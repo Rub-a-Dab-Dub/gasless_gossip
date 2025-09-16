@@ -7,6 +7,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
+import { AuthModule } from './auth/auth.module';
 
 function loadModules(): (new () => any)[] {
   const modulesDir = path.join(__dirname);
@@ -62,6 +63,7 @@ function loadModules(): (new () => any)[] {
     DatabaseModule,
     HealthModule,
     ...loadModules(),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
