@@ -49,6 +49,7 @@ const path = __importStar(require("path"));
 const fs = __importStar(require("fs"));
 const database_module_1 = require("./database/database.module");
 const health_module_1 = require("./health/health.module");
+const auth_module_1 = require("./auth/auth.module");
 function loadModules() {
     const modulesDir = path.join(__dirname);
     const moduleFiles = fs
@@ -92,6 +93,7 @@ exports.AppModule = AppModule = __decorate([
             database_module_1.DatabaseModule,
             health_module_1.HealthModule,
             ...loadModules(),
+            auth_module_1.AuthModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
