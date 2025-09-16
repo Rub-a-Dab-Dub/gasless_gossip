@@ -57,7 +57,7 @@ AccountResponse _accountWithBalance(String accountId, String xlm) {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  group('StellarWalletService', () {
+  group('Wallet Initialization', () {
     late _MemoryStore store;
     late _MockHorizon horizon;
     late StellarWalletService service;
@@ -80,6 +80,23 @@ void main() {
       expect(state['network'], equals(Network.TESTNET));
       expect(state['isSignedIn'], isFalse);
     });
+  });
+
+  group('Key Management', () {
+    late _MemoryStore store;
+    late _MockHorizon horizon;
+    late StellarWalletService service;
+
+    setUp(() async {
+      store = _MemoryStore();
+      horizon = _MockHorizon();
+      service = StellarWalletService(
+        secureStore: store,
+        horizonGateway: horizon,
+        horizonUrl: 'https://horizon-testnet.stellar.org',
+        networkPassphrase: Network.TESTNET,
+      );
+    });
 
     test('should create new wallet and store keys securely', () async {
       final info = await service.createWallet();
@@ -101,6 +118,23 @@ void main() {
     test('should handle invalid secret key gracefully', () async {
       expect(() => service.importWallet('invalid'), throwsArgumentError);
     });
+  });
+
+  group('Authentication Flow', () {
+    late _MemoryStore store;
+    late _MockHorizon horizon;
+    late StellarWalletService service;
+
+    setUp(() async {
+      store = _MemoryStore();
+      horizon = _MockHorizon();
+      service = StellarWalletService(
+        secureStore: store,
+        horizonGateway: horizon,
+        horizonUrl: 'https://horizon-testnet.stellar.org',
+        networkPassphrase: Network.TESTNET,
+      );
+    });
 
     test('should sign in with stored wallet', () async {
       final created = await service.createWallet();
@@ -116,6 +150,23 @@ void main() {
       expect(service.isSignedIn, isFalse);
       expect(await service.isWalletStored(), isFalse);
     });
+  });
+
+  group('Network Operations', () {
+    late _MemoryStore store;
+    late _MockHorizon horizon;
+    late StellarWalletService service;
+
+    setUp(() async {
+      store = _MemoryStore();
+      horizon = _MockHorizon();
+      service = StellarWalletService(
+        secureStore: store,
+        horizonGateway: horizon,
+        horizonUrl: 'https://horizon-testnet.stellar.org',
+        networkPassphrase: Network.TESTNET,
+      );
+    });
 
     test('should retrieve account balance from testnet', () async {
       final kp = KeyPair.random();
@@ -129,9 +180,25 @@ void main() {
       horizon.nextError = Exception('network');
       expect(() => service.getAccountBalance(kp.accountId), throwsException);
     });
+  });
+
+  group('Error Handling', () {
+    late _MemoryStore store;
+    late _MockHorizon horizon;
+    late StellarWalletService service;
+
+    setUp(() async {
+      store = _MemoryStore();
+      horizon = _MockHorizon();
+      service = StellarWalletService(
+        secureStore: store,
+        horizonGateway: horizon,
+        horizonUrl: 'https://horizon-testnet.stellar.org',
+        networkPassphrase: Network.TESTNET,
+      );
+    });
 
     test('should load env when available', () async {
-      // Simulate loading .env; if not present, initializeWallet should still succeed.
       try {
         await dotenv.load(fileName: '.env');
       } catch (_) {}

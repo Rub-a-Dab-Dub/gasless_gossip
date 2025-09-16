@@ -23,41 +23,48 @@ void main() {
     );
   }
 
-  testWidgets('XPProgressBar renders and animates', (tester) async {
-    await tester.pumpWidget(MaterialApp(theme: AppTheme.darkTheme, home: const Scaffold(body: XPProgressBar(currentXP: 50, nextLevelXP: 100, level: 2))));
-    expect(find.textContaining('Lv'), findsOneWidget);
-    await tester.pump(const Duration(milliseconds: 900));
+  group('GiftAnimationWidget', () {
+    testWidgets('builds', (tester) async {
+      await tester.pumpWidget(MaterialApp(theme: AppTheme.darkTheme, home: const Scaffold(body: Center(child: GiftAnimationWidget()))));
+      expect(find.byType(GiftAnimationWidget), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 300));
+    });
   });
 
-  testWidgets('RoomCard shows room info', (tester) async {
-    final room = RoomProvider().rooms; // empty by default; just mount a placeholder card via minimal Room
-    await tester.pumpWidget(MaterialApp(
-      theme: AppTheme.darkTheme,
-      home: Scaffold(
-        body: RoomCard(
-          room: const Room(
-            id: '1',
-            name: 'General',
-            onlineCount: 5,
-            recentMessages: <ChatMessage>[],
-            createdAt: DateTime.now(),
-            lastActivity: DateTime.now(),
-            type: RoomType.general,
+  group('HomeScreen Rendering', () {
+    testWidgets('mounts with providers', (tester) async {
+      await tester.pumpWidget(_wrapWithProviders(const HomeScreen()));
+      expect(find.text('Whisper'), findsOneWidget);
+    });
+  });
+
+  group('Provider Integration', () {
+    testWidgets('XPProgressBar renders and animates', (tester) async {
+      await tester.pumpWidget(MaterialApp(theme: AppTheme.darkTheme, home: const Scaffold(body: XPProgressBar(currentXP: 50, nextLevelXP: 100, level: 2))));
+      expect(find.textContaining('Lv'), findsOneWidget);
+      await tester.pump(const Duration(milliseconds: 900));
+    });
+
+    testWidgets('RoomCard shows room info', (tester) async {
+      final room = RoomProvider().rooms; // unused; ensures provider can be constructed
+      await tester.pumpWidget(MaterialApp(
+        theme: AppTheme.darkTheme,
+        home: Scaffold(
+          body: RoomCard(
+            room: const Room(
+              id: '1',
+              name: 'General',
+              onlineCount: 5,
+              recentMessages: <ChatMessage>[],
+              createdAt: DateTime.now(),
+              lastActivity: DateTime.now(),
+              type: RoomType.general,
+            ),
           ),
         ),
-      ),
-    ));
-    expect(find.text('General'), findsOneWidget);
-  });
-
-  testWidgets('GiftAnimationWidget builds', (tester) async {
-    await tester.pumpWidget(MaterialApp(theme: AppTheme.darkTheme, home: const Scaffold(body: Center(child: GiftAnimationWidget()))));
-    expect(find.byType(GiftAnimationWidget), findsOneWidget);
-  });
-
-  testWidgets('HomeScreen mounts with providers', (tester) async {
-    await tester.pumpWidget(_wrapWithProviders(const HomeScreen()));
-    expect(find.text('Whisper'), findsOneWidget);
+      ));
+      expect(find.text('General'), findsOneWidget);
+    });
   });
 }
 

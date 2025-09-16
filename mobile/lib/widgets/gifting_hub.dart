@@ -64,31 +64,55 @@ class GiftingHub extends StatelessWidget {
                 GiftType.epic => 1.0,
                 GiftType.legendary => 2.5,
               };
-              return MysticalCard(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    GiftAnimationWidget(giftType: type, size: compactMode ? 54 : 64),
-                    const SizedBox(height: 8),
-                    Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
-                    const SizedBox(height: 4),
-                    Text('${cost.toStringAsFixed(2)} XLM', style: const TextStyle(color: Colors.white70, fontSize: 12)),
-                    const SizedBox(height: 10),
-                    GlowingButton(
-                      label: quickSend ? 'Send' : 'Select',
-                      onPressed: () async {
-                        // Placeholder: in full flow, open recipient selector; here we simulate send
-                        await context.read<WalletProvider>().sendGift('user-123', label.toLowerCase());
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$label gift sent!')));
-                        }
-                      },
-                      variant: ButtonVariant.primary,
-                      icon: Icons.card_giftcard,
+              return LayoutBuilder(
+                builder: (context, constraints) {
+                  final double tileH = constraints.maxHeight.isFinite ? constraints.maxHeight : 120;
+                  final double maxGift = compactMode ? 54 : 64;
+                  final double giftSize = tileH * 0.42 < maxGift ? tileH * 0.42 : maxGift;
+                  return MysticalCard(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        SizedBox(
+                          height: giftSize,
+                          child: Center(child: GiftAnimationWidget(giftType: type, size: giftSize)),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          '${cost.toStringAsFixed(2)} XLM',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(color: Colors.white70, fontSize: 12),
+                        ),
+                        const Spacer(),
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: GlowingButton(
+                            label: quickSend ? 'Send' : 'Select',
+                            onPressed: () async {
+                              await context.read<WalletProvider>().sendGift('user-123', label.toLowerCase());
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('$label gift sent!')));
+                              }
+                            },
+                            variant: ButtonVariant.primary,
+                            icon: Icons.card_giftcard,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  );
+                },
               );
             },
           ),

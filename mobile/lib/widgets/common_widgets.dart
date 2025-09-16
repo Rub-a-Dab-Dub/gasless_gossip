@@ -59,11 +59,15 @@ class GlowingButton extends StatelessWidget {
                 else if (icon != null)
                   Icon(icon, size: 18, color: Colors.black87),
                 if (loading || icon != null) const SizedBox(width: 8),
-                Text(
-                  label,
-                  style: const TextStyle(
-                    color: Colors.black87,
-                    fontWeight: FontWeight.w700,
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ],

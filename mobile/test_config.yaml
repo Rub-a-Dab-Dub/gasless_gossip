@@ -1,0 +1,40 @@
+timeouts:
+  unit: 30s
+  widget: 60s
+  integration: 120s
+
+coverage:
+  minimum:
+    unit: 80
+    widget: 70
+  exclude:
+    - '**/*.g.dart'
+    - '**/*.freezed.dart'
+    - '**/generated/**'
+  reports:
+    - lcov
+    - html
+    - json
+
+groups:
+  unit: [ 'models', 'services', 'providers' ]
+  widget: [ 'widgets', 'screens' ]
+  integration: [ 'flows', 'e2e' ]
+
+environment:
+  variables:
+    API_URL: http://localhost:3001
+    API_TIMEOUT: '2000'
+    DEBUG_MODE: 'false'
+
+reporting:
+  junit: true
+  artifacts:
+    enabled: true
+    paths:
+      - coverage/
+
+execution:
+  parallel: true
+  fail_fast: false
+

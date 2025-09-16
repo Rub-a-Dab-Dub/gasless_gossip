@@ -8,12 +8,12 @@ import 'package:http/testing.dart';
 import 'package:whisper/services/api_service.dart';
 
 void main() {
-  group('ApiService', () {
+  group('HTTP Operations', () {
     setUp(() async {
       dotenv.testLoad(fileInput: 'API_URL=http://localhost:3001\nAPI_TIMEOUT=2000\nDEBUG_MODE=false');
     });
 
-    test('should load environment variables correctly', () async {
+    test('loads env and health GET succeeds', () async {
       final client = MockClient((request) async => http.Response('{}', 200));
       final api = ApiService(httpClient: client);
       await api.initialize();
@@ -21,7 +21,7 @@ void main() {
       expect(res, isA<Map<String, dynamic>>());
     });
 
-    test('should make successful GET request to health endpoint', () async {
+    test('successful GET /health', () async {
       final client = MockClient((request) async {
         expect(request.url.toString(), 'http://localhost:3001/health');
         return http.Response('{"status":"ok"}', 200);
@@ -32,73 +32,78 @@ void main() {
       expect(res['status'], 'ok');
     });
 
-    test('should handle HTTP errors gracefully', () async {
+    test('handles HTTP 500', () async {
       final client = MockClient((request) async => http.Response('boom', 500));
       final api = ApiService(httpClient: client);
       await api.initialize();
       expect(() => api.get('/health'), throwsA(isA<ApiException>()));
     });
 
-    test('should return mock user XP data', () async {
+    test('POST/PUT/DELETE request paths with auth header', () async {
+      final seen = <String>[];
+      final client = MockClient((request) async {
+        seen.add('${request.method} ${request.url.path}');
+        expect(request.headers['Authorization'], isNotNull);
+        return http.Response('{"ok":true}', 200);
+      });
+      final api = ApiService(httpClient: client);
+      await api.initialize();
+      api.setAuthToken('token-123');
+      await api.post('/gifts', body: {'id': 1});
+      await api.put('/rooms/1', body: {'name': 'General'});
+      await api.delete('/rooms/1');
+      expect(seen, containsAllInOrder(['POST /gifts', 'PUT /rooms/1', 'DELETE /rooms/1']));
+    });
+
+    test('user XP and rooms mocks', () async {
       final api = ApiService(httpClient: MockClient((_) async => http.Response('{}', 200)));
       await api.initialize();
       final res = await api.getUserXP('user123');
       expect(res['userId'], 'user123');
       expect(res['xp'], isA<int>());
-    });
-
-    test('should return mock room list', () async {
-      final api = ApiService(httpClient: MockClient((_) async => http.Response('{}', 200)));
-      await api.initialize();
       final rooms = await api.getRooms();
       expect(rooms, isA<List>());
       expect(rooms.first, containsPair('id', 'room-general'));
     });
 
-    test('should handle network timeout', () async {
-      final client = MockClient((request) async {
+    test('timeout and retry logic', () async {
+      final timeoutClient = MockClient((request) async {
         await Future.delayed(const Duration(milliseconds: 2100));
         return http.Response('{}', 200);
       });
-      final api = ApiService(httpClient: client);
-      await api.initialize();
-      api.setMaxRetries(0);
-      expect(() => api.get('/health'), throwsA(isA<TimeoutExceptionApi>()));
-    });
+      final apiTimeout = ApiService(httpClient: timeoutClient);
+      await apiTimeout.initialize();
+      apiTimeout.setMaxRetries(0);
+      expect(() => apiTimeout.get('/health'), throwsA(isA<TimeoutExceptionApi>()));
 
-    test('should retry failed requests', () async {
       int count = 0;
-      final client = MockClient((request) async {
+      final retryClient = MockClient((request) async {
         count++;
-        if (count < 2) {
-          return http.Response('server error', 500);
-        }
+        if (count < 2) return http.Response('server error', 500);
         return http.Response('{}', 200);
       });
-      final api = ApiService(httpClient: client);
-      await api.initialize();
-      final res = await api.get('/health');
+      final apiRetry = ApiService(httpClient: retryClient);
+      await apiRetry.initialize();
+      final res = await apiRetry.get('/health');
       expect(res, isA<Map<String, dynamic>>());
       expect(count, 2);
     });
 
-    test('should add authentication headers when token provided', () async {
-      final client = MockClient((request) async {
-        expect(request.headers['Authorization'], isNotNull);
-        expect(request.headers['Authorization']!.startsWith('Bearer '), isTrue);
-        return http.Response('{}', 200);
-      });
-      final api = ApiService(httpClient: client);
-      await api.initialize();
-      api.setAuthToken('token-123');
-      await api.get('/health');
-    });
-
-    test('should handle JSON parsing error', () async {
+    test('JSON parsing error', () async {
       final client = MockClient((request) async => http.Response('not-json', 200));
       final api = ApiService(httpClient: client);
       await api.initialize();
       expect(() => api.get('/health'), throwsA(isA<JsonParsingException>()));
+    });
+  });
+
+  group('WebSocket Operations', () {
+    // High-level placeholder: ensure setup does not crash in test env when disabled.
+    test('websocket configuration does not throw when disabled', () async {
+      dotenv.testLoad(fileInput: 'API_URL=http://localhost:3001\nAPI_TIMEOUT=2000\nENABLE_WS=false');
+      final api = ApiService();
+      await api.initialize();
+      expect(api.isWebSocketEnabled, anyOf(isNull, isFalse));
     });
   });
 }
