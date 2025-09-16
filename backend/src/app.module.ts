@@ -5,6 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import * as path from 'path';
 import * as fs from 'fs';
+import { DatabaseModule } from './database/database.module';
+import { HealthModule } from './health/health.module';
 
 function loadModules(): (new () => any)[] {
   const modulesDir = path.join(__dirname);
@@ -57,6 +59,8 @@ function loadModules(): (new () => any)[] {
       }),
       inject: [ConfigService],
     }),
+    DatabaseModule,
+    HealthModule,
     ...loadModules(),
   ],
   controllers: [AppController],

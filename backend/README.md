@@ -96,3 +96,53 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+# Whisper Backend
+
+## Database Setup
+
+This project uses PostgreSQL with TypeORM for structured storage.
+
+### PostgreSQL Setup
+
+1. **Install PostgreSQL**  
+   On macOS:  
+   ```sh
+   brew install postgresql
+   brew services start postgresql
+   ```
+   On Ubuntu:  
+   ```sh
+   sudo apt update
+   sudo apt install postgresql postgresql-contrib
+   sudo service postgresql start
+   ```
+
+2. **Create Database and User**
+   ```sh
+   psql -U postgres
+   CREATE DATABASE whspr;
+   CREATE USER whspr_user WITH PASSWORD 'yourpassword';
+   GRANT ALL PRIVILEGES ON DATABASE whspr TO whspr_user;
+   ```
+
+3. **Configure Environment Variables**  
+   Create a `.env` file in `backend/`:
+   ```
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USER=whspr_user
+   DB_PASS=yourpassword
+   DB_NAME=whspr
+   NODE_ENV=development
+   ```
+
+## Health Check
+
+- `GET /health/db` returns `{ "status": "DB Connected" }` if successful.
+- On error, returns 503 with error message.
+
+## Troubleshooting
+
+- Check logs for meaningful error messages on connection failure.
+- For help, ask in the Stellar Community or repo discussions.
