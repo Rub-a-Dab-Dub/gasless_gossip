@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+/* dim-lit theme base */
+
+@layer base {
+  body {
+    background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+  }
+}
+
+@layer components {
+  .glow-effect {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  }
+
+  .candle-glow {
+    filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.5));
+  }
+}
