@@ -1,3 +1,24 @@
+## Reactions Feature
+
+Whisper supports message reactions to boost engagement and XP! Users can react to any message with fun emojis. Each reaction is stored and counted, and can trigger XP updates for the message author and the reactor.
+
+### Endpoints
+- `POST /reactions` — Add a reaction to a message (body: `{ messageId, type, userId }`)
+- `GET /reactions/:messageId` — Get aggregated reaction counts for a message
+
+### Supported Emoji Reactions
+You can react with any of these fun emojis:
+
+👍 ❤️ 😂 🔥 🎉 😮 😢 😡 🥳 🤩 🙌 👀 💯 🚀
+
+Suggest more in the community discussions!
+
+### How it works
+- Each reaction is stored in the database (PostgreSQL or SQLite for local dev)
+- XP updates are triggered via the service layer
+- Endpoints enforce message access and validation
+
+---
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>

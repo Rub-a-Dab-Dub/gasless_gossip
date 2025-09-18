@@ -11,6 +11,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       useFactory: async (
         configService: ConfigService,
       ): Promise<TypeOrmModuleOptions> => {
+        // Use SQLite for local development if DB_TYPE is set to 'sqlite', else use postgres
+        const dbType = configService.get<string>('DB_TYPE', 'postgres');
+        if (dbType === 'sqlite') {
+          return {
+            type: 'sqlite',
+            database: configService.get<string>('SQLITE_DB_PATH', 'dev.sqlite'),
+            autoLoadEntities: true,
+            synchronize: true,
+            logging: true,
+          };
+        }
         return {
           type: 'postgres',
           host: configService.get<string>('DB_HOST', 'localhost'),
