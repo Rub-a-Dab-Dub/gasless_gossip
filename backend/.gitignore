@@ -7,3 +7,4 @@ node_modules/
 # Ignore everything in dist except when explicitly forced
 dist/
 dist/
+docker-compose.yml
