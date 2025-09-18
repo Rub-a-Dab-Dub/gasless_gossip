@@ -202,11 +202,11 @@ class Gift extends Collectible {
       imageUrl: json['imageUrl'],
       rarity: CollectibleRarity.common,
       value: null,
-      obtainedAt: _parseDate(json['obtainedAt']),
+      obtainedAt: Collectible._parseDate(json['obtainedAt']),
       attributes: json['attributes'] == null ? null : Map<String, dynamic>.from(json['attributes'] as Map),
       fromUserId: json['from'] ?? '',
       toUserId: json['to'] ?? '',
-      sentAt: _parseDate(json['sentAt'] ?? json['timestamp']) ?? DateTime.now(),
+      sentAt: Collectible._parseDate(json['sentAt'] ?? json['timestamp']) ?? DateTime.now(),
       status: _statusFrom(json['status']),
       message: json['message'],
     );

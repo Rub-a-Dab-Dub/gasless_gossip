@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:mobile/services/stellar_wallet_service.dart';
+import 'package:whisper/services/stellar_wallet_service.dart';
 
 Future<void> runStellarWalletServiceDemo() async {
   final service = StellarWalletService();
