@@ -38,6 +38,24 @@ $ npm install
 $ npm run start
 
 # watch mode
+
+## XP Module (contribution notes)
+
+This project includes an `XPModule` to support gamified progression. Suggested accrual mechanics:
+
+- Messaging: +5 XP per message (deduplicate by message hash)
+- Token send: +10 XP per token transfer
+- First message of the day: bonus +20 XP
+- Gifting an NFT/collectible: +25 XP
+- Daily login streaks: exponential bonus (2% per day capped)
+
+Stellar events should be validated (e.g., check message hash on-chain) before granting XP. The `XPModule` stores data in PostgreSQL and exposes endpoints:
+
+- `GET /xp/:userId` — returns current XP for a user
+- `POST /xp/add` — adds XP (used by internal event processors/tests)
+
+When implementing accrual logic, prefer idempotent operations and event deduplication to avoid double-counting.
+
 $ npm run start:dev
 
 # production mode
