@@ -1,21 +1,15 @@
 #![cfg(test)]
 
+use crate::users::users::{UserManager, UserManagerClient};
+
 use super::*;
 use soroban_sdk::{vec, Env, String};
 
 #[test]
 fn test() {
     let env = Env::default();
-    let contract_id = env.register(Contract, ());
-    let client = ContractClient::new(&env, &contract_id);
+    env.mock_all_auths();
+    let contract_id = env.register(UserManager, {});
+    let client = UserManagerClient::new(&env, &contract_id);
 
-    let words = client.hello(&String::from_str(&env, "Dev"));
-    assert_eq!(
-        words,
-        vec![
-            &env,
-            String::from_str(&env, "Hello"),
-            String::from_str(&env, "Dev"),
-        ]
-    );
 }
