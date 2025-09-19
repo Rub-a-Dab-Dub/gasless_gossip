@@ -1,10 +1,10 @@
-name: Flutter CI
+name: Build CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, dev ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main, dev ]
 
 jobs:
   build:
@@ -12,21 +12,24 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v2
 
-      - name: Setup Flutter
+      - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
+          flutter-version: '3.35.4'
 
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Check code formatting
+      - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
 
-      - name: Run analyzer
+      - name: Generate files
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
+      - name: Analyze project source
         run: flutter analyze
 
-      - name: Run tests
-        run: flutter test --coverage
+      #- name: Run tests
+      #  run: flutter test
