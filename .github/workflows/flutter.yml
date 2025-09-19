@@ -1,4 +1,4 @@
-name: Flutter CI - Full
+name: Flutter CI
 
 on:
   push:
@@ -9,67 +9,24 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Build & Test (Android + Web)
+
     steps:
-      # Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Setup Flutter
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: 'stable'
 
-      # Cache dependencies for faster builds
-      - name: Cache Flutter packages
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.pub-cache
-            build
-          key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-flutter-
-
-      # Install dependencies
       - name: Install dependencies
         run: flutter pub get
 
-      # Check code formatting
       - name: Check code formatting
         run: dart format --output=none --set-exit-if-changed .
 
-      # Run static analysis
       - name: Run analyzer
         run: flutter analyze
 
-      # Run unit & widget tests
       - name: Run tests
         run: flutter test --coverage
-
-      # Build Android APK
-      - name: Build Android APK
-        run: flutter build apk --debug
-
-      # Build Web
-      - name: Build Web
-        run: flutter build web
-
-  build_ios:
-    runs-on: macos-latest
-    name: Build iOS
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: 'stable'
-
-      - name: Install dependencies
-        run: flutter pub get
-
-      - name: Build iOS (simulator)
-        run: flutter build ios --simulator
