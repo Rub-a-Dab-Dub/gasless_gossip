@@ -1,9 +1,11 @@
+import { Badge } from 'src/badges/badge.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('users')
@@ -22,6 +24,9 @@ export class User {
 
   @Column({ name: 'stellar_account_id', unique: true, nullable: true })
   stellarAccountId!: string;
+
+  @OneToMany(() => Badge, badge => badge.user)
+  badges!: Badge[];
 
   @Column({ default: true })
   isActive!: boolean;
