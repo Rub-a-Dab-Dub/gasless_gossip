@@ -17,8 +17,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
-  ,"migrate": "for f in migrations/*.sql; do psql \"$${DB_CONN_STRING:-postgresql://$${DB_USER:-postgres}:$${DB_PASSWORD:-postgres}@$${DB_HOST:-localhost}:$${DB_PORT:-5432}/$${DB_NAME:-whspr}}\" -f \"$f\"; done"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "migrate": "for f in migrations/*.sql; do psql \"$${DB_CONN_STRING:-postgresql://$${DB_USER:-postgres}:$${DB_PASSWORD:-postgres}@$${DB_HOST:-localhost}:$${DB_PORT:-5432}/$${DB_NAME:-whspr}}\" -f \"$f\"; done"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.6",
