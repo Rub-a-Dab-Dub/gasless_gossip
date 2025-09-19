@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TokensService } from './tokens.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { TokenTransaction } from './token-transaction.entity';
+import { StellarAccount } from '../xp/stellar-account.entity';
 import { Repository } from 'typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -14,6 +15,10 @@ describe('TokensService', () => {
     save: jest.fn(async (d) => d),
     find: jest.fn(async () => []),
   } as unknown as Repository<TokenTransaction>;
+
+  const stellarRepoMock = {
+    findOne: jest.fn(async ({ where: { userId } }) => userId === 'internal-dest' ? ({ userId, stellarAccount: 'GDEST...' } as any) : null),
+  } as unknown as Repository<StellarAccount>;
 
   const serverSubmitMock = jest.fn(async () => ({ hash: 'hash123', ledger: 1 }));
   const loadAccountMock = jest.fn(async () => ({}));
@@ -47,6 +52,7 @@ describe('TokensService', () => {
         TokensService,
         ConfigService,
         { provide: getRepositoryToken(TokenTransaction), useValue: repoMock },
+        { provide: getRepositoryToken(StellarAccount), useValue: stellarRepoMock },
       ],
     }).compile();
 
@@ -59,6 +65,11 @@ describe('TokensService', () => {
     expect(res.successful).toBe(true);
     expect(repo.create).toHaveBeenCalled();
     expect(repo.save).toHaveBeenCalled();
+  });
+
+  it('resolves internal userId to Stellar address', async () => {
+    const res = await service.send({ fromId: 'A', toId: 'internal-dest', amount: '1' });
+    expect(res.successful).toBe(true);
   });
 
   it('returns history', async () => {

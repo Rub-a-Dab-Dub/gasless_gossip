@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { TokenTransaction } from './token-transaction.entity';
 import { SendTokenDto } from './dto/send-token.dto';
 import { ConfigService } from '@nestjs/config';
+import { StellarAccount } from '../xp/stellar-account.entity';
 
 const StellarSdk = require('stellar-sdk');
 
@@ -14,6 +15,8 @@ export class TokensService {
   constructor(
     @InjectRepository(TokenTransaction)
     private readonly tokenTxRepo: Repository<TokenTransaction>,
+    @InjectRepository(StellarAccount)
+    private readonly stellarAccountRepo: Repository<StellarAccount>,
     private readonly config: ConfigService,
   ) {}
 
@@ -28,8 +31,15 @@ export class TokensService {
     const sourceKeypair = StellarSdk.Keypair.fromSecret(sourceSecret);
     const sourcePublic = sourceKeypair.publicKey();
 
-    // Map internal IDs to stellar accounts if necessary (simplified: assume fromId maps to configured source)
-    const destination = dto.toId; // Accept Stellar address for MVP
+    // Resolve destination: if dto.toId looks like a Stellar G... key, use directly; otherwise, map via table
+    let destination = dto.toId;
+    if (!/^G[A-Z2-7]{55}$/.test(destination)) {
+      const mapping = await this.stellarAccountRepo.findOne({ where: { userId: destination } });
+      if (!mapping) {
+        throw new Error('Destination user has no linked Stellar account');
+      }
+      destination = mapping.stellarAccount;
+    }
 
     const assetCode = this.config.get<string>('STELLAR_ASSET_CODE');
     const assetIssuer = this.config.get<string>('STELLAR_ASSET_ISSUER');
