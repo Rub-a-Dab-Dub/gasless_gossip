@@ -1,4 +1,4 @@
-use soroban_sdk::{contracttype, Address, String, Vec};
+use soroban_sdk::{contracttype, Address, String, Vec, Map};
 
 /// Level thresholds defining XP required for each level (10 levels)
 /// Level 1: 0-99 XP (implicit, starts at 0)
@@ -12,6 +12,14 @@ use soroban_sdk::{contracttype, Address, String, Vec};
 /// Level 9: 4000-5199 XP
 /// Level 10: 5200-6599 XP (and beyond)
 pub const LEVEL_THRESHOLDS: [u64; 10] = [100, 300, 600, 1000, 1500, 2200, 3000, 4000, 5200, 6600];
+
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum RoomType {
+    Public,
+    Private,
+    Secret, // Anonymous
+}
 
 /// Calculate the level based on XP amount
 /// Returns a level between 1 and 10 (inclusive)
@@ -53,13 +61,14 @@ pub struct UserProfile {
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Room {
     pub id: u128,
+    pub creator: Address,
+    pub room_type: RoomType,
     pub name: String,
-    pub room_type: u32, // 1=Public, 2=Private, 3=InviteOnly
+    pub members: Vec<Address>,
+    pub settings: Map<String, String>,
     pub max_members: u32,
     pub min_level: u32,
     pub min_xp: u64,
-    pub creator: Address,
-    pub members: Vec<Address>,
     pub is_active: bool,
     pub created_at: u64,
 }
@@ -69,6 +78,8 @@ pub struct Room {
 pub enum DataKey {
     UserProfile(Address),
     Room(u128),
+    RoomNames,  // Global set of taken room names
+    NextRoomId, // Counter for generating unique room IDs
 }
 
 #[cfg(test)]
