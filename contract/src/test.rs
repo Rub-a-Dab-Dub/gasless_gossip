@@ -1,8 +1,10 @@
 #![cfg(test)]
 
 use crate::users::users::{UserManager, UserManagerClient};
-use crate::types::calculate_level;
-use soroban_sdk::{testutils::Address as _, Env, String, Address};
+use crate::rooms::rooms::{RoomManager, RoomManagerClient};
+use crate::types::{calculate_level, RoomType};
+use crate::{WhsprContract, WhsprContractClient};
+use soroban_sdk::{testutils::Address as _, Env, String, Address, Map};
 
 
 // Helper function to setup test environment
@@ -219,4 +221,315 @@ fn test_update_level_unregistered_user() {
     
     // Try to update level for unregistered user
     client.update_user_level(&user_address);
+}
+
+// === ROOM TESTS ===
+
+// Helper function to setup room test environment
+fn setup_room_test_env() -> (Env, RoomManagerClient<'static>) {
+    let env = Env::default();
+    env.mock_all_auths();
+    let contract_id = env.register(RoomManager, {});
+    let client = RoomManagerClient::new(&env, &contract_id);
+    (env, client)
+}
+
+// Helper function to setup full contract test environment
+fn setup_full_contract_env() -> (Env, WhsprContractClient<'static>) {
+    let env = Env::default();
+    env.mock_all_auths();
+    let contract_id = env.register(WhsprContract, {});
+    let client = WhsprContractClient::new(&env, &contract_id);
+    (env, client)
+}
+
+#[test]
+fn test_create_public_room() {
+    let (env, client) = setup_room_test_env();
+    let creator = Address::generate(&env);
+    let room_name = String::from_str(&env, "Test Public Room");
+    let settings = Map::new(&env);
+    
+    // Create a public room
+    let room_id = client.create_room(&creator, &room_name, &RoomType::Public, &settings);
+    
+    // Verify room was created
+    assert_eq!(room_id, 1); // First room should have ID 1
+    
+    // Get room details
+    let room = client.get_room(&room_id);
+    assert_eq!(room.id, room_id);
+    assert_eq!(room.name, room_name);
+    assert_eq!(room.creator, creator);
+    assert_eq!(room.room_type, RoomType::Public);
+    assert_eq!(room.members.len(), 1); // Creator is automatically added
+    assert_eq!(room.members.get(0).unwrap(), creator);
+    assert_eq!(room.is_active, true);
+    assert_eq!(room.max_members, 100); // Default value
+    assert_eq!(room.min_level, 1); // Default value
+    assert_eq!(room.min_xp, 0); // Default value
+}
+
+#[test]
+fn test_create_private_room() {
+    let (env, client) = setup_room_test_env();
+    let creator = Address::generate(&env);
+    let room_name = String::from_str(&env, "Test Private Room");
+    let settings = Map::new(&env);
+    
+    // Create a private room
+    let room_id = client.create_room(&creator, &room_name, &RoomType::Private, &settings);
+    
+    // Get room details
+    let room = client.get_room(&room_id);
+    assert_eq!(room.room_type, RoomType::Private);
+    assert_eq!(room.creator, creator);
+}
+
+#[test]
+fn test_create_secret_room() {
+    let (env, client) = setup_room_test_env();
+    let creator = Address::generate(&env);
+    let room_name = String::from_str(&env, "Test Secret Room");
+    let settings = Map::new(&env);
+    
+    // Create a secret room
+    let room_id = client.create_room(&creator, &room_name, &RoomType::Secret, &settings);
+    
+    // Get room details
+    let room = client.get_room(&room_id);
+    assert_eq!(room.room_type, RoomType::Secret);
+    assert_eq!(room.creator, creator);
+}
+
+#[test]
+fn test_create_room_with_custom_settings() {
+    let (env, client) = setup_room_test_env();
+    let creator = Address::generate(&env);
+    let room_name = String::from_str(&env, "Custom Settings Room");
+    
+    // Create settings map
+    let mut settings = Map::new(&env);
+    settings.set(String::from_str(&env, "max_members"), String::from_str(&env, "50"));
+    settings.set(String::from_str(&env, "min_level"), String::from_str(&env, "3"));
+    settings.set(String::from_str(&env, "min_xp"), String::from_str(&env, "500"));
+    settings.set(String::from_str(&env, "description"), String::from_str(&env, "A custom room"));
+    
+    // Create room
+    let room_id = client.create_room(&creator, &room_name, &RoomType::Public, &settings);
+    
+    // Get room details
+    let room = client.get_room(&room_id);
+    assert_eq!(room.settings.len(), 4);
+    assert_eq!(room.settings.get(String::from_str(&env, "description")).unwrap(), 
+               String::from_str(&env, "A custom room"));
+}
+
+#[test]
+fn test_multiple_room_creation() {
+    let (env, client) = setup_room_test_env();
+    let creator = Address::generate(&env);
+    let settings = Map::new(&env);
+    
+    // Create multiple rooms
+    let room1_id = client.create_room(&creator, &String::from_str(&env, "Room 1"), &RoomType::Public, &settings);
+    let room2_id = client.create_room(&creator, &String::from_str(&env, "Room 2"), &RoomType::Private, &settings);
+    let room3_id = client.create_room(&creator, &String::from_str(&env, "Room 3"), &RoomType::Secret, &settings);
+    
+    // Verify unique IDs
+    assert_eq!(room1_id, 1);
+    assert_eq!(room2_id, 2);
+    assert_eq!(room3_id, 3);
+    
+    // Verify rooms exist
+    let room1 = client.get_room(&room1_id);
+    let room2 = client.get_room(&room2_id);
+    let room3 = client.get_room(&room3_id);
+    
+    assert_eq!(room1.name, String::from_str(&env, "Room 1"));
+    assert_eq!(room2.name, String::from_str(&env, "Room 2"));
+    assert_eq!(room3.name, String::from_str(&env, "Room 3"));
+}
+
+#[test]
+fn test_join_room() {
+    let (env, client) = setup_room_test_env();
+    let creator = Address::generate(&env);
+    let user = Address::generate(&env);
+    let room_name = String::from_str(&env, "Join Test Room");
+    let settings = Map::new(&env);
+    
+    // Create room
+    let room_id = client.create_room(&creator, &room_name, &RoomType::Public, &settings);
+    
+    // User joins room
+    let result = client.join_room(&user, &room_id);
+    assert_eq!(result, true);
+    
+    // Verify user is member
+    assert_eq!(client.is_member(&user, &room_id), true);
+    assert_eq!(client.get_member_count(&room_id), 2); // Creator + User
+    
+    // Get room and check members
+    let room = client.get_room(&room_id);
+    assert_eq!(room.members.len(), 2);
+    assert_eq!(room.members.get(1).unwrap(), user);
+}
+
+#[test]
+fn test_leave_room() {
+    let (env, client) = setup_room_test_env();
+    let creator = Address::generate(&env);
+    let user = Address::generate(&env);
+    let room_name = String::from_str(&env, "Leave Test Room");
+    let settings = Map::new(&env);
+    
+    // Create room and join
+    let room_id = client.create_room(&creator, &room_name, &RoomType::Public, &settings);
+    client.join_room(&user, &room_id);
+    
+    // Verify user is member
+    assert_eq!(client.is_member(&user, &room_id), true);
+    assert_eq!(client.get_member_count(&room_id), 2);
+    
+    // User leaves room
+    let result = client.leave_room(&user, &room_id);
+    assert_eq!(result, true);
+    
+    // Verify user is no longer member
+    assert_eq!(client.is_member(&user, &room_id), false);
+    assert_eq!(client.get_member_count(&room_id), 1); // Only creator remains
+}
+
+#[test]
+fn test_update_room_settings() {
+    let (env, client) = setup_room_test_env();
+    let creator = Address::generate(&env);
+    let room_name = String::from_str(&env, "Settings Test Room");
+    let settings = Map::new(&env);
+    
+    // Create room
+    let room_id = client.create_room(&creator, &room_name, &RoomType::Public, &settings);
+    
+    // Update settings
+    let mut new_settings = Map::new(&env);
+    new_settings.set(String::from_str(&env, "description"), String::from_str(&env, "Updated description"));
+    new_settings.set(String::from_str(&env, "theme"), String::from_str(&env, "dark"));
+    
+    let result = client.update_room_settings(&creator, &room_id, &new_settings);
+    assert_eq!(result, true);
+    
+    // Verify settings were updated
+    let room = client.get_room(&room_id);
+    assert_eq!(room.settings.len(), 2);
+    assert_eq!(room.settings.get(String::from_str(&env, "description")).unwrap(), 
+               String::from_str(&env, "Updated description"));
+}
+
+#[test]
+fn test_deactivate_room() {
+    let (env, client) = setup_room_test_env();
+    let creator = Address::generate(&env);
+    let room_name = String::from_str(&env, "Deactivate Test Room");
+    let settings = Map::new(&env);
+    
+    // Create room
+    let room_id = client.create_room(&creator, &room_name, &RoomType::Public, &settings);
+    
+    // Verify room is active
+    let room = client.get_room(&room_id);
+    assert_eq!(room.is_active, true);
+    
+    // Deactivate room
+    let result = client.deactivate_room(&creator, &room_id);
+    assert_eq!(result, true);
+    
+    // Verify room is deactivated
+    let room = client.get_room(&room_id);
+    assert_eq!(room.is_active, false);
+}
+
+#[test]
+fn test_full_contract_integration() {
+    let (env, client) = setup_full_contract_env();
+    let creator = Address::generate(&env);
+    let user = Address::generate(&env);
+    
+    // Register users using the user management functions directly
+    // Note: The integration might need adjustment based on how the modules are connected
+    
+    // Create room through main contract
+    let settings = Map::new(&env);
+    let room_id = client.create_room(&creator, &String::from_str(&env, "Integration Test"), &RoomType::Public, &settings);
+    
+    // Join room
+    let join_result = client.join_room(&user, &room_id);
+    assert_eq!(join_result, true);
+    
+    // Check membership
+    assert_eq!(client.is_member(&user, &room_id), true);
+    
+    // Get room details
+    let room = client.get_room(&room_id);
+    assert_eq!(room.members.len(), 2);
+}
+
+#[test]
+#[should_panic(expected = "Error(Contract, #1)")]
+fn test_get_nonexistent_room() {
+    let (env, client) = setup_room_test_env();
+    
+    // Try to get a room that doesn't exist
+    client.get_room(&999);
+}
+
+#[test]
+#[should_panic(expected = "Error(Contract, #2)")]
+fn test_join_room_already_member() {
+    let (env, client) = setup_room_test_env();
+    let creator = Address::generate(&env);
+    let user = Address::generate(&env);
+    let settings = Map::new(&env);
+    
+    // Create room
+    let room_id = client.create_room(&creator, &String::from_str(&env, "Test Room"), &RoomType::Public, &settings);
+    
+    // User joins room
+    client.join_room(&user, &room_id);
+    
+    // Try to join again (should panic)
+    client.join_room(&user, &room_id);
+}
+
+#[test]
+#[should_panic(expected = "Error(Contract, #3)")]
+fn test_leave_room_not_member() {
+    let (env, client) = setup_room_test_env();
+    let creator = Address::generate(&env);
+    let user = Address::generate(&env);
+    let settings = Map::new(&env);
+    
+    // Create room
+    let room_id = client.create_room(&creator, &String::from_str(&env, "Test Room"), &RoomType::Public, &settings);
+    
+    // Try to leave without being a member (should panic)
+    client.leave_room(&user, &room_id);
+}
+
+#[test]
+#[should_panic(expected = "Error(Contract, #7)")]
+fn test_join_inactive_room() {
+    let (env, client) = setup_room_test_env();
+    let creator = Address::generate(&env);
+    let user = Address::generate(&env);
+    let settings = Map::new(&env);
+    
+    // Create room
+    let room_id = client.create_room(&creator, &String::from_str(&env, "Test Room"), &RoomType::Public, &settings);
+    
+    // Deactivate room
+    client.deactivate_room(&creator, &room_id);
+    
+    // Try to join inactive room (should panic)
+    client.join_room(&user, &room_id);
 }
