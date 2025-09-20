@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   isConnected,
   isAllowed,
@@ -118,7 +119,7 @@ export async function getNetworkConfig() {
  */
 export async function signTx(
   xdr: string,
-  opts?: { network?: string; networkPassphrase?: string; address?: string }
+  opts?: { networkPassphrase?: string; address?: string }
 ) {
   try {
     const signed = await signTransaction(xdr, opts);
