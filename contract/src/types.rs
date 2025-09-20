@@ -1,4 +1,4 @@
-use soroban_sdk::{contracttype, Address, String};
+use soroban_sdk::{contracttype, Address, String, Vec};
 
 /// Level thresholds defining XP required for each level (10 levels)
 /// Level 1: 0-99 XP (implicit, starts at 0)
@@ -38,10 +38,9 @@ pub fn calculate_level(xp: u64) -> u32 {
     10 // Should never reach here due to earlier checks, but rust needs this
 }
 
-
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct  UserProfile {
+pub struct UserProfile {
     pub account_id: Address,
     pub username: String,
     pub xp: u64,
@@ -50,10 +49,26 @@ pub struct  UserProfile {
     pub created_at: u64,
 }
 
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct Room {
+    pub id: u128,
+    pub name: String,
+    pub room_type: u32, // 1=Public, 2=Private, 3=InviteOnly
+    pub max_members: u32,
+    pub min_level: u32,
+    pub min_xp: u64,
+    pub creator: Address,
+    pub members: Vec<Address>,
+    pub is_active: bool,
+    pub created_at: u64,
+}
+
 #[derive(Clone)]
 #[contracttype]
 pub enum DataKey {
     UserProfile(Address),
+    Room(u128),
 }
 
 #[cfg(test)]

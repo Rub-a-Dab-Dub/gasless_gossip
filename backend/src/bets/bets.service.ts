@@ -4,11 +4,11 @@ import { Repository } from 'typeorm';
 import { Bet } from './bet.entity';
 import { PlaceBetDto } from './dto/place-bet.dto';
 import { ResolveBetDto } from './dto/resolve-bet.dto';
-import * as StellarSdk from 'stellar-sdk';
+// import * as StellarSdk from 'stellar-sdk';
 
 @Injectable()
 export class BetsService {
-  private server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
+  // private server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
 
   constructor(
     @InjectRepository(Bet)

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Badge } from './badge.entity';
+import { Badge } from './entities/badge.entity';
 import { AssignBadgeDto } from './dto/assign-badge.dto';
-import { StellarService } from 'src/stellar/stellar.service';
+import { StellarService } from '../stellar/stellar.service';
 
 @Injectable()
 export class BadgesService {

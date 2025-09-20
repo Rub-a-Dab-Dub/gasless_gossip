@@ -1,4 +1,4 @@
-import { Badge } from 'src/badges/badge.entity';
+import { Badge } from '../../badges/entities/badge.entity';
 import {
   Entity,
   Column,
