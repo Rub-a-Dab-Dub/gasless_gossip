@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Badge } from './badge.entity';
+import { Badge } from './entities/badge.entity';
 import { BadgesService } from './badges.service';
 import { BadgesController } from './badges.controller';
 import { StellarModule } from '../stellar/stellar.module';
