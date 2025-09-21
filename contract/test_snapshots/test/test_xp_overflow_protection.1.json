@@ -42,6 +42,13 @@
                 },
                 {
                   "u64": "18446744073709551615"
+                },
+                {
+                  "vec": [
+                    {
+                      "symbol": "DailyLogin"
+                    }
+                  ]
                 }
               ]
             }
@@ -65,6 +72,13 @@
                 },
                 {
                   "u64": "100"
+                },
+                {
+                  "vec": [
+                    {
+                      "symbol": "DailyLogin"
+                    }
+                  ]
                 }
               ]
             }
@@ -154,6 +168,79 @@
                       },
                       "val": {
                         "u64": "18446744073709551615"
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "xp_history"
+                      },
+                      "val": {
+                        "vec": [
+                          {
+                            "map": [
+                              {
+                                "key": {
+                                  "symbol": "amount"
+                                },
+                                "val": {
+                                  "u64": "18446744073709551615"
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "reason"
+                                },
+                                "val": {
+                                  "vec": [
+                                    {
+                                      "symbol": "DailyLogin"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "timestamp"
+                                },
+                                "val": {
+                                  "u64": "0"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "map": [
+                              {
+                                "key": {
+                                  "symbol": "amount"
+                                },
+                                "val": {
+                                  "u64": "100"
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "reason"
+                                },
+                                "val": {
+                                  "vec": [
+                                    {
+                                      "symbol": "DailyLogin"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "timestamp"
+                                },
+                                "val": {
+                                  "u64": "0"
+                                }
+                              }
+                            ]
+                          }
+                        ]
                       }
                     }
                   ]

@@ -1,7 +1,7 @@
-use crate::types::{UserProfile, calculate_level, Room, RoomType, DataKey};
+use crate::types::{calculate_level, DataKey, Room, RoomType, UserProfile};
 use soroban_sdk::{
-    contractimpl, Address, Env, String, Vec, contract, symbol_short,
-    contracterror, contractevent, panic_with_error, Map
+    contract, contracterror, contractevent, contractimpl, panic_with_error, symbol_short, Address,
+    Env, Map, String, Vec,
 };
 
 #[contracterror]
@@ -55,21 +55,21 @@ impl RoomManager {
         settings: Map<String, String>,
     ) -> u128 {
         creator.require_auth();
-        
+
         // Generate unique room ID
         let next_id_key = DataKey::NextRoomId;
         let room_id: u128 = env.storage().persistent().get(&next_id_key).unwrap_or(1);
         env.storage().persistent().set(&next_id_key, &(room_id + 1));
 
         let room_key = DataKey::Room(room_id);
-        
+
         if env.storage().persistent().has(&room_key) {
             panic!("Room already exists");
         }
 
         // Validate room name uniqueness (if required)
         // This is optional based on your requirements
-        
+
         // Get settings or use defaults - convert strings manually
         let max_members_key = String::from_str(env, "max_members");
         let max_members = if settings.contains_key(max_members_key) {
@@ -79,14 +79,14 @@ impl RoomManager {
         } else {
             100
         };
-            
+
         let min_level_key = String::from_str(env, "min_level");
         let min_level = if settings.contains_key(min_level_key) {
             1 // Default min level
         } else {
             1
         };
-            
+
         let min_xp_key = String::from_str(env, "min_xp");
         let min_xp = if settings.contains_key(min_xp_key) {
             0 // Default min XP
@@ -124,7 +124,7 @@ impl RoomManager {
         user.require_auth();
 
         let room_key = DataKey::Room(room_id);
-        
+
         if !env.storage().persistent().has(&room_key) {
             panic_with_error!(env, RoomError::RoomNotFound);
         }
@@ -151,11 +151,11 @@ impl RoomManager {
         let user_key = (symbol_short!("usr"), user.clone());
         if env.storage().persistent().has(&user_key) {
             let user_profile: UserProfile = env.storage().persistent().get(&user_key).unwrap();
-            
+
             if user_profile.level < room.min_level {
                 panic_with_error!(env, RoomError::InsufficientLevel);
             }
-            
+
             if user_profile.xp < room.min_xp {
                 panic_with_error!(env, RoomError::InsufficientXp);
             }
@@ -176,13 +176,13 @@ impl RoomManager {
         if env.storage().persistent().has(&user_key) {
             let mut user_profile: UserProfile = env.storage().persistent().get(&user_key).unwrap();
             user_profile.xp += xp_amount;
-            
+
             // Check for level up
             let new_level = calculate_level(user_profile.xp);
             if new_level != user_profile.level {
                 user_profile.level = new_level;
             }
-            
+
             env.storage().persistent().set(&user_key, &user_profile);
         }
 
@@ -196,7 +196,7 @@ impl RoomManager {
         user.require_auth();
 
         let room_key = DataKey::Room(room_id);
-        
+
         if !env.storage().persistent().has(&room_key) {
             panic_with_error!(env, RoomError::RoomNotFound);
         }
@@ -220,7 +220,7 @@ impl RoomManager {
                 // TODO: Add proper event emission when Soroban SDK supports it better
 
                 true
-            },
+            }
             None => panic_with_error!(env, RoomError::UserNotMember),
         }
     }
@@ -228,7 +228,7 @@ impl RoomManager {
     /// Get room information
     pub fn get_room(env: &Env, room_id: u128) -> Room {
         let room_key = DataKey::Room(room_id);
-        
+
         if !env.storage().persistent().has(&room_key) {
             panic_with_error!(env, RoomError::RoomNotFound);
         }
@@ -239,26 +239,26 @@ impl RoomManager {
     /// Check if user is a member of a room
     pub fn is_member(env: &Env, user: Address, room_id: u128) -> bool {
         let room_key = DataKey::Room(room_id);
-        
+
         if !env.storage().persistent().has(&room_key) {
             return false;
         }
 
         let room: Room = env.storage().persistent().get(&room_key).unwrap();
-        
+
         for member in room.members.iter() {
             if member == user {
                 return true;
             }
         }
-        
+
         false
     }
 
     /// Get member count for a room
     pub fn get_member_count(env: &Env, room_id: u128) -> u32 {
         let room_key = DataKey::Room(room_id);
-        
+
         if !env.storage().persistent().has(&room_key) {
             return 0;
         }
@@ -277,7 +277,7 @@ impl RoomManager {
         creator.require_auth();
 
         let room_key = DataKey::Room(room_id);
-        
+
         if !env.storage().persistent().has(&room_key) {
             panic_with_error!(env, RoomError::RoomNotFound);
         }
@@ -291,7 +291,7 @@ impl RoomManager {
 
         // Update settings
         room.settings = settings.clone();
-        
+
         // Update derived settings - use simple approach since parsing is complex in Soroban
         let max_members_key = String::from_str(env, "max_members");
         if settings.contains_key(max_members_key) {
@@ -299,19 +299,19 @@ impl RoomManager {
             // In a real implementation, you might want to implement custom parsing
             room.max_members = 100; // Could be made configurable
         }
-            
+
         let min_level_key = String::from_str(env, "min_level");
         if settings.contains_key(min_level_key) {
             room.min_level = 1; // Could be made configurable
         }
-            
+
         let min_xp_key = String::from_str(env, "min_xp");
         if settings.contains_key(min_xp_key) {
             room.min_xp = 0; // Could be made configurable
         }
-            // Example: If you want to log the creator as a string for auditing (not required for contract logic)
-            // let creator_str: String = creator.to_string();
-            // env.events().publish((symbol_short!("settings_update"),), creator_str);
+        // Example: If you want to log the creator as a string for auditing (not required for contract logic)
+        // let creator_str: String = creator.to_string();
+        // env.events().publish((symbol_short!("settings_update"),), creator_str);
         env.storage().persistent().set(&room_key, &room);
 
         true
@@ -322,7 +322,7 @@ impl RoomManager {
         creator.require_auth();
 
         let room_key = DataKey::Room(room_id);
-        
+
         if !env.storage().persistent().has(&room_key) {
             panic_with_error!(env, RoomError::RoomNotFound);
         }

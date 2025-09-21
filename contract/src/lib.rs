@@ -1,13 +1,13 @@
 #![no_std]
 
-pub mod users;
 pub mod rooms;
 pub mod types;
+pub mod users;
 
-use soroban_sdk::{contract, contractimpl, Address, Env, String, Map};
-use types::{RoomType, Room, UserProfile};
-use users::users::UserManager;
 use rooms::rooms::RoomManager;
+use soroban_sdk::{contract, contractimpl, Address, Env, Map, String};
+use types::{Room, RoomType, UserProfile};
+use users::users::UserManager;
 
 #[contract]
 pub struct WhsprContract;

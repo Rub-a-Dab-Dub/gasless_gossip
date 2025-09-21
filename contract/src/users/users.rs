@@ -1,6 +1,7 @@
 use crate::types::{calculate_level, UserProfile, XpHistoryEntry, XpReason};
 use soroban_sdk::{
-    contract, contracterror, contractevent, contractimpl, panic_with_error, symbol_short, vec, Address, Env, String, Vec
+    contract, contracterror, contractevent, contractimpl, panic_with_error, symbol_short, vec,
+    Address, Env, String, Vec,
 };
 
 #[contracterror]
@@ -47,7 +48,7 @@ impl UserManager {
         }
 
         let key = symbol_short!("usr");
-        
+
         if env.storage().persistent().has(&key) {
             panic_with_error!(env, Error::UserAlreadyRegistered);
         }
@@ -67,12 +68,12 @@ impl UserManager {
         // Emit registration event
         env.events().publish(
             (symbol_short!("user_reg"),),
-            (account_id.clone(), username.clone())
+            (account_id.clone(), username.clone()),
         );
     }
 
     /// Add XP to a user and automatically update their level if it changes
-   pub fn add_xp(env: &Env, account_id: Address, amount: u64, reason: XpReason) {
+    pub fn add_xp(env: &Env, account_id: Address, amount: u64, reason: XpReason) {
         account_id.require_auth();
 
         if amount == 0 {
@@ -120,29 +121,29 @@ impl UserManager {
             );
         }
     }
-    
+
     /// Update user's level based on their current XP
     pub fn update_user_level(env: &Env, account_id: Address) {
         account_id.require_auth();
-        
+
         let key = symbol_short!("usr");
-        
+
         if !env.storage().persistent().has(&key) {
             panic!("User not registered");
         }
-        
+
         let mut profile: UserProfile = env.storage().persistent().get(&key).unwrap();
         let new_level = calculate_level(profile.xp);
-        
+
         if new_level != profile.level {
             let old_level = profile.level;
             profile.level = new_level;
             env.storage().persistent().set(&key, &profile);
-            
+
             // Emit level up event
             env.events().publish(
                 (symbol_short!("level_up"),),
-                (account_id, old_level, new_level)
+                (account_id, old_level, new_level),
             );
         }
     }
@@ -150,7 +151,7 @@ impl UserManager {
     /// Get user profile
     pub fn get_user(env: &Env, _account_id: Address) -> UserProfile {
         let key = symbol_short!("usr");
-        
+
         if !env.storage().persistent().has(&key) {
             panic!("User not registered");
         }
