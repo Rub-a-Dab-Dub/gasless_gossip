@@ -8,7 +8,7 @@ import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
 import { TradeModule } from './trade/trade.module';
 import { SecretsModule } from './modules/secrets/secrets.module';
-
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 function loadModules(): (new () => any)[] {
   const modulesDir = path.join(__dirname);
@@ -49,6 +49,7 @@ function loadModules(): (new () => any)[] {
     }),
     DatabaseModule,
     HealthModule,
+    EventEmitterModule.forRoot(),
     ...loadModules(),
     TradeModule,
     SecretsModule,
