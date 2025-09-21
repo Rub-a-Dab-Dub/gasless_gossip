@@ -7,6 +7,7 @@ import * as fs from 'fs';
 import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
 import { TradeModule } from './trade/trade.module';
+import { SecretsModule } from './modules/secrets/secrets.module';
 
 
 function loadModules(): (new () => any)[] {
@@ -50,6 +51,7 @@ function loadModules(): (new () => any)[] {
     HealthModule,
     ...loadModules(),
     TradeModule,
+    SecretsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
