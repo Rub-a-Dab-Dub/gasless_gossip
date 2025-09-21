@@ -1,7 +1,6 @@
-use crate::types::{UserProfile, calculate_level};
+use crate::types::{calculate_level, UserProfile, XpHistoryEntry, XpReason};
 use soroban_sdk::{
-    contractimpl, Address, Env, String, contract, symbol_short,
-    contracterror, contractevent, panic_with_error
+    contract, contracterror, contractevent, contractimpl, panic_with_error, symbol_short, vec, Address, Env, String, Vec
 };
 
 #[contracterror]
@@ -10,6 +9,7 @@ pub enum Error {
     UserAlreadyRegistered = 1,
     UserNotRegistered = 2,
     InvalidUsernameLength = 3,
+    InvalidXpAmount = 4,
 }
 
 #[contractevent]
@@ -59,6 +59,7 @@ impl UserManager {
             level: 1,
             reputation: 0,
             created_at: env.ledger().timestamp(),
+            xp_history: Vec::new(env),
         };
 
         env.storage().persistent().set(&key, &profile);
@@ -71,43 +72,55 @@ impl UserManager {
     }
 
     /// Add XP to a user and automatically update their level if it changes
-    pub fn add_xp(env: &Env, account_id: Address, xp_amount: u64) {
+   pub fn add_xp(env: &Env, account_id: Address, amount: u64, reason: XpReason) {
         account_id.require_auth();
 
-        let key = symbol_short!("usr");
-        
-        if !env.storage().persistent().has(&key) {
-            panic!("User not registered");
+        if amount == 0 {
+            panic_with_error!(env, Error::InvalidXpAmount);
         }
-        
+
+        let key = symbol_short!("usr");
+        if !env.storage().persistent().has(&key) {
+            panic_with_error!(env, Error::UserNotRegistered);
+        }
+
         let mut profile: UserProfile = env.storage().persistent().get(&key).unwrap();
         let old_level = profile.level;
-        
-        // Add XP with overflow protection
-        profile.xp = profile.xp.saturating_add(xp_amount);
-        
-        // Calculate new level
+
+        // Overflow protection
+        profile.xp = profile.xp.saturating_add(amount);
+
+        // Level calculation (reuse existing logic)
         let new_level = calculate_level(profile.xp);
         profile.level = new_level;
-        
-        // Save updated profile
+
+        // XP history (optional, can be capped for storage)
+        let mut history = profile.xp_history.clone();
+        let entry = XpHistoryEntry {
+            timestamp: env.ledger().timestamp(),
+            reason: reason.clone(),
+            amount,
+        };
+        history.push_back(entry);
+        profile.xp_history = history;
+
         env.storage().persistent().set(&key, &profile);
-        
-        // Emit XP added event
+
+        // Emit event
         env.events().publish(
             (symbol_short!("xp_added"),),
-            (account_id.clone(), xp_amount)
+            (account_id.clone(), amount, reason.clone()),
         );
-        
-        // If level changed, emit level up event
+
+        // Emit level up event if needed (reuse existing logic)
         if new_level != old_level {
             env.events().publish(
                 (symbol_short!("level_up"),),
-                (account_id, old_level, new_level)
+                (account_id, old_level, new_level),
             );
         }
     }
-
+    
     /// Update user's level based on their current XP
     pub fn update_user_level(env: &Env, account_id: Address) {
         account_id.require_auth();

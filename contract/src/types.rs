@@ -46,6 +46,15 @@ pub fn calculate_level(xp: u64) -> u32 {
     10 // Should never reach here due to earlier checks, but rust needs this
 }
 
+
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct XpHistoryEntry {
+    pub timestamp: u64,
+    pub reason: XpReason,
+    pub amount: u64,
+}
+
 #[contracttype]
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct UserProfile {
@@ -53,8 +62,9 @@ pub struct UserProfile {
     pub username: String,
     pub xp: u64,
     pub level: u32,
-    pub reputation: i64, 
+    pub reputation: i64,
     pub created_at: u64,
+    pub xp_history: Vec<XpHistoryEntry>,
 }
 
 #[contracttype]
@@ -112,4 +122,15 @@ mod tests {
         assert_eq!(calculate_level(6600), 10, "6600 XP should be Level 10");
         assert_eq!(calculate_level(9999), 10, "9999 XP should be Level 10");
     }
+}
+
+
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum XpReason {
+    MessageSent,
+    RoomCreated,
+    InviteAccepted,
+    DailyLogin,
+    Custom(String),
 }

@@ -2,7 +2,7 @@
 
 use crate::users::users::{UserManager, UserManagerClient};
 use crate::rooms::rooms::{RoomManager, RoomManagerClient};
-use crate::types::{calculate_level, RoomType};
+use crate::types::{calculate_level, RoomType, XpReason};
 use crate::{WhsprContract, WhsprContractClient};
 use soroban_sdk::{testutils::Address as _, Env, String, Address, Map};
 
@@ -51,31 +51,31 @@ fn test_xp_and_level_progression() {
     assert_eq!(profile.level, 1);
     
     // Test XP addition and automatic level up
-    client.add_xp(&user_address, &50);
+    client.add_xp(&user_address, &50, &XpReason::DailyLogin);
     let profile = client.get_user(&user_address);
     assert_eq!(profile.xp, 50);
     assert_eq!(profile.level, 1);
     
     // Add XP to trigger level up to level 2
-    client.add_xp(&user_address, &60);  // Total: 110 XP
+    client.add_xp(&user_address, &60, &XpReason::DailyLogin);  // Total: 110 XP
     let profile = client.get_user(&user_address);
     assert_eq!(profile.xp, 110);
     assert_eq!(profile.level, 2);
     
     // Test multiple level ups in one addition
-    client.add_xp(&user_address, &500);  // Total: 610 XP
+    client.add_xp(&user_address, &500, &XpReason::DailyLogin);  // Total: 610 XP
     let profile = client.get_user(&user_address);
     assert_eq!(profile.xp, 610);
     assert_eq!(profile.level, 4);
     
     // Test exact threshold values
-    client.add_xp(&user_address, &390);  // Total: 1000 XP (Level 5 threshold)
+    client.add_xp(&user_address, &390, &XpReason::DailyLogin);  // Total: 1000 XP (Level 5 threshold)
     let profile = client.get_user(&user_address);
     assert_eq!(profile.xp, 1000);
     assert_eq!(profile.level, 5);
     
     // Test max level cap
-    client.add_xp(&user_address, &6000);  // Total: 7000 XP (beyond Level 10)
+    client.add_xp(&user_address, &6000, &XpReason::DailyLogin);  // Total: 7000 XP (beyond Level 10)
     let profile = client.get_user(&user_address);
     assert_eq!(profile.xp, 7000);
     assert_eq!(profile.level, 10);
@@ -89,7 +89,7 @@ fn test_manual_level_update() {
     
     // Register user and add XP
     client.register_user(&user_address, &username);
-    client.add_xp(&user_address, &350);  // Should be Level 3
+    client.add_xp(&user_address, &350, &XpReason::DailyLogin);  // Should be Level 3
     
     // Verify level
     let profile = client.get_user(&user_address);
@@ -146,7 +146,7 @@ fn test_update_user_level() {
     client.register_user(&user_address, &username);
     
     // Add XP to level 3
-    client.add_xp(&user_address, &400); // 400 XP = Level 3
+    client.add_xp(&user_address, &400, &XpReason::DailyLogin); // 400 XP = Level 3
     let profile = client.get_user(&user_address);
     assert_eq!(profile.level, 3);
     
@@ -170,13 +170,13 @@ fn test_xp_overflow_protection() {
     client.register_user(&user_address, &username);
     
     // Add maximum XP to test overflow protection
-    client.add_xp(&user_address, &u64::MAX);
+    client.add_xp(&user_address, &u64::MAX, &XpReason::DailyLogin);
     let profile = client.get_user(&user_address);
     assert_eq!(profile.xp, u64::MAX);
     assert_eq!(profile.level, 10);
     
     // Try to add more XP (should saturate, not overflow)
-    client.add_xp(&user_address, &100);
+    client.add_xp(&user_address, &100, &XpReason::DailyLogin);
     let profile = client.get_user(&user_address);
     assert_eq!(profile.xp, u64::MAX); // Should remain at max
     assert_eq!(profile.level, 10);
@@ -206,7 +206,7 @@ fn test_add_xp_unregistered_user() {
     let user_address = Address::generate(&env);
     
     // Try to add XP to unregistered user
-    client.add_xp(&user_address, &100);
+    client.add_xp(&user_address, &100, &XpReason::DailyLogin);
 }
 
 #[test]
@@ -532,4 +532,38 @@ fn test_join_inactive_room() {
     
     // Try to join inactive room (should panic)
     client.join_room(&user, &room_id);
+}
+
+#[test]
+fn test_add_xp_with_reason_and_history() {
+    let (env, client) = setup_test_env();
+    let user_address = Address::generate(&env);
+    let username = String::from_str(&env, "testuser");
+
+    client.register_user(&user_address, &username);
+
+    // Add XP for message sent
+    client.add_xp(&user_address, &50, &XpReason::MessageSent);
+    let profile = client.get_user(&user_address);
+    assert_eq!(profile.xp, 50);
+    assert_eq!(profile.xp_history.len(), 1);
+
+    // Add XP for custom reason
+    client.add_xp(&user_address, &25, &XpReason::Custom(String::from_str(&env, "SpecialEvent")));
+    let profile = client.get_user(&user_address);
+    assert_eq!(profile.xp, 75);
+    assert_eq!(profile.xp_history.len(), 2);
+}
+
+#[test]
+#[should_panic(expected = "Error(Contract, #8)")]
+fn test_add_xp_invalid_amount_should_panic() {
+    let (env, client) = setup_test_env();
+    let user_address = Address::generate(&env);
+    let username = String::from_str(&env, "testuser");
+
+    client.register_user(&user_address, &username);
+
+    // Try to add 0 XP (should panic)
+    client.add_xp(&user_address, &0, &XpReason::DailyLogin);
 }

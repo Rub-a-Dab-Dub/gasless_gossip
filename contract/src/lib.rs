@@ -19,8 +19,8 @@ impl WhsprContract {
         UserManager::register_user(&env, account_id, username);
     }
 
-    pub fn add_xp(env: Env, account_id: Address, xp_amount: u64) {
-        UserManager::add_xp(&env, account_id, xp_amount);
+    pub fn add_xp(env: Env, account_id: Address, xp_amount: u64, reason: String) {
+        UserManager::add_xp(&env, account_id, xp_amount, types::XpReason::Custom(reason));
     }
 
     pub fn get_user(env: Env, account_id: Address) -> UserProfile {
