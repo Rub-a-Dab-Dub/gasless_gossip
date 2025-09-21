@@ -8,6 +8,7 @@ import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
 import { TradeModule } from './trade/trade.module';
 
+
 function loadModules(): (new () => any)[] {
   const modulesDir = path.join(__dirname);
   const moduleFiles = fs
