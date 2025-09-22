@@ -5,35 +5,35 @@ import {
   CreateDateColumn,
   Index,
   Unique,
-} from "typeorm";
+} from 'typeorm';
 
 export enum ReactionType {
-  LIKE = "like",
-  LOVE = "love",
-  LAUGH = "laugh",
-  WOW = "wow",
-  SAD = "sad",
-  ANGRY = "angry",
+  LIKE = 'like',
+  LOVE = 'love',
+  LAUGH = 'laugh',
+  WOW = 'wow',
+  SAD = 'sad',
+  ANGRY = 'angry',
 }
 
-@Entity("reactions")
-@Unique(["messageId", "userId"]) // Prevent duplicate reactions from same user on same message
-@Index(["messageId"]) // Optimize queries by messageId
-@Index(["userId"]) // Optimize queries by userId
+@Entity('reactions')
+@Unique(['messageId', 'userId']) // Prevent duplicate reactions from same user on same message
+@Index(['messageId']) // Optimize queries by messageId
+@Index(['userId']) // Optimize queries by userId
 export class Reaction {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column("uuid")
+  @Column('uuid')
   messageId: string;
 
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: ReactionType,
   })
   type: ReactionType;
 
-  @Column("uuid")
+  @Column('uuid')
   userId: string;
 
   @CreateDateColumn()

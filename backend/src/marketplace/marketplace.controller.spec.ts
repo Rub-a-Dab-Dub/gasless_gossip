@@ -34,7 +34,10 @@ describe('MarketplaceController', () => {
 
     const result = await controller.createListing(req, createListingDto);
     expect(result).toEqual(listing);
-    expect(service.createListing).toHaveBeenCalledWith('user1', createListingDto);
+    expect(service.createListing).toHaveBeenCalledWith(
+      'user1',
+      createListingDto,
+    );
   });
 
   it('should purchase listing', async () => {

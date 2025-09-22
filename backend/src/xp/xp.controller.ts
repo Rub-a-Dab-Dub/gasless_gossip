@@ -8,7 +8,11 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { XpService } from './xp.service';
-import { AddXpDto, StellarEventDto, MapStellarAccountDto } from './dto/add-xp.dto';
+import {
+  AddXpDto,
+  StellarEventDto,
+  MapStellarAccountDto,
+} from './dto/add-xp.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { StellarAccount } from './stellar-account.entity';
@@ -47,13 +51,18 @@ export class XpController {
     // lightweight: find or create a mapping
     // Controller does a simple upsert via repository
     // Note: in larger projects this should be handled by a dedicated service
-    const existing = await this.stellarAccountRepo.findOne({ where: { stellarAccount: body.stellarAccount } });
+    const existing = await this.stellarAccountRepo.findOne({
+      where: { stellarAccount: body.stellarAccount },
+    });
     if (existing) {
       existing.userId = body.userId ?? existing.userId;
       await this.stellarAccountRepo.save(existing);
       return existing;
     }
-    const created = this.stellarAccountRepo.create({ stellarAccount: body.stellarAccount, userId: body.userId });
+    const created = this.stellarAccountRepo.create({
+      stellarAccount: body.stellarAccount,
+      userId: body.userId,
+    });
     await this.stellarAccountRepo.save(created);
     return created;
   }

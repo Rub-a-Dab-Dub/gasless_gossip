@@ -1,4 +1,12 @@
-import { IsNotEmpty, IsString, IsEnum, IsOptional, IsNumber, Min, Max } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsEnum,
+  IsOptional,
+  IsNumber,
+  Min,
+  Max,
+} from 'class-validator';
 import { RoomType } from '../entities/room.entity';
 
 export class CreateRoomDto {

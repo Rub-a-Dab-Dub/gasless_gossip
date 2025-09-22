@@ -12,7 +12,8 @@ export class HealthController {
       await this.dataSource.query('SELECT 1');
       return { status: 'DB Connected' };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       throw new HttpException(
         { status: 'DB Connection Failed', message: errorMessage },
         HttpStatus.SERVICE_UNAVAILABLE,

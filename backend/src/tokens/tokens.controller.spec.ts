@@ -7,15 +7,13 @@ describe('TokensController', () => {
 
   const serviceMock = {
     send: jest.fn(async () => ({ hash: 'abc', ledger: 1, successful: true })),
-    history: jest.fn(async () => ([])),
+    history: jest.fn(async () => []),
   } as unknown as TokensService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TokensController],
-      providers: [
-        { provide: TokensService, useValue: serviceMock },
-      ],
+      providers: [{ provide: TokensService, useValue: serviceMock }],
     }).compile();
 
     controller = module.get<TokensController>(TokensController);
@@ -32,5 +30,3 @@ describe('TokensController', () => {
     expect(res).toEqual({ userId: 'user-1', entries: [] });
   });
 });
-
-

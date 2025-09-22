@@ -25,7 +25,7 @@ export class User {
   @Column({ name: 'stellar_account_id', unique: true, nullable: true })
   stellarAccountId!: string;
 
-  @OneToMany(() => Badge, badge => badge.user)
+  @OneToMany(() => Badge, (badge) => badge.user)
   badges!: Badge[];
 
   @Column({ default: true })

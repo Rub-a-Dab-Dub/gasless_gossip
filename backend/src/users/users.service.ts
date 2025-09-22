@@ -91,16 +91,21 @@ export class UsersService {
     await this.userRepository.save(user);
   }
 
-  async linkStellarAccount(userId: string, stellarAccountId: string): Promise<User> {
+  async linkStellarAccount(
+    userId: string,
+    stellarAccountId: string,
+  ): Promise<User> {
     this.validateStellarAccount(stellarAccountId);
-    
+
     // Check if Stellar account is already linked
     const existingLink = await this.userRepository.findOne({
       where: { stellarAccountId },
     });
 
     if (existingLink && existingLink.id !== userId) {
-      throw new ConflictException('Stellar account already linked to another user');
+      throw new ConflictException(
+        'Stellar account already linked to another user',
+      );
     }
 
     const user = await this.findOne(userId);

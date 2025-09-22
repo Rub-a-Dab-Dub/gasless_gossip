@@ -7,10 +7,11 @@ import { TokenTransaction } from './token-transaction.entity';
 import { StellarAccount } from '../xp/stellar-account.entity';
 
 @Module({
-  imports: [ConfigModule, TypeOrmModule.forFeature([TokenTransaction, StellarAccount])],
+  imports: [
+    ConfigModule,
+    TypeOrmModule.forFeature([TokenTransaction, StellarAccount]),
+  ],
   controllers: [TokensController],
   providers: [TokensService],
 })
 export class TokensModule {}
-
-

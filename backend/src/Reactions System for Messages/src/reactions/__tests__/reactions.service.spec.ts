@@ -1,9 +1,9 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { getRepositoryToken } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { ConflictException, NotFoundException } from "@nestjs/common";
-import { ReactionsService } from "../reactions.service";
-import { Reaction, ReactionType } from "../entities/reaction.entity";
+import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { ConflictException, NotFoundException } from '@nestjs/common';
+import { ReactionsService } from '../reactions.service';
+import { Reaction, ReactionType } from '../entities/reaction.entity';
 
 const mockRepository = {
   findOne: jest.fn(),
@@ -15,7 +15,7 @@ const mockRepository = {
   createQueryBuilder: jest.fn(),
 };
 
-describe("ReactionsService", () => {
+describe('ReactionsService', () => {
   let service: ReactionsService;
   let repository: Repository<Reaction>;
 
@@ -38,18 +38,18 @@ describe("ReactionsService", () => {
     jest.clearAllMocks();
   });
 
-  describe("createReaction", () => {
-    it("should create a new reaction", async () => {
+  describe('createReaction', () => {
+    it('should create a new reaction', async () => {
       const createReactionDto = {
-        messageId: "message-123",
+        messageId: 'message-123',
         type: ReactionType.LIKE,
       };
-      const userId = "user-123";
+      const userId = 'user-123';
 
       mockRepository.findOne.mockResolvedValue(null);
       mockRepository.create.mockReturnValue({ ...createReactionDto, userId });
       mockRepository.save.mockResolvedValue({
-        id: "reaction-123",
+        id: 'reaction-123',
         ...createReactionDto,
         userId,
         createdAt: new Date(),
@@ -58,35 +58,35 @@ describe("ReactionsService", () => {
       const result = await service.createReaction(createReactionDto, userId);
 
       expect(mockRepository.findOne).toHaveBeenCalledWith({
-        where: { messageId: "message-123", userId: "user-123" },
+        where: { messageId: 'message-123', userId: 'user-123' },
       });
       expect(result.type).toBe(ReactionType.LIKE);
     });
 
-    it("should throw ConflictException for duplicate reaction of same type", async () => {
+    it('should throw ConflictException for duplicate reaction of same type', async () => {
       const createReactionDto = {
-        messageId: "message-123",
+        messageId: 'message-123',
         type: ReactionType.LIKE,
       };
-      const userId = "user-123";
+      const userId = 'user-123';
 
       mockRepository.findOne.mockResolvedValue({
-        id: "existing-123",
+        id: 'existing-123',
         type: ReactionType.LIKE,
-        messageId: "message-123",
+        messageId: 'message-123',
         userId,
       });
 
       await expect(
-        service.createReaction(createReactionDto, userId)
+        service.createReaction(createReactionDto, userId),
       ).rejects.toThrow(ConflictException);
     });
   });
 
-  describe("getReactionsByMessage", () => {
-    it("should return reaction counts by type", async () => {
-      const messageId = "message-123";
-      const userId = "user-123";
+  describe('getReactionsByMessage', () => {
+    it('should return reaction counts by type', async () => {
+      const messageId = 'message-123';
+      const userId = 'user-123';
 
       const reactions = [
         { type: ReactionType.LIKE },

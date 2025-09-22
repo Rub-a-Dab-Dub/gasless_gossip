@@ -48,12 +48,12 @@ describe('UsersController', () => {
         email: 'test@example.com',
         pseudonym: 'Test Whisper',
       };
-      
+
       const expectedResult = { id: '1', ...createUserDto };
       mockUsersService.create.mockResolvedValue(expectedResult);
 
       const result = await controller.create(createUserDto);
-      
+
       expect(service.create).toHaveBeenCalledWith(createUserDto);
       expect(result).toEqual(expectedResult);
     });
@@ -68,11 +68,11 @@ describe('UsersController', () => {
         email: 'test@example.com',
         pseudonym: 'Test Whisper',
       };
-      
+
       mockUsersService.findOne.mockResolvedValue(expectedResult);
 
       const result = await controller.findOne(userId);
-      
+
       expect(service.findOne).toHaveBeenCalledWith(userId);
       expect(result).toEqual(expectedResult);
     });

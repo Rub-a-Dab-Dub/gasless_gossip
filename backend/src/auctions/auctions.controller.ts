@@ -1,4 +1,12 @@
-import { Controller, Post, Get, Body, Param, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Param,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { AuctionsService } from './auctions.service';
 import { StartAuctionDto } from './dto/start-auction.dto';
 import { PlaceBidDto } from './dto/place-bid.dto';
@@ -14,12 +22,15 @@ export class AuctionsController {
       return {
         success: true,
         data: auction,
-        message: 'Auction started successfully'
+        message: 'Auction started successfully',
       };
     } catch (error) {
       throw new HttpException(
-        { success: false, message: error.message },
-        HttpStatus.BAD_REQUEST
+        {
+          success: false,
+          message: error instanceof Error ? error.message : 'An error occurred',
+        },
+        HttpStatus.BAD_REQUEST,
       );
     }
   }
@@ -31,12 +42,15 @@ export class AuctionsController {
       return {
         success: true,
         data: bid,
-        message: 'Bid placed successfully'
+        message: 'Bid placed successfully',
       };
     } catch (error) {
       throw new HttpException(
-        { success: false, message: error.message },
-        HttpStatus.BAD_REQUEST
+        {
+          success: false,
+          message: error instanceof Error ? error.message : 'An error occurred',
+        },
+        HttpStatus.BAD_REQUEST,
       );
     }
   }
@@ -48,12 +62,15 @@ export class AuctionsController {
       return {
         success: true,
         data: auction,
-        message: 'Auction retrieved successfully'
+        message: 'Auction retrieved successfully',
       };
     } catch (error) {
       throw new HttpException(
-        { success: false, message: error.message },
-        HttpStatus.NOT_FOUND
+        {
+          success: false,
+          message: error instanceof Error ? error.message : 'An error occurred',
+        },
+        HttpStatus.NOT_FOUND,
       );
     }
   }
@@ -65,12 +82,12 @@ export class AuctionsController {
       return {
         success: true,
         data: auctions,
-        message: 'Active auctions retrieved successfully'
+        message: 'Active auctions retrieved successfully',
       };
     } catch (error) {
       throw new HttpException(
         { success: false, message: error.message },
-        HttpStatus.INTERNAL_SERVER_ERROR
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }

@@ -52,7 +52,9 @@ describe('MarketplaceService', () => {
   it('should purchase a listing', async () => {
     const listing = { id: '1', sellerId: 'user1', price: 10, isActive: true };
     jest.spyOn(repository, 'findOne').mockResolvedValue(listing as any);
-    jest.spyOn(repository, 'save').mockResolvedValue({ ...listing, isActive: false } as any);
+    jest
+      .spyOn(repository, 'save')
+      .mockResolvedValue({ ...listing, isActive: false } as any);
 
     const result = await service.purchaseListing('user2', '1');
     expect(result.isActive).toBe(false);
@@ -62,6 +64,8 @@ describe('MarketplaceService', () => {
     const listing = { id: '1', sellerId: 'user1', price: 10, isActive: true };
     jest.spyOn(repository, 'findOne').mockResolvedValue(listing as any);
 
-    await expect(service.purchaseListing('user1', '1')).rejects.toThrow(BadRequestException);
+    await expect(service.purchaseListing('user1', '1')).rejects.toThrow(
+      BadRequestException,
+    );
   });
 });

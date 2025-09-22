@@ -18,7 +18,7 @@ export class ChatGateway
 {
   @WebSocketServer()
   server!: Server;
-  
+
   private readonly logger = new Logger(ChatGateway.name);
 
   constructor(private readonly roomsService: RoomsService) {}
@@ -26,11 +26,11 @@ export class ChatGateway
   afterInit() {
     console.log('ChatGateway initialized');
   }
-  
+
   handleConnection(client: Socket) {
     console.log('Client connected', client.id);
   }
-  
+
   handleDisconnect(client: Socket) {
     console.log('Client disconnected', client.id);
   }
@@ -44,20 +44,25 @@ export class ChatGateway
       // For backward compatibility, allow joining without formal room validation
       // But also check if it's a formal room
       if (payload.userId) {
-        const isMember = await this.isUserMemberOfRoom(payload.userId, payload.room);
+        const isMember = await this.isUserMemberOfRoom(
+          payload.userId,
+          payload.room,
+        );
         if (!isMember) {
-          client.emit('error', { message: 'User is not a member of this room' });
+          client.emit('error', {
+            message: 'User is not a member of this room',
+          });
           return;
         }
       }
-      
+
       client.join(payload.room);
       client.emit('joined', { room: payload.room });
-      
+
       // Notify room about new connection
-      client.to(payload.room).emit('user_connected', { 
+      client.to(payload.room).emit('user_connected', {
         userId: payload.userId,
-        socketId: client.id 
+        socketId: client.id,
       });
     } catch (error) {
       this.logger.error('Error joining room:', error);
@@ -72,29 +77,30 @@ export class ChatGateway
   ) {
     client.leave(payload.room);
     client.emit('left', { room: payload.room });
-    
+
     // Notify room about user leaving
-    client.to(payload.room).emit('user_disconnected', { 
+    client.to(payload.room).emit('user_disconnected', {
       userId: payload.userId,
-      socketId: client.id 
+      socketId: client.id,
     });
   }
 
   @SubscribeMessage('message')
-  async handleMessage(@MessageBody() payload: { 
-    room: string; 
-    message: any;
-    userId?: string;
-  }) {
+  async handleMessage(
+    @MessageBody() payload: { room: string; message: any; userId?: string },
+  ) {
     try {
       // Validate user can send messages to this room
       if (payload.userId) {
-        const isMember = await this.isUserMemberOfRoom(payload.userId, payload.room);
+        const isMember = await this.isUserMemberOfRoom(
+          payload.userId,
+          payload.room,
+        );
         if (!isMember) {
           return; // Silently ignore messages from non-members
         }
       }
-      
+
       // broadcast to room
       console.log('📩 Message received from client:', payload.message);
       this.server.to(payload.room).emit('message', {
@@ -124,10 +130,15 @@ export class ChatGateway
     });
   }
 
-  private async isUserMemberOfRoom(userId: string, roomId: string): Promise<boolean> {
+  private async isUserMemberOfRoom(
+    userId: string,
+    roomId: string,
+  ): Promise<boolean> {
     try {
       const members = await this.roomsService.getRoomMembers(roomId);
-      return members.some(membership => membership.userId === userId && membership.isActive);
+      return members.some(
+        (membership) => membership.userId === userId && membership.isActive,
+      );
     } catch (error) {
       // If room doesn't exist in formal system, allow for backward compatibility
       return true;

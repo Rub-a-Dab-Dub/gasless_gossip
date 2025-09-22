@@ -49,8 +49,20 @@ describe('MessagesService', () => {
 
   it('should find messages by room', async () => {
     const messages = [
-      { id: '1', roomId: 'room1', contentHash: 'hash1', senderId: 'user1', createdAt: new Date() },
-      { id: '2', roomId: 'room1', contentHash: 'hash2', senderId: 'user2', createdAt: new Date() },
+      {
+        id: '1',
+        roomId: 'room1',
+        contentHash: 'hash1',
+        senderId: 'user1',
+        createdAt: new Date(),
+      },
+      {
+        id: '2',
+        roomId: 'room1',
+        contentHash: 'hash2',
+        senderId: 'user2',
+        createdAt: new Date(),
+      },
     ];
     jest.spyOn(repo, 'find').mockResolvedValue(messages as any);
     const result = await service.findByRoom('room1');

@@ -7,11 +7,7 @@ import { StellarModule } from '../stellar/stellar.module';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Listing]),
-    StellarModule,
-    AuthModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Listing]), StellarModule, AuthModule],
   controllers: [MarketplaceController],
   providers: [MarketplaceService],
   exports: [MarketplaceService],

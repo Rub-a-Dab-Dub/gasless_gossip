@@ -53,7 +53,7 @@ describe('AuctionsService', () => {
       const startAuctionDto = {
         giftId: 'gift-123',
         endTime: new Date(Date.now() + 86400000).toISOString(), // 24 hours from now
-        startingBid: 10
+        startingBid: 10,
       };
 
       const mockEscrowAccount = 'GCTEST123...';
@@ -62,10 +62,12 @@ describe('AuctionsService', () => {
         giftId: startAuctionDto.giftId,
         highestBid: startAuctionDto.startingBid,
         stellarEscrowAccount: mockEscrowAccount,
-        status: 'ACTIVE'
+        status: 'ACTIVE',
       };
 
-      mockStellarService.createEscrowAccount.mockResolvedValue(mockEscrowAccount);
+      mockStellarService.createEscrowAccount.mockResolvedValue(
+        mockEscrowAccount,
+      );
       mockAuctionRepo.create.mockReturnValue(mockAuction);
       mockAuctionRepo.save.mockResolvedValue(mockAuction);
 
@@ -83,9 +85,9 @@ describe('AuctionsService', () => {
         endTime: new Date(Date.now() - 86400000).toISOString(), // 24 hours ago
       };
 
-      await expect(service.startAuction(startAuctionDto))
-        .rejects
-        .toThrow('End time must be in the future');
+      await expect(service.startAuction(startAuctionDto)).rejects.toThrow(
+        'End time must be in the future',
+      );
     });
   });
 
@@ -94,7 +96,7 @@ describe('AuctionsService', () => {
       const placeBidDto = {
         auctionId: 'auction-123',
         bidderId: 'bidder-123',
-        amount: 15
+        amount: 15,
       };
 
       const mockAuction = {
@@ -103,7 +105,7 @@ describe('AuctionsService', () => {
         endTime: new Date(Date.now() + 86400000), // 24 hours from now
         highestBid: 10,
         stellarEscrowAccount: 'GCTEST123...',
-        bids: []
+        bids: [],
       };
 
       const mockBid = {
@@ -111,21 +113,26 @@ describe('AuctionsService', () => {
         auctionId: placeBidDto.auctionId,
         bidderId: placeBidDto.bidderId,
         amount: placeBidDto.amount,
-        stellarTransactionId: 'stellar_tx_123'
+        stellarTransactionId: 'stellar_tx_123',
       };
 
       mockAuctionRepo.findOne.mockResolvedValue(mockAuction);
-      mockStellarService.processEscrowPayment.mockResolvedValue('stellar_tx_123');
+      mockStellarService.processEscrowPayment.mockResolvedValue(
+        'stellar_tx_123',
+      );
       mockBidRepo.create.mockReturnValue(mockBid);
       mockBidRepo.save.mockResolvedValue(mockBid);
-      mockAuctionRepo.save.mockResolvedValue({ ...mockAuction, highestBid: 15 });
+      mockAuctionRepo.save.mockResolvedValue({
+        ...mockAuction,
+        highestBid: 15,
+      });
 
       const result = await service.placeBid(placeBidDto);
 
       expect(mockStellarService.processEscrowPayment).toHaveBeenCalledWith(
         placeBidDto.bidderId,
         mockAuction.stellarEscrowAccount,
-        placeBidDto.amount
+        placeBidDto.amount,
       );
       expect(result).toEqual(mockBid);
     });
@@ -134,7 +141,7 @@ describe('AuctionsService', () => {
       const placeBidDto = {
         auctionId: 'auction-123',
         bidderId: 'bidder-123',
-        amount: 5 // Lower than current highest bid
+        amount: 5, // Lower than current highest bid
       };
 
       const mockAuction = {
@@ -142,14 +149,14 @@ describe('AuctionsService', () => {
         status: 'ACTIVE',
         endTime: new Date(Date.now() + 86400000),
         highestBid: 10,
-        bids: []
+        bids: [],
       };
 
       mockAuctionRepo.findOne.mockResolvedValue(mockAuction);
 
-      await expect(service.placeBid(placeBidDto))
-        .rejects
-        .toThrow('Bid must be higher than current highest bid of 10');
+      await expect(service.placeBid(placeBidDto)).rejects.toThrow(
+        'Bid must be higher than current highest bid of 10',
+      );
     });
   });
 });

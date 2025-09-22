@@ -27,7 +27,10 @@ describe('BetsService', () => {
     mockRepository.create.mockReturnValue(mockBet);
     mockRepository.save.mockResolvedValue(mockBet);
 
-    const result = await service.placeBet('user1', { outcome: 'win', stakes: 100 });
+    const result = await service.placeBet('user1', {
+      outcome: 'win',
+      stakes: 100,
+    });
     expect(result).toEqual(mockBet);
   });
 

@@ -3,23 +3,23 @@ import {
   NotFoundException,
   ConflictException,
   ForbiddenException,
-} from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
-import { Reaction, ReactionType } from "./entities/reaction.entity";
-import { CreateReactionDto } from "./dto/create-reaction.dto";
-import { ReactionCountDto } from "./dto/reaction-response.dto";
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Reaction, ReactionType } from './entities/reaction.entity';
+import { CreateReactionDto } from './dto/create-reaction.dto';
+import { ReactionCountDto } from './dto/reaction-response.dto';
 
 @Injectable()
 export class ReactionsService {
   constructor(
     @InjectRepository(Reaction)
-    private readonly reactionRepository: Repository<Reaction>
+    private readonly reactionRepository: Repository<Reaction>,
   ) {}
 
   async createReaction(
     createReactionDto: CreateReactionDto,
-    userId: string
+    userId: string,
   ): Promise<Reaction> {
     // Check if message exists and user has access (implement based on your message service)
     await this.validateMessageAccess(createReactionDto.messageId, userId);
@@ -35,16 +35,15 @@ export class ReactionsService {
     if (existingReaction) {
       // Update existing reaction instead of creating new one
       if (existingReaction.type === createReactionDto.type) {
-        throw new ConflictException("User has already reacted with this type");
+        throw new ConflictException('User has already reacted with this type');
       }
 
       existingReaction.type = createReactionDto.type;
-      const updatedReaction = await this.reactionRepository.save(
-        existingReaction
-      );
+      const updatedReaction =
+        await this.reactionRepository.save(existingReaction);
 
       // Trigger XP update for reaction change
-      await this.triggerXpUpdate(createReactionDto.messageId, userId, "update");
+      await this.triggerXpUpdate(createReactionDto.messageId, userId, 'update');
 
       return updatedReaction;
     }
@@ -58,7 +57,7 @@ export class ReactionsService {
     const savedReaction = await this.reactionRepository.save(reaction);
 
     // Trigger XP update for new reaction
-    await this.triggerXpUpdate(createReactionDto.messageId, userId, "create");
+    await this.triggerXpUpdate(createReactionDto.messageId, userId, 'create');
 
     return savedReaction;
   }
@@ -71,18 +70,18 @@ export class ReactionsService {
     });
 
     if (!reaction) {
-      throw new NotFoundException("Reaction not found");
+      throw new NotFoundException('Reaction not found');
     }
 
     await this.reactionRepository.remove(reaction);
 
     // Trigger XP update for reaction removal
-    await this.triggerXpUpdate(messageId, userId, "remove");
+    await this.triggerXpUpdate(messageId, userId, 'remove');
   }
 
   async getReactionsByMessage(
     messageId: string,
-    userId: string
+    userId: string,
   ): Promise<ReactionCountDto> {
     await this.validateMessageAccess(messageId, userId);
 
@@ -91,10 +90,13 @@ export class ReactionsService {
     });
 
     const totalCount = reactions.length;
-    const countByType = reactions.reduce((acc, reaction) => {
-      acc[reaction.type] = (acc[reaction.type] || 0) + 1;
-      return acc;
-    }, {} as Record<ReactionType, number>);
+    const countByType = reactions.reduce(
+      (acc, reaction) => {
+        acc[reaction.type] = (acc[reaction.type] || 0) + 1;
+        return acc;
+      },
+      {} as Record<ReactionType, number>,
+    );
 
     // Ensure all reaction types are represented
     Object.values(ReactionType).forEach((type) => {
@@ -112,7 +114,7 @@ export class ReactionsService {
 
   async getUserReactionForMessage(
     messageId: string,
-    userId: string
+    userId: string,
   ): Promise<Reaction | null> {
     await this.validateMessageAccess(messageId, userId);
 
@@ -123,7 +125,7 @@ export class ReactionsService {
 
   private async validateMessageAccess(
     messageId: string,
-    userId: string
+    userId: string,
   ): Promise<void> {
     // This should integrate with your message service to check:
     // 1. Message exists
@@ -137,14 +139,14 @@ export class ReactionsService {
       // For now, we'll assume the message exists and user has access
       // In a real implementation, this would throw appropriate exceptions
       if (!messageId || !userId) {
-        throw new ForbiddenException("Invalid message or user");
+        throw new ForbiddenException('Invalid message or user');
       }
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw new NotFoundException("Message not found");
+        throw new NotFoundException('Message not found');
       }
       if (error instanceof ForbiddenException) {
-        throw new ForbiddenException("No access to this message");
+        throw new ForbiddenException('No access to this message');
       }
       throw error;
     }
@@ -153,7 +155,7 @@ export class ReactionsService {
   private async triggerXpUpdate(
     messageId: string,
     reactorUserId: string,
-    action: "create" | "update" | "remove"
+    action: 'create' | 'update' | 'remove',
   ): Promise<void> {
     // This should integrate with your XP service
     // Different XP amounts based on action type
@@ -167,24 +169,24 @@ export class ReactionsService {
       // await this.xpService.updateUserXp(message.authorId, xpAmount);
 
       console.log(
-        `XP Update triggered: ${action} reaction on message ${messageId} by user ${reactorUserId}, XP: ${xpAmount}`
+        `XP Update triggered: ${action} reaction on message ${messageId} by user ${reactorUserId}, XP: ${xpAmount}`,
       );
 
       // Placeholder for actual XP service integration
       // await this.xpService.addXp(messageAuthorId, xpAmount, `Received ${action} reaction`);
     } catch (error) {
       // Log error but don't fail the reaction operation
-      console.error("Failed to update XP:", error);
+      console.error('Failed to update XP:', error);
     }
   }
 
-  private getXpAmountForAction(action: "create" | "update" | "remove"): number {
+  private getXpAmountForAction(action: 'create' | 'update' | 'remove'): number {
     switch (action) {
-      case "create":
+      case 'create':
         return 5; // New reaction gives 5 XP
-      case "update":
+      case 'update':
         return 2; // Changing reaction gives 2 XP
-      case "remove":
+      case 'remove':
         return -3; // Removing reaction removes 3 XP
       default:
         return 0;
@@ -195,10 +197,10 @@ export class ReactionsService {
   async getReactionStats(): Promise<any> {
     const totalReactions = await this.reactionRepository.count();
     const reactionsByType = await this.reactionRepository
-      .createQueryBuilder("reaction")
-      .select("reaction.type", "type")
-      .addSelect("COUNT(*)", "count")
-      .groupBy("reaction.type")
+      .createQueryBuilder('reaction')
+      .select('reaction.type', 'type')
+      .addSelect('COUNT(*)', 'count')
+      .groupBy('reaction.type')
       .getRawMany();
 
     return {

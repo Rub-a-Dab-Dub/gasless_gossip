@@ -27,12 +27,18 @@ describe('BadgesService', () => {
     badgeRepo.create.mockReturnValue(dto);
     badgeRepo.save.mockResolvedValue(dto);
     await service.assignBadge(dto);
-    expect(stellarService.mintBadgeToken).toHaveBeenCalledWith(1, 'Lord of the Leaks', {});
+    expect(stellarService.mintBadgeToken).toHaveBeenCalledWith(
+      1,
+      'Lord of the Leaks',
+      {},
+    );
     expect(badgeRepo.save).toHaveBeenCalledWith(dto);
   });
 
   it('retrieves badges by user', async () => {
-    badgeRepo.find.mockResolvedValue([{ id: 1, userId: 1, type: 'Lord of the Leaks', metadata: {} }]);
+    badgeRepo.find.mockResolvedValue([
+      { id: 1, userId: 1, type: 'Lord of the Leaks', metadata: {} },
+    ]);
     const badges = await service.getBadgesByUser(1);
     expect(badges).toHaveLength(1);
     expect(badges[0].type).toBe('Lord of the Leaks');

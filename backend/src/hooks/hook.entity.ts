@@ -1,20 +1,21 @@
+/* eslint-disable prettier/prettier */
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-} from 'typeorm';
+} from "typeorm";
 
-@Entity('processed_event')
-export class ProcessedEvent {
+@Entity()
+export class Hook {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ unique: true })
-  eventId!: string;
+  @Column()
+  eventType!: string;
 
-  @Column({ nullable: true })
-  source?: string;
+  @Column('jsonb')
+  data: any;
 
   @CreateDateColumn()
   createdAt!: Date;

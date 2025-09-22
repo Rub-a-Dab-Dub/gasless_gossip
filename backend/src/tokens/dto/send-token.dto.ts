@@ -15,5 +15,3 @@ export class SendTokenDto {
   @Matches(/^(?:0|[1-9]\d*)(?:\.\d{1,7})?$/)
   amount!: string;
 }
-
-

@@ -14,12 +14,14 @@ describe('Users (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }));
-    
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transform: true,
+      }),
+    );
+
     await app.init();
   });
 
@@ -90,7 +92,8 @@ describe('Users (e2e)', () => {
         username: 'stellaruser2',
         email: 'stellar2@test.com',
         pseudonym: 'Stellar Whisperer 2',
-        stellarAccountId: 'GCKFBEIYTKP5RDBXSGBLQWJFWJQJ5PFYBYZ6KQLPVX4WWQCAHHWFMXJ5',
+        stellarAccountId:
+          'GCKFBEIYTKP5RDBXSGBLQWJFWJQJ5PFYBYZ6KQLPVX4WWQCAHHWFMXJ5',
       };
 
       return request(app.getHttpServer())

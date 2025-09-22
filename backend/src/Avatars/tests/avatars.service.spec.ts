@@ -88,7 +88,11 @@ describe('AvatarsService', () => {
       mockRepository.save.mockResolvedValue(mockAvatar);
 
       // Execute
-      const result = await service.mintAvatar(userId, createAvatarDto, stellarPublicKey);
+      const result = await service.mintAvatar(
+        userId,
+        createAvatarDto,
+        stellarPublicKey,
+      );
 
       // Verify
       expect(result).toEqual({
@@ -104,12 +108,12 @@ describe('AvatarsService', () => {
       });
 
       expect(mockRepository.findOne).toHaveBeenCalledWith({
-        where: { userId, isActive: true }
+        where: { userId, isActive: true },
       });
       expect(mockStellarService.mintNFT).toHaveBeenCalledWith(
         stellarPublicKey,
         'AVTTEST123',
-        createAvatarDto
+        createAvatarDto,
       );
     });
 
@@ -117,7 +121,7 @@ describe('AvatarsService', () => {
       mockRepository.findOne.mockResolvedValue({ id: 'existing-avatar' });
 
       await expect(
-        service.mintAvatar(userId, createAvatarDto, stellarPublicKey)
+        service.mintAvatar(userId, createAvatarDto, stellarPublicKey),
       ).rejects.toThrow(ConflictException);
     });
   });
@@ -142,14 +146,16 @@ describe('AvatarsService', () => {
 
       expect(result).toEqual(mockAvatar);
       expect(mockRepository.findOne).toHaveBeenCalledWith({
-        where: { userId: 'user-123', isActive: true }
+        where: { userId: 'user-123', isActive: true },
       });
     });
 
     it('should throw NotFoundException if avatar not found', async () => {
       mockRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.getUserAvatar('user-123')).rejects.toThrow(NotFoundException);
+      await expect(service.getUserAvatar('user-123')).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });
