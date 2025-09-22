@@ -52,6 +52,7 @@ function loadModules(): (new () => any)[] {
     TradeModule,
     SecretsModule,
     PodcastRoomsModule,
+    GamblesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
