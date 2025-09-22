@@ -9,7 +9,7 @@ export class Badge {
   @Column()
   userId!: number;
 
-  @ManyToOne(() => User, user => user.badges)
+  @ManyToOne(() => User, (user) => user.badges)
   user!: User;
 
   @Column()

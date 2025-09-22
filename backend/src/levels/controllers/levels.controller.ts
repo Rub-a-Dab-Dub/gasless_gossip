@@ -1,29 +1,45 @@
-import { Controller, Get, Post, Param, Query, ParseUUIDPipe, ParseIntPipe, HttpStatus, HttpCode } from "@nestjs/common"
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiQuery } from "@nestjs/swagger"
-import type { LevelsService } from "../services/levels.service"
-import type { CreateLevelDto } from "../dto/create-level.dto"
-import type { UpdateLevelDto } from "../dto/update-level.dto"
-import { LevelResponseDto } from "../dto/level-response.dto"
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Query,
+  ParseUUIDPipe,
+  ParseIntPipe,
+  HttpStatus,
+  HttpCode,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
+import type { LevelsService } from '../services/levels.service';
+import type { CreateLevelDto } from '../dto/create-level.dto';
+import type { UpdateLevelDto } from '../dto/update-level.dto';
+import { LevelResponseDto } from '../dto/level-response.dto';
 
-@ApiTags("levels")
-@Controller("levels")
+@ApiTags('levels')
+@Controller('levels')
 export class LevelsController {
   constructor(private readonly levelsService: LevelsService) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: "Create a new level record for a user" })
+  @ApiOperation({ summary: 'Create a new level record for a user' })
   @ApiResponse({
     status: 201,
-    description: "Level record created successfully",
+    description: 'Level record created successfully',
     type: LevelResponseDto,
   })
   @ApiResponse({
     status: 400,
-    description: "Bad request - User already has a level record",
+    description: 'Bad request - User already has a level record',
   })
   async createLevel(createLevelDto: CreateLevelDto): Promise<LevelResponseDto> {
-    return this.levelsService.createUserLevel(createLevelDto)
+    return this.levelsService.createUserLevel(createLevelDto);
   }
 
   @Get(':userId')
@@ -44,28 +60,28 @@ export class LevelsController {
     return this.levelsService.getUserLevel(userId);
   }
 
-  @Post(":userId/add-xp")
+  @Post(':userId/add-xp')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: "Add XP to user and check for level ups" })
-  @ApiParam({ name: "userId", description: "User UUID" })
+  @ApiOperation({ summary: 'Add XP to user and check for level ups' })
+  @ApiParam({ name: 'userId', description: 'User UUID' })
   @ApiResponse({
     status: 200,
-    description: "XP added successfully, level updated if applicable",
+    description: 'XP added successfully, level updated if applicable',
     type: LevelResponseDto,
   })
   @ApiResponse({
     status: 404,
-    description: "Level record not found for user",
+    description: 'Level record not found for user',
   })
   async addXp(
     @Param('userId', ParseUUIDPipe) userId: string,
     updateLevelDto: UpdateLevelDto,
   ): Promise<LevelResponseDto> {
-    const { xpToAdd } = updateLevelDto
+    const { xpToAdd } = updateLevelDto;
     if (!xpToAdd || xpToAdd <= 0) {
-      throw new Error("XP to add must be a positive number")
+      throw new Error('XP to add must be a positive number');
     }
-    return this.levelsService.addXpToUser(userId, xpToAdd)
+    return this.levelsService.addXpToUser(userId, xpToAdd);
   }
 
   @Post(':userId/check')

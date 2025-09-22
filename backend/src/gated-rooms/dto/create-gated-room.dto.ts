@@ -1,4 +1,13 @@
-import { IsString, IsArray, IsOptional, IsBoolean, ValidateNested, IsEnum, IsNumber, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  IsArray,
+  IsOptional,
+  IsBoolean,
+  ValidateNested,
+  IsEnum,
+  IsNumber,
+  IsNotEmpty,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class GateRuleDto {

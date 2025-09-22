@@ -17,13 +17,25 @@ export class MarketplaceController {
   constructor(private readonly marketplaceService: MarketplaceService) {}
 
   @Post('list')
-  createListing(@Request() req: any, @Body() createListingDto: CreateListingDto) {
-    return this.marketplaceService.createListing(req.user.sub, createListingDto);
+  createListing(
+    @Request() req: any,
+    @Body() createListingDto: CreateListingDto,
+  ) {
+    return this.marketplaceService.createListing(
+      req.user.sub,
+      createListingDto,
+    );
   }
 
   @Post('buy')
-  purchaseListing(@Request() req: any, @Body() purchaseListingDto: PurchaseListingDto) {
-    return this.marketplaceService.purchaseListing(req.user.sub, purchaseListingDto.listingId);
+  purchaseListing(
+    @Request() req: any,
+    @Body() purchaseListingDto: PurchaseListingDto,
+  ) {
+    return this.marketplaceService.purchaseListing(
+      req.user.sub,
+      purchaseListingDto.listingId,
+    );
   }
 
   @Get()

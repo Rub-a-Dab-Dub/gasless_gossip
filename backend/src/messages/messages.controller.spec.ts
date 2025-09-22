@@ -31,9 +31,19 @@ describe('MessagesController', () => {
   });
 
   it('should create a message (with access)', async () => {
-    const dto: CreateMessageDto = { roomId: 'room1', content: 'hi', senderId: 'user1' };
+    const dto: CreateMessageDto = {
+      roomId: 'room1',
+      content: 'hi',
+      senderId: 'user1',
+    };
     const req = { user: { id: 'user1' } };
-    const message: Message = { id: '1', roomId: 'room1', contentHash: 'hash', senderId: 'user1', createdAt: new Date() };
+    const message: Message = {
+      id: '1',
+      roomId: 'room1',
+      contentHash: 'hash',
+      senderId: 'user1',
+      createdAt: new Date(),
+    };
     jest.spyOn(controller as any, 'userHasRoomAccess').mockReturnValue(true);
     jest.spyOn(service, 'create').mockResolvedValue(message);
     const result = await controller.create(dto, req);
@@ -41,16 +51,28 @@ describe('MessagesController', () => {
   });
 
   it('should throw ForbiddenException if no access', async () => {
-    const dto: CreateMessageDto = { roomId: 'room1', content: 'hi', senderId: 'user1' };
+    const dto: CreateMessageDto = {
+      roomId: 'room1',
+      content: 'hi',
+      senderId: 'user1',
+    };
     const req = { user: { id: 'user1' } };
     jest.spyOn(controller as any, 'userHasRoomAccess').mockReturnValue(false);
-    await expect(controller.create(dto, req)).rejects.toThrow('No access to this room');
+    await expect(controller.create(dto, req)).rejects.toThrow(
+      'No access to this room',
+    );
   });
 
   it('should get messages by room (with access)', async () => {
     const req = { user: { id: 'user1' } };
     const messages: Message[] = [
-      { id: '1', roomId: 'room1', contentHash: 'hash', senderId: 'user1', createdAt: new Date() },
+      {
+        id: '1',
+        roomId: 'room1',
+        contentHash: 'hash',
+        senderId: 'user1',
+        createdAt: new Date(),
+      },
     ];
     jest.spyOn(controller as any, 'userHasRoomAccess').mockReturnValue(true);
     jest.spyOn(service, 'findByRoom').mockResolvedValue(messages);

@@ -25,9 +25,12 @@ export class ReactionsService {
 
   async countReactions(messageId: string): Promise<{ [type: string]: number }> {
     const reactions = await this.getReactionsForMessage(messageId);
-    return reactions.reduce((acc, r) => {
-      acc[r.type] = (acc[r.type] || 0) + 1;
-      return acc;
-    }, {} as { [type: string]: number });
+    return reactions.reduce(
+      (acc, r) => {
+        acc[r.type] = (acc[r.type] || 0) + 1;
+        return acc;
+      },
+      {} as { [type: string]: number },
+    );
   }
 }

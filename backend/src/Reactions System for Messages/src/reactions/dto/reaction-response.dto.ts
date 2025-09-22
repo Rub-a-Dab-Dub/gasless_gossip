@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { ReactionType } from "../entities/reaction.entity";
+import { ApiProperty } from '@nestjs/swagger';
+import { ReactionType } from '../entities/reaction.entity';
 
 export class ReactionResponseDto {
   @ApiProperty()
@@ -26,7 +26,7 @@ export class ReactionCountDto {
   totalCount: number;
 
   @ApiProperty({
-    description: "Count by reaction type",
+    description: 'Count by reaction type',
     example: { like: 5, love: 2, laugh: 1 },
   })
   countByType: Record<ReactionType, number>;

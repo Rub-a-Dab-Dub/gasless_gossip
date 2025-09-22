@@ -3,7 +3,10 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RoomsService } from './rooms.service';
 import { Room, RoomType } from './entities/room.entity';
-import { RoomMembership, MembershipRole } from './entities/room-membership.entity';
+import {
+  RoomMembership,
+  MembershipRole,
+} from './entities/room-membership.entity';
 import { User } from '../users/entities/user.entity';
 import { XpService } from '../xp/xp.service';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
@@ -87,7 +90,9 @@ describe('RoomsService', () => {
 
     service = module.get<RoomsService>(RoomsService);
     roomRepository = module.get<Repository<Room>>(getRepositoryToken(Room));
-    membershipRepository = module.get<Repository<RoomMembership>>(getRepositoryToken(RoomMembership));
+    membershipRepository = module.get<Repository<RoomMembership>>(
+      getRepositoryToken(RoomMembership),
+    );
     userRepository = module.get<Repository<User>>(getRepositoryToken(User));
     xpService = module.get<XpService>(XpService);
   });
@@ -102,30 +107,42 @@ describe('RoomsService', () => {
       jest.spyOn(membershipRepository, 'findOne').mockResolvedValue(null);
       jest.spyOn(membershipRepository, 'count').mockResolvedValue(5);
       jest.spyOn(userRepository, 'findOne').mockResolvedValue(mockUser);
-      jest.spyOn(membershipRepository, 'create').mockReturnValue({} as RoomMembership);
-      jest.spyOn(membershipRepository, 'save').mockResolvedValue({} as RoomMembership);
+      jest
+        .spyOn(membershipRepository, 'create')
+        .mockReturnValue({} as RoomMembership);
+      jest
+        .spyOn(membershipRepository, 'save')
+        .mockResolvedValue({} as RoomMembership);
       jest.spyOn(xpService, 'addXp').mockResolvedValue(undefined);
 
       const result = await service.joinRoom('user-2', 'room-id-1');
 
       expect(result.success).toBe(true);
       expect(result.xpAwarded).toBe(5);
-      expect(xpService.addXp).toHaveBeenCalledWith('user-2', 5, 'Joined public room');
+      expect(xpService.addXp).toHaveBeenCalledWith(
+        'user-2',
+        5,
+        'Joined public room',
+      );
     });
 
     it('should throw NotFoundException if room does not exist', async () => {
       jest.spyOn(roomRepository, 'findOne').mockResolvedValue(null);
 
-      await expect(service.joinRoom('user-1', 'nonexistent-room'))
-        .rejects.toThrow(NotFoundException);
+      await expect(
+        service.joinRoom('user-1', 'nonexistent-room'),
+      ).rejects.toThrow(NotFoundException);
     });
 
     it('should throw BadRequestException if user is already a member', async () => {
       jest.spyOn(roomRepository, 'findOne').mockResolvedValue(mockRoom);
-      jest.spyOn(membershipRepository, 'findOne').mockResolvedValue({} as RoomMembership);
+      jest
+        .spyOn(membershipRepository, 'findOne')
+        .mockResolvedValue({} as RoomMembership);
 
-      await expect(service.joinRoom('user-1', 'room-id-1'))
-        .rejects.toThrow(BadRequestException);
+      await expect(service.joinRoom('user-1', 'room-id-1')).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('should throw BadRequestException if room is at capacity', async () => {
@@ -133,8 +150,9 @@ describe('RoomsService', () => {
       jest.spyOn(membershipRepository, 'findOne').mockResolvedValue(null);
       jest.spyOn(membershipRepository, 'count').mockResolvedValue(100);
 
-      await expect(service.joinRoom('user-1', 'room-id-1'))
-        .rejects.toThrow(BadRequestException);
+      await expect(service.joinRoom('user-1', 'room-id-1')).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
@@ -151,8 +169,12 @@ describe('RoomsService', () => {
       };
 
       jest.spyOn(roomRepository, 'findOne').mockResolvedValue(mockRoom);
-      jest.spyOn(membershipRepository, 'findOne').mockResolvedValue(mockMembership);
-      jest.spyOn(membershipRepository, 'save').mockResolvedValue(mockMembership);
+      jest
+        .spyOn(membershipRepository, 'findOne')
+        .mockResolvedValue(mockMembership);
+      jest
+        .spyOn(membershipRepository, 'save')
+        .mockResolvedValue(mockMembership);
 
       const result = await service.leaveRoom('user-1', 'room-id-1');
 
@@ -164,8 +186,9 @@ describe('RoomsService', () => {
       jest.spyOn(roomRepository, 'findOne').mockResolvedValue(mockRoom);
       jest.spyOn(membershipRepository, 'findOne').mockResolvedValue(null);
 
-      await expect(service.leaveRoom('user-1', 'room-id-1'))
-        .rejects.toThrow(BadRequestException);
+      await expect(service.leaveRoom('user-1', 'room-id-1')).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('should prevent owner from leaving', async () => {
@@ -180,10 +203,13 @@ describe('RoomsService', () => {
       };
 
       jest.spyOn(roomRepository, 'findOne').mockResolvedValue(mockRoom);
-      jest.spyOn(membershipRepository, 'findOne').mockResolvedValue(mockMembership);
+      jest
+        .spyOn(membershipRepository, 'findOne')
+        .mockResolvedValue(mockMembership);
 
-      await expect(service.leaveRoom('user-1', 'room-id-1'))
-        .rejects.toThrow(BadRequestException);
+      await expect(service.leaveRoom('user-1', 'room-id-1')).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 });

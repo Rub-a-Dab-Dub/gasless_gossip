@@ -1,4 +1,13 @@
-import { Controller, Post, Get, Body, Param, UseGuards, Request, ForbiddenException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Param,
+  UseGuards,
+  Request,
+  ForbiddenException,
+} from '@nestjs/common';
 import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { Message } from './message.entity';
@@ -10,7 +19,10 @@ export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
 
   @Post()
-  async create(@Body() createMessageDto: CreateMessageDto, @Request() req): Promise<Message> {
+  async create(
+    @Body() createMessageDto: CreateMessageDto,
+    @Request() req,
+  ): Promise<Message> {
     // Enforce room access (pseudo, replace with real check)
     if (!this.userHasRoomAccess(req.user, createMessageDto.roomId)) {
       throw new ForbiddenException('No access to this room');
@@ -19,7 +31,10 @@ export class MessagesController {
   }
 
   @Get(':roomId')
-  async findByRoom(@Param('roomId') roomId: string, @Request() req): Promise<Message[]> {
+  async findByRoom(
+    @Param('roomId') roomId: string,
+    @Request() req,
+  ): Promise<Message[]> {
     // Enforce room access (pseudo, replace with real check)
     if (!this.userHasRoomAccess(req.user, roomId)) {
       throw new ForbiddenException('No access to this room');

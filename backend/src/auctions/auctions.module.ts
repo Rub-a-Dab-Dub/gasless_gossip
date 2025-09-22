@@ -8,10 +8,7 @@ import { Auction } from './entities/auction.entity';
 import { Bid } from './entities/bid.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Auction, Bid]),
-    ScheduleModule.forRoot(),
-  ],
+  imports: [TypeOrmModule.forFeature([Auction, Bid]), ScheduleModule.forRoot()],
   controllers: [AuctionsController],
   providers: [AuctionsService, StellarService],
   exports: [AuctionsService],

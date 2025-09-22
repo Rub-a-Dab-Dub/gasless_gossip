@@ -47,7 +47,7 @@ export class Room {
   @Column({ name: 'min_xp', default: 0 })
   minXp!: number; // Minimum XP required to join
 
-  @OneToMany(() => RoomMembership, membership => membership.room)
+  @OneToMany(() => RoomMembership, (membership) => membership.room)
   memberships!: RoomMembership[];
 
   @CreateDateColumn({ name: 'created_at' })

@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Get, Param, UsePipes, ValidationPipe } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { TokensService } from './tokens.service';
 import { SendTokenDto } from './dto/send-token.dto';
 
@@ -18,5 +26,3 @@ export class TokensController {
     return { userId, entries };
   }
 }
-
-

@@ -17,7 +17,7 @@ export class BetsService {
 
   async placeBet(userId: string, placeBetDto: PlaceBetDto): Promise<Bet> {
     const escrowTxId = await this.createEscrow(userId, placeBetDto.stakes);
-    
+
     const bet = this.betRepo.create({
       ...placeBetDto,
       userId,
@@ -28,11 +28,13 @@ export class BetsService {
   }
 
   async resolveBet(resolveBetDto: ResolveBetDto): Promise<Bet> {
-    const bet = await this.betRepo.findOne({ where: { id: resolveBetDto.betId } });
+    const bet = await this.betRepo.findOne({
+      where: { id: resolveBetDto.betId },
+    });
     if (!bet) throw new Error('Bet not found');
 
     await this.resolveEscrow(bet.txId, resolveBetDto.won);
-    
+
     bet.status = resolveBetDto.won ? 'won' : 'lost';
     return this.betRepo.save(bet);
   }
@@ -44,6 +46,8 @@ export class BetsService {
 
   private async resolveEscrow(txId: string, won: boolean): Promise<void> {
     // Mock escrow resolution
-    console.log(`Resolving escrow ${txId}: ${won ? 'release' : 'return'} funds`);
+    console.log(
+      `Resolving escrow ${txId}: ${won ? 'release' : 'return'} funds`,
+    );
   }
 }

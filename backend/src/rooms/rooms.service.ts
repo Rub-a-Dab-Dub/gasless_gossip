@@ -1,8 +1,16 @@
-import { Injectable, BadRequestException, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Room, RoomType } from './entities/room.entity';
-import { RoomMembership, MembershipRole } from './entities/room-membership.entity';
+import {
+  RoomMembership,
+  MembershipRole,
+} from './entities/room-membership.entity';
 import { User } from '../users/entities/user.entity';
 import { XpService } from '../xp/xp.service';
 import { CreateRoomDto } from './dto/create-room.dto';
@@ -19,7 +27,10 @@ export class RoomsService {
     private readonly xpService: XpService,
   ) {}
 
-  async createRoom(createRoomDto: CreateRoomDto, createdBy: string): Promise<Room> {
+  async createRoom(
+    createRoomDto: CreateRoomDto,
+    createdBy: string,
+  ): Promise<Room> {
     const room = this.roomRepository.create({
       ...createRoomDto,
       createdBy,
@@ -33,7 +44,11 @@ export class RoomsService {
     return savedRoom;
   }
 
-  async joinRoom(userId: string, roomId: string, chatGateway?: any): Promise<{ success: boolean; message: string; xpAwarded?: number }> {
+  async joinRoom(
+    userId: string,
+    roomId: string,
+    chatGateway?: any,
+  ): Promise<{ success: boolean; message: string; xpAwarded?: number }> {
     // Check if room exists
     const room = await this.roomRepository.findOne({
       where: { id: roomId, isActive: true },
@@ -92,7 +107,11 @@ export class RoomsService {
     };
   }
 
-  async leaveRoom(userId: string, roomId: string, chatGateway?: any): Promise<{ success: boolean; message: string }> {
+  async leaveRoom(
+    userId: string,
+    roomId: string,
+    chatGateway?: any,
+  ): Promise<{ success: boolean; message: string }> {
     // Check if room exists
     const room = await this.roomRepository.findOne({
       where: { id: roomId, isActive: true },
@@ -113,7 +132,9 @@ export class RoomsService {
 
     // Prevent owner from leaving (they must transfer ownership first)
     if (membership.role === MembershipRole.OWNER) {
-      throw new BadRequestException('Room owner cannot leave. Transfer ownership first.');
+      throw new BadRequestException(
+        'Room owner cannot leave. Transfer ownership first.',
+      );
     }
 
     // Deactivate membership
@@ -145,11 +166,12 @@ export class RoomsService {
       relations: ['room'],
     });
 
-    return memberships.map(membership => membership.room);
+    return memberships.map((membership) => membership.room);
   }
 
   async getAllRooms(userId?: string): Promise<Room[]> {
-    const query = this.roomRepository.createQueryBuilder('room')
+    const query = this.roomRepository
+      .createQueryBuilder('room')
       .where('room.isActive = :isActive', { isActive: true })
       .andWhere('(room.type = :publicType OR room.createdBy = :userId)', {
         publicType: RoomType.PUBLIC,
@@ -160,7 +182,11 @@ export class RoomsService {
     return query.getMany();
   }
 
-  private async addMembership(roomId: string, userId: string, role: MembershipRole = MembershipRole.MEMBER): Promise<RoomMembership> {
+  private async addMembership(
+    roomId: string,
+    userId: string,
+    role: MembershipRole = MembershipRole.MEMBER,
+  ): Promise<RoomMembership> {
     const membership = this.membershipRepository.create({
       roomId,
       userId,
@@ -188,7 +214,10 @@ export class RoomsService {
     }
   }
 
-  private async awardJoinRoomXP(userId: string, roomType: RoomType): Promise<number> {
+  private async awardJoinRoomXP(
+    userId: string,
+    roomType: RoomType,
+  ): Promise<number> {
     let xpAmount = 0;
 
     // Different XP amounts based on room type

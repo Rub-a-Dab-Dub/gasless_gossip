@@ -16,9 +16,7 @@ describe('MarketplaceController (e2e)', () => {
   });
 
   it('/marketplace (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/marketplace')
-      .expect(401); // Should require auth
+    return request(app.getHttpServer()).get('/marketplace').expect(401); // Should require auth
   });
 
   it('/marketplace/list (POST)', () => {

@@ -1,4 +1,10 @@
-import { Controller, Get, Param, Query, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+  BadRequestException,
+} from '@nestjs/common';
 import { TokenLogsService } from './token-logs.service';
 import { GetTokenLogsQueryDto } from './dto/get-token-logs-query.dto';
 
@@ -11,8 +17,10 @@ export class TokenLogsController {
     @Param('userId') userId: string,
     @Query() query: GetTokenLogsQueryDto,
   ) {
-    if (query.page && query.page < 1) throw new BadRequestException('Page must be >= 1');
-    if (query.limit && (query.limit < 1 || query.limit > 100)) throw new BadRequestException('Limit must be 1-100');
+    if (query.page && query.page < 1)
+      throw new BadRequestException('Page must be >= 1');
+    if (query.limit && (query.limit < 1 || query.limit > 100))
+      throw new BadRequestException('Limit must be 1-100');
     return this.tokenLogsService.getLogsForUser(userId, query);
   }
 

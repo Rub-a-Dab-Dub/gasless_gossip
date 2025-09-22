@@ -17,7 +17,10 @@ export class TokenLogsService {
     return this.tokenLogRepository.save(log);
   }
 
-  async getLogsForUser(userId: string, query?: GetTokenLogsQueryDto): Promise<{ data: TokenLog[]; total: number; page: number; limit: number }> {
+  async getLogsForUser(
+    userId: string,
+    query?: GetTokenLogsQueryDto,
+  ): Promise<{ data: TokenLog[]; total: number; page: number; limit: number }> {
     const where: FindOptionsWhere<TokenLog>[] = [];
     if (!query || !query.type) {
       where.push({ fromId: userId });
@@ -41,7 +44,10 @@ export class TokenLogsService {
 
     // Find with filters
     const [data, total] = await this.tokenLogRepository.findAndCount({
-      where: where.map((w) => ({ ...w, ...(dateFilter ? { createdAt: dateFilter } : {}) })),
+      where: where.map((w) => ({
+        ...w,
+        ...(dateFilter ? { createdAt: dateFilter } : {}),
+      })),
       order: { id: 'DESC' },
       skip,
       take: limit,
@@ -49,7 +55,9 @@ export class TokenLogsService {
     return { data, total, page, limit };
   }
 
-  async getSummaryForUser(userId: string): Promise<{ totalSent: string; totalReceived: string }> {
+  async getSummaryForUser(
+    userId: string,
+  ): Promise<{ totalSent: string; totalReceived: string }> {
     const sent = await this.tokenLogRepository
       .createQueryBuilder('log')
       .select('SUM(log.amount)', 'total')

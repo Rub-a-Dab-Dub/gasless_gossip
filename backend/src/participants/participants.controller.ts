@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Get, Param, Delete, Req } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Delete,
+  Req,
+} from '@nestjs/common';
 import { ParticipantsService } from './participants.service';
 import { JoinParticipantDto, LeaveParticipantDto } from './dto';
 

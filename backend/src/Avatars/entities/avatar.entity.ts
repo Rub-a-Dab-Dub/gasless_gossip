@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Index } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Index,
+} from 'typeorm';
 
 @Entity('avatars')
 @Index(['userId'], { unique: true }) // One avatar per user
@@ -44,7 +51,16 @@ export class Avatar {
 }
 
 // src/avatars/dto/create-avatar.dto.ts
-import { IsString, IsNumber, IsEnum, IsArray, ValidateNested, IsUrl, Min, Max } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsEnum,
+  IsArray,
+  ValidateNested,
+  IsUrl,
+  Min,
+  Max,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class AttributeDto {

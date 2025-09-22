@@ -24,7 +24,10 @@ export class WebSocketsGateway {
   }
 
   @SubscribeMessage('notification')
-  handleNotification(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
+  handleNotification(
+    @MessageBody() data: any,
+    @ConnectedSocket() client: Socket,
+  ) {
     // Broadcast notification
     return this.wsService.handleNotification(data, client);
   }
