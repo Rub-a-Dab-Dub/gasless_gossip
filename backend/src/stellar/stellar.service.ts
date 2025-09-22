@@ -30,11 +30,27 @@ export class StellarService {
     // Example: send custom tokens to the user's Stellar account
     // You may need to map userId to a Stellar public key
     this.logger.log(`Distributed ${amount} reward tokens to user ${userId}`);
-    
+
     // Mock implementation - in production, this would:
     // 1. Get user's Stellar public key from their profile
     // 2. Create a transaction to send tokens to their account
     // 3. Sign and submit the transaction
     // 4. Return the transaction hash for tracking
+  }
+
+  /**
+   * Check if a user owns a premium theme token
+   * This is a placeholder. Replace with actual Stellar token ownership verification.
+   */
+  async verifyPremiumThemeOwnership(userId: string, themeId: string): Promise<boolean> {
+    // TODO: Implement actual Stellar token ownership check
+    // Example: query the user's Stellar account for specific theme tokens
+    // For now, mock: assume 'premium' themes require ownership
+    if (themeId.startsWith('premium-')) {
+      this.logger.log(`Verifying premium theme ownership for user ${userId}, theme ${themeId}`);
+      // Mock: return true for demo purposes
+      return true;
+    }
+    return true; // Free themes always allowed
   }
 }
