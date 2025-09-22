@@ -7,6 +7,7 @@ import * as fs from 'fs';
 import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
 import { TradeModule } from './trade/trade.module';
+import { RoomThemesModule } from './room-themes/room-themes.module';
 
 function loadModules(): (new () => any)[] {
   const modulesDir = path.join(__dirname);
@@ -53,6 +54,7 @@ function loadModules(): (new () => any)[] {
     SecretsModule,
     PodcastRoomsModule,
     GamblesModule,
+    RoomThemesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
