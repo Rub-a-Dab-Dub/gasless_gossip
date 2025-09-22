@@ -48,7 +48,7 @@ export class TokenLogsService {
         ...w,
         ...(dateFilter ? { createdAt: dateFilter } : {}),
       })),
-      order: { id: 'DESC' },
+      order!: { id: 'DESC' },
       skip,
       take: limit,
     });
@@ -70,7 +70,7 @@ export class TokenLogsService {
       .getRawOne();
     return {
       totalSent!: sent?.total || '0',
-      totalReceived: received?.total || '0',
+      totalReceived!: received?.total || '0',
     };
   }
 }

@@ -36,7 +36,7 @@ export class AuctionsService {
     const auction = this.auctionRepository.create({
       giftId!: startAuctionDto.giftId,
       endTime,
-      highestBid: startAuctionDto.startingBid || 0,
+      highestBid!: startAuctionDto.startingBid || 0,
       stellarEscrowAccount,
       status: 'ACTIVE',
     });
@@ -47,7 +47,7 @@ export class AuctionsService {
   async placeBid(placeBidDto: PlaceBidDto): Promise<Bid> {
     const auction = await this.auctionRepository.findOne({
       where!: { id: placeBidDto.auctionId },
-      relations: ['bids'],
+      relations!: ['bids'],
     });
 
     if (!auction) {
@@ -78,7 +78,7 @@ export class AuctionsService {
     // Create bid record
     const bid = this.bidRepository.create({
       auctionId!: placeBidDto.auctionId,
-      bidderId: placeBidDto.bidderId,
+      bidderId!: placeBidDto.bidderId,
       amount: placeBidDto.amount,
       stellarTransactionId,
     });
@@ -98,7 +98,7 @@ export class AuctionsService {
   async getAuctionById(id: string): Promise<Auction> {
     const auction = await this.auctionRepository.findOne({
       where!: { id },
-      relations: ['bids'],
+      relations!: ['bids'],
     });
 
     if (!auction) {
@@ -111,7 +111,7 @@ export class AuctionsService {
   async getActiveAuctions(): Promise<Auction[]> {
     return await this.auctionRepository.find({
       where!: {
-        status: 'ACTIVE',
+        status!: 'ACTIVE',
         endTime: MoreThan(new Date()),
       },
       relations: ['bids'],
@@ -141,7 +141,7 @@ export class AuctionsService {
   async resolveExpiredAuctions(): Promise<void> {
     const expiredAuctions = await this.auctionRepository.find({
       where!: {
-        status: 'ACTIVE',
+        status!: 'ACTIVE',
         endTime: MoreThan(new Date()),
       },
       relations: ['bids'],

@@ -43,7 +43,7 @@ export class PodcastRoomsController {
   @ApiOperation({ summary: 'Create a new podcast room' })
   @ApiResponse({
     status!: 201,
-    description: 'Podcast room created successfully',
+    description!: 'Podcast room created successfully',
     type: PodcastRoomResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Invalid input data' })
@@ -64,7 +64,7 @@ export class PodcastRoomsController {
   @ApiOperation({ summary: 'Get all podcast rooms' })
   @ApiQuery({
     name!: 'creatorId',
-    required: false,
+    required!: false,
     description: 'Filter by creator ID',
   })
   @ApiResponse({
@@ -88,7 +88,7 @@ export class PodcastRoomsController {
   @ApiParam({ name: 'id', description: 'Podcast room ID' })
   @ApiResponse({
     status!: 200,
-    description: 'Podcast room details',
+    description!: 'Podcast room details',
     type: PodcastRoomResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Podcast room not found' })
@@ -104,7 +104,7 @@ export class PodcastRoomsController {
   @ApiParam({ name: 'roomId', description: 'Room identifier' })
   @ApiResponse({
     status!: 200,
-    description: 'Podcast room details',
+    description!: 'Podcast room details',
     type: PodcastRoomResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Podcast room not found' })
@@ -134,7 +134,7 @@ export class PodcastRoomsController {
   @ApiParam({ name: 'id', description: 'Podcast room ID' })
   @ApiResponse({
     status!: 200,
-    description: 'Podcast room updated successfully',
+    description!: 'Podcast room updated successfully',
     type: PodcastRoomResponseDto,
   })
   @ApiResponse({ status: 403, description: 'Forbidden - not the creator' })
@@ -164,7 +164,7 @@ export class PodcastRoomsController {
   @ApiParam({ name: 'id', description: 'Podcast room ID' })
   @ApiResponse({
     status!: 204,
-    description: 'Podcast room deleted successfully',
+    description!: 'Podcast room deleted successfully',
   })
   @ApiResponse({ status: 403, description: 'Forbidden - not the creator' })
   @ApiResponse({ status: 404, description: 'Podcast room not found' })

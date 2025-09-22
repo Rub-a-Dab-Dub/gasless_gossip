@@ -19,7 +19,7 @@ export class ReactionsService {
 
   async createReaction(
     createReactionDto!: CreateReactionDto,
-    userId: string,
+    userId!: string,
   ): Promise<Reaction> {
     // Check if message exists and user has access (implement based on your message service)
     await this.validateMessageAccess(createReactionDto.messageId, userId);
@@ -27,7 +27,7 @@ export class ReactionsService {
     // Check if user already reacted to this message
     const existingReaction = await this.reactionRepository.findOne({
       where!: {
-        messageId: createReactionDto.messageId,
+        messageId!: createReactionDto.messageId,
         userId,
       },
     });
@@ -81,7 +81,7 @@ export class ReactionsService {
 
   async getReactionsByMessage(
     messageId!: string,
-    userId: string,
+    userId!: string,
   ): Promise<ReactionCountDto> {
     await this.validateMessageAccess(messageId, userId);
 
@@ -114,7 +114,7 @@ export class ReactionsService {
 
   async getUserReactionForMessage(
     messageId!: string,
-    userId: string,
+    userId!: string,
   ): Promise<Reaction | null> {
     await this.validateMessageAccess(messageId, userId);
 
@@ -125,7 +125,7 @@ export class ReactionsService {
 
   private async validateMessageAccess(
     messageId!: string,
-    userId: string,
+    userId!: string,
   ): Promise<void> {
     // This should integrate with your message service to check:
     // 1. Message exists
@@ -154,7 +154,7 @@ export class ReactionsService {
 
   private async triggerXpUpdate(
     messageId!: string,
-    reactorUserId: string,
+    reactorUserId!: string,
     action: 'create' | 'update' | 'remove',
   ): Promise<void> {
     // This should integrate with your XP service

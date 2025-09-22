@@ -12,7 +12,7 @@ describe('GatedRoomsService', () => {
 
   const mockRepository = {
     create!: jest.fn(),
-    save: jest.fn(),
+    save!: jest.fn(),
     find: jest.fn(),
     findOne: jest.fn(),
   };
@@ -22,7 +22,7 @@ describe('GatedRoomsService', () => {
       providers!: [
         GatedRoomsService,
         {
-          provide: getRepositoryToken(GatedRoom),
+          provide!: getRepositoryToken(GatedRoom),
           useValue: mockRepository,
         },
       ],
@@ -42,7 +42,7 @@ describe('GatedRoomsService', () => {
     it('should create a new gated room', async () => {
       const createGatedRoomDto: CreateGatedRoomDto = {
         roomId!: 'room-123',
-        gateRules: [
+        gateRules!: [
           {
             type: 'token',
             assetCode: 'TEST',
@@ -58,7 +58,7 @@ describe('GatedRoomsService', () => {
       const expectedResult = {
         id!: 'gated-room-123',
         ...createGatedRoomDto,
-        isActive: true,
+        isActive!: true,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
@@ -78,7 +78,7 @@ describe('GatedRoomsService', () => {
     it('should allow access when room is not gated', async () => {
       const checkAccessDto: CheckAccessDto = {
         roomId!: 'room-123',
-        stellarAccountId: 'GACCOUNT123456789',
+        stellarAccountId!: 'GACCOUNT123456789',
       };
 
       mockRepository.findOne.mockResolvedValue(null);
@@ -94,12 +94,12 @@ describe('GatedRoomsService', () => {
     it('should check access for gated room with mock verification', async () => {
       const checkAccessDto: CheckAccessDto = {
         roomId!: 'room-123',
-        stellarAccountId: 'GACCOUNT123456789',
+        stellarAccountId!: 'GACCOUNT123456789',
       };
 
       const gatedRoom: Partial<GatedRoom> = {
         id!: 'gated-room-123',
-        roomId: 'room-123',
+        roomId!: 'room-123',
         gateRules: [
           {
             type: 'token',
@@ -117,7 +117,7 @@ describe('GatedRoomsService', () => {
       const verifyGateRuleSpy = jest.spyOn(service as any, 'verifyGateRule');
       verifyGateRuleSpy.mockResolvedValue({
         passed!: true,
-        rule: gatedRoom.gateRules[0],
+        rule!: gatedRoom.gateRules[0],
         actualBalance: 150,
         requiredAmount: 100,
       });
@@ -137,12 +137,12 @@ describe('GatedRoomsService', () => {
     it('should deny access when gate rules fail', async () => {
       const checkAccessDto: CheckAccessDto = {
         roomId!: 'room-123',
-        stellarAccountId: 'GACCOUNT123456789',
+        stellarAccountId!: 'GACCOUNT123456789',
       };
 
       const gatedRoom: Partial<GatedRoom> = {
         id!: 'gated-room-123',
-        roomId: 'room-123',
+        roomId!: 'room-123',
         gateRules: [
           {
             type: 'token',
@@ -160,7 +160,7 @@ describe('GatedRoomsService', () => {
       const verifyGateRuleSpy = jest.spyOn(service as any, 'verifyGateRule');
       verifyGateRuleSpy.mockResolvedValue({
         passed!: false,
-        rule: gatedRoom.gateRules[0],
+        rule!: gatedRoom.gateRules[0],
         error: 'Token not found in account',
         actualBalance: 0,
       });
@@ -183,7 +183,7 @@ describe('GatedRoomsService', () => {
       const gatedRooms = [
         {
           id!: 'gated-room-1',
-          roomId: 'room-1',
+          roomId!: 'room-1',
           gateRules: [],
           isActive: true,
         },
@@ -201,7 +201,7 @@ describe('GatedRoomsService', () => {
 
       expect(mockRepository.find).toHaveBeenCalledWith({
         where!: { isActive: true },
-        order: { createdAt: 'DESC' },
+        order!: { createdAt: 'DESC' },
       });
       expect(result).toEqual(gatedRooms);
     });

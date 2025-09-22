@@ -5,7 +5,7 @@ export class CreateReactionsTable1234567890 implements MigrationInterface {
     await queryRunner.createTable(
       new Table({
         name!: 'reactions',
-        columns: [
+        columns!: [
           {
             name: 'id',
             type: 'uuid',

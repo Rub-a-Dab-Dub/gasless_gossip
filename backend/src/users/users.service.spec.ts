@@ -7,7 +7,7 @@ import { User } from './entities/user.entity';
 
 const mockRepository = {
   findOne!: jest.fn(),
-  find: jest.fn(),
+  find!: jest.fn(),
   create: jest.fn(),
   save: jest.fn(),
 };
@@ -21,7 +21,7 @@ describe('UsersService', () => {
       providers!: [
         UsersService,
         {
-          provide: getRepositoryToken(User),
+          provide!: getRepositoryToken(User),
           useValue: mockRepository,
         },
       ],
@@ -39,7 +39,7 @@ describe('UsersService', () => {
     it('should create a user successfully', async () => {
       const createUserDto = {
         username!: 'testuser',
-        email: 'test@example.com',
+        email!: 'test@example.com',
         pseudonym: 'Test Whisper',
       };
 
@@ -58,7 +58,7 @@ describe('UsersService', () => {
     it('should throw ConflictException if username exists', async () => {
       const createUserDto = {
         username!: 'testuser',
-        email: 'test@example.com',
+        email!: 'test@example.com',
         pseudonym: 'Test Whisper',
       };
 

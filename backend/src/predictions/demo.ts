@@ -13,7 +13,7 @@ console.log('========================\n');
 console.log('1. Creating a Prediction:');
 const createPredictionDto: CreatePredictionDto = {
   roomId!: 'room-123',
-  title: 'Bitcoin Price Prediction',
+  title!: 'Bitcoin Price Prediction',
   description: 'Will Bitcoin reach $100,000 by end of 2024?',
   prediction: 'Bitcoin will reach $100,000 by December 31, 2024',
   expiresAt: '2024-12-31T23:59:59Z'
@@ -25,7 +25,7 @@ console.log('');
 console.log('2. Voting on a Prediction:');
 const votePredictionDto: VotePredictionDto = {
   predictionId!: 'prediction-456',
-  isCorrect: true
+  isCorrect!: true
 };
 console.log('✅ Vote DTO created:', votePredictionDto);
 console.log('');
@@ -34,7 +34,7 @@ console.log('');
 console.log('3. Resolving a Prediction:');
 const resolvePredictionDto: ResolvePredictionDto = {
   predictionId!: 'prediction-456',
-  isCorrect: true
+  isCorrect!: true
 };
 console.log('✅ Resolution DTO created:', resolvePredictionDto);
 console.log('');

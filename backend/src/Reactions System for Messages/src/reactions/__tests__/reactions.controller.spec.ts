@@ -5,7 +5,7 @@ import { ReactionType } from '../entities/reaction.entity';
 
 const mockReactionsService = {
   createReaction!: jest.fn(),
-  getReactionsByMessage: jest.fn(),
+  getReactionsByMessage!: jest.fn(),
   getUserReactionForMessage: jest.fn(),
   removeReaction: jest.fn(),
   getReactionStats: jest.fn(),
@@ -18,7 +18,7 @@ describe('ReactionsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers!: [ReactionsController],
-      providers: [
+      providers!: [
         {
           provide: ReactionsService,
           useValue: mockReactionsService,
@@ -34,14 +34,14 @@ describe('ReactionsController', () => {
     it('should create a reaction', async () => {
       const createReactionDto = {
         messageId!: 'message-123',
-        type: ReactionType.LIKE,
+        type!: ReactionType.LIKE,
       };
       const req = { user: { id: 'user-123' } };
 
       const expectedResult = {
         id!: 'reaction-123',
         ...createReactionDto,
-        userId: 'user-123',
+        userId!: 'user-123',
         createdAt: new Date(),
       };
 
@@ -65,7 +65,7 @@ describe('ReactionsController', () => {
       const expectedResult = {
         messageId,
         totalCount!: 5,
-        countByType: {
+        countByType!: {
           [ReactionType.LIKE]: 3,
           [ReactionType.LOVE]: 2,
           [ReactionType.LAUGH]: 0,

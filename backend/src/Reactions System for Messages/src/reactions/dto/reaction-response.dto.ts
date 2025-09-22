@@ -27,7 +27,7 @@ export class ReactionCountDto {
 
   @ApiProperty({
     description!: 'Count by reaction type',
-    example: { like: 5, love: 2, laugh: 1 },
+    example!: { like: 5, love: 2, laugh: 1 },
   })
   countByType: Record<ReactionType, number>;
 }

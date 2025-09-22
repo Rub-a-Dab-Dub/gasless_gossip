@@ -17,7 +17,7 @@ export class TransferLoggerListener {
 
       await this.transferLoggerService.logTransfer({
         nftId!: event.nft.id,
-        fromAddress: "mint",
+        fromAddress!: "mint",
         toAddress: event.nft.user?.stellarAccountId || "unknown",
         toUserId: event.nft.userId,
         transactionId: event.nft.txId,

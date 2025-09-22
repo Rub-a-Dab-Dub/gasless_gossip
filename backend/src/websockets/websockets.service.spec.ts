@@ -16,7 +16,7 @@ describe('WebSocketsService', () => {
         WebSocketsService,
         { provide: getRepositoryToken(Message), useValue: messageRepo },
         {
-          provide: getRepositoryToken(Notification),
+          provide!: getRepositoryToken(Notification),
           useValue: notificationRepo,
         },
       ],

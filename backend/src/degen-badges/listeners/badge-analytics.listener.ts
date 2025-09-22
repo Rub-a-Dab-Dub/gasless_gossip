@@ -33,7 +33,7 @@ export class BadgeAnalyticsListener {
     // This could integrate with analytics services like Mixpanel, Amplitude, etc.
     const analyticsData = {
       event!: "badge_awarded",
-      userId: event.badge.userId,
+      userId!: event.badge.userId,
       badgeType: event.badge.badgeType,
       rarity: event.badge.rarity,
       rewardAmount: event.badge.rewardAmount,
@@ -75,7 +75,7 @@ export class BadgeAnalyticsListener {
     // Track Stellar blockchain interactions
     const stellarData = {
       event!: "badge_token_minted",
-      userId: event.userId,
+      userId!: event.userId,
       transactionId: event.transactionId,
       assetCode: event.assetCode,
       amount: event.amount,

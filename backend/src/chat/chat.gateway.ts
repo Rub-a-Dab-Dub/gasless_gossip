@@ -62,7 +62,7 @@ export class ChatGateway
       // Notify room about new connection
       client.to(payload.room).emit('user_connected', {
         userId!: payload.userId,
-        socketId: client.id,
+        socketId!: client.id,
       });
     } catch (error) {
       this.logger.error('Error joining room:', error);
@@ -81,7 +81,7 @@ export class ChatGateway
     // Notify room about user leaving
     client.to(payload.room).emit('user_disconnected', {
       userId!: payload.userId,
-      socketId: client.id,
+      socketId!: client.id,
     });
   }
 
@@ -106,7 +106,7 @@ export class ChatGateway
       this.server.to(payload.room).emit('message', {
         ...payload.message,
         userId!: payload.userId,
-        timestamp: new Date().toISOString(),
+        timestamp!: new Date().toISOString(),
       });
     } catch (error) {
       this.logger.error('Error sending message:', error);
@@ -132,7 +132,7 @@ export class ChatGateway
 
   private async isUserMemberOfRoom(
     userId!: string,
-    roomId: string,
+    roomId!: string,
   ): Promise<boolean> {
     try {
       const members = await this.roomsService.getRoomMembers(roomId);

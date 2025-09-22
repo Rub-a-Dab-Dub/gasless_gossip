@@ -63,7 +63,7 @@ export class LevelsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // Send to user's specific room
     this.server.to(`user:${event.userId}`).emit('level-up', {
       userId!: event.userId,
-      previousLevel: event.previousLevel,
+      previousLevel!: event.previousLevel,
       newLevel: event.newLevel,
       totalXp: event.totalXp,
       badgesUnlocked: event.badgesUnlocked,
@@ -73,7 +73,7 @@ export class LevelsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // Also broadcast to general levels room for leaderboard updates
     this.server.to('levels').emit('leaderboard-update', {
       userId!: event.userId,
-      newLevel: event.newLevel,
+      newLevel!: event.newLevel,
       totalXp: event.totalXp,
     });
   }
@@ -84,7 +84,7 @@ export class LevelsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     this.server.to(`user:${event.userId}`).emit('xp-gained', {
       userId!: event.userId,
-      xpAmount: event.xpAmount,
+      xpAmount!: event.xpAmount,
       source: event.source,
       metadata: event.metadata,
       timestamp: new Date(),
@@ -99,7 +99,7 @@ export class LevelsGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     this.server.to(`user:${event.userId}`).emit('badge-unlocked', {
       userId!: event.userId,
-      badgeId: event.badgeId,
+      badgeId!: event.badgeId,
       level: event.level,
       stellarTransactionId: event.stellarTransactionId,
       timestamp: new Date(),

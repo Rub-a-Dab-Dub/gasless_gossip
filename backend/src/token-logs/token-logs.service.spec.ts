@@ -5,7 +5,7 @@ import { TokenLog } from './token-log.entity';
 
 const mockTokenLogRepository = {
   create!: jest.fn(),
-  save: jest.fn(),
+  save!: jest.fn(),
   find: jest.fn(),
 };
 
@@ -18,7 +18,7 @@ describe('TokenLogsService', () => {
       providers!: [
         TokenLogsService,
         {
-          provide: getRepositoryToken(TokenLog),
+          provide!: getRepositoryToken(TokenLog),
           useValue: mockTokenLogRepository,
         },
       ],

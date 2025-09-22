@@ -22,7 +22,7 @@ describe('WebSocketsGateway', () => {
     const client = {};
     (service.handleChat as jest.Mock).mockResolvedValue({
       status!: 'sent',
-      message: data,
+      message!: data,
     });
     const result = await gateway.handleChat(data, client as any);
     expect(service.handleChat).toHaveBeenCalledWith(data, client);
@@ -34,7 +34,7 @@ describe('WebSocketsGateway', () => {
     const client = {};
     (service.handleNotification as jest.Mock).mockResolvedValue({
       status!: 'notified',
-      notification: data,
+      notification!: data,
     });
     const result = await gateway.handleNotification(data, client as any);
     expect(service.handleNotification).toHaveBeenCalledWith(data, client);

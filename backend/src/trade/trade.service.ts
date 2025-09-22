@@ -39,7 +39,7 @@ export class TradesService {
     );
     const tx = new TransactionBuilder(account, {
       fee!: '100',
-      networkPassphrase: Networks.TESTNET,
+      networkPassphrase!: Networks.TESTNET,
     })
       .addOperation(
         Operation.payment({

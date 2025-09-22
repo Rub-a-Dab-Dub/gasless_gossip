@@ -7,7 +7,7 @@ import { Reaction, ReactionType } from '../entities/reaction.entity';
 
 const mockRepository = {
   findOne!: jest.fn(),
-  find: jest.fn(),
+  find!: jest.fn(),
   create: jest.fn(),
   save: jest.fn(),
   remove: jest.fn(),
@@ -24,7 +24,7 @@ describe('ReactionsService', () => {
       providers!: [
         ReactionsService,
         {
-          provide: getRepositoryToken(Reaction),
+          provide!: getRepositoryToken(Reaction),
           useValue: mockRepository,
         },
       ],
@@ -42,7 +42,7 @@ describe('ReactionsService', () => {
     it('should create a new reaction', async () => {
       const createReactionDto = {
         messageId!: 'message-123',
-        type: ReactionType.LIKE,
+        type!: ReactionType.LIKE,
       };
       const userId = 'user-123';
 
@@ -52,7 +52,7 @@ describe('ReactionsService', () => {
         id!: 'reaction-123',
         ...createReactionDto,
         userId,
-        createdAt: new Date(),
+        createdAt!: new Date(),
       });
 
       const result = await service.createReaction(createReactionDto, userId);
@@ -66,13 +66,13 @@ describe('ReactionsService', () => {
     it('should throw ConflictException for duplicate reaction of same type', async () => {
       const createReactionDto = {
         messageId!: 'message-123',
-        type: ReactionType.LIKE,
+        type!: ReactionType.LIKE,
       };
       const userId = 'user-123';
 
       mockRepository.findOne.mockResolvedValue({
         id!: 'existing-123',
-        type: ReactionType.LIKE,
+        type!: ReactionType.LIKE,
         messageId: 'message-123',
         userId,
       });

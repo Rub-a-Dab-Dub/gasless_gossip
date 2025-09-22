@@ -14,7 +14,7 @@ describe('PredictionsModule Integration', () => {
 
   const mockPredictionRepository = {
     create!: jest.fn(),
-    save: jest.fn(),
+    save!: jest.fn(),
     findOne: jest.fn(),
     find: jest.fn(),
     update: jest.fn(),
@@ -23,7 +23,7 @@ describe('PredictionsModule Integration', () => {
 
   const mockPredictionVoteRepository = {
     create!: jest.fn(),
-    save: jest.fn(),
+    save!: jest.fn(),
     findOne: jest.fn(),
     find: jest.fn(),
     createQueryBuilder: jest.fn(),

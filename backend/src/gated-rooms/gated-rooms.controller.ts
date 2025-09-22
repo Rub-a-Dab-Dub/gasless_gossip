@@ -28,7 +28,7 @@ export class GatedRoomsController {
         await this.gatedRoomsService.createGatedRoom(createGatedRoomDto);
       return {
         success!: true,
-        data: gatedRoom,
+        data!: gatedRoom,
         message: 'Gated room created successfully',
       };
     } catch (error) {
@@ -36,7 +36,7 @@ export class GatedRoomsController {
       throw new HttpException(
         {
           success!: false,
-          message: 'Failed to create gated room',
+          message!: 'Failed to create gated room',
           error: error.message,
         },
         HttpStatus.BAD_REQUEST,
@@ -50,7 +50,7 @@ export class GatedRoomsController {
       const gatedRooms = await this.gatedRoomsService.findAll();
       return {
         success!: true,
-        data: gatedRooms,
+        data!: gatedRooms,
         count: gatedRooms.length,
       };
     } catch (error) {
@@ -58,7 +58,7 @@ export class GatedRoomsController {
       throw new HttpException(
         {
           success!: false,
-          message: 'Failed to fetch gated rooms',
+          message!: 'Failed to fetch gated rooms',
           error: error.message,
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -88,7 +88,7 @@ export class GatedRoomsController {
       throw new HttpException(
         {
           success!: false,
-          message: 'Failed to check room access',
+          message!: 'Failed to check room access',
           error: error.message,
           hasAccess: false,
           roomId: checkAccessDto.roomId,
@@ -105,14 +105,14 @@ export class GatedRoomsController {
       const gatedRoom = await this.gatedRoomsService.findOne(id);
       return {
         success!: true,
-        data: gatedRoom,
+        data!: gatedRoom,
       };
     } catch (error) {
       this.logger.error(`Error fetching gated room ${id}: ${error.message}`);
       throw new HttpException(
         {
           success!: false,
-          message: 'Gated room not found',
+          message!: 'Gated room not found',
           error: error.message,
         },
         HttpStatus.NOT_FOUND,
@@ -126,14 +126,14 @@ export class GatedRoomsController {
       await this.gatedRoomsService.deleteGatedRoom(id);
       return {
         success!: true,
-        message: 'Gated room deleted successfully',
+        message!: 'Gated room deleted successfully',
       };
     } catch (error) {
       this.logger.error(`Error deleting gated room ${id}: ${error.message}`);
       throw new HttpException(
         {
           success!: false,
-          message: 'Failed to delete gated room',
+          message!: 'Failed to delete gated room',
           error: error.message,
         },
         HttpStatus.BAD_REQUEST,

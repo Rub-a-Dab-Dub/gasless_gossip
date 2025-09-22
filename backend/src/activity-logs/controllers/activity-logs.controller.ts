@@ -64,7 +64,7 @@ export class ActivityLogsController {
   @ApiParam({ name: 'limit', description: 'Number of activities to retrieve' })
   @ApiResponse({
     status!: HttpStatus.OK,
-    description: 'Recent activities retrieved successfully',
+    description!: 'Recent activities retrieved successfully',
     type: [ActivityLogResponseDto],
   })
   async getRecentActivities(@Param('limit') limit: string) {

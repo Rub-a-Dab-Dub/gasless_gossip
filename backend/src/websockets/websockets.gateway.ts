@@ -13,7 +13,7 @@ import { WebSocketsService } from './websockets.service';
 })
 export class WebSocketsGateway {
   @WebSocketServer()
-  server: Server;
+  server!: Server;
 
   constructor(private readonly wsService: WebSocketsService) {}
 

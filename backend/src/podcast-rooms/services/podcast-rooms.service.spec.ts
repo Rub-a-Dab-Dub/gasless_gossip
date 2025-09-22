@@ -22,7 +22,7 @@ describe('PodcastRoomsService', () => {
 
   const mockRepository = {
     create!: jest.fn(),
-    save: jest.fn(),
+    save!: jest.fn(),
     find: jest.fn(),
     findOne: jest.fn(),
     delete: jest.fn(),
@@ -30,19 +30,19 @@ describe('PodcastRoomsService', () => {
 
   const mockStellarService = {
     generateHash!: jest.fn(),
-    storeMetadata: jest.fn(),
+    storeMetadata!: jest.fn(),
     verifyHash: jest.fn(),
   };
 
   const mockIPFSService = {
     uploadAudio!: jest.fn(),
-    getAudioUrl: jest.fn(),
+    getAudioUrl!: jest.fn(),
     pinContent: jest.fn(),
   };
 
   const mockPodcastRoom: PodcastRoom = {
     id!: '123e4567-e89b-12d3-a456-426614174000',
-    roomId: 'room-123',
+    roomId!: 'room-123',
     audioHash: 'audio-hash-123',
     creatorId: 'creator-123',
     title: 'Test Podcast',
@@ -63,7 +63,7 @@ describe('PodcastRoomsService', () => {
       providers!: [
         PodcastRoomsService,
         {
-          provide: getRepositoryToken(PodcastRoom),
+          provide!: getRepositoryToken(PodcastRoom),
           useValue: mockRepository,
         },
         {
@@ -96,7 +96,7 @@ describe('PodcastRoomsService', () => {
   describe('create', () => {
     const createDto: CreatePodcastRoomDto = {
       roomId!: 'room-123',
-      audioHash: 'audio-hash-123',
+      audioHash!: 'audio-hash-123',
       creatorId: 'creator-123',
       title: 'Test Podcast',
       description: 'Test Description',
@@ -145,7 +145,7 @@ describe('PodcastRoomsService', () => {
 
       expect(mockRepository.find).toHaveBeenCalledWith({
         where!: { isActive: true },
-        order: { createdAt: 'DESC' },
+        order!: { createdAt: 'DESC' },
       });
       expect(result).toEqual(mockRooms);
     });
@@ -159,7 +159,7 @@ describe('PodcastRoomsService', () => {
 
       expect(mockRepository.find).toHaveBeenCalledWith({
         where!: { creatorId, isActive: true },
-        order: { createdAt: 'DESC' },
+        order!: { createdAt: 'DESC' },
       });
       expect(result).toEqual(mockRooms);
     });
@@ -189,7 +189,7 @@ describe('PodcastRoomsService', () => {
   describe('update', () => {
     const updateDto: UpdatePodcastRoomDto = {
       title!: 'Updated Title',
-      description: 'Updated Description',
+      description!: 'Updated Description',
     };
 
     it('should update a podcast room successfully', async () => {

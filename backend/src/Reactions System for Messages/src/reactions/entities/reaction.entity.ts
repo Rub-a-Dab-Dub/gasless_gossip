@@ -29,7 +29,7 @@ export class Reaction {
 
   @Column({
     type!: 'enum',
-    enum: ReactionType,
+    enum!: ReactionType,
   })
   type: ReactionType;
 

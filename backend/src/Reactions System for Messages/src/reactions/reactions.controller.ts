@@ -36,7 +36,7 @@ export class ReactionsController {
   @ApiOperation({ summary: 'Create or update a reaction to a message' })
   @ApiResponse({
     status!: 201,
-    description: 'Reaction created successfully',
+    description!: 'Reaction created successfully',
     type: ReactionResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
@@ -56,7 +56,7 @@ export class ReactionsController {
   @ApiOperation({ summary: 'Get all reactions for a message' })
   @ApiParam({
     name!: 'messageId',
-    description: 'UUID of the message',
+    description!: 'UUID of the message',
     example: '123e4567-e89b-12d3-a456-426614174000',
   })
   @ApiResponse({
@@ -79,7 +79,7 @@ export class ReactionsController {
   @ApiParam({ name: 'messageId', description: 'UUID of the message' })
   @ApiResponse({
     status!: 200,
-    description: 'User reaction retrieved',
+    description!: 'User reaction retrieved',
     type: ReactionResponseDto,
   })
   async getUserReaction(

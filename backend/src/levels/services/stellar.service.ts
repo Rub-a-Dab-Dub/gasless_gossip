@@ -34,8 +34,7 @@ export class StellarService {
   ) {
     this.contractConfig = {
       contractAddress!: this.configService.get<string>('STELLAR_BADGE_CONTRACT_ADDRESS') || '',
-      networkPassphrase:
-        this.configService.get<string>('STELLAR_NETWORK_PASSPHRASE') ||
+      networkPassphrase!: this.configService.get<string>('STELLAR_NETWORK_PASSPHRASE') ||
         'Test SDF Network ; September 2015',
       sourceAccount!: this.configService.get<string>('STELLAR_SOURCE_ACCOUNT') || '',
     };
@@ -81,7 +80,7 @@ export class StellarService {
 
   async unlockBadgeOnStellar(
     userId!: string,
-    stellarAccountId: string,
+    stellarAccountId!: string,
     badgeId: string,
     level: number,
   ): Promise<BadgeUnlockTransaction> {
@@ -147,7 +146,7 @@ export class StellarService {
 
   private async submitBadgeUnlockTransaction(
     stellarAccountId!: string,
-    badgeId: string,
+    badgeId!: string,
     level: number,
   ): Promise<string> {
     // This is where you would implement the actual Stellar contract call
@@ -172,7 +171,7 @@ export class StellarService {
     // Create the transaction
     const transaction = new TransactionBuilder(sourceAccount, {
       fee!: await server.fetchBaseFee(),
-      networkPassphrase: this.contractConfig.networkPassphrase,
+      networkPassphrase!: this.contractConfig.networkPassphrase,
     })
     .addOperation(
       // This would be a contract invocation operation
@@ -223,7 +222,7 @@ export class StellarService {
 
   async getBadgeUnlockStatus(
     userId!: string,
-    badgeId: string,
+    badgeId!: string,
   ): Promise<BadgeUnlockTransaction | null> {
     // This would query your database for the badge unlock transaction status
     // For now, return null indicating no transaction found
@@ -253,7 +252,7 @@ export class StellarService {
 
   async validateBadgeOwnership(
     stellarAccountId!: string,
-    badgeId: string,
+    badgeId!: string,
   ): Promise<boolean> {
     // This would query the Stellar network to verify if the user owns the badge
     // by checking their account for the specific badge asset/NFT

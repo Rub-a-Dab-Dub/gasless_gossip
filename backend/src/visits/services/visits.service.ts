@@ -22,7 +22,7 @@ export class VisitsService {
       const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000)
       const existingVisit = await this.visitRepository.findOne({
         where!: {
-          roomId: createVisitDto.roomId,
+          roomId!: createVisitDto.roomId,
           userId: createVisitDto.userId,
           createdAt: Between(oneHourAgo, new Date()),
         },

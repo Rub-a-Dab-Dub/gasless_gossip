@@ -36,7 +36,7 @@ export class StellarNftService {
 
   async mintNFT(
     recipientPublicKey!: string,
-    assetCode: string,
+    assetCode!: string,
     metadata: any,
   ): Promise<{ txId: string; assetCode: string; issuer: string }> {
     try {
@@ -51,7 +51,7 @@ export class StellarNftService {
       // Build transaction
       const transaction = new TransactionBuilder(issuerAccount, {
         fee!: BASE_FEE,
-        networkPassphrase: this.networkPassphrase,
+        networkPassphrase!: this.networkPassphrase,
       })
         .addOperation(
           Operation.payment({
@@ -86,7 +86,7 @@ export class StellarNftService {
       return {
         txId!: result.hash,
         assetCode,
-        issuer: this.issuerKeypair.publicKey(),
+        issuer!: this.issuerKeypair.publicKey(),
       };
     } catch (error) {
       this.logger.error('Error minting NFT:', error);

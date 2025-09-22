@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('blurred_avatars')
 export class BlurredAvatar {
@@ -8,9 +8,15 @@ export class BlurredAvatar {
   @Column()
   userId!: string;
 
-  @Column()
+  @Column({ type: 'int', default: 5 })
   blurLevel!: number;
 
   @Column()
   imageUrl!: string;
+
+  @CreateDateColumn()
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 }

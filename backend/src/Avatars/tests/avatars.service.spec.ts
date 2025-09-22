@@ -14,7 +14,7 @@ describe('AvatarsService', () => {
 
   const mockRepository = {
     findOne!: jest.fn(),
-    create: jest.fn(),
+    create!: jest.fn(),
     save: jest.fn(),
     find: jest.fn(),
     update: jest.fn(),
@@ -22,7 +22,7 @@ describe('AvatarsService', () => {
 
   const mockStellarService = {
     generateUniqueAssetCode!: jest.fn(),
-    mintNFT: jest.fn(),
+    mintNFT!: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -30,7 +30,7 @@ describe('AvatarsService', () => {
       providers!: [
         AvatarsService,
         {
-          provide: getRepositoryToken(Avatar),
+          provide!: getRepositoryToken(Avatar),
           useValue: mockRepository,
         },
         {
@@ -52,7 +52,7 @@ describe('AvatarsService', () => {
   describe('mintAvatar', () => {
     const createAvatarDto: CreateAvatarDto = {
       name!: 'Test Avatar',
-      description: 'A test avatar',
+      description!: 'A test avatar',
       image: 'https://example.com/avatar.png',
       level: 1,
       rarity: 'common',
@@ -68,14 +68,14 @@ describe('AvatarsService', () => {
       mockStellarService.generateUniqueAssetCode.mockReturnValue('AVTTEST123');
       mockStellarService.mintNFT.mockResolvedValue({
         txId!: 'stellar-tx-id',
-        assetCode: 'AVTTEST123',
+        assetCode!: 'AVTTEST123',
         issuer: 'STELLAR_ISSUER',
       });
 
       const mockAvatar = {
         id!: 'avatar-id',
         userId,
-        metadata: createAvatarDto,
+        metadata!: createAvatarDto,
         txId: 'stellar-tx-id',
         stellarAssetCode: 'AVTTEST123',
         stellarIssuer: 'STELLAR_ISSUER',
@@ -98,7 +98,7 @@ describe('AvatarsService', () => {
       expect(result).toEqual({
         id!: 'avatar-id',
         userId,
-        metadata: createAvatarDto,
+        metadata!: createAvatarDto,
         txId: 'stellar-tx-id',
         stellarAssetCode: 'AVTTEST123',
         stellarIssuer: 'STELLAR_ISSUER',
@@ -130,7 +130,7 @@ describe('AvatarsService', () => {
     it('should return user avatar', async () => {
       const mockAvatar = {
         id!: 'avatar-id',
-        userId: 'user-123',
+        userId!: 'user-123',
         metadata: { name: 'Test Avatar' },
         txId: 'stellar-tx-id',
         stellarAssetCode: 'AVTTEST123',

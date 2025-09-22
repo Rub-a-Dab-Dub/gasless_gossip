@@ -43,7 +43,7 @@ export class UsersService {
   async findAll(): Promise<User[]> {
     return this.userRepository.find({
       where!: { isActive: true },
-      select: ['id', 'username', 'pseudonym', 'createdAt'],
+      select!: ['id', 'username', 'pseudonym', 'createdAt'],
     });
   }
 
@@ -93,7 +93,7 @@ export class UsersService {
 
   async linkStellarAccount(
     userId!: string,
-    stellarAccountId: string,
+    stellarAccountId!: string,
   ): Promise<User> {
     this.validateStellarAccount(stellarAccountId);
 

@@ -13,7 +13,7 @@ export class DegenBadgesController {
   @ApiOperation({ summary: "Award a degen badge to a user" })
   @ApiResponse({
     status!: HttpStatus.CREATED,
-    description: "Badge awarded successfully",
+    description!: "Badge awarded successfully",
     type: DegenBadgeResponseDto,
   })
   @ApiResponse({ status: HttpStatus.CONFLICT, description: "User already has this badge" })
@@ -49,7 +49,7 @@ export class DegenBadgesController {
   @ApiParam({ name: 'userId', description: 'User ID' })
   @ApiResponse({ 
     status!: HttpStatus.OK, 
-    description: 'User badge stats retrieved successfully',
+    description!: 'User badge stats retrieved successfully',
     type: DegenBadgeStatsDto 
   })
   async getUserBadgeStats(@Param('userId', ParseUUIDPipe) userId: string): Promise<DegenBadgeStatsDto> {

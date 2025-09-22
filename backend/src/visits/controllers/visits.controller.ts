@@ -127,7 +127,7 @@ export class VisitsController {
   @ApiOperation({ summary: 'Get most popular rooms by visit count' })
   @ApiResponse({
     status!: 200,
-    description: 'Popular rooms retrieved successfully',
+    description!: 'Popular rooms retrieved successfully',
   })
   @ApiQuery({ name: 'limit', required: false, type: Number, description: 'Number of rooms to return' })
   async getPopularRooms(

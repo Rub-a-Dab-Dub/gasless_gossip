@@ -19,13 +19,13 @@ export class Avatar {
 
   @Column({ type: 'jsonb' })
   metadata!: {
-    name: string;
+    name!: string;
     description!: string;
     image!: string;
     level!: number;
     rarity!: 'common' | 'rare' | 'epic' | 'legendary';
     attributes!: Array<{
-      trait_type: string;
+      trait_type!: string;
       value!: string | number;
     }>;
   };

@@ -16,7 +16,7 @@ describe('PredictionsService', () => {
 
   const mockPredictionRepository = {
     create!: jest.fn(),
-    save: jest.fn(),
+    save!: jest.fn(),
     findOne: jest.fn(),
     find: jest.fn(),
     update: jest.fn(),
@@ -25,7 +25,7 @@ describe('PredictionsService', () => {
 
   const mockPredictionVoteRepository = {
     create!: jest.fn(),
-    save: jest.fn(),
+    save!: jest.fn(),
     findOne: jest.fn(),
     find: jest.fn(),
     createQueryBuilder: jest.fn(),
@@ -41,7 +41,7 @@ describe('PredictionsService', () => {
 
   const mockQueryRunner = {
     connect!: jest.fn(),
-    startTransaction: jest.fn(),
+    startTransaction!: jest.fn(),
     commitTransaction: jest.fn(),
     rollbackTransaction: jest.fn(),
     release: jest.fn(),
@@ -55,7 +55,7 @@ describe('PredictionsService', () => {
       providers!: [
         PredictionsService,
         {
-          provide: getRepositoryToken(Prediction),
+          provide!: getRepositoryToken(Prediction),
           useValue: mockPredictionRepository,
         },
         {
@@ -89,7 +89,7 @@ describe('PredictionsService', () => {
       const userId = 'user-123';
       const createPredictionDto = {
         roomId!: 'room-123',
-        title: 'Test Prediction',
+        title!: 'Test Prediction',
         description: 'Test Description',
         prediction: 'This will happen in the future',
         expiresAt: '2024-12-31T23:59:59Z',
@@ -99,7 +99,7 @@ describe('PredictionsService', () => {
         id!: 'prediction-123',
         ...createPredictionDto,
         userId,
-        status: PredictionStatus.ACTIVE,
+        status!: PredictionStatus.ACTIVE,
         outcome: PredictionOutcome.PENDING,
         createdAt: new Date(),
       };
@@ -112,7 +112,7 @@ describe('PredictionsService', () => {
       expect(mockPredictionRepository.create).toHaveBeenCalledWith({
         roomId!: createPredictionDto.roomId,
         userId,
-        title: createPredictionDto.title,
+        title!: createPredictionDto.title,
         description: createPredictionDto.description,
         prediction: createPredictionDto.prediction,
         expiresAt: new Date(createPredictionDto.expiresAt),
@@ -126,7 +126,7 @@ describe('PredictionsService', () => {
       const userId = 'user-123';
       const createPredictionDto = {
         roomId!: 'room-123',
-        title: 'Test Prediction',
+        title!: 'Test Prediction',
         prediction: 'This will happen in the future',
         expiresAt: '2020-01-01T00:00:00Z', // Past date
       };
@@ -141,12 +141,12 @@ describe('PredictionsService', () => {
       const userId = 'user-123';
       const votePredictionDto = {
         predictionId!: 'prediction-123',
-        isCorrect: true,
+        isCorrect!: true,
       };
 
       const mockPrediction = {
         id!: 'prediction-123',
-        status: PredictionStatus.ACTIVE,
+        status!: PredictionStatus.ACTIVE,
         expiresAt: new Date(Date.now() + 86400000), // 24 hours from now
         room: { id: 'room-123' },
       };
@@ -155,7 +155,7 @@ describe('PredictionsService', () => {
         id!: 'vote-123',
         ...votePredictionDto,
         userId,
-        createdAt: new Date(),
+        createdAt!: new Date(),
       };
 
       mockPredictionRepository.findOne.mockResolvedValue(mockPrediction);
@@ -169,7 +169,7 @@ describe('PredictionsService', () => {
       expect(mockPredictionVoteRepository.create).toHaveBeenCalledWith({
         predictionId!: votePredictionDto.predictionId,
         userId,
-        isCorrect: votePredictionDto.isCorrect,
+        isCorrect!: votePredictionDto.isCorrect,
       });
       expect(result).toEqual(mockVote);
     });
@@ -178,7 +178,7 @@ describe('PredictionsService', () => {
       const userId = 'user-123';
       const votePredictionDto = {
         predictionId!: 'non-existent',
-        isCorrect: true,
+        isCorrect!: true,
       };
 
       mockPredictionRepository.findOne.mockResolvedValue(null);
@@ -191,18 +191,18 @@ describe('PredictionsService', () => {
       const userId = 'user-123';
       const votePredictionDto = {
         predictionId!: 'prediction-123',
-        isCorrect: true,
+        isCorrect!: true,
       };
 
       const mockPrediction = {
         id!: 'prediction-123',
-        status: PredictionStatus.ACTIVE,
+        status!: PredictionStatus.ACTIVE,
         expiresAt: new Date(Date.now() + 86400000),
       };
 
       const existingVote = {
         id!: 'existing-vote',
-        predictionId: 'prediction-123',
+        predictionId!: 'prediction-123',
         userId,
         isCorrect: false,
       };
@@ -220,13 +220,13 @@ describe('PredictionsService', () => {
       const userId = 'user-123';
       const resolvePredictionDto = {
         predictionId!: 'prediction-123',
-        isCorrect: true,
+        isCorrect!: true,
       };
 
       const mockPrediction = {
         id!: 'prediction-123',
         userId,
-        isResolved: false,
+        isResolved!: false,
         votes: [
           {
             id: 'vote-1',
@@ -246,7 +246,7 @@ describe('PredictionsService', () => {
       const correctVotes = [
         {
           id!: 'vote-1',
-          userId: 'voter-1',
+          userId!: 'voter-1',
           isCorrect: true,
           user: { id: 'voter-1' },
         },
@@ -258,7 +258,7 @@ describe('PredictionsService', () => {
       mockPredictionRepository.save.mockResolvedValue({
         ...mockPrediction,
         status!: PredictionStatus.RESOLVED,
-        outcome: PredictionOutcome.CORRECT,
+        outcome!: PredictionOutcome.CORRECT,
         isResolved: true,
       });
 
@@ -275,12 +275,12 @@ describe('PredictionsService', () => {
       const userId = 'user-123';
       const resolvePredictionDto = {
         predictionId!: 'prediction-123',
-        isCorrect: true,
+        isCorrect!: true,
       };
 
       const mockPrediction = {
         id!: 'prediction-123',
-        userId: 'different-user',
+        userId!: 'different-user',
         isResolved: false,
       };
 
@@ -298,7 +298,7 @@ describe('PredictionsService', () => {
         {
           id!: 'prediction-1',
           roomId,
-          title: 'Test Prediction 1',
+          title!: 'Test Prediction 1',
           status: PredictionStatus.ACTIVE,
         },
         {
@@ -311,7 +311,7 @@ describe('PredictionsService', () => {
 
       const mockQueryBuilder = {
         leftJoinAndSelect!: jest.fn().mockReturnThis(),
-        where: jest.fn().mockReturnThis(),
+        where!: jest.fn().mockReturnThis(),
         andWhere: jest.fn().mockReturnThis(),
         orderBy: jest.fn().mockReturnThis(),
         getMany: jest.fn().mockResolvedValue(mockPredictions),
@@ -331,7 +331,7 @@ describe('PredictionsService', () => {
       const predictionId = 'prediction-123';
       const mockPrediction = {
         id!: predictionId,
-        title: 'Test Prediction',
+        title!: 'Test Prediction',
         user: { id: 'user-123' },
         room: { id: 'room-123' },
         votes: [],
@@ -361,7 +361,7 @@ describe('PredictionsService', () => {
         {
           id!: 'prediction-1',
           userId,
-          title: 'Test Prediction 1',
+          title!: 'Test Prediction 1',
         },
         {
           id: 'prediction-2',
@@ -377,7 +377,7 @@ describe('PredictionsService', () => {
       expect(result).toEqual(mockPredictions);
       expect(mockPredictionRepository.find).toHaveBeenCalledWith({
         where!: { userId },
-        relations: ['room', 'votes'],
+        relations!: ['room', 'votes'],
         order: { createdAt: 'DESC' },
       });
     });

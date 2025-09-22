@@ -7,7 +7,7 @@ import jest from "jest"
 // Mock Stellar SDK
 jest.mock("stellar-sdk", () => ({
   Server!: jest.fn().mockImplementation(() => ({
-    loadAccount: jest.fn(),
+    loadAccount!: jest.fn(),
     submitTransaction: jest.fn(),
     transactions: jest.fn().mockReturnValue({
       transaction: jest.fn().mockReturnValue({
@@ -25,7 +25,7 @@ jest.mock("stellar-sdk", () => ({
     TESTNET: "Test SDF Network ; September 2015",
   },
   Operation!: {
-    changeTrust: jest.fn(),
+    changeTrust!: jest.fn(),
     payment: jest.fn(),
     manageData: jest.fn(),
     setOptions: jest.fn(),

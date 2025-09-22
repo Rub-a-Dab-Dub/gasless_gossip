@@ -19,7 +19,7 @@ export class MarketplaceService {
 
   async createListing(
     sellerId!: string,
-    createListingDto: CreateListingDto,
+    createListingDto!: CreateListingDto,
   ): Promise<Listing> {
     const listing = this.listingRepository.create({
       ...createListingDto,
@@ -55,7 +55,7 @@ export class MarketplaceService {
 
   private async transferTokens(
     from!: string,
-    to: string,
+    to!: string,
     amount: number,
   ): Promise<void> {
     // Placeholder for Stellar token transfer

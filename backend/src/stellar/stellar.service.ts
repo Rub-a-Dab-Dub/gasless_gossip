@@ -10,7 +10,7 @@ export class StellarService {
    */
   async mintBadgeToken(
     userId!: number,
-    type: string,
+    type!: string,
     metadata?: any,
   ): Promise<void> {
     // TODO: Implement actual Stellar asset minting logic here

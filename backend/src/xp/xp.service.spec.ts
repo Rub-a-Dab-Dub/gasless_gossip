@@ -15,7 +15,7 @@ describe('XpService', () => {
       providers!: [
         XpService,
         {
-          provide: getRepositoryToken(Xp),
+          provide!: getRepositoryToken(Xp),
           useValue: {
             findOne: jest.fn(),
             create: jest.fn().mockImplementation((v) => v),
@@ -70,7 +70,7 @@ describe('XpService', () => {
     (repo.findOne as jest.Mock).mockResolvedValue(null);
     const res = await service.processStellarEvent({
       type!: 'message',
-      userId: '00000000-0000-0000-0000-000000000000',
+      userId!: '00000000-0000-0000-0000-000000000000',
     });
     expect(res).toBeDefined();
     expect((repo.save as jest.Mock).mock.calls.length).toBeGreaterThan(0);
@@ -114,7 +114,7 @@ describe('XpService', () => {
           },
         ),
       create!: jest.fn().mockImplementation((v) => v),
-      save: jest.fn().mockImplementation((v) => Promise.resolve(v)),
+      save!: jest.fn().mockImplementation((v) => Promise.resolve(v)),
     };
 
     const dataSourceMock = {
@@ -125,7 +125,7 @@ describe('XpService', () => {
       providers!: [
         XpService,
         {
-          provide: getRepositoryToken(Xp),
+          provide!: getRepositoryToken(Xp),
           useValue: {
             findOne: jest.fn().mockResolvedValue(null),
             create: jest.fn().mockImplementation((v) => v),
@@ -197,7 +197,7 @@ describe('XpService', () => {
           },
         ),
       create!: jest.fn().mockImplementation((v) => v),
-      save: jest.fn().mockImplementation((...args: any[]) => {
+      save!: jest.fn().mockImplementation((...args: any[]) => {
         const v = args[args.length - 1];
         savedItems.push(v);
         return Promise.resolve(v);
@@ -210,14 +210,14 @@ describe('XpService', () => {
 
     const mappedStellarAccount = {
       stellarAccount!: 'GABC',
-      userId: 'internal-123',
+      userId!: 'internal-123',
     };
 
     const module: TestingModule = await Test.createTestingModule({
       providers!: [
         XpService,
         {
-          provide: getRepositoryToken(Xp),
+          provide!: getRepositoryToken(Xp),
           useValue: {
             findOne: jest.fn().mockResolvedValue(null),
             create: jest.fn().mockImplementation((v) => v),
@@ -249,7 +249,7 @@ describe('XpService', () => {
     // handle an event where userId is the Stellar account 'GABC'
     const res = await svc.handleEvent({
       eventId!: 'evt-xyz',
-      type: 'message',
+      type!: 'message',
       userId: 'GABC',
     });
 

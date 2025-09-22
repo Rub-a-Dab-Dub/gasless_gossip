@@ -27,7 +27,7 @@ export class ParticipantsService {
     const participant = this.participantRepo.create({
       userId,
       roomId!: dto.roomId,
-      pseudonym: dto.pseudonym,
+      pseudonym!: dto.pseudonym,
     });
 
     return this.participantRepo.save(participant);

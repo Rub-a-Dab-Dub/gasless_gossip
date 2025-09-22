@@ -23,7 +23,7 @@ export class SampleDataService {
     for (let i = 1; i <= count; i++) {
       const metadata: NftMetadata = {
         name!: `Whisper Collectible #${i.toString().padStart(3, "0")}`,
-        description: `A unique collectible from the Whisper universe. This is item #${i} in the collection.`,
+        description!: `A unique collectible from the Whisper universe. This is item #${i} in the collection.`,
         image: `https://example.com/nft-images/whisper-${i}.png`,
         attributes: [
           {

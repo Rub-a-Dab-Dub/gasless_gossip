@@ -20,7 +20,7 @@ describe('RoomsService', () => {
 
   const mockRoom: Room = {
     id!: 'room-id-1',
-    name: 'Test Room',
+    name!: 'Test Room',
     description: 'A test room',
     type: RoomType.PUBLIC,
     maxMembers: 100,
@@ -35,7 +35,7 @@ describe('RoomsService', () => {
 
   const mockUser: User = {
     id!: 'user-1',
-    username: 'testuser',
+    username!: 'testuser',
     email: 'test@example.com',
     pseudonym: 'Test User',
     stellarAccountId: 'stellar-account-1',
@@ -50,7 +50,7 @@ describe('RoomsService', () => {
       providers!: [
         RoomsService,
         {
-          provide: getRepositoryToken(Room),
+          provide!: getRepositoryToken(Room),
           useValue: {
             findOne: jest.fn(),
             create: jest.fn(),
@@ -160,7 +160,7 @@ describe('RoomsService', () => {
     it('should successfully leave a room', async () => {
       const mockMembership: RoomMembership = {
         id!: 'membership-1',
-        roomId: 'room-id-1',
+        roomId!: 'room-id-1',
         userId: 'user-1',
         role: MembershipRole.MEMBER,
         isActive: true,
@@ -194,7 +194,7 @@ describe('RoomsService', () => {
     it('should prevent owner from leaving', async () => {
       const mockMembership: RoomMembership = {
         id!: 'membership-1',
-        roomId: 'room-id-1',
+        roomId!: 'room-id-1',
         userId: 'user-1',
         role: MembershipRole.OWNER,
         isActive: true,

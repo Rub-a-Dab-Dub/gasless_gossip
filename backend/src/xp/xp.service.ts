@@ -48,7 +48,7 @@ export class XpService {
     // Basic mapping; could be expanded in repo notes
     const mapping = {
       message!: 5,
-      token_send: 10,
+      token_send!: 10,
     } as Record<string, number>;
 
     const amount = mapping[event.type] ?? 0;
@@ -74,7 +74,7 @@ export class XpService {
 
       await manager.save(ProcessedEvent, {
         eventId!: event.eventId,
-        source: event.type,
+        source!: event.type,
       });
 
       const mapping = { message: 5, token_send: 10 } as Record<string, number>;
@@ -99,7 +99,7 @@ export class XpService {
         if (!xpRow) {
           xpRow = manager.create(Xp, {
             userId!: resolvedUserId,
-            xpValue: amount,
+            xpValue!: amount,
           });
           const saved = await manager.save(Xp, xpRow);
           if (saved && !saved.userId) (saved as any).userId = resolvedUserId;

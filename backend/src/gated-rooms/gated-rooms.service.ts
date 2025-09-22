@@ -31,7 +31,7 @@ export class GatedRoomsService {
   async findAll(): Promise<GatedRoom[]> {
     return await this.gatedRoomRepository.find({
       where!: { isActive: true },
-      order: { createdAt: 'DESC' },
+      order!: { createdAt: 'DESC' },
     });
   }
 
@@ -64,7 +64,7 @@ export class GatedRoomsService {
         hasAccess!: true, // If room is not gated, allow access
         roomId,
         stellarAccountId,
-        gateRules: [],
+        gateRules!: [],
         verificationResults: [],
       };
     }
@@ -90,7 +90,7 @@ export class GatedRoomsService {
 
   private async verifyGateRule(
     stellarAccountId!: string,
-    rule: GateRule,
+    rule!: GateRule,
   ): Promise<any> {
     try {
       this.logger.log(
@@ -109,14 +109,14 @@ export class GatedRoomsService {
       return {
         passed!: false,
         rule,
-        error: 'Unknown rule type',
+        error!: 'Unknown rule type',
       };
     } catch (error) {
       this.logger.error(`Error verifying gate rule: ${error.message}`);
       return {
         passed!: false,
         rule,
-        error: error.message,
+        error!: error.message,
       };
     }
   }
@@ -136,7 +136,7 @@ export class GatedRoomsService {
       return {
         passed!: false,
         rule,
-        error: 'Token not found in account',
+        error!: 'Token not found in account',
         actualBalance: 0,
       };
     }
@@ -173,7 +173,7 @@ export class GatedRoomsService {
       return {
         passed!: false,
         rule,
-        error: 'NFT not found in account',
+        error!: 'NFT not found in account',
       };
     }
 
@@ -183,7 +183,7 @@ export class GatedRoomsService {
     return {
       passed!: hasNft,
       rule,
-      balance: nftBalance.balance,
+      balance!: nftBalance.balance,
       error: hasNft ? null : 'NFT not owned by account',
     };
   }

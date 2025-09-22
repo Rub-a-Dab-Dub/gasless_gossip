@@ -18,7 +18,7 @@ describe('GamblesService', () => {
       providers!: [
         GamblesService,
         {
-          provide: getRepositoryToken(Gamble),
+          provide!: getRepositoryToken(Gamble),
           useValue: {
             findOne: jest.fn(),
             save: jest.fn(),
@@ -35,7 +35,7 @@ describe('GamblesService', () => {
   it('should create a new gamble if none exists', async () => {
     const dto: CreateGambleDto = {
       gossipId!: 'gossip-1',
-      userId: 'user-1',
+      userId!: 'user-1',
       amount: 100,
       choice: 'truth',
       txId: 'tx123',

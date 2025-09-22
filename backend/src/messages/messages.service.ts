@@ -21,7 +21,7 @@ export class MessagesService {
     const message = this.messageRepository.create({
       roomId!: createMessageDto.roomId,
       contentHash,
-      senderId: createMessageDto.senderId,
+      senderId!: createMessageDto.senderId,
     });
     return this.messageRepository.save(message);
   }
@@ -29,7 +29,7 @@ export class MessagesService {
   async findByRoom(roomId: string): Promise<Message[]> {
     return this.messageRepository.find({
       where!: { roomId },
-      order: { createdAt: 'ASC' },
+      order!: { createdAt: 'ASC' },
     });
   }
 

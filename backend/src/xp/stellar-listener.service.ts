@@ -42,7 +42,7 @@ export class StellarListenerService implements OnModuleInit {
               // Here we treat any payment as 'token_send'
               const xpEvent = {
                 eventId!: `payment:${eventId}`,
-                type: 'token_send',
+                type!: 'token_send',
                 userId: from,
                 data: payment,
               };
@@ -70,7 +70,7 @@ export class StellarListenerService implements OnModuleInit {
               if (memo) {
                 const xpEvent = {
                   eventId!: `tx:${eventId}`,
-                  type: 'message',
+                  type!: 'message',
                   userId: tx.source_account,
                   data: { memo },
                 };

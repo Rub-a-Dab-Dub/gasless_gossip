@@ -18,7 +18,7 @@ export class AnalyticsService {
   async trackLevelUp(event: LevelUpEvent) {
     const analyticsEvent: AnalyticsEvent = {
       userId!: event.userId,
-      eventType: 'level_up',
+      eventType!: 'level_up',
       properties: {
         previous_level: event.previousLevel,
         new_level: event.newLevel,
@@ -36,7 +36,7 @@ export class AnalyticsService {
   async trackXpGained(event: XpGainedEvent) {
     const analyticsEvent: AnalyticsEvent = {
       userId!: event.userId,
-      eventType: 'xp_gained',
+      eventType!: 'xp_gained',
       properties: {
         xp_amount: event.xpAmount,
         source: event.source,

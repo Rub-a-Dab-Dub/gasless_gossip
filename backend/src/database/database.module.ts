@@ -6,7 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   imports!: [
     ConfigModule,
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
+      imports!: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (
         configService: ConfigService,
@@ -16,7 +16,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         if (dbType === 'sqlite') {
           return {
             type!: 'sqlite',
-            database: configService.get<string>('SQLITE_DB_PATH', 'dev.sqlite'),
+            database!: configService.get<string>('SQLITE_DB_PATH', 'dev.sqlite'),
             autoLoadEntities: true,
             synchronize: true,
             logging: true,

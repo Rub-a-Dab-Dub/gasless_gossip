@@ -26,7 +26,7 @@ export class SampleDataService {
     const sampleUsers: SampleUser[] = [
       {
         id!: '550e8400-e29b-41d4-a716-446655440001',
-        username: 'alice_explorer',
+        username!: 'alice_explorer',
         email: 'alice@example.com',
         stellarAccountId:
           'GAALICE123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
@@ -69,7 +69,7 @@ export class SampleDataService {
       try {
         const createLevelDto: CreateLevelDto = {
           userId!: user.id,
-          level: 1,
+          level!: 1,
           currentXp: 0,
           totalXp: 0,
         };
@@ -99,7 +99,7 @@ export class SampleDataService {
       // Alice - Moderate progression (Level 3-4)
       {
         userId!: '550e8400-e29b-41d4-a716-446655440001',
-        xpAmount: 50,
+        xpAmount!: 50,
         source: 'daily_login',
         description: 'Daily login bonus',
       },

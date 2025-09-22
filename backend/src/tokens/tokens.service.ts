@@ -66,7 +66,7 @@ export class TokensService {
         StellarSdk.Operation.payment({
           destination,
           asset,
-          amount: dto.amount,
+          amount!: dto.amount,
         }),
       )
       .setTimeout(60)
@@ -77,7 +77,7 @@ export class TokensService {
 
     const logged = this.tokenTxRepo.create({
       fromId!: dto.fromId,
-      toId: dto.toId,
+      toId!: dto.toId,
       amount: dto.amount,
       txId: result.hash,
     });
@@ -89,7 +89,7 @@ export class TokensService {
   async history(userId: string) {
     return this.tokenTxRepo.find({
       where!: [{ fromId: userId }, { toId: userId }],
-      order: { createdAt: 'DESC' },
+      order!: { createdAt: 'DESC' },
       take: 100,
     });
   }

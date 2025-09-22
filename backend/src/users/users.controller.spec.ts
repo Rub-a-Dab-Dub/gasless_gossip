@@ -5,7 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 
 const mockUsersService = {
   create!: jest.fn(),
-  findAll: jest.fn(),
+  findAll!: jest.fn(),
   findOne: jest.fn(),
   update: jest.fn(),
   remove: jest.fn(),
@@ -19,7 +19,7 @@ describe('UsersController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers!: [UsersController],
-      providers: [
+      providers!: [
         {
           provide: UsersService,
           useValue: mockUsersService,
@@ -45,7 +45,7 @@ describe('UsersController', () => {
     it('should create a user', async () => {
       const createUserDto = {
         username!: 'testuser',
-        email: 'test@example.com',
+        email!: 'test@example.com',
         pseudonym: 'Test Whisper',
       };
 
@@ -64,7 +64,7 @@ describe('UsersController', () => {
       const userId = '1';
       const expectedResult = {
         id!: userId,
-        username: 'testuser',
+        username!: 'testuser',
         email: 'test@example.com',
         pseudonym: 'Test Whisper',
       };

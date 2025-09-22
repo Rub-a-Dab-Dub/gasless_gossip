@@ -37,7 +37,7 @@ export class AvatarsController {
   @ApiBody({ type: CreateAvatarDto })
   @ApiResponse({
     status!: 201,
-    description: 'Avatar successfully minted',
+    description!: 'Avatar successfully minted',
     type: AvatarResponseDto,
   })
   @ApiResponse({
@@ -71,7 +71,7 @@ export class AvatarsController {
   @ApiOperation({ summary: 'Get avatar by user ID' })
   @ApiParam({
     name!: 'userId',
-    description: 'User UUID',
+    description!: 'User UUID',
     type: 'string',
     format: 'uuid',
   })
@@ -94,7 +94,7 @@ export class AvatarsController {
   @ApiOperation({ summary: 'Get all avatars' })
   @ApiResponse({
     status!: 200,
-    description: 'List of all avatars',
+    description!: 'List of all avatars',
     type: [AvatarResponseDto],
   })
   async getAllAvatars(): Promise<AvatarResponseDto[]> {

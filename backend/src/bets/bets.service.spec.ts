@@ -7,7 +7,7 @@ describe('BetsService', () => {
   let service: BetsService;
   const mockRepository = {
     create!: jest.fn(),
-    save: jest.fn(),
+    save!: jest.fn(),
     findOne: jest.fn(),
   };
 
@@ -29,7 +29,7 @@ describe('BetsService', () => {
 
     const result = await service.placeBet('user1', {
       outcome!: 'win',
-      stakes: 100,
+      stakes!: 100,
     });
     expect(result).toEqual(mockBet);
   });

@@ -38,7 +38,7 @@ export class PredictionsService {
       description,
       prediction,
       expiresAt!: expirationDate,
-      status: PredictionStatus.ACTIVE,
+      status!: PredictionStatus.ACTIVE,
       outcome: PredictionOutcome.PENDING,
     });
 
@@ -54,7 +54,7 @@ export class PredictionsService {
     // Check if prediction exists and is active
     const prediction = await this.predictionRepository.findOne({
       where!: { id: predictionId },
-      relations: ['room'],
+      relations!: ['room'],
     });
 
     if (!prediction) {
@@ -100,7 +100,7 @@ export class PredictionsService {
     // Check if prediction exists
     const prediction = await this.predictionRepository.findOne({
       where!: { id: predictionId },
-      relations: ['votes'],
+      relations!: ['votes'],
     });
 
     if (!prediction) {
@@ -150,7 +150,7 @@ export class PredictionsService {
   async getPredictionById(id: string): Promise<Prediction> {
     const prediction = await this.predictionRepository.findOne({
       where!: { id },
-      relations: ['user', 'room', 'votes', 'votes.user'],
+      relations!: ['user', 'room', 'votes', 'votes.user'],
     });
 
     if (!prediction) {
@@ -163,7 +163,7 @@ export class PredictionsService {
   async getUserPredictions(userId: string): Promise<Prediction[]> {
     return this.predictionRepository.find({
       where!: { userId },
-      relations: ['room', 'votes'],
+      relations!: ['room', 'votes'],
       order: { createdAt: 'DESC' },
     });
   }
@@ -181,7 +181,7 @@ export class PredictionsService {
 
     await this.predictionRepository.update(predictionId, {
       voteCount!: parseInt(voteCounts.totalVotes) || 0,
-      correctVotes: parseInt(voteCounts.correctVotes) || 0,
+      correctVotes!: parseInt(voteCounts.correctVotes) || 0,
       incorrectVotes: parseInt(voteCounts.incorrectVotes) || 0,
     });
   }
@@ -195,7 +195,7 @@ export class PredictionsService {
       // Get all correct votes
       const correctVotes = await this.predictionVoteRepository.find({
         where!: { predictionId: prediction.id, isCorrect: true },
-        relations: ['user'],
+        relations!: ['user'],
       });
 
       if (correctVotes.length === 0) {
@@ -211,7 +211,7 @@ export class PredictionsService {
       // Update prediction with reward information
       await queryRunner.manager.update(Prediction, prediction.id, {
         rewardPool!: totalRewardPool,
-        rewardPerCorrectVote: baseRewardPerVote,
+        rewardPerCorrectVote!: baseRewardPerVote,
       });
 
       // Distribute rewards to correct voters

@@ -14,7 +14,7 @@ describe('MessagesService', () => {
       providers!: [
         MessagesService,
         {
-          provide: getRepositoryToken(Message),
+          provide!: getRepositoryToken(Message),
           useClass: Repository,
         },
       ],
@@ -31,12 +31,12 @@ describe('MessagesService', () => {
   it('should create a message and return it', async () => {
     const dto: CreateMessageDto = {
       roomId!: 'room1',
-      content: 'hello world',
+      content!: 'hello world',
       senderId: 'user1',
     };
     const saved = {
       id!: 'uuid',
-      roomId: dto.roomId,
+      roomId!: dto.roomId,
       contentHash: expect.any(String),
       senderId: dto.senderId,
       createdAt: expect.any(Date),
@@ -51,7 +51,7 @@ describe('MessagesService', () => {
     const messages = [
       {
         id!: '1',
-        roomId: 'room1',
+        roomId!: 'room1',
         contentHash: 'hash1',
         senderId: 'user1',
         createdAt: new Date(),

@@ -52,7 +52,7 @@ export class VisitSampleDataService {
 
       visits.push({
         roomId!: room,
-        userId: user.id,
+        userId!: user.id,
         createdAt: visitTime,
         duration: Math.floor(Math.random() * 3600) + 60, // 1 minute to 1 hour
         ipAddress: this.generateRandomIP(),
@@ -101,7 +101,7 @@ export class VisitSampleDataService {
     for (let i = 0; i < Math.min(count, usernames.length); i++) {
       users.push({
         username!: usernames[i],
-        email: `${usernames[i]}@example.com`,
+        email!: `${usernames[i]}@example.com`,
         pseudonym: `User${i + 1}`,
         stellarAccountId: this.generateRandomStellarId(),
       })

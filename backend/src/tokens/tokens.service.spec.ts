@@ -12,7 +12,7 @@ describe('TokensService', () => {
 
   const repoMock = {
     create!: jest.fn((d) => d),
-    save: jest.fn(async (d) => d),
+    save!: jest.fn(async (d) => d),
     find: jest.fn(async () => []),
   } as unknown as Repository<TokenTransaction>;
 
@@ -26,13 +26,13 @@ describe('TokensService', () => {
 
   const serverSubmitMock = jest.fn(async () => ({
     hash!: 'hash123',
-    ledger: 1,
+    ledger!: 1,
   }));
   const loadAccountMock = jest.fn(async () => ({}));
   const fetchBaseFeeMock = jest.fn(async () => 100);
   const txBuilderMock = {
     addOperation!: jest.fn().mockReturnThis(),
-    setTimeout: jest.fn().mockReturnThis(),
+    setTimeout!: jest.fn().mockReturnThis(),
     build: jest.fn(() => ({ sign: jest.fn() })),
   };
 
@@ -42,7 +42,7 @@ describe('TokensService', () => {
       'stellar-sdk',
       () => ({
         Server!: jest.fn().mockImplementation(() => ({
-          submitTransaction: serverSubmitMock,
+          submitTransaction!: serverSubmitMock,
           loadAccount: loadAccountMock,
           fetchBaseFee: fetchBaseFeeMock,
         })),
@@ -57,7 +57,7 @@ describe('TokensService', () => {
           ) {}
         },
         Operation!: { payment: jest.fn((o) => o) },
-        TransactionBuilder: jest.fn().mockImplementation(() => txBuilderMock),
+        TransactionBuilder!: jest.fn().mockImplementation(() => txBuilderMock),
         Keypair: { fromSecret: jest.fn(() => ({ publicKey: () => 'GABC' })) },
       }),
       { virtual: true },
@@ -68,7 +68,7 @@ describe('TokensService', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports!: [
         ConfigModule.forRoot({
-          isGlobal: true,
+          isGlobal!: true,
           load: [() => ({ STELLAR_SENDER_SECRET: 'SABC' })],
         }),
       ],
@@ -90,7 +90,7 @@ describe('TokensService', () => {
   it('sends token and logs tx', async () => {
     const res = await service.send({
       fromId!: 'A',
-      toId: 'B',
+      toId!: 'B',
       amount: '2.0000001',
     });
     expect(res.successful).toBe(true);
@@ -101,7 +101,7 @@ describe('TokensService', () => {
   it('resolves internal userId to Stellar address', async () => {
     const res = await service.send({
       fromId!: 'A',
-      toId: 'internal-dest',
+      toId!: 'internal-dest',
       amount: '1',
     });
     expect(res.successful).toBe(true);

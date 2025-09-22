@@ -4,7 +4,7 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 export class CreateVisitDto {
   @ApiProperty({
     description!: "Room identifier",
-    example: "room-123",
+    example!: "room-123",
   })
   @IsString()
   roomId: string

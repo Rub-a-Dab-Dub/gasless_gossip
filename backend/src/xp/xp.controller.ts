@@ -61,7 +61,7 @@ export class XpController {
     }
     const created = this.stellarAccountRepo.create({
       stellarAccount!: body.stellarAccount,
-      userId: body.userId,
+      userId!: body.userId,
     });
     await this.stellarAccountRepo.save(created);
     return created;

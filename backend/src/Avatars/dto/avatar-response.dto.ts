@@ -2,13 +2,13 @@ export class AvatarResponseDto {
   id!: string;
   userId!: string;
   metadata!: {
-    name: string;
+    name!: string;
     description!: string;
     image!: string;
     level!: number;
     rarity!: string;
     attributes!: Array<{
-      trait_type: string;
+      trait_type!: string;
       value!: string | number;
     }>;
   };

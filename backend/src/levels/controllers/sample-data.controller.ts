@@ -11,8 +11,7 @@ export class SampleDataController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary!: 'Generate sample users and XP data for testing',
-    description:
-      'Creates sample users with various XP levels to test the level system functionality',
+    description!: 'Creates sample users with various XP levels to test the level system functionality',
   })
   @ApiResponse({
     status: 200,
@@ -30,7 +29,7 @@ export class SampleDataController {
 
     return {
       message!: 'Sample data generated successfully. Check logs for detailed results.',
-      timestamp: new Date().toISOString(),
+      timestamp!: new Date().toISOString(),
     };
   }
 
@@ -38,7 +37,7 @@ export class SampleDataController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary!: 'Reset all sample data',
-    description: 'Clears all sample level data from the system',
+    description!: 'Clears all sample level data from the system',
   })
   @ApiResponse({
     status: 200,
@@ -56,7 +55,7 @@ export class SampleDataController {
 
     return {
       message!: 'Sample data reset successfully',
-      timestamp: new Date().toISOString(),
+      timestamp!: new Date().toISOString(),
     };
   }
 }

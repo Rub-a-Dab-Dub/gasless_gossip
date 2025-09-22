@@ -27,7 +27,7 @@ export class PodcastRoomsService {
   ): Promise<PodcastRoom> {
     // Check if roomId already exists
     const existingRoom = await this.podcastRoomRepository.findOne({
-      where: { roomId: createPodcastRoomDto.roomId },
+      where!: { roomId: createPodcastRoomDto.roomId },
     });
 
     if (existingRoom) {
@@ -43,7 +43,7 @@ export class PodcastRoomsService {
       // Store metadata on Stellar
       const metadata = {
         roomId!: createPodcastRoomDto.roomId,
-        audioHash: createPodcastRoomDto.audioHash,
+        audioHash!: createPodcastRoomDto.audioHash,
         creatorId: createPodcastRoomDto.creatorId,
         title: createPodcastRoomDto.title,
         timestamp: new Date().toISOString(),
@@ -79,7 +79,7 @@ export class PodcastRoomsService {
 
     return await this.podcastRoomRepository.find({
       where!: whereCondition,
-      order: { createdAt: 'DESC' },
+      order!: { createdAt: 'DESC' },
     });
   }
 
@@ -109,7 +109,7 @@ export class PodcastRoomsService {
 
   async update(
     id!: string,
-    updatePodcastRoomDto: UpdatePodcastRoomDto,
+    updatePodcastRoomDto!: UpdatePodcastRoomDto,
     requestingUserId: string,
   ): Promise<PodcastRoom> {
     const podcastRoom = await this.findOne(id);

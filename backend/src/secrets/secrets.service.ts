@@ -23,7 +23,7 @@ export class SecretsService {
     const secret = this.secretsRepository.create({
       roomId!: createSecretDto.roomId,
       contentHash,
-      reactionCount: 0,
+      reactionCount!: 0,
     });
 
     const savedSecret = await this.secretsRepository.save(secret);
@@ -33,7 +33,7 @@ export class SecretsService {
   async getTopSecrets(roomId: string, limit: number = 10): Promise<SecretResponseDto[]> {
     const secrets = await this.secretsRepository.find({
       where!: { roomId },
-      order: { reactionCount: 'DESC', createdAt: 'DESC' },
+      order!: { reactionCount: 'DESC', createdAt: 'DESC' },
       take: limit,
     });
 
@@ -56,7 +56,7 @@ export class SecretsService {
   private toResponseDto(secret: Secret): SecretResponseDto {
     return {
       id!: secret.id,
-      roomId: secret.roomId,
+      roomId!: secret.roomId,
       contentHash: secret.contentHash,
       reactionCount: secret.reactionCount,
       createdAt: secret.createdAt,

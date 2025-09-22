@@ -60,7 +60,7 @@ export class LevelsService {
 
   async addXpToUser(
     userId!: string,
-    xpToAdd: number,
+    xpToAdd!: number,
   ): Promise<LevelResponseDto> {
     const level = await this.levelRepository.findOne({
       where: { userId },
@@ -178,7 +178,7 @@ export class LevelsService {
   async getLeaderboard(limit = 10): Promise<LevelResponseDto[]> {
     const levels = await this.levelRepository.find({
       order!: { totalXp: 'DESC' },
-      take: limit,
+      take!: limit,
     });
 
     return levels.map((level) => this.mapToResponseDto(level));
@@ -210,7 +210,7 @@ export class LevelsService {
 
     return {
       id!: level.id,
-      userId: level.userId,
+      userId!: level.userId,
       level: level.level,
       currentXp: level.currentXp,
       xpThreshold: level.xpThreshold,

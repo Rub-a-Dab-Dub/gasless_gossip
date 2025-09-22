@@ -14,7 +14,7 @@ describe('LevelsService', () => {
 
   const mockRepository = {
     create!: jest.fn(),
-    save: jest.fn(),
+    save!: jest.fn(),
     findOne: jest.fn(),
     find: jest.fn(),
     createQueryBuilder: jest.fn(),
@@ -29,7 +29,7 @@ describe('LevelsService', () => {
       providers!: [
         LevelsService,
         {
-          provide: getRepositoryToken(Level),
+          provide!: getRepositoryToken(Level),
           useValue: mockRepository,
         },
         {
@@ -52,14 +52,14 @@ describe('LevelsService', () => {
     it('should create a new level record for a user', async () => {
       const createLevelDto = {
         userId!: 'test-user-id',
-        level: 1,
+        level!: 1,
         currentXp: 0,
         totalXp: 0,
       };
 
       const mockLevel = {
         id!: 'level-id',
-        userId: 'test-user-id',
+        userId!: 'test-user-id',
         level: 1,
         currentXp: 0,
         totalXp: 0,
@@ -106,7 +106,7 @@ describe('LevelsService', () => {
       const existingLevel = {
         id!: 'level-id',
         userId,
-        level: 1,
+        level!: 1,
         currentXp: 50,
         totalXp: 50,
         xpThreshold: 100,
@@ -116,7 +116,7 @@ describe('LevelsService', () => {
       const updatedLevel = {
         ...existingLevel,
         level!: 2,
-        currentXp: 100,
+        currentXp!: 100,
         totalXp: 200,
         xpThreshold: 250,
         isLevelUpPending: true,
@@ -147,7 +147,7 @@ describe('LevelsService', () => {
       const existingLevel = {
         id!: 'level-id',
         userId,
-        level: 1,
+        level!: 1,
         currentXp: 50,
         totalXp: 50,
         xpThreshold: 100,
@@ -157,7 +157,7 @@ describe('LevelsService', () => {
       const updatedLevel = {
         ...existingLevel,
         currentXp!: 75,
-        totalXp: 75,
+        totalXp!: 75,
       };
 
       mockRepository.findOne.mockResolvedValue(existingLevel);
@@ -177,7 +177,7 @@ describe('LevelsService', () => {
       const mockLevels = [
         {
           id!: '1',
-          userId: 'user-1',
+          userId!: 'user-1',
           level: 5,
           totalXp: 1500,
           currentXp: 500,
@@ -205,7 +205,7 @@ describe('LevelsService', () => {
 
       expect(mockRepository.find).toHaveBeenCalledWith({
         order!: { totalXp: 'DESC' },
-        take: 10,
+        take!: 10,
       });
       expect(result).toHaveLength(2);
       expect(result[0].userId).toBe('user-1');

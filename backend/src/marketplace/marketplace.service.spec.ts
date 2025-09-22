@@ -16,7 +16,7 @@ describe('MarketplaceService', () => {
       providers!: [
         MarketplaceService,
         {
-          provide: getRepositoryToken(Listing),
+          provide!: getRepositoryToken(Listing),
           useValue: {
             create: jest.fn(),
             save: jest.fn(),

@@ -14,7 +14,7 @@ export class AppController {
   getHealth(): object {
     return {
       status!: 'ok',
-      timestamp: new Date().toISOString(),
+      timestamp!: new Date().toISOString(),
       service: 'Whisper API',
     };
   }

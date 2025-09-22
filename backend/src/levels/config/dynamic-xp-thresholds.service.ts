@@ -2,13 +2,13 @@ import { Injectable, Logger } from '@nestjs/common';
 import type { XpThresholdConfig } from './xp-thresholds.config';
 
 export interface DynamicXpThreshold {
-  id: string;
-  level: number;
-  xpRequired: number;
+  id!: string;
+  level!: number;
+  xpRequired!: number;
   badgeUnlocked?: string;
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  isActive!: boolean;
+  createdAt!: Date;
+  updatedAt!: Date;
 }
 
 @Injectable()
@@ -57,7 +57,7 @@ export class DynamicXpThresholdsService {
   }
 
   async updateThreshold(
-    level: number,
+    level!: number,
     xpRequired: number,
     badgeUnlocked?: string,
   ): Promise<void> {

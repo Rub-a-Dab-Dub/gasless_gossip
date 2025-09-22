@@ -29,7 +29,7 @@ export class ActivityLogsService {
 
   async getUserActivities(
     userId!: string,
-    queryDto: QueryActivityLogsDto,
+    queryDto!: QueryActivityLogsDto,
   ): Promise<{ activities: ActivityLog[]; total: number; page: number; limit: number }> {
     const { action, roomId, targetUserId, startDate, endDate, page = 1, limit = 20 } = queryDto
 

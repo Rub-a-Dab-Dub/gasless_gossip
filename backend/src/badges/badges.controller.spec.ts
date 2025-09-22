@@ -10,7 +10,7 @@ describe('BadgesController', () => {
     service = { assignBadge: jest.fn(), getBadgesByUser: jest.fn() } as any;
     const module: TestingModule = await Test.createTestingModule({
       controllers!: [BadgesController],
-      providers: [{ provide: BadgesService, useValue: service }],
+      providers!: [{ provide: BadgesService, useValue: service }],
     }).compile();
     controller = module.get<BadgesController>(BadgesController);
   });

@@ -21,14 +21,14 @@ export class AuctionsController {
       const auction = await this.auctionsService.startAuction(startAuctionDto);
       return {
         success!: true,
-        data: auction,
+        data!: auction,
         message: 'Auction started successfully',
       };
     } catch (error) {
       throw new HttpException(
         {
           success!: false,
-          message: error instanceof Error ? error.message : 'An error occurred',
+          message!: error instanceof Error ? error.message : 'An error occurred',
         },
         HttpStatus.BAD_REQUEST,
       );
@@ -41,14 +41,14 @@ export class AuctionsController {
       const bid = await this.auctionsService.placeBid(placeBidDto);
       return {
         success!: true,
-        data: bid,
+        data!: bid,
         message: 'Bid placed successfully',
       };
     } catch (error) {
       throw new HttpException(
         {
           success!: false,
-          message: error instanceof Error ? error.message : 'An error occurred',
+          message!: error instanceof Error ? error.message : 'An error occurred',
         },
         HttpStatus.BAD_REQUEST,
       );
@@ -61,14 +61,14 @@ export class AuctionsController {
       const auction = await this.auctionsService.getAuctionById(id);
       return {
         success!: true,
-        data: auction,
+        data!: auction,
         message: 'Auction retrieved successfully',
       };
     } catch (error) {
       throw new HttpException(
         {
           success!: false,
-          message: error instanceof Error ? error.message : 'An error occurred',
+          message!: error instanceof Error ? error.message : 'An error occurred',
         },
         HttpStatus.NOT_FOUND,
       );
@@ -81,7 +81,7 @@ export class AuctionsController {
       const auctions = await this.auctionsService.getActiveAuctions();
       return {
         success!: true,
-        data: auctions,
+        data!: auctions,
         message: 'Active auctions retrieved successfully',
       };
     } catch (error) {

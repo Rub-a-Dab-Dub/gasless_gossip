@@ -29,7 +29,7 @@ export class RoomsService {
 
   async createRoom(
     createRoomDto!: CreateRoomDto,
-    createdBy: string,
+    createdBy!: string,
   ): Promise<Room> {
     const room = this.roomRepository.create({
       ...createRoomDto,
@@ -46,13 +46,13 @@ export class RoomsService {
 
   async joinRoom(
     userId!: string,
-    roomId: string,
+    roomId!: string,
     chatGateway?: any,
   ): Promise<{ success: boolean; message: string; xpAwarded?: number }> {
     // Check if room exists
     const room = await this.roomRepository.findOne({
       where!: { id: roomId, isActive: true },
-      relations: ['memberships'],
+      relations!: ['memberships'],
     });
 
     if (!room) {
@@ -102,14 +102,14 @@ export class RoomsService {
 
     return {
       success!: true,
-      message: `Successfully joined room: ${room.name}`,
+      message!: `Successfully joined room: ${room.name}`,
       xpAwarded,
     };
   }
 
   async leaveRoom(
     userId!: string,
-    roomId: string,
+    roomId!: string,
     chatGateway?: any,
   ): Promise<{ success: boolean; message: string }> {
     // Check if room exists
@@ -148,14 +148,14 @@ export class RoomsService {
 
     return {
       success!: true,
-      message: `Successfully left room: ${room.name}`,
+      message!: `Successfully left room: ${room.name}`,
     };
   }
 
   async getRoomMembers(roomId: string): Promise<RoomMembership[]> {
     return this.membershipRepository.find({
       where!: { roomId, isActive: true },
-      relations: ['room'],
+      relations!: ['room'],
       order: { joinedAt: 'DESC' },
     });
   }
@@ -163,7 +163,7 @@ export class RoomsService {
   async getUserRooms(userId: string): Promise<Room[]> {
     const memberships = await this.membershipRepository.find({
       where!: { userId, isActive: true },
-      relations: ['room'],
+      relations!: ['room'],
     });
 
     return memberships.map((membership) => membership.room);
@@ -175,7 +175,7 @@ export class RoomsService {
       .where('room.isActive = :isActive', { isActive: true })
       .andWhere('(room.type = :publicType OR room.createdBy = :userId)', {
         publicType!: RoomType.PUBLIC,
-        userId: userId || '',
+        userId!: userId || '',
       })
       .orderBy('room.createdAt', 'DESC');
 
@@ -184,7 +184,7 @@ export class RoomsService {
 
   private async addMembership(
     roomId!: string,
-    userId: string,
+    userId!: string,
     role: MembershipRole = MembershipRole.MEMBER,
   ): Promise<RoomMembership> {
     const membership = this.membershipRepository.create({
@@ -215,7 +215,7 @@ export class RoomsService {
 
   private async awardJoinRoomXP(
     userId!: string,
-    roomType: RoomType,
+    roomType!: RoomType,
   ): Promise<number> {
     let xpAmount = 0;
 

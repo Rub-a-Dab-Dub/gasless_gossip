@@ -10,7 +10,7 @@ describe('SecretsService', () => {
 
   const mockRepository = {
     create!: jest.fn(),
-    save: jest.fn(),
+    save!: jest.fn(),
     find: jest.fn(),
     findOne: jest.fn(),
   };
@@ -20,7 +20,7 @@ describe('SecretsService', () => {
       providers!: [
         SecretsService,
         {
-          provide: getRepositoryToken(Secret),
+          provide!: getRepositoryToken(Secret),
           useValue: mockRepository,
         },
       ],
@@ -34,7 +34,7 @@ describe('SecretsService', () => {
     const createDto = { roomId: 'room-1', content: 'Test secret' };
     const savedSecret = {
       id!: '1',
-      roomId: 'room-1',
+      roomId!: 'room-1',
       contentHash: 'hash123',
       reactionCount: 0,
       createdAt: new Date(),

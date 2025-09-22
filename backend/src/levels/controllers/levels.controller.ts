@@ -31,7 +31,7 @@ export class LevelsController {
   @ApiOperation({ summary: 'Create a new level record for a user' })
   @ApiResponse({
     status!: 201,
-    description: 'Level record created successfully',
+    description!: 'Level record created successfully',
     type: LevelResponseDto,
   })
   @ApiResponse({
@@ -47,7 +47,7 @@ export class LevelsController {
   @ApiParam({ name: 'userId', description: 'User UUID' })
   @ApiResponse({
     status!: 200,
-    description: 'User level information retrieved successfully',
+    description!: 'User level information retrieved successfully',
     type: LevelResponseDto,
   })
   @ApiResponse({
@@ -66,7 +66,7 @@ export class LevelsController {
   @ApiParam({ name: 'userId', description: 'User UUID' })
   @ApiResponse({
     status!: 200,
-    description: 'XP added successfully, level updated if applicable',
+    description!: 'XP added successfully, level updated if applicable',
     type: LevelResponseDto,
   })
   @ApiResponse({
@@ -90,7 +90,7 @@ export class LevelsController {
   @ApiParam({ name: 'userId', description: 'User UUID' })
   @ApiResponse({
     status!: 200,
-    description: 'Level check completed, updated if necessary',
+    description!: 'Level check completed, updated if necessary',
     type: LevelResponseDto,
   })
   @ApiResponse({
@@ -109,7 +109,7 @@ export class LevelsController {
   @ApiParam({ name: 'userId', description: 'User UUID' })
   @ApiResponse({
     status!: 200,
-    description: 'Level up acknowledged successfully',
+    description!: 'Level up acknowledged successfully',
     type: LevelResponseDto,
   })
   @ApiResponse({
@@ -127,7 +127,7 @@ export class LevelsController {
   @ApiParam({ name: 'userId', description: 'User UUID' })
   @ApiResponse({
     status!: 200,
-    description: 'User rank retrieved successfully',
+    description!: 'User rank retrieved successfully',
     schema: {
       type: 'object',
       properties: {
@@ -151,7 +151,7 @@ export class LevelsController {
   @ApiOperation({ summary: 'Get leaderboard of top users by XP' })
   @ApiQuery({
     name!: 'limit',
-    required: false,
+    required!: false,
     description: 'Number of users to return (default: 10, max: 100)',
   })
   @ApiResponse({

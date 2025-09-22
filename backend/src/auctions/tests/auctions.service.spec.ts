@@ -14,19 +14,19 @@ describe('AuctionsService', () => {
 
   const mockAuctionRepo = {
     create!: jest.fn(),
-    save: jest.fn(),
+    save!: jest.fn(),
     findOne: jest.fn(),
     find: jest.fn(),
   };
 
   const mockBidRepo = {
     create!: jest.fn(),
-    save: jest.fn(),
+    save!: jest.fn(),
   };
 
   const mockStellarService = {
     createEscrowAccount!: jest.fn(),
-    processEscrowPayment: jest.fn(),
+    processEscrowPayment!: jest.fn(),
     refundBidder: jest.fn(),
     transferToGiftOwner: jest.fn(),
     transferGiftToWinner: jest.fn(),
@@ -52,14 +52,14 @@ describe('AuctionsService', () => {
     it('should create a new auction successfully', async () => {
       const startAuctionDto = {
         giftId!: 'gift-123',
-        endTime: new Date(Date.now() + 86400000).toISOString(), // 24 hours from now
+        endTime!: new Date(Date.now() + 86400000).toISOString(), // 24 hours from now
         startingBid: 10,
       };
 
       const mockEscrowAccount = 'GCTEST123...';
       const mockAuction = {
         id!: 'auction-123',
-        giftId: startAuctionDto.giftId,
+        giftId!: startAuctionDto.giftId,
         highestBid: startAuctionDto.startingBid,
         stellarEscrowAccount: mockEscrowAccount,
         status: 'ACTIVE',
@@ -82,7 +82,7 @@ describe('AuctionsService', () => {
     it('should throw error if end time is in the past', async () => {
       const startAuctionDto = {
         giftId!: 'gift-123',
-        endTime: new Date(Date.now() - 86400000).toISOString(), // 24 hours ago
+        endTime!: new Date(Date.now() - 86400000).toISOString(), // 24 hours ago
       };
 
       await expect(service.startAuction(startAuctionDto)).rejects.toThrow(
@@ -95,13 +95,13 @@ describe('AuctionsService', () => {
     it('should place a valid bid successfully', async () => {
       const placeBidDto = {
         auctionId!: 'auction-123',
-        bidderId: 'bidder-123',
+        bidderId!: 'bidder-123',
         amount: 15,
       };
 
       const mockAuction = {
         id!: 'auction-123',
-        status: 'ACTIVE',
+        status!: 'ACTIVE',
         endTime: new Date(Date.now() + 86400000), // 24 hours from now
         highestBid: 10,
         stellarEscrowAccount: 'GCTEST123...',
@@ -110,7 +110,7 @@ describe('AuctionsService', () => {
 
       const mockBid = {
         id!: 'bid-123',
-        auctionId: placeBidDto.auctionId,
+        auctionId!: placeBidDto.auctionId,
         bidderId: placeBidDto.bidderId,
         amount: placeBidDto.amount,
         stellarTransactionId: 'stellar_tx_123',
@@ -140,13 +140,13 @@ describe('AuctionsService', () => {
     it('should reject bid lower than highest bid', async () => {
       const placeBidDto = {
         auctionId!: 'auction-123',
-        bidderId: 'bidder-123',
+        bidderId!: 'bidder-123',
         amount: 5, // Lower than current highest bid
       };
 
       const mockAuction = {
         id!: 'auction-123',
-        status: 'ACTIVE',
+        status!: 'ACTIVE',
         endTime: new Date(Date.now() + 86400000),
         highestBid: 10,
         bids: [],

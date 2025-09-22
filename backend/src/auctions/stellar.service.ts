@@ -25,7 +25,7 @@ export class StellarService {
 
   async processEscrowPayment(
     bidderId!: string,
-    escrowAccount: string,
+    escrowAccount!: string,
     amount: number,
   ): Promise<string> {
     try {
@@ -34,7 +34,7 @@ export class StellarService {
 
       console.log(`Processing escrow payment:`, {
         from!: bidderId,
-        to: escrowAccount,
+        to!: escrowAccount,
         amount,
         transactionId,
       });
@@ -50,7 +50,7 @@ export class StellarService {
 
   async refundBidder(
     escrowAccount!: string,
-    bidderId: string,
+    bidderId!: string,
     amount: number,
     originalTxId: string,
   ): Promise<void> {
@@ -71,7 +71,7 @@ export class StellarService {
 
   async transferToGiftOwner(
     escrowAccount!: string,
-    giftId: string,
+    giftId!: string,
     amount: number,
   ): Promise<void> {
     try {
