@@ -10,6 +10,7 @@ import { TradeModule } from './trade/trade.module';
 import { SecretsModule } from './modules/secrets/secrets.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { PodcastRoomsModule } from './podcast-rooms/podcast-rooms.module';
+import { GamblesModule } from './gambles/gambles.module';
 
 function loadModules(): (new () => any)[] {
   const modulesDir = path.join(__dirname);
@@ -55,6 +56,7 @@ function loadModules(): (new () => any)[] {
     TradeModule,
     SecretsModule,
     PodcastRoomsModule,
+    GamblesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
