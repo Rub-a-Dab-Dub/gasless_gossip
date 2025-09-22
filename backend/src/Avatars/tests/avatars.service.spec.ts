@@ -13,7 +13,7 @@ describe('AvatarsService', () => {
   let stellarService: StellarNftService;
 
   const mockRepository = {
-    findOne: jest.fn(),
+    findOne!: jest.fn(),
     create: jest.fn(),
     save: jest.fn(),
     find: jest.fn(),
@@ -21,13 +21,13 @@ describe('AvatarsService', () => {
   };
 
   const mockStellarService = {
-    generateUniqueAssetCode: jest.fn(),
+    generateUniqueAssetCode!: jest.fn(),
     mintNFT: jest.fn(),
   };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         AvatarsService,
         {
           provide: getRepositoryToken(Avatar),
@@ -51,7 +51,7 @@ describe('AvatarsService', () => {
 
   describe('mintAvatar', () => {
     const createAvatarDto: CreateAvatarDto = {
-      name: 'Test Avatar',
+      name!: 'Test Avatar',
       description: 'A test avatar',
       image: 'https://example.com/avatar.png',
       level: 1,
@@ -67,13 +67,13 @@ describe('AvatarsService', () => {
       mockRepository.findOne.mockResolvedValue(null); // No existing avatar
       mockStellarService.generateUniqueAssetCode.mockReturnValue('AVTTEST123');
       mockStellarService.mintNFT.mockResolvedValue({
-        txId: 'stellar-tx-id',
+        txId!: 'stellar-tx-id',
         assetCode: 'AVTTEST123',
         issuer: 'STELLAR_ISSUER',
       });
 
       const mockAvatar = {
-        id: 'avatar-id',
+        id!: 'avatar-id',
         userId,
         metadata: createAvatarDto,
         txId: 'stellar-tx-id',
@@ -96,7 +96,7 @@ describe('AvatarsService', () => {
 
       // Verify
       expect(result).toEqual({
-        id: 'avatar-id',
+        id!: 'avatar-id',
         userId,
         metadata: createAvatarDto,
         txId: 'stellar-tx-id',
@@ -108,7 +108,7 @@ describe('AvatarsService', () => {
       });
 
       expect(mockRepository.findOne).toHaveBeenCalledWith({
-        where: { userId, isActive: true },
+        where!: { userId, isActive: true },
       });
       expect(mockStellarService.mintNFT).toHaveBeenCalledWith(
         stellarPublicKey,
@@ -129,7 +129,7 @@ describe('AvatarsService', () => {
   describe('getUserAvatar', () => {
     it('should return user avatar', async () => {
       const mockAvatar = {
-        id: 'avatar-id',
+        id!: 'avatar-id',
         userId: 'user-123',
         metadata: { name: 'Test Avatar' },
         txId: 'stellar-tx-id',
@@ -146,7 +146,7 @@ describe('AvatarsService', () => {
 
       expect(result).toEqual(mockAvatar);
       expect(mockRepository.findOne).toHaveBeenCalledWith({
-        where: { userId: 'user-123', isActive: true },
+        where!: { userId: 'user-123', isActive: true },
       });
     });
 

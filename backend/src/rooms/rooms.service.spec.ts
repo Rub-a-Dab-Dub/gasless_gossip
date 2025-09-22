@@ -19,7 +19,7 @@ describe('RoomsService', () => {
   let xpService: XpService;
 
   const mockRoom: Room = {
-    id: 'room-id-1',
+    id!: 'room-id-1',
     name: 'Test Room',
     description: 'A test room',
     type: RoomType.PUBLIC,
@@ -34,7 +34,7 @@ describe('RoomsService', () => {
   };
 
   const mockUser: User = {
-    id: 'user-1',
+    id!: 'user-1',
     username: 'testuser',
     email: 'test@example.com',
     pseudonym: 'Test User',
@@ -47,7 +47,7 @@ describe('RoomsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         RoomsService,
         {
           provide: getRepositoryToken(Room),
@@ -159,7 +159,7 @@ describe('RoomsService', () => {
   describe('leaveRoom', () => {
     it('should successfully leave a room', async () => {
       const mockMembership: RoomMembership = {
-        id: 'membership-1',
+        id!: 'membership-1',
         roomId: 'room-id-1',
         userId: 'user-1',
         role: MembershipRole.MEMBER,
@@ -193,7 +193,7 @@ describe('RoomsService', () => {
 
     it('should prevent owner from leaving', async () => {
       const mockMembership: RoomMembership = {
-        id: 'membership-1',
+        id!: 'membership-1',
         roomId: 'room-id-1',
         userId: 'user-1',
         role: MembershipRole.OWNER,

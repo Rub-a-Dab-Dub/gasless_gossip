@@ -25,7 +25,7 @@ export class CollectionsController {
   @Post()
   @ApiOperation({ summary: "Create a new NFT collection" })
   @ApiResponse({
-    status: HttpStatus.CREATED,
+    status!: HttpStatus.CREATED,
     description: "Collection created successfully",
     type: CollectionResponseDto,
   })

@@ -39,7 +39,7 @@ export class ConfigController {
   @Get()
   @ApiOperation({ summary: 'Get all XP thresholds configuration' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'XP thresholds retrieved successfully',
   })
   async getAllThresholds(): Promise<XpThresholdConfig[]> {
@@ -50,7 +50,7 @@ export class ConfigController {
   @ApiOperation({ summary: 'Get XP threshold for specific level' })
   @ApiParam({ name: 'level', description: 'Level number' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'XP threshold retrieved successfully',
   })
   async getThresholdForLevel(
@@ -74,7 +74,7 @@ export class ConfigController {
   @ApiParam({ name: 'level', description: 'Level number' })
   @ApiBody({ type: UpdateThresholdDto })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'XP threshold updated successfully',
   })
   async updateThreshold(
@@ -95,7 +95,7 @@ export class ConfigController {
   @ApiOperation({ summary: 'Create multiple XP thresholds in bulk' })
   @ApiBody({ type: BulkThresholdsDto })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'XP thresholds created successfully',
   })
   async createBulkThresholds(
@@ -106,7 +106,7 @@ export class ConfigController {
     );
 
     return {
-      message: 'XP thresholds created successfully',
+      message!: 'XP thresholds created successfully',
       count: bulkDto.thresholds.length,
     };
   }
@@ -116,7 +116,7 @@ export class ConfigController {
   @ApiOperation({ summary: 'Deactivate XP threshold for specific level' })
   @ApiParam({ name: 'level', description: 'Level number' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'XP threshold deactivated successfully',
   })
   async deactivateThreshold(
@@ -125,14 +125,14 @@ export class ConfigController {
     await this.dynamicXpThresholdsService.deactivateThreshold(level);
 
     return {
-      message: `XP threshold for level ${level} deactivated successfully`,
+      message!: `XP threshold for level ${level} deactivated successfully`,
     };
   }
 
   @Get('validate/all')
   @ApiOperation({ summary: 'Validate all XP thresholds configuration' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'Validation results',
   })
   async validateThresholds(): Promise<{ isValid: boolean; errors: string[] }> {
@@ -142,7 +142,7 @@ export class ConfigController {
   @Get('export/json')
   @ApiOperation({ summary: 'Export XP thresholds as JSON' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'XP thresholds exported successfully',
   })
   async exportThresholds(): Promise<XpThresholdConfig[]> {
@@ -154,7 +154,7 @@ export class ConfigController {
   @ApiOperation({ summary: 'Import XP thresholds from JSON' })
   @ApiBody({ type: BulkThresholdsDto })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'XP thresholds imported successfully',
   })
   async importThresholds(
@@ -165,14 +165,14 @@ export class ConfigController {
     );
 
     return {
-      message: 'XP thresholds imported successfully',
+      message!: 'XP thresholds imported successfully',
       count: importDto.thresholds.length,
     };
   }
 
   @Get('preview/:totalXp')
   @ApiOperation({
-    summary: 'Preview what level a given XP amount would result in',
+    summary!: 'Preview what level a given XP amount would result in',
   })
   @ApiParam({ name: 'totalXp', description: 'Total XP amount' })
   @ApiResponse({
@@ -181,10 +181,10 @@ export class ConfigController {
   })
   async previewLevel(@Param('totalXp', ParseIntPipe) totalXp: number): Promise<{
     totalXp: number;
-    level: number;
-    currentXp: number;
-    xpToNextLevel: number;
-    progressPercentage: number;
+    level!: number;
+    currentXp!: number;
+    xpToNextLevel!: number;
+    progressPercentage!: number;
   }> {
     const level = await this.dynamicXpThresholdsService.getLevelForXp(totalXp);
     const currentLevelThreshold =

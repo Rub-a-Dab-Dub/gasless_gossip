@@ -12,7 +12,7 @@ describe('WebSocketsService', () => {
     messageRepo = { create: jest.fn(), save: jest.fn() };
     notificationRepo = { create: jest.fn(), save: jest.fn() };
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         WebSocketsService,
         { provide: getRepositoryToken(Message), useValue: messageRepo },
         {
@@ -27,7 +27,7 @@ describe('WebSocketsService', () => {
   it('should save and broadcast chat message', async () => {
     const data = { roomId: '1', userId: '2', content: 'Hello' };
     const client = {
-      broadcast: { to: jest.fn().mockReturnThis(), emit: jest.fn() },
+      broadcast!: { to: jest.fn().mockReturnThis(), emit: jest.fn() },
     };
     messageRepo.create.mockReturnValue(data);
     messageRepo.save.mockResolvedValue(data);

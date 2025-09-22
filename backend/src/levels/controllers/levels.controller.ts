@@ -30,7 +30,7 @@ export class LevelsController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Create a new level record for a user' })
   @ApiResponse({
-    status: 201,
+    status!: 201,
     description: 'Level record created successfully',
     type: LevelResponseDto,
   })
@@ -46,7 +46,7 @@ export class LevelsController {
   @ApiOperation({ summary: 'Get user level information' })
   @ApiParam({ name: 'userId', description: 'User UUID' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'User level information retrieved successfully',
     type: LevelResponseDto,
   })
@@ -65,7 +65,7 @@ export class LevelsController {
   @ApiOperation({ summary: 'Add XP to user and check for level ups' })
   @ApiParam({ name: 'userId', description: 'User UUID' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'XP added successfully, level updated if applicable',
     type: LevelResponseDto,
   })
@@ -89,7 +89,7 @@ export class LevelsController {
   @ApiOperation({ summary: 'Check and update user level based on current XP' })
   @ApiParam({ name: 'userId', description: 'User UUID' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'Level check completed, updated if necessary',
     type: LevelResponseDto,
   })
@@ -108,7 +108,7 @@ export class LevelsController {
   @ApiOperation({ summary: 'Acknowledge level up notification' })
   @ApiParam({ name: 'userId', description: 'User UUID' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'Level up acknowledged successfully',
     type: LevelResponseDto,
   })
@@ -126,7 +126,7 @@ export class LevelsController {
   @ApiOperation({ summary: 'Get user rank in leaderboard' })
   @ApiParam({ name: 'userId', description: 'User UUID' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'User rank retrieved successfully',
     schema: {
       type: 'object',
@@ -150,7 +150,7 @@ export class LevelsController {
   @Get()
   @ApiOperation({ summary: 'Get leaderboard of top users by XP' })
   @ApiQuery({
-    name: 'limit',
+    name!: 'limit',
     required: false,
     description: 'Number of users to return (default: 10, max: 100)',
   })

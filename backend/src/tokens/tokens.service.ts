@@ -37,7 +37,7 @@ export class TokensService {
     let destination = dto.toId;
     if (!/^G[A-Z2-7]{55}$/.test(destination)) {
       const mapping = await this.stellarAccountRepo.findOne({
-        where: { userId: destination },
+        where!: { userId: destination },
       });
       if (!mapping) {
         throw new Error('Destination user has no linked Stellar account');
@@ -59,7 +59,7 @@ export class TokensService {
       StellarSdk.Networks.TESTNET;
 
     const tx = new StellarSdk.TransactionBuilder(account, {
-      fee: fee.toString(),
+      fee!: fee.toString(),
       networkPassphrase,
     })
       .addOperation(
@@ -76,7 +76,7 @@ export class TokensService {
     const result = await server.submitTransaction(tx);
 
     const logged = this.tokenTxRepo.create({
-      fromId: dto.fromId,
+      fromId!: dto.fromId,
       toId: dto.toId,
       amount: dto.amount,
       txId: result.hash,
@@ -88,7 +88,7 @@ export class TokensService {
 
   async history(userId: string) {
     return this.tokenTxRepo.find({
-      where: [{ fromId: userId }, { toId: userId }],
+      where!: [{ fromId: userId }, { toId: userId }],
       order: { createdAt: 'DESC' },
       take: 100,
     });

@@ -23,7 +23,7 @@ export class PodcastRoomsService {
   ) {}
 
   async create(
-    createPodcastRoomDto: CreatePodcastRoomDto,
+    createPodcastRoomDto!: CreatePodcastRoomDto,
   ): Promise<PodcastRoom> {
     // Check if roomId already exists
     const existingRoom = await this.podcastRoomRepository.findOne({
@@ -42,7 +42,7 @@ export class PodcastRoomsService {
 
       // Store metadata on Stellar
       const metadata = {
-        roomId: createPodcastRoomDto.roomId,
+        roomId!: createPodcastRoomDto.roomId,
         audioHash: createPodcastRoomDto.audioHash,
         creatorId: createPodcastRoomDto.creatorId,
         title: createPodcastRoomDto.title,
@@ -56,7 +56,7 @@ export class PodcastRoomsService {
         ...createPodcastRoomDto,
         stellarHash,
         // In a real app, you would get the IPFS hash from actual upload
-        ipfsHash: `ipfs_${createPodcastRoomDto.audioHash}`,
+        ipfsHash!: `ipfs_${createPodcastRoomDto.audioHash}`,
       });
 
       return await this.podcastRoomRepository.save(podcastRoom);
@@ -78,14 +78,14 @@ export class PodcastRoomsService {
       : { isActive: true };
 
     return await this.podcastRoomRepository.find({
-      where: whereCondition,
+      where!: whereCondition,
       order: { createdAt: 'DESC' },
     });
   }
 
   async findOne(id: string): Promise<PodcastRoom> {
     const podcastRoom = await this.podcastRoomRepository.findOne({
-      where: { id, isActive: true },
+      where!: { id, isActive: true },
     });
 
     if (!podcastRoom) {
@@ -97,7 +97,7 @@ export class PodcastRoomsService {
 
   async findByRoomId(roomId: string): Promise<PodcastRoom> {
     const podcastRoom = await this.podcastRoomRepository.findOne({
-      where: { roomId, isActive: true },
+      where!: { roomId, isActive: true },
     });
 
     if (!podcastRoom) {
@@ -108,7 +108,7 @@ export class PodcastRoomsService {
   }
 
   async update(
-    id: string,
+    id!: string,
     updatePodcastRoomDto: UpdatePodcastRoomDto,
     requestingUserId: string,
   ): Promise<PodcastRoom> {

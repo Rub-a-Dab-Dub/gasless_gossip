@@ -4,10 +4,10 @@ import type { LevelUpEvent } from '../events/level-up.event';
 import type { XpGainedEvent } from '../events/xp-gained.event';
 
 export interface AnalyticsEvent {
-  userId: string;
-  eventType: string;
-  properties: Record<string, any>;
-  timestamp: Date;
+  userId!: string;
+  eventType!: string;
+  properties!: Record<string, any>;
+  timestamp!: Date;
 }
 
 @Injectable()
@@ -17,7 +17,7 @@ export class AnalyticsService {
   @OnEvent('level.up')
   async trackLevelUp(event: LevelUpEvent) {
     const analyticsEvent: AnalyticsEvent = {
-      userId: event.userId,
+      userId!: event.userId,
       eventType: 'level_up',
       properties: {
         previous_level: event.previousLevel,
@@ -35,7 +35,7 @@ export class AnalyticsService {
   @OnEvent('xp.gained')
   async trackXpGained(event: XpGainedEvent) {
     const analyticsEvent: AnalyticsEvent = {
-      userId: event.userId,
+      userId!: event.userId,
       eventType: 'xp_gained',
       properties: {
         xp_amount: event.xpAmount,

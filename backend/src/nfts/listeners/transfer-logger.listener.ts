@@ -16,7 +16,7 @@ export class TransferLoggerListener {
       this.logger.log(`Handling NFT minted event for NFT ${event.nft.id}`)
 
       await this.transferLoggerService.logTransfer({
-        nftId: event.nft.id,
+        nftId!: event.nft.id,
         fromAddress: "mint",
         toAddress: event.nft.user?.stellarAccountId || "unknown",
         toUserId: event.nft.userId,

@@ -3,30 +3,30 @@ import { ReactionType } from '../entities/reaction.entity';
 
 export class ReactionResponseDto {
   @ApiProperty()
-  id: string;
+  id!: string;
 
   @ApiProperty()
-  messageId: string;
+  messageId!: string;
 
   @ApiProperty({ enum: ReactionType })
-  type: ReactionType;
+  type!: ReactionType;
 
   @ApiProperty()
-  userId: string;
+  userId!: string;
 
   @ApiProperty()
-  createdAt: Date;
+  createdAt!: Date;
 }
 
 export class ReactionCountDto {
   @ApiProperty()
-  messageId: string;
+  messageId!: string;
 
   @ApiProperty()
-  totalCount: number;
+  totalCount!: number;
 
   @ApiProperty({
-    description: 'Count by reaction type',
+    description!: 'Count by reaction type',
     example: { like: 5, love: 2, laugh: 1 },
   })
   countByType: Record<ReactionType, number>;

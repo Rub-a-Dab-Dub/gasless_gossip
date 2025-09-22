@@ -41,13 +41,13 @@ export class XpService {
 
   // Example: process a Stellar event payload to award XP
   async processStellarEvent(event: {
-    type: string;
-    userId: string;
+    type!: string;
+    userId!: string;
     data?: any;
   }) {
     // Basic mapping; could be expanded in repo notes
     const mapping = {
-      message: 5,
+      message!: 5,
       token_send: 10,
     } as Record<string, number>;
 
@@ -60,20 +60,20 @@ export class XpService {
 
   // idempotent handler for incoming Stellar events (uses eventId dedup)
   async handleEvent(event: {
-    eventId: string;
-    type: string;
-    userId: string;
+    eventId!: string;
+    type!: string;
+    userId!: string;
     data?: any;
   }) {
     // transactional approach: insert processed_event, if exists -> skip
     return this.dataSource.transaction(async (manager) => {
       const processed = await manager.findOne(ProcessedEvent, {
-        where: { eventId: event.eventId },
+        where!: { eventId: event.eventId },
       });
       if (processed) return null; // already handled
 
       await manager.save(ProcessedEvent, {
-        eventId: event.eventId,
+        eventId!: event.eventId,
         source: event.type,
       });
 
@@ -84,7 +84,7 @@ export class XpService {
         let resolvedUserId = event.userId;
         try {
           const mappingRow = await this.stellarAccountRepo.findOne({
-            where: { stellarAccount: event.userId },
+            where!: { stellarAccount: event.userId },
           });
           if (mappingRow && mappingRow.userId)
             resolvedUserId = mappingRow.userId;
@@ -94,11 +94,11 @@ export class XpService {
         }
 
         let xpRow = await manager.findOne(Xp, {
-          where: { userId: resolvedUserId },
+          where!: { userId: resolvedUserId },
         });
         if (!xpRow) {
           xpRow = manager.create(Xp, {
-            userId: resolvedUserId,
+            userId!: resolvedUserId,
             xpValue: amount,
           });
           const saved = await manager.save(Xp, xpRow);

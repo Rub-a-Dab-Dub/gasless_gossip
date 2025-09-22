@@ -15,7 +15,7 @@ describe('GamblesService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         GamblesService,
         {
           provide: getRepositoryToken(Gamble),
@@ -34,7 +34,7 @@ describe('GamblesService', () => {
 
   it('should create a new gamble if none exists', async () => {
     const dto: CreateGambleDto = {
-      gossipId: 'gossip-1',
+      gossipId!: 'gossip-1',
       userId: 'user-1',
       amount: 100,
       choice: 'truth',

@@ -28,7 +28,7 @@ export class RoomsService {
   ) {}
 
   async createRoom(
-    createRoomDto: CreateRoomDto,
+    createRoomDto!: CreateRoomDto,
     createdBy: string,
   ): Promise<Room> {
     const room = this.roomRepository.create({
@@ -45,13 +45,13 @@ export class RoomsService {
   }
 
   async joinRoom(
-    userId: string,
+    userId!: string,
     roomId: string,
     chatGateway?: any,
   ): Promise<{ success: boolean; message: string; xpAwarded?: number }> {
     // Check if room exists
     const room = await this.roomRepository.findOne({
-      where: { id: roomId, isActive: true },
+      where!: { id: roomId, isActive: true },
       relations: ['memberships'],
     });
 
@@ -61,7 +61,7 @@ export class RoomsService {
 
     // Check if user is already a member
     const existingMembership = await this.membershipRepository.findOne({
-      where: { roomId, userId, isActive: true },
+      where!: { roomId, userId, isActive: true },
     });
 
     if (existingMembership) {
@@ -70,7 +70,7 @@ export class RoomsService {
 
     // Check capacity
     const currentMemberCount = await this.membershipRepository.count({
-      where: { roomId, isActive: true },
+      where!: { roomId, isActive: true },
     });
 
     if (currentMemberCount >= room.maxMembers) {
@@ -101,20 +101,20 @@ export class RoomsService {
     }
 
     return {
-      success: true,
+      success!: true,
       message: `Successfully joined room: ${room.name}`,
       xpAwarded,
     };
   }
 
   async leaveRoom(
-    userId: string,
+    userId!: string,
     roomId: string,
     chatGateway?: any,
   ): Promise<{ success: boolean; message: string }> {
     // Check if room exists
     const room = await this.roomRepository.findOne({
-      where: { id: roomId, isActive: true },
+      where!: { id: roomId, isActive: true },
     });
 
     if (!room) {
@@ -123,7 +123,7 @@ export class RoomsService {
 
     // Check if user is a member
     const membership = await this.membershipRepository.findOne({
-      where: { roomId, userId, isActive: true },
+      where!: { roomId, userId, isActive: true },
     });
 
     if (!membership) {
@@ -147,14 +147,14 @@ export class RoomsService {
     }
 
     return {
-      success: true,
+      success!: true,
       message: `Successfully left room: ${room.name}`,
     };
   }
 
   async getRoomMembers(roomId: string): Promise<RoomMembership[]> {
     return this.membershipRepository.find({
-      where: { roomId, isActive: true },
+      where!: { roomId, isActive: true },
       relations: ['room'],
       order: { joinedAt: 'DESC' },
     });
@@ -162,7 +162,7 @@ export class RoomsService {
 
   async getUserRooms(userId: string): Promise<Room[]> {
     const memberships = await this.membershipRepository.find({
-      where: { userId, isActive: true },
+      where!: { userId, isActive: true },
       relations: ['room'],
     });
 
@@ -174,7 +174,7 @@ export class RoomsService {
       .createQueryBuilder('room')
       .where('room.isActive = :isActive', { isActive: true })
       .andWhere('(room.type = :publicType OR room.createdBy = :userId)', {
-        publicType: RoomType.PUBLIC,
+        publicType!: RoomType.PUBLIC,
         userId: userId || '',
       })
       .orderBy('room.createdAt', 'DESC');
@@ -183,7 +183,7 @@ export class RoomsService {
   }
 
   private async addMembership(
-    roomId: string,
+    roomId!: string,
     userId: string,
     role: MembershipRole = MembershipRole.MEMBER,
   ): Promise<RoomMembership> {
@@ -209,13 +209,12 @@ export class RoomsService {
         // Check if user has an invitation (this would need an invitations system)
         // For now, we'll throw an error
         throw new ForbiddenException('This room is invite-only');
-      default:
-        throw new BadRequestException('Invalid room type');
+      default!: throw new BadRequestException('Invalid room type');
     }
   }
 
   private async awardJoinRoomXP(
-    userId: string,
+    userId!: string,
     roomType: RoomType,
   ): Promise<number> {
     let xpAmount = 0;

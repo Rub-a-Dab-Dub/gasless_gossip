@@ -24,7 +24,7 @@ export class TradesService {
 
   async proposeTrade(dto: ProposeTradeDto): Promise<Trade> {
     const trade = this.tradeRepo.create({
-      offerId: dto.offerId,
+      offerId!: dto.offerId,
     });
     return this.tradeRepo.save(trade);
   }
@@ -38,7 +38,7 @@ export class TradesService {
       this.issuerKeypair.publicKey(),
     );
     const tx = new TransactionBuilder(account, {
-      fee: '100',
+      fee!: '100',
       networkPassphrase: Networks.TESTNET,
     })
       .addOperation(

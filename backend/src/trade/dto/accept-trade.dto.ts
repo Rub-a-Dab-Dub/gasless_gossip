@@ -2,8 +2,8 @@ import { IsUUID } from 'class-validator';
 
 export class AcceptTradeDto {
   @IsUUID()
-  tradeId: string;
+  tradeId!: string;
 
   @IsUUID()
-  acceptorId: string;
+  acceptorId!: string;
 }

@@ -11,7 +11,7 @@ describe('GamblesController (e2e)', () => {
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [
+      imports!: [
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
@@ -35,7 +35,7 @@ describe('GamblesController (e2e)', () => {
     const res = await request(app.getHttpServer())
       .post('/gambles')
       .send({
-        gossipId: 'gossip-1',
+        gossipId!: 'gossip-1',
         userId: 'user-1',
         amount: 100,
         choice: 'truth',

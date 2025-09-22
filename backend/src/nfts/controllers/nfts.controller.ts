@@ -28,7 +28,7 @@ export class NftsController {
   @Post("mint")
   @ApiOperation({ summary: "Mint a new NFT" })
   @ApiResponse({
-    status: HttpStatus.CREATED,
+    status!: HttpStatus.CREATED,
     description: "NFT minted successfully",
     type: NftResponseDto,
   })
@@ -132,7 +132,7 @@ export class NftsController {
   @Get('transaction/:txId')
   @ApiOperation({ summary: 'Get NFT by transaction ID' })
   @ApiParam({
-    name: 'txId',
+    name!: 'txId',
     description: 'Stellar transaction ID',
     type: 'string',
   })
@@ -155,7 +155,7 @@ export class NftsController {
   @Post("transfer")
   @ApiOperation({ summary: "Transfer NFT to another user" })
   @ApiResponse({
-    status: HttpStatus.OK,
+    status!: HttpStatus.OK,
     description: "NFT transferred successfully",
     type: NftResponseDto,
   })
@@ -207,7 +207,7 @@ export class NftsController {
   @Get(":id/verify-ownership/:userId")
   @ApiOperation({ summary: "Verify NFT ownership" })
   @ApiParam({
-    name: "id",
+    name!: "id",
     description: "NFT ID",
     type: "string",
     format: "uuid",

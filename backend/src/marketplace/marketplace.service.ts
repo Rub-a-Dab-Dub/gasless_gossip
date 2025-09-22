@@ -18,7 +18,7 @@ export class MarketplaceService {
   ) {}
 
   async createListing(
-    sellerId: string,
+    sellerId!: string,
     createListingDto: CreateListingDto,
   ): Promise<Listing> {
     const listing = this.listingRepository.create({
@@ -30,7 +30,7 @@ export class MarketplaceService {
 
   async purchaseListing(buyerId: string, listingId: string): Promise<Listing> {
     const listing = await this.listingRepository.findOne({
-      where: { id: listingId, isActive: true },
+      where!: { id: listingId, isActive: true },
     });
 
     if (!listing) {
@@ -54,7 +54,7 @@ export class MarketplaceService {
   }
 
   private async transferTokens(
-    from: string,
+    from!: string,
     to: string,
     amount: number,
   ): Promise<void> {

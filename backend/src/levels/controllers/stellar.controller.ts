@@ -23,7 +23,7 @@ export class StellarController {
   @ApiParam({ name: 'userId', description: 'User UUID' })
   @ApiParam({ name: 'badgeId', description: 'Badge identifier' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'Badge unlock initiated successfully',
   })
   @ApiResponse({
@@ -51,7 +51,7 @@ export class StellarController {
   @ApiParam({ name: 'userId', description: 'User UUID' })
   @ApiParam({ name: 'badgeId', description: 'Badge identifier' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'Badge unlock status retrieved successfully',
   })
   async getBadgeUnlockStatus(
@@ -66,7 +66,7 @@ export class StellarController {
   @ApiParam({ name: 'stellarAccountId', description: 'Stellar account ID' })
   @ApiParam({ name: 'badgeId', description: 'Badge identifier' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'Badge ownership validation result',
     schema: {
       type: 'object',
@@ -98,7 +98,7 @@ export class StellarController {
   @ApiOperation({ summary: 'Retry failed badge unlock transaction' })
   @ApiParam({ name: 'transactionId', description: 'Transaction ID to retry' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'Transaction retry initiated successfully',
   })
   async retryTransaction(

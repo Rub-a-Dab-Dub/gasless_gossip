@@ -34,7 +34,7 @@ export class AuctionsService {
       await this.stellarService.createEscrowAccount();
 
     const auction = this.auctionRepository.create({
-      giftId: startAuctionDto.giftId,
+      giftId!: startAuctionDto.giftId,
       endTime,
       highestBid: startAuctionDto.startingBid || 0,
       stellarEscrowAccount,
@@ -46,7 +46,7 @@ export class AuctionsService {
 
   async placeBid(placeBidDto: PlaceBidDto): Promise<Bid> {
     const auction = await this.auctionRepository.findOne({
-      where: { id: placeBidDto.auctionId },
+      where!: { id: placeBidDto.auctionId },
       relations: ['bids'],
     });
 
@@ -77,7 +77,7 @@ export class AuctionsService {
 
     // Create bid record
     const bid = this.bidRepository.create({
-      auctionId: placeBidDto.auctionId,
+      auctionId!: placeBidDto.auctionId,
       bidderId: placeBidDto.bidderId,
       amount: placeBidDto.amount,
       stellarTransactionId,
@@ -97,7 +97,7 @@ export class AuctionsService {
 
   async getAuctionById(id: string): Promise<Auction> {
     const auction = await this.auctionRepository.findOne({
-      where: { id },
+      where!: { id },
       relations: ['bids'],
     });
 
@@ -110,7 +110,7 @@ export class AuctionsService {
 
   async getActiveAuctions(): Promise<Auction[]> {
     return await this.auctionRepository.find({
-      where: {
+      where!: {
         status: 'ACTIVE',
         endTime: MoreThan(new Date()),
       },
@@ -140,7 +140,7 @@ export class AuctionsService {
   @Cron(CronExpression.EVERY_MINUTE)
   async resolveExpiredAuctions(): Promise<void> {
     const expiredAuctions = await this.auctionRepository.find({
-      where: {
+      where!: {
         status: 'ACTIVE',
         endTime: MoreThan(new Date()),
       },

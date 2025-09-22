@@ -3,7 +3,7 @@ import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
 
 export class CreateVisitDto {
   @ApiProperty({
-    description: "Room identifier",
+    description!: "Room identifier",
     example: "room-123",
   })
   @IsString()

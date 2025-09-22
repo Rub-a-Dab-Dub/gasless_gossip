@@ -52,7 +52,7 @@ export class XpController {
     // Controller does a simple upsert via repository
     // Note: in larger projects this should be handled by a dedicated service
     const existing = await this.stellarAccountRepo.findOne({
-      where: { stellarAccount: body.stellarAccount },
+      where!: { stellarAccount: body.stellarAccount },
     });
     if (existing) {
       existing.userId = body.userId ?? existing.userId;
@@ -60,7 +60,7 @@ export class XpController {
       return existing;
     }
     const created = this.stellarAccountRepo.create({
-      stellarAccount: body.stellarAccount,
+      stellarAccount!: body.stellarAccount,
       userId: body.userId,
     });
     await this.stellarAccountRepo.save(created);

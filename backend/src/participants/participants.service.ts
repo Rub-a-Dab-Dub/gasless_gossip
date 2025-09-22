@@ -17,7 +17,7 @@ export class ParticipantsService {
 
   async join(userId: string, dto: JoinParticipantDto): Promise<Participant> {
     const existing = await this.participantRepo.findOne({
-      where: { roomId: dto.roomId, pseudonym: dto.pseudonym },
+      where!: { roomId: dto.roomId, pseudonym: dto.pseudonym },
     });
 
     if (existing) {
@@ -26,7 +26,7 @@ export class ParticipantsService {
 
     const participant = this.participantRepo.create({
       userId,
-      roomId: dto.roomId,
+      roomId!: dto.roomId,
       pseudonym: dto.pseudonym,
     });
 
@@ -39,7 +39,7 @@ export class ParticipantsService {
 
   async leave(userId: string, dto: LeaveParticipantDto): Promise<void> {
     const participant = await this.participantRepo.findOne({
-      where: { roomId: dto.roomId, userId },
+      where!: { roomId: dto.roomId, userId },
     });
 
     if (!participant) {

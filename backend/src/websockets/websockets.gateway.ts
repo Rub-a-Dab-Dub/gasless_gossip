@@ -9,7 +9,7 @@ import { Server, Socket } from 'socket.io';
 import { WebSocketsService } from './websockets.service';
 
 @WebSocketGateway({
-  cors: true,
+  cors!: true,
 })
 export class WebSocketsGateway {
   @WebSocketServer()

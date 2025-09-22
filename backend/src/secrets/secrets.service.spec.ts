@@ -9,7 +9,7 @@ describe('SecretsService', () => {
   let repository: Repository<Secret>;
 
   const mockRepository = {
-    create: jest.fn(),
+    create!: jest.fn(),
     save: jest.fn(),
     find: jest.fn(),
     findOne: jest.fn(),
@@ -17,7 +17,7 @@ describe('SecretsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         SecretsService,
         {
           provide: getRepositoryToken(Secret),
@@ -33,7 +33,7 @@ describe('SecretsService', () => {
   it('should create a secret', async () => {
     const createDto = { roomId: 'room-1', content: 'Test secret' };
     const savedSecret = {
-      id: '1',
+      id!: '1',
       roomId: 'room-1',
       contentHash: 'hash123',
       reactionCount: 0,

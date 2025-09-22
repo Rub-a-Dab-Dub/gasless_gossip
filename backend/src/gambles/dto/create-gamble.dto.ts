@@ -4,23 +4,23 @@ import { IsNotEmpty, IsString, IsNumber, IsIn } from 'class-validator';
 export class CreateGambleDto {
   @IsNotEmpty()
   @IsString()
-  gossipId: string;
+  gossipId!: string;
 
   @IsNotEmpty()
   @IsString()
-  userId: string;
+  userId!: string;
 
   @IsNotEmpty()
   @IsNumber()
-  amount: number;
+  amount!: number;
 
   @IsNotEmpty()
   @IsIn(['truth', 'fake'])
-  choice: 'truth' | 'fake';
+  choice!: 'truth' | 'fake';
 
   @IsNotEmpty()
   @IsString()
-  txId: string;
+  txId!: string;
 }
 
 // src/gambles/dto/resolve-gamble.dto.ts
@@ -28,9 +28,9 @@ import { IsNotEmpty, IsIn } from 'class-validator';
 
 export class ResolveGambleDto {
   @IsNotEmpty()
-  gambleId: string;
+  gambleId!: string;
 
   @IsNotEmpty()
   @IsIn(['truth', 'fake'])
-  outcome: 'truth' | 'fake';
+  outcome!: 'truth' | 'fake';
 }

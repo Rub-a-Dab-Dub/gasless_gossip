@@ -8,17 +8,17 @@ import {
 @Entity('trades')
 export class Trade {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  offerId: string;
+  offerId!: string;
 
   @Column({ nullable: true })
-  acceptorId: string;
+  acceptorId!: string;
 
   @Column({ nullable: true })
-  txId: string;
+  txId!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }

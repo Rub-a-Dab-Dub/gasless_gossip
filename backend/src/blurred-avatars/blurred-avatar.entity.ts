@@ -3,14 +3,14 @@ import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('blurred_avatars')
 export class BlurredAvatar {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  userId: string;
+  userId!: string;
 
   @Column()
-  blurLevel: number;
+  blurLevel!: number;
 
   @Column()
-  imageUrl: string;
+  imageUrl!: string;
 }

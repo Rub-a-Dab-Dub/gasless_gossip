@@ -13,19 +13,19 @@ describe('AuctionsService', () => {
   let stellarService: StellarService;
 
   const mockAuctionRepo = {
-    create: jest.fn(),
+    create!: jest.fn(),
     save: jest.fn(),
     findOne: jest.fn(),
     find: jest.fn(),
   };
 
   const mockBidRepo = {
-    create: jest.fn(),
+    create!: jest.fn(),
     save: jest.fn(),
   };
 
   const mockStellarService = {
-    createEscrowAccount: jest.fn(),
+    createEscrowAccount!: jest.fn(),
     processEscrowPayment: jest.fn(),
     refundBidder: jest.fn(),
     transferToGiftOwner: jest.fn(),
@@ -34,7 +34,7 @@ describe('AuctionsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         AuctionsService,
         { provide: getRepositoryToken(Auction), useValue: mockAuctionRepo },
         { provide: getRepositoryToken(Bid), useValue: mockBidRepo },
@@ -51,14 +51,14 @@ describe('AuctionsService', () => {
   describe('startAuction', () => {
     it('should create a new auction successfully', async () => {
       const startAuctionDto = {
-        giftId: 'gift-123',
+        giftId!: 'gift-123',
         endTime: new Date(Date.now() + 86400000).toISOString(), // 24 hours from now
         startingBid: 10,
       };
 
       const mockEscrowAccount = 'GCTEST123...';
       const mockAuction = {
-        id: 'auction-123',
+        id!: 'auction-123',
         giftId: startAuctionDto.giftId,
         highestBid: startAuctionDto.startingBid,
         stellarEscrowAccount: mockEscrowAccount,
@@ -81,7 +81,7 @@ describe('AuctionsService', () => {
 
     it('should throw error if end time is in the past', async () => {
       const startAuctionDto = {
-        giftId: 'gift-123',
+        giftId!: 'gift-123',
         endTime: new Date(Date.now() - 86400000).toISOString(), // 24 hours ago
       };
 
@@ -94,13 +94,13 @@ describe('AuctionsService', () => {
   describe('placeBid', () => {
     it('should place a valid bid successfully', async () => {
       const placeBidDto = {
-        auctionId: 'auction-123',
+        auctionId!: 'auction-123',
         bidderId: 'bidder-123',
         amount: 15,
       };
 
       const mockAuction = {
-        id: 'auction-123',
+        id!: 'auction-123',
         status: 'ACTIVE',
         endTime: new Date(Date.now() + 86400000), // 24 hours from now
         highestBid: 10,
@@ -109,7 +109,7 @@ describe('AuctionsService', () => {
       };
 
       const mockBid = {
-        id: 'bid-123',
+        id!: 'bid-123',
         auctionId: placeBidDto.auctionId,
         bidderId: placeBidDto.bidderId,
         amount: placeBidDto.amount,
@@ -124,7 +124,7 @@ describe('AuctionsService', () => {
       mockBidRepo.save.mockResolvedValue(mockBid);
       mockAuctionRepo.save.mockResolvedValue({
         ...mockAuction,
-        highestBid: 15,
+        highestBid!: 15,
       });
 
       const result = await service.placeBid(placeBidDto);
@@ -139,13 +139,13 @@ describe('AuctionsService', () => {
 
     it('should reject bid lower than highest bid', async () => {
       const placeBidDto = {
-        auctionId: 'auction-123',
+        auctionId!: 'auction-123',
         bidderId: 'bidder-123',
         amount: 5, // Lower than current highest bid
       };
 
       const mockAuction = {
-        id: 'auction-123',
+        id!: 'auction-123',
         status: 'ACTIVE',
         endTime: new Date(Date.now() + 86400000),
         highestBid: 10,

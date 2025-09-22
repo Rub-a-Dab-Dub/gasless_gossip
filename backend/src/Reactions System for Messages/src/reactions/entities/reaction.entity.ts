@@ -22,20 +22,20 @@ export enum ReactionType {
 @Index(['userId']) // Optimize queries by userId
 export class Reaction {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column('uuid')
-  messageId: string;
+  messageId!: string;
 
   @Column({
-    type: 'enum',
+    type!: 'enum',
     enum: ReactionType,
   })
   type: ReactionType;
 
   @Column('uuid')
-  userId: string;
+  userId!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }

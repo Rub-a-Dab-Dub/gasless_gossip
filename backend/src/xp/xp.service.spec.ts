@@ -12,7 +12,7 @@ describe('XpService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         XpService,
         {
           provide: getRepositoryToken(Xp),
@@ -69,7 +69,7 @@ describe('XpService', () => {
   it('adds xp via processStellarEvent', async () => {
     (repo.findOne as jest.Mock).mockResolvedValue(null);
     const res = await service.processStellarEvent({
-      type: 'message',
+      type!: 'message',
       userId: '00000000-0000-0000-0000-000000000000',
     });
     expect(res).toBeDefined();
@@ -85,7 +85,7 @@ describe('XpService', () => {
 
     let processedChecks = 0;
     const managerSpy = {
-      findOne: jest
+      findOne!: jest
         .fn()
         .mockImplementation(
           async (entityOrOptions: any, maybeOptions?: any) => {
@@ -113,16 +113,16 @@ describe('XpService', () => {
             return null;
           },
         ),
-      create: jest.fn().mockImplementation((v) => v),
+      create!: jest.fn().mockImplementation((v) => v),
       save: jest.fn().mockImplementation((v) => Promise.resolve(v)),
     };
 
     const dataSourceMock = {
-      transaction: jest.fn().mockImplementation(async (cb) => cb(managerSpy)),
+      transaction!: jest.fn().mockImplementation(async (cb) => cb(managerSpy)),
     };
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         XpService,
         {
           provide: getRepositoryToken(Xp),
@@ -170,7 +170,7 @@ describe('XpService', () => {
   it('awards XP to mapped internal userId when Stellar account is mapped', async () => {
     const savedItems: any[] = [];
     const managerSpy = {
-      findOne: jest
+      findOne!: jest
         .fn()
         .mockImplementation(
           async (entityOrOptions: any, maybeOptions?: any) => {
@@ -196,7 +196,7 @@ describe('XpService', () => {
             return null;
           },
         ),
-      create: jest.fn().mockImplementation((v) => v),
+      create!: jest.fn().mockImplementation((v) => v),
       save: jest.fn().mockImplementation((...args: any[]) => {
         const v = args[args.length - 1];
         savedItems.push(v);
@@ -205,16 +205,16 @@ describe('XpService', () => {
     };
 
     const dataSourceMock = {
-      transaction: jest.fn().mockImplementation(async (cb) => cb(managerSpy)),
+      transaction!: jest.fn().mockImplementation(async (cb) => cb(managerSpy)),
     };
 
     const mappedStellarAccount = {
-      stellarAccount: 'GABC',
+      stellarAccount!: 'GABC',
       userId: 'internal-123',
     };
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         XpService,
         {
           provide: getRepositoryToken(Xp),
@@ -248,7 +248,7 @@ describe('XpService', () => {
 
     // handle an event where userId is the Stellar account 'GABC'
     const res = await svc.handleEvent({
-      eventId: 'evt-xyz',
+      eventId!: 'evt-xyz',
       type: 'message',
       userId: 'GABC',
     });

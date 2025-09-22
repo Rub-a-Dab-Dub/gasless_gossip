@@ -21,7 +21,7 @@ export class SecretsService {
       .digest('hex');
 
     const secret = this.secretsRepository.create({
-      roomId: createSecretDto.roomId,
+      roomId!: createSecretDto.roomId,
       contentHash,
       reactionCount: 0,
     });
@@ -32,7 +32,7 @@ export class SecretsService {
 
   async getTopSecrets(roomId: string, limit: number = 10): Promise<SecretResponseDto[]> {
     const secrets = await this.secretsRepository.find({
-      where: { roomId },
+      where!: { roomId },
       order: { reactionCount: 'DESC', createdAt: 'DESC' },
       take: limit,
     });
@@ -55,7 +55,7 @@ export class SecretsService {
 
   private toResponseDto(secret: Secret): SecretResponseDto {
     return {
-      id: secret.id,
+      id!: secret.id,
       roomId: secret.roomId,
       contentHash: secret.contentHash,
       reactionCount: secret.reactionCount,

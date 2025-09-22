@@ -6,14 +6,14 @@ import { Bet } from './bet.entity';
 describe('BetsService', () => {
   let service: BetsService;
   const mockRepository = {
-    create: jest.fn(),
+    create!: jest.fn(),
     save: jest.fn(),
     findOne: jest.fn(),
   };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         BetsService,
         { provide: getRepositoryToken(Bet), useValue: mockRepository },
       ],
@@ -28,7 +28,7 @@ describe('BetsService', () => {
     mockRepository.save.mockResolvedValue(mockBet);
 
     const result = await service.placeBet('user1', {
-      outcome: 'win',
+      outcome!: 'win',
       stakes: 100,
     });
     expect(result).toEqual(mockBet);

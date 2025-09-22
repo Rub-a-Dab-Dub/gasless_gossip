@@ -28,7 +28,7 @@ export class StellarController {
   createKeypair() {
     const pair = StellarSdk.Keypair.random();
     return {
-      publicKey: pair.publicKey(),
+      publicKey!: pair.publicKey(),
       secret: pair.secret(),
     };
   }

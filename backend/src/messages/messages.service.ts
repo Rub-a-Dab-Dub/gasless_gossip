@@ -19,7 +19,7 @@ export class MessagesService {
     // TODO: Implement IPFS and Stellar integration
     const contentHash = await this.hashMessageContent(createMessageDto.content);
     const message = this.messageRepository.create({
-      roomId: createMessageDto.roomId,
+      roomId!: createMessageDto.roomId,
       contentHash,
       senderId: createMessageDto.senderId,
     });
@@ -28,7 +28,7 @@ export class MessagesService {
 
   async findByRoom(roomId: string): Promise<Message[]> {
     return this.messageRepository.find({
-      where: { roomId },
+      where!: { roomId },
       order: { createdAt: 'ASC' },
     });
   }

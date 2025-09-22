@@ -4,12 +4,12 @@ import type { XpGainedEvent } from '../events/xp-gained.event';
 import type { BadgeUnlockedEvent } from '../events/badge-unlocked.event';
 
 export interface NotificationPayload {
-  userId: string;
-  type: 'level_up' | 'xp_gained' | 'badge_unlocked';
-  title: string;
-  message: string;
+  userId!: string;
+  type!: 'level_up' | 'xp_gained' | 'badge_unlocked';
+  title!: string;
+  message!: string;
   data?: Record<string, any>;
-  timestamp: Date;
+  timestamp!: Date;
 }
 
 @Injectable()
@@ -71,7 +71,7 @@ export class NotificationService {
   }
 
   private async sendNotification(
-    notification: NotificationPayload,
+    notification!: NotificationPayload,
   ): Promise<void> {
     // Here you would implement the actual notification sending logic:
     // - WebSocket for real-time notifications

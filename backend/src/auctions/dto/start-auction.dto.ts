@@ -9,10 +9,10 @@ import { Type } from 'class-transformer';
 
 export class StartAuctionDto {
   @IsString()
-  giftId: string;
+  giftId!: string;
 
   @IsDateString()
-  endTime: string;
+  endTime!: string;
 
   @IsOptional()
   @IsNumber()

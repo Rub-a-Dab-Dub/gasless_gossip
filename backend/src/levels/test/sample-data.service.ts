@@ -3,17 +3,17 @@ import type { LevelsService } from '../services/levels.service';
 import type { CreateLevelDto } from '../dto/create-level.dto';
 
 export interface SampleUser {
-  id: string;
-  username: string;
-  email: string;
-  stellarAccountId: string;
+  id!: string;
+  username!: string;
+  email!: string;
+  stellarAccountId!: string;
 }
 
 export interface XpActivity {
-  userId: string;
-  xpAmount: number;
-  source: string;
-  description: string;
+  userId!: string;
+  xpAmount!: number;
+  source!: string;
+  description!: string;
 }
 
 @Injectable()
@@ -25,7 +25,7 @@ export class SampleDataService {
   async createSampleUsers(): Promise<SampleUser[]> {
     const sampleUsers: SampleUser[] = [
       {
-        id: '550e8400-e29b-41d4-a716-446655440001',
+        id!: '550e8400-e29b-41d4-a716-446655440001',
         username: 'alice_explorer',
         email: 'alice@example.com',
         stellarAccountId:
@@ -68,7 +68,7 @@ export class SampleDataService {
     for (const user of users) {
       try {
         const createLevelDto: CreateLevelDto = {
-          userId: user.id,
+          userId!: user.id,
           level: 1,
           currentXp: 0,
           totalXp: 0,
@@ -98,7 +98,7 @@ export class SampleDataService {
     const activities: XpActivity[] = [
       // Alice - Moderate progression (Level 3-4)
       {
-        userId: '550e8400-e29b-41d4-a716-446655440001',
+        userId!: '550e8400-e29b-41d4-a716-446655440001',
         xpAmount: 50,
         source: 'daily_login',
         description: 'Daily login bonus',

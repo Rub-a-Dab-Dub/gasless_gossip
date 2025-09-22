@@ -16,7 +16,7 @@ export class WebSocketsService {
   async handleChat(data: any, client: Socket) {
     // Save message to PostgreSQL
     const message = this.messageRepo.create({
-      roomId: data.roomId,
+      roomId!: data.roomId,
       userId: data.userId,
       content: data.content,
     });
@@ -29,7 +29,7 @@ export class WebSocketsService {
   async handleNotification(data: any, client: Socket) {
     // Save notification to PostgreSQL
     const notification = this.notificationRepo.create({
-      userId: data.userId,
+      userId!: data.userId,
       content: data.content,
     });
     await this.notificationRepo.save(notification);

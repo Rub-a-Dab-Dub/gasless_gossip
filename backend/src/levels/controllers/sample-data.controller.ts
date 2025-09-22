@@ -10,7 +10,7 @@ export class SampleDataController {
   @Post('generate')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: 'Generate sample users and XP data for testing',
+    summary!: 'Generate sample users and XP data for testing',
     description:
       'Creates sample users with various XP levels to test the level system functionality',
   })
@@ -29,8 +29,7 @@ export class SampleDataController {
     await this.sampleDataService.runFullSampleDataGeneration();
 
     return {
-      message:
-        'Sample data generated successfully. Check logs for detailed results.',
+      message!: 'Sample data generated successfully. Check logs for detailed results.',
       timestamp: new Date().toISOString(),
     };
   }
@@ -38,7 +37,7 @@ export class SampleDataController {
   @Delete('reset')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: 'Reset all sample data',
+    summary!: 'Reset all sample data',
     description: 'Clears all sample level data from the system',
   })
   @ApiResponse({
@@ -56,7 +55,7 @@ export class SampleDataController {
     await this.sampleDataService.resetSampleData();
 
     return {
-      message: 'Sample data reset successfully',
+      message!: 'Sample data reset successfully',
       timestamp: new Date().toISOString(),
     };
   }

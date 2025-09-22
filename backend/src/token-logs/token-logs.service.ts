@@ -18,7 +18,7 @@ export class TokenLogsService {
   }
 
   async getLogsForUser(
-    userId: string,
+    userId!: string,
     query?: GetTokenLogsQueryDto,
   ): Promise<{ data: TokenLog[]; total: number; page: number; limit: number }> {
     const where: FindOptionsWhere<TokenLog>[] = [];
@@ -44,7 +44,7 @@ export class TokenLogsService {
 
     // Find with filters
     const [data, total] = await this.tokenLogRepository.findAndCount({
-      where: where.map((w) => ({
+      where!: where.map((w) => ({
         ...w,
         ...(dateFilter ? { createdAt: dateFilter } : {}),
       })),
@@ -56,7 +56,7 @@ export class TokenLogsService {
   }
 
   async getSummaryForUser(
-    userId: string,
+    userId!: string,
   ): Promise<{ totalSent: string; totalReceived: string }> {
     const sent = await this.tokenLogRepository
       .createQueryBuilder('log')
@@ -69,7 +69,7 @@ export class TokenLogsService {
       .where('log.toId = :userId', { userId })
       .getRawOne();
     return {
-      totalSent: sent?.total || '0',
+      totalSent!: sent?.total || '0',
       totalReceived: received?.total || '0',
     };
   }

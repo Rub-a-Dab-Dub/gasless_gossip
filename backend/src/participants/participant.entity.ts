@@ -12,20 +12,20 @@ import { Room } from '../rooms/entities/room.entity';
 @Unique(['roomId', 'pseudonym']) // ensure pseudonym uniqueness within a room
 export class Participant {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  userId: string;
+  userId!: string;
 
   @Column()
-  roomId: string;
+  roomId!: string;
 
   @Column()
-  pseudonym: string;
+  pseudonym!: string;
 
   @ManyToOne(() => User, (user) => user.participants, { onDelete: 'CASCADE' })
-  user: User;
+  user!: User;
 
   @ManyToOne(() => Room, (room) => room.participants, { onDelete: 'CASCADE' })
-  room: Room;
+  room!: Room;
 }

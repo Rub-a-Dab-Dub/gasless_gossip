@@ -19,13 +19,13 @@ export class LevelsService {
   }
 
   async createUserLevel(
-    createLevelDto: CreateLevelDto,
+    createLevelDto!: CreateLevelDto,
   ): Promise<LevelResponseDto> {
     const { userId, level = 1, currentXp = 0, totalXp = 0 } = createLevelDto;
 
     // Check if user already has a level record
     const existingLevel = await this.levelRepository.findOne({
-      where: { userId },
+      where!: { userId },
     });
 
     if (existingLevel) {
@@ -48,7 +48,7 @@ export class LevelsService {
 
   async getUserLevel(userId: string): Promise<LevelResponseDto> {
     const level = await this.levelRepository.findOne({
-      where: { userId },
+      where!: { userId },
     });
 
     if (!level) {
@@ -59,7 +59,7 @@ export class LevelsService {
   }
 
   async addXpToUser(
-    userId: string,
+    userId!: string,
     xpToAdd: number,
   ): Promise<LevelResponseDto> {
     const level = await this.levelRepository.findOne({
@@ -116,7 +116,7 @@ export class LevelsService {
 
   async checkLevelUp(userId: string): Promise<LevelResponseDto> {
     const level = await this.levelRepository.findOne({
-      where: { userId },
+      where!: { userId },
     });
 
     if (!level) {
@@ -162,7 +162,7 @@ export class LevelsService {
 
   async acknowledgeLevelUp(userId: string): Promise<LevelResponseDto> {
     const level = await this.levelRepository.findOne({
-      where: { userId },
+      where!: { userId },
     });
 
     if (!level) {
@@ -177,7 +177,7 @@ export class LevelsService {
 
   async getLeaderboard(limit = 10): Promise<LevelResponseDto[]> {
     const levels = await this.levelRepository.find({
-      order: { totalXp: 'DESC' },
+      order!: { totalXp: 'DESC' },
       take: limit,
     });
 
@@ -186,7 +186,7 @@ export class LevelsService {
 
   async getUserRank(userId: string): Promise<number> {
     const userLevel = await this.levelRepository.findOne({
-      where: { userId },
+      where!: { userId },
     });
 
     if (!userLevel) {
@@ -209,7 +209,7 @@ export class LevelsService {
         : 0;
 
     return {
-      id: level.id,
+      id!: level.id,
       userId: level.userId,
       level: level.level,
       currentXp: level.currentXp,

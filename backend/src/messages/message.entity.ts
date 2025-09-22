@@ -8,17 +8,17 @@ import {
 @Entity('messages')
 export class Message {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  roomId: string;
+  roomId!: string;
 
   @Column()
-  contentHash: string;
+  contentHash!: string;
 
   @Column()
-  senderId: string;
+  senderId!: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }

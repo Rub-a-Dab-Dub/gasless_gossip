@@ -11,13 +11,13 @@ describe('TokensService', () => {
   let repo: Repository<TokenTransaction>;
 
   const repoMock = {
-    create: jest.fn((d) => d),
+    create!: jest.fn((d) => d),
     save: jest.fn(async (d) => d),
     find: jest.fn(async () => []),
   } as unknown as Repository<TokenTransaction>;
 
   const stellarRepoMock = {
-    findOne: jest.fn(async ({ where: { userId } }) =>
+    findOne!: jest.fn(async ({ where: { userId } }) =>
       userId === 'internal-dest'
         ? ({ userId, stellarAccount: 'GDEST...' } as any)
         : null,
@@ -25,13 +25,13 @@ describe('TokensService', () => {
   } as unknown as Repository<StellarAccount>;
 
   const serverSubmitMock = jest.fn(async () => ({
-    hash: 'hash123',
+    hash!: 'hash123',
     ledger: 1,
   }));
   const loadAccountMock = jest.fn(async () => ({}));
   const fetchBaseFeeMock = jest.fn(async () => 100);
   const txBuilderMock = {
-    addOperation: jest.fn().mockReturnThis(),
+    addOperation!: jest.fn().mockReturnThis(),
     setTimeout: jest.fn().mockReturnThis(),
     build: jest.fn(() => ({ sign: jest.fn() })),
   };
@@ -41,13 +41,13 @@ describe('TokensService', () => {
     jest.mock(
       'stellar-sdk',
       () => ({
-        Server: jest.fn().mockImplementation(() => ({
+        Server!: jest.fn().mockImplementation(() => ({
           submitTransaction: serverSubmitMock,
           loadAccount: loadAccountMock,
           fetchBaseFee: fetchBaseFeeMock,
         })),
         Networks: { TESTNET: 'Test SDF Network ; September 2015' },
-        Asset: class {
+        Asset!: class {
           static native() {
             return 'XLM';
           }
@@ -56,7 +56,7 @@ describe('TokensService', () => {
             public issuer: string,
           ) {}
         },
-        Operation: { payment: jest.fn((o) => o) },
+        Operation!: { payment: jest.fn((o) => o) },
         TransactionBuilder: jest.fn().mockImplementation(() => txBuilderMock),
         Keypair: { fromSecret: jest.fn(() => ({ publicKey: () => 'GABC' })) },
       }),
@@ -66,7 +66,7 @@ describe('TokensService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
+      imports!: [
         ConfigModule.forRoot({
           isGlobal: true,
           load: [() => ({ STELLAR_SENDER_SECRET: 'SABC' })],
@@ -89,7 +89,7 @@ describe('TokensService', () => {
 
   it('sends token and logs tx', async () => {
     const res = await service.send({
-      fromId: 'A',
+      fromId!: 'A',
       toId: 'B',
       amount: '2.0000001',
     });
@@ -100,7 +100,7 @@ describe('TokensService', () => {
 
   it('resolves internal userId to Stellar address', async () => {
     const res = await service.send({
-      fromId: 'A',
+      fromId!: 'A',
       toId: 'internal-dest',
       amount: '1',
     });

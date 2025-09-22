@@ -21,7 +21,7 @@ describe('PodcastRoomsService', () => {
   let ipfsService: IPFSService;
 
   const mockRepository = {
-    create: jest.fn(),
+    create!: jest.fn(),
     save: jest.fn(),
     find: jest.fn(),
     findOne: jest.fn(),
@@ -29,19 +29,19 @@ describe('PodcastRoomsService', () => {
   };
 
   const mockStellarService = {
-    generateHash: jest.fn(),
+    generateHash!: jest.fn(),
     storeMetadata: jest.fn(),
     verifyHash: jest.fn(),
   };
 
   const mockIPFSService = {
-    uploadAudio: jest.fn(),
+    uploadAudio!: jest.fn(),
     getAudioUrl: jest.fn(),
     pinContent: jest.fn(),
   };
 
   const mockPodcastRoom: PodcastRoom = {
-    id: '123e4567-e89b-12d3-a456-426614174000',
+    id!: '123e4567-e89b-12d3-a456-426614174000',
     roomId: 'room-123',
     audioHash: 'audio-hash-123',
     creatorId: 'creator-123',
@@ -60,7 +60,7 @@ describe('PodcastRoomsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         PodcastRoomsService,
         {
           provide: getRepositoryToken(PodcastRoom),
@@ -95,7 +95,7 @@ describe('PodcastRoomsService', () => {
 
   describe('create', () => {
     const createDto: CreatePodcastRoomDto = {
-      roomId: 'room-123',
+      roomId!: 'room-123',
       audioHash: 'audio-hash-123',
       creatorId: 'creator-123',
       title: 'Test Podcast',
@@ -116,7 +116,7 @@ describe('PodcastRoomsService', () => {
       const result = await service.create(createDto);
 
       expect(mockRepository.findOne).toHaveBeenCalledWith({
-        where: { roomId: createDto.roomId },
+        where!: { roomId: createDto.roomId },
       });
       expect(mockStellarService.generateHash).toHaveBeenCalledWith(
         createDto.audioHash,
@@ -144,7 +144,7 @@ describe('PodcastRoomsService', () => {
       const result = await service.findAll();
 
       expect(mockRepository.find).toHaveBeenCalledWith({
-        where: { isActive: true },
+        where!: { isActive: true },
         order: { createdAt: 'DESC' },
       });
       expect(result).toEqual(mockRooms);
@@ -158,7 +158,7 @@ describe('PodcastRoomsService', () => {
       const result = await service.findAll(creatorId);
 
       expect(mockRepository.find).toHaveBeenCalledWith({
-        where: { creatorId, isActive: true },
+        where!: { creatorId, isActive: true },
         order: { createdAt: 'DESC' },
       });
       expect(result).toEqual(mockRooms);
@@ -172,7 +172,7 @@ describe('PodcastRoomsService', () => {
       const result = await service.findOne(mockPodcastRoom.id);
 
       expect(mockRepository.findOne).toHaveBeenCalledWith({
-        where: { id: mockPodcastRoom.id, isActive: true },
+        where!: { id: mockPodcastRoom.id, isActive: true },
       });
       expect(result).toEqual(mockPodcastRoom);
     });
@@ -188,7 +188,7 @@ describe('PodcastRoomsService', () => {
 
   describe('update', () => {
     const updateDto: UpdatePodcastRoomDto = {
-      title: 'Updated Title',
+      title!: 'Updated Title',
       description: 'Updated Description',
     };
 

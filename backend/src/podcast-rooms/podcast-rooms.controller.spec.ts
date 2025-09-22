@@ -11,7 +11,7 @@ describe('PodcastRoomsController', () => {
   let service: PodcastRoomsService;
 
   const mockService = {
-    create: jest.fn(),
+    create!: jest.fn(),
     findAll: jest.fn(),
     findOne: jest.fn(),
     findByRoomId: jest.fn(),
@@ -22,7 +22,7 @@ describe('PodcastRoomsController', () => {
   };
 
   const mockPodcastRoom: PodcastRoom = {
-    id: '123e4567-e89b-12d3-a456-426614174000',
+    id!: '123e4567-e89b-12d3-a456-426614174000',
     roomId: 'room-123',
     audioHash: 'audio-hash-123',
     creatorId: 'creator-123',
@@ -41,7 +41,7 @@ describe('PodcastRoomsController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [PodcastRoomsController],
+      controllers!: [PodcastRoomsController],
       providers: [
         {
           provide: PodcastRoomsService,
@@ -65,7 +65,7 @@ describe('PodcastRoomsController', () => {
   describe('create', () => {
     it('should create a podcast room', async () => {
       const createDto: CreatePodcastRoomDto = {
-        roomId: 'room-123',
+        roomId!: 'room-123',
         audioHash: 'audio-hash-123',
         creatorId: 'creator-123',
         title: 'Test Podcast',
@@ -83,7 +83,7 @@ describe('PodcastRoomsController', () => {
       expect(mockService.create).toHaveBeenCalledWith(createDto);
       expect(result).toEqual(
         expect.objectContaining({
-          id: mockPodcastRoom.id,
+          id!: mockPodcastRoom.id,
           roomId: mockPodcastRoom.roomId,
           title: mockPodcastRoom.title,
         }),
@@ -141,7 +141,7 @@ describe('PodcastRoomsController', () => {
   describe('update', () => {
     it('should update a podcast room', async () => {
       const updateDto: UpdatePodcastRoomDto = {
-        title: 'Updated Title',
+        title!: 'Updated Title',
       };
       const updatedRoom = { ...mockPodcastRoom, ...updateDto };
 

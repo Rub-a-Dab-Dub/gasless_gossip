@@ -32,7 +32,7 @@ export class BadgeAnalyticsListener {
     // Implement analytics tracking
     // This could integrate with analytics services like Mixpanel, Amplitude, etc.
     const analyticsData = {
-      event: "badge_awarded",
+      event!: "badge_awarded",
       userId: event.badge.userId,
       badgeType: event.badge.badgeType,
       rarity: event.badge.rarity,
@@ -74,7 +74,7 @@ export class BadgeAnalyticsListener {
   private async trackStellarMinting(event: BadgeMintedEvent) {
     // Track Stellar blockchain interactions
     const stellarData = {
-      event: "badge_token_minted",
+      event!: "badge_token_minted",
       userId: event.userId,
       transactionId: event.transactionId,
       assetCode: event.assetCode,

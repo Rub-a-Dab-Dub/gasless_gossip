@@ -11,7 +11,7 @@ describe('MessagesService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         MessagesService,
         {
           provide: getRepositoryToken(Message),
@@ -30,12 +30,12 @@ describe('MessagesService', () => {
 
   it('should create a message and return it', async () => {
     const dto: CreateMessageDto = {
-      roomId: 'room1',
+      roomId!: 'room1',
       content: 'hello world',
       senderId: 'user1',
     };
     const saved = {
-      id: 'uuid',
+      id!: 'uuid',
       roomId: dto.roomId,
       contentHash: expect.any(String),
       senderId: dto.senderId,
@@ -50,7 +50,7 @@ describe('MessagesService', () => {
   it('should find messages by room', async () => {
     const messages = [
       {
-        id: '1',
+        id!: '1',
         roomId: 'room1',
         contentHash: 'hash1',
         senderId: 'user1',

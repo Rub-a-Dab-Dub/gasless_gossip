@@ -27,7 +27,7 @@ export class GatedRoomsController {
       const gatedRoom =
         await this.gatedRoomsService.createGatedRoom(createGatedRoomDto);
       return {
-        success: true,
+        success!: true,
         data: gatedRoom,
         message: 'Gated room created successfully',
       };
@@ -35,7 +35,7 @@ export class GatedRoomsController {
       this.logger.error(`Error creating gated room: ${error.message}`);
       throw new HttpException(
         {
-          success: false,
+          success!: false,
           message: 'Failed to create gated room',
           error: error.message,
         },
@@ -49,7 +49,7 @@ export class GatedRoomsController {
     try {
       const gatedRooms = await this.gatedRoomsService.findAll();
       return {
-        success: true,
+        success!: true,
         data: gatedRooms,
         count: gatedRooms.length,
       };
@@ -57,7 +57,7 @@ export class GatedRoomsController {
       this.logger.error(`Error fetching gated rooms: ${error.message}`);
       throw new HttpException(
         {
-          success: false,
+          success!: false,
           message: 'Failed to fetch gated rooms',
           error: error.message,
         },
@@ -87,7 +87,7 @@ export class GatedRoomsController {
       this.logger.error(`Error checking access: ${error.message}`);
       throw new HttpException(
         {
-          success: false,
+          success!: false,
           message: 'Failed to check room access',
           error: error.message,
           hasAccess: false,
@@ -104,14 +104,14 @@ export class GatedRoomsController {
     try {
       const gatedRoom = await this.gatedRoomsService.findOne(id);
       return {
-        success: true,
+        success!: true,
         data: gatedRoom,
       };
     } catch (error) {
       this.logger.error(`Error fetching gated room ${id}: ${error.message}`);
       throw new HttpException(
         {
-          success: false,
+          success!: false,
           message: 'Gated room not found',
           error: error.message,
         },
@@ -125,14 +125,14 @@ export class GatedRoomsController {
     try {
       await this.gatedRoomsService.deleteGatedRoom(id);
       return {
-        success: true,
+        success!: true,
         message: 'Gated room deleted successfully',
       };
     } catch (error) {
       this.logger.error(`Error deleting gated room ${id}: ${error.message}`);
       throw new HttpException(
         {
-          success: false,
+          success!: false,
           message: 'Failed to delete gated room',
           error: error.message,
         },

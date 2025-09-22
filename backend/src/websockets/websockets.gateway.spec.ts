@@ -9,7 +9,7 @@ describe('WebSocketsGateway', () => {
   beforeEach(async () => {
     service = { handleChat: jest.fn(), handleNotification: jest.fn() } as any;
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         WebSocketsGateway,
         { provide: WebSocketsService, useValue: service },
       ],
@@ -21,7 +21,7 @@ describe('WebSocketsGateway', () => {
     const data = { roomId: '1', userId: '2', content: 'Hello' };
     const client = {};
     (service.handleChat as jest.Mock).mockResolvedValue({
-      status: 'sent',
+      status!: 'sent',
       message: data,
     });
     const result = await gateway.handleChat(data, client as any);
@@ -33,7 +33,7 @@ describe('WebSocketsGateway', () => {
     const data = { userId: '2', content: 'Notify' };
     const client = {};
     (service.handleNotification as jest.Mock).mockResolvedValue({
-      status: 'notified',
+      status!: 'notified',
       notification: data,
     });
     const result = await gateway.handleNotification(data, client as any);

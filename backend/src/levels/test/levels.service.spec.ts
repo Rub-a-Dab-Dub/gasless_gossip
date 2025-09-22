@@ -13,7 +13,7 @@ describe('LevelsService', () => {
   let eventEmitter: EventEmitter2;
 
   const mockRepository = {
-    create: jest.fn(),
+    create!: jest.fn(),
     save: jest.fn(),
     findOne: jest.fn(),
     find: jest.fn(),
@@ -21,12 +21,12 @@ describe('LevelsService', () => {
   };
 
   const mockEventEmitter = {
-    emit: jest.fn(),
+    emit!: jest.fn(),
   };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         LevelsService,
         {
           provide: getRepositoryToken(Level),
@@ -51,14 +51,14 @@ describe('LevelsService', () => {
   describe('createUserLevel', () => {
     it('should create a new level record for a user', async () => {
       const createLevelDto = {
-        userId: 'test-user-id',
+        userId!: 'test-user-id',
         level: 1,
         currentXp: 0,
         totalXp: 0,
       };
 
       const mockLevel = {
-        id: 'level-id',
+        id!: 'level-id',
         userId: 'test-user-id',
         level: 1,
         currentXp: 0,
@@ -76,7 +76,7 @@ describe('LevelsService', () => {
       const result = await service.createUserLevel(createLevelDto);
 
       expect(mockRepository.findOne).toHaveBeenCalledWith({
-        where: { userId: 'test-user-id' },
+        where!: { userId: 'test-user-id' },
       });
       expect(mockRepository.create).toHaveBeenCalled();
       expect(mockRepository.save).toHaveBeenCalledWith(mockLevel);
@@ -86,7 +86,7 @@ describe('LevelsService', () => {
 
     it('should throw error if user already has a level record', async () => {
       const createLevelDto = {
-        userId: 'test-user-id',
+        userId!: 'test-user-id',
       };
 
       const existingLevel = { id: 'existing-id', userId: 'test-user-id' };
@@ -104,7 +104,7 @@ describe('LevelsService', () => {
       const xpToAdd = 150;
 
       const existingLevel = {
-        id: 'level-id',
+        id!: 'level-id',
         userId,
         level: 1,
         currentXp: 50,
@@ -115,7 +115,7 @@ describe('LevelsService', () => {
 
       const updatedLevel = {
         ...existingLevel,
-        level: 2,
+        level!: 2,
         currentXp: 100,
         totalXp: 200,
         xpThreshold: 250,
@@ -128,7 +128,7 @@ describe('LevelsService', () => {
       const result = await service.addXpToUser(userId, xpToAdd);
 
       expect(mockRepository.findOne).toHaveBeenCalledWith({
-        where: { userId },
+        where!: { userId },
       });
       expect(mockRepository.save).toHaveBeenCalled();
       expect(mockEventEmitter.emit).toHaveBeenCalledWith(
@@ -145,7 +145,7 @@ describe('LevelsService', () => {
       const xpToAdd = 25;
 
       const existingLevel = {
-        id: 'level-id',
+        id!: 'level-id',
         userId,
         level: 1,
         currentXp: 50,
@@ -156,7 +156,7 @@ describe('LevelsService', () => {
 
       const updatedLevel = {
         ...existingLevel,
-        currentXp: 75,
+        currentXp!: 75,
         totalXp: 75,
       };
 
@@ -176,7 +176,7 @@ describe('LevelsService', () => {
     it('should return top users by total XP', async () => {
       const mockLevels = [
         {
-          id: '1',
+          id!: '1',
           userId: 'user-1',
           level: 5,
           totalXp: 1500,
@@ -204,7 +204,7 @@ describe('LevelsService', () => {
       const result = await service.getLeaderboard(10);
 
       expect(mockRepository.find).toHaveBeenCalledWith({
-        order: { totalXp: 'DESC' },
+        order!: { totalXp: 'DESC' },
         take: 10,
       });
       expect(result).toHaveLength(2);

@@ -42,7 +42,7 @@ export class PodcastRoomsController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Create a new podcast room' })
   @ApiResponse({
-    status: 201,
+    status!: 201,
     description: 'Podcast room created successfully',
     type: PodcastRoomResponseDto,
   })
@@ -56,14 +56,14 @@ export class PodcastRoomsController {
     const podcastRoom =
       await this.podcastRoomsService.create(createPodcastRoomDto);
     return plainToClass(PodcastRoomResponseDto, podcastRoom, {
-      excludeExtraneousValues: true,
+      excludeExtraneousValues!: true,
     });
   }
 
   @Get()
   @ApiOperation({ summary: 'Get all podcast rooms' })
   @ApiQuery({
-    name: 'creatorId',
+    name!: 'creatorId',
     required: false,
     description: 'Filter by creator ID',
   })
@@ -78,7 +78,7 @@ export class PodcastRoomsController {
     const podcastRooms = await this.podcastRoomsService.findAll(creatorId);
     return podcastRooms.map((room) =>
       plainToClass(PodcastRoomResponseDto, room, {
-        excludeExtraneousValues: true,
+        excludeExtraneousValues!: true,
       }),
     );
   }
@@ -87,7 +87,7 @@ export class PodcastRoomsController {
   @ApiOperation({ summary: 'Get a podcast room by ID' })
   @ApiParam({ name: 'id', description: 'Podcast room ID' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'Podcast room details',
     type: PodcastRoomResponseDto,
   })
@@ -95,7 +95,7 @@ export class PodcastRoomsController {
   async findOne(@Param('id') id: string): Promise<PodcastRoomResponseDto> {
     const podcastRoom = await this.podcastRoomsService.findOne(id);
     return plainToClass(PodcastRoomResponseDto, podcastRoom, {
-      excludeExtraneousValues: true,
+      excludeExtraneousValues!: true,
     });
   }
 
@@ -103,7 +103,7 @@ export class PodcastRoomsController {
   @ApiOperation({ summary: 'Get a podcast room by room ID' })
   @ApiParam({ name: 'roomId', description: 'Room identifier' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'Podcast room details',
     type: PodcastRoomResponseDto,
   })
@@ -113,7 +113,7 @@ export class PodcastRoomsController {
   ): Promise<PodcastRoomResponseDto> {
     const podcastRoom = await this.podcastRoomsService.findByRoomId(roomId);
     return plainToClass(PodcastRoomResponseDto, podcastRoom, {
-      excludeExtraneousValues: true,
+      excludeExtraneousValues!: true,
     });
   }
 
@@ -133,7 +133,7 @@ export class PodcastRoomsController {
   @ApiOperation({ summary: 'Update a podcast room' })
   @ApiParam({ name: 'id', description: 'Podcast room ID' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'Podcast room updated successfully',
     type: PodcastRoomResponseDto,
   })
@@ -154,7 +154,7 @@ export class PodcastRoomsController {
       userId,
     );
     return plainToClass(PodcastRoomResponseDto, podcastRoom, {
-      excludeExtraneousValues: true,
+      excludeExtraneousValues!: true,
     });
   }
 
@@ -163,7 +163,7 @@ export class PodcastRoomsController {
   @ApiOperation({ summary: 'Delete a podcast room' })
   @ApiParam({ name: 'id', description: 'Podcast room ID' })
   @ApiResponse({
-    status: 204,
+    status!: 204,
     description: 'Podcast room deleted successfully',
   })
   @ApiResponse({ status: 403, description: 'Forbidden - not the creator' })

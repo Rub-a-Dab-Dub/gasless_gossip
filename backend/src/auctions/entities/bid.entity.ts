@@ -10,23 +10,23 @@ import { Auction } from './auction.entity';
 @Entity('bids')
 export class Bid {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  auctionId: string;
+  auctionId!: string;
 
   @Column()
-  bidderId: string;
+  bidderId!: string;
 
   @Column('decimal', { precision: 10, scale: 2 })
-  amount: number;
+  amount!: number;
 
   @Column({ nullable: true })
-  stellarTransactionId: string;
+  stellarTransactionId!: string;
 
   @ManyToOne(() => Auction, (auction) => auction.bids)
-  auction: Auction;
+  auction!: Auction;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }

@@ -7,9 +7,9 @@ import {
 } from 'typeorm';
 
 export interface GateRule {
-  type: 'token' | 'nft';
-  assetCode: string;
-  issuer: string;
+  type!: 'token' | 'nft';
+  assetCode!: string;
+  issuer!: string;
   minAmount?: number;
   requiredNftId?: string;
 }

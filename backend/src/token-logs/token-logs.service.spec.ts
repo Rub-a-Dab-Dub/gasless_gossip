@@ -4,7 +4,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { TokenLog } from './token-log.entity';
 
 const mockTokenLogRepository = {
-  create: jest.fn(),
+  create!: jest.fn(),
   save: jest.fn(),
   find: jest.fn(),
 };
@@ -15,7 +15,7 @@ describe('TokenLogsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         TokenLogsService,
         {
           provide: getRepositoryToken(TokenLog),

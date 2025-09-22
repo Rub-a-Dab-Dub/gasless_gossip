@@ -13,7 +13,7 @@ describe('BadgesService', () => {
     badgeRepo = { create: jest.fn(), save: jest.fn(), find: jest.fn() };
     stellarService = { mintBadgeToken: jest.fn() } as any;
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         BadgesService,
         { provide: getRepositoryToken(Badge), useValue: badgeRepo },
         { provide: StellarService, useValue: stellarService },

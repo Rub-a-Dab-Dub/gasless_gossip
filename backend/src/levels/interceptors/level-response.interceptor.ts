@@ -20,7 +20,7 @@ export class LevelResponseInterceptor implements NestInterceptor {
           return {
             ...levelData,
             // Add computed fields
-            isMaxLevel: levelData.level >= 20,
+            isMaxLevel!: levelData.level >= 20,
             nextLevelExists: levelData.level < 20,
             // Format progress as a more readable string
             progressText: `${levelData.currentXp}/${levelData.xpThreshold} XP (${levelData.progressPercentage}%)`,

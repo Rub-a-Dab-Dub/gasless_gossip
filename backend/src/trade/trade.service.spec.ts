@@ -10,7 +10,7 @@ describe('TradesService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         TradesService,
         { provide: getRepositoryToken(Trade), useClass: Repository },
       ],

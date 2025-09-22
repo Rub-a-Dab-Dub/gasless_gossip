@@ -8,20 +8,20 @@ import {
 @Entity('token_logs')
 export class TokenLog {
   @PrimaryGeneratedColumn()
-  id: number;
+  id!: number;
 
   @Column({ unique: true })
-  txId: string;
+  txId!: string;
 
   @Column()
-  fromId: string;
+  fromId!: string;
 
   @Column()
-  toId: string;
+  toId!: string;
 
   @Column('decimal', { precision: 18, scale: 8 })
-  amount: string;
+  amount!: string;
 
   @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
+  createdAt!: Date;
 }

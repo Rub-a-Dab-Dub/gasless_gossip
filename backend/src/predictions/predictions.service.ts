@@ -37,7 +37,7 @@ export class PredictionsService {
       title,
       description,
       prediction,
-      expiresAt: expirationDate,
+      expiresAt!: expirationDate,
       status: PredictionStatus.ACTIVE,
       outcome: PredictionOutcome.PENDING,
     });
@@ -53,7 +53,7 @@ export class PredictionsService {
 
     // Check if prediction exists and is active
     const prediction = await this.predictionRepository.findOne({
-      where: { id: predictionId },
+      where!: { id: predictionId },
       relations: ['room'],
     });
 
@@ -71,7 +71,7 @@ export class PredictionsService {
 
     // Check if user has already voted
     const existingVote = await this.predictionVoteRepository.findOne({
-      where: { predictionId, userId },
+      where!: { predictionId, userId },
     });
 
     if (existingVote) {
@@ -99,7 +99,7 @@ export class PredictionsService {
 
     // Check if prediction exists
     const prediction = await this.predictionRepository.findOne({
-      where: { id: predictionId },
+      where!: { id: predictionId },
       relations: ['votes'],
     });
 
@@ -149,7 +149,7 @@ export class PredictionsService {
 
   async getPredictionById(id: string): Promise<Prediction> {
     const prediction = await this.predictionRepository.findOne({
-      where: { id },
+      where!: { id },
       relations: ['user', 'room', 'votes', 'votes.user'],
     });
 
@@ -162,7 +162,7 @@ export class PredictionsService {
 
   async getUserPredictions(userId: string): Promise<Prediction[]> {
     return this.predictionRepository.find({
-      where: { userId },
+      where!: { userId },
       relations: ['room', 'votes'],
       order: { createdAt: 'DESC' },
     });
@@ -180,7 +180,7 @@ export class PredictionsService {
       .getRawOne();
 
     await this.predictionRepository.update(predictionId, {
-      voteCount: parseInt(voteCounts.totalVotes) || 0,
+      voteCount!: parseInt(voteCounts.totalVotes) || 0,
       correctVotes: parseInt(voteCounts.correctVotes) || 0,
       incorrectVotes: parseInt(voteCounts.incorrectVotes) || 0,
     });
@@ -194,7 +194,7 @@ export class PredictionsService {
     try {
       // Get all correct votes
       const correctVotes = await this.predictionVoteRepository.find({
-        where: { predictionId: prediction.id, isCorrect: true },
+        where!: { predictionId: prediction.id, isCorrect: true },
         relations: ['user'],
       });
 
@@ -210,7 +210,7 @@ export class PredictionsService {
 
       // Update prediction with reward information
       await queryRunner.manager.update(Prediction, prediction.id, {
-        rewardPool: totalRewardPool,
+        rewardPool!: totalRewardPool,
         rewardPerCorrectVote: baseRewardPerVote,
       });
 
@@ -219,7 +219,7 @@ export class PredictionsService {
         try {
           // Update vote with reward amount
           await queryRunner.manager.update(PredictionVote, vote.id, {
-            rewardAmount: baseRewardPerVote,
+            rewardAmount!: baseRewardPerVote,
           });
 
           // Distribute Stellar tokens

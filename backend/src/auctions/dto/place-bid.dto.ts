@@ -3,13 +3,13 @@ import { Type } from 'class-transformer';
 
 export class PlaceBidDto {
   @IsString()
-  auctionId: string;
+  auctionId!: string;
 
   @IsNumber()
   @Min(0.01)
   @Type(() => Number)
-  amount: number;
+  amount!: number;
 
   @IsString()
-  bidderId: string;
+  bidderId!: string;
 }

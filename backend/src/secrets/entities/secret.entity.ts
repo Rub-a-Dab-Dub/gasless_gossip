@@ -4,21 +4,21 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 @Index(['roomId', 'reactionCount'])
 export class Secret {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
   @Index()
-  roomId: string;
+  roomId!: string;
 
   @Column('text')
-  contentHash: string;
+  contentHash!: string;
 
   @Column({ type: 'integer', default: 0 })
-  reactionCount: number;
+  reactionCount!: number;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

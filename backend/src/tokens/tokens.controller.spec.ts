@@ -6,13 +6,13 @@ describe('TokensController', () => {
   let controller: TokensController;
 
   const serviceMock = {
-    send: jest.fn(async () => ({ hash: 'abc', ledger: 1, successful: true })),
+    send!: jest.fn(async () => ({ hash: 'abc', ledger: 1, successful: true })),
     history: jest.fn(async () => []),
   } as unknown as TokensService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [TokensController],
+      controllers!: [TokensController],
       providers: [{ provide: TokensService, useValue: serviceMock }],
     }).compile();
 

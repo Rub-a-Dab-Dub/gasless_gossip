@@ -21,7 +21,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto): Promise<User> {
     // Check for existing username or email
     const existingUser = await this.userRepository.findOne({
-      where: [
+      where!: [
         { username: createUserDto.username },
         { email: createUserDto.email },
       ],
@@ -42,14 +42,14 @@ export class UsersService {
 
   async findAll(): Promise<User[]> {
     return this.userRepository.find({
-      where: { isActive: true },
+      where!: { isActive: true },
       select: ['id', 'username', 'pseudonym', 'createdAt'],
     });
   }
 
   async findOne(id: string): Promise<User> {
     const user = await this.userRepository.findOne({
-      where: { id, isActive: true },
+      where!: { id, isActive: true },
     });
 
     if (!user) {
@@ -65,7 +65,7 @@ export class UsersService {
     // Check for username/email conflicts
     if (updateUserDto.username || updateUserDto.email) {
       const existingUser = await this.userRepository.findOne({
-        where: [
+        where!: [
           { username: updateUserDto.username },
           { email: updateUserDto.email },
         ],
@@ -92,14 +92,14 @@ export class UsersService {
   }
 
   async linkStellarAccount(
-    userId: string,
+    userId!: string,
     stellarAccountId: string,
   ): Promise<User> {
     this.validateStellarAccount(stellarAccountId);
 
     // Check if Stellar account is already linked
     const existingLink = await this.userRepository.findOne({
-      where: { stellarAccountId },
+      where!: { stellarAccountId },
     });
 
     if (existingLink && existingLink.id !== userId) {

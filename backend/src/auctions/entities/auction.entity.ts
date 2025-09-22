@@ -11,32 +11,32 @@ import { Bid } from './bid.entity';
 @Entity('auctions')
 export class Auction {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  giftId: string;
+  giftId!: string;
 
   @Column('decimal', { precision: 10, scale: 2, default: 0 })
-  highestBid: number;
+  highestBid!: number;
 
   @Column()
-  endTime: Date;
+  endTime!: Date;
 
   @Column({ default: 'ACTIVE' })
-  status: 'ACTIVE' | 'ENDED' | 'CANCELLED';
+  status!: 'ACTIVE' | 'ENDED' | 'CANCELLED';
 
   @Column({ nullable: true })
-  winnerId: string;
+  winnerId!: string;
 
   @Column({ nullable: true })
-  stellarEscrowAccount: string;
+  stellarEscrowAccount!: string;
 
   @OneToMany(() => Bid, (bid) => bid.auction)
-  bids: Bid[];
+  bids!: Bid[];
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;
+  updatedAt!: Date;
 }

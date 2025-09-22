@@ -13,7 +13,7 @@ describe('PredictionsModule Integration', () => {
   let controller: PredictionsController;
 
   const mockPredictionRepository = {
-    create: jest.fn(),
+    create!: jest.fn(),
     save: jest.fn(),
     findOne: jest.fn(),
     find: jest.fn(),
@@ -22,7 +22,7 @@ describe('PredictionsModule Integration', () => {
   };
 
   const mockPredictionVoteRepository = {
-    create: jest.fn(),
+    create!: jest.fn(),
     save: jest.fn(),
     findOne: jest.fn(),
     find: jest.fn(),
@@ -30,12 +30,12 @@ describe('PredictionsModule Integration', () => {
   };
 
   const mockStellarService = {
-    distributeReward: jest.fn(),
+    distributeReward!: jest.fn(),
   };
 
   beforeEach(async () => {
     module = await Test.createTestingModule({
-      imports: [PredictionsModule],
+      imports!: [PredictionsModule],
     })
       .overrideProvider(getRepositoryToken(Prediction))
       .useValue(mockPredictionRepository)

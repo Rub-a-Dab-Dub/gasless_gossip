@@ -22,7 +22,7 @@ export class AvatarsService {
   ) {}
 
   async mintAvatar(
-    userId: string,
+    userId!: string,
     createAvatarDto: CreateAvatarDto,
     userStellarPublicKey: string,
   ): Promise<AvatarResponseDto> {
@@ -52,7 +52,7 @@ export class AvatarsService {
       // Save to database
       const avatar = this.avatarRepository.create({
         userId,
-        metadata: createAvatarDto,
+        metadata!: createAvatarDto,
         txId,
         stellarAssetCode: assetCode,
         stellarIssuer: issuer,
@@ -71,7 +71,7 @@ export class AvatarsService {
 
   async getUserAvatar(userId: string): Promise<AvatarResponseDto> {
     const avatar = await this.avatarRepository.findOne({
-      where: { userId, isActive: true },
+      where!: { userId, isActive: true },
     });
 
     if (!avatar) {
@@ -83,7 +83,7 @@ export class AvatarsService {
 
   async getAllAvatars(): Promise<AvatarResponseDto[]> {
     const avatars = await this.avatarRepository.find({
-      where: { isActive: true },
+      where!: { isActive: true },
       order: { createdAt: 'DESC' },
     });
 
@@ -103,7 +103,7 @@ export class AvatarsService {
 
   private mapToResponseDto(avatar: Avatar): AvatarResponseDto {
     return {
-      id: avatar.id,
+      id!: avatar.id,
       userId: avatar.userId,
       metadata: avatar.metadata,
       txId: avatar.txId,

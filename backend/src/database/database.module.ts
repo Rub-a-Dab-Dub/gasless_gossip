@@ -3,7 +3,7 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [
+  imports!: [
     ConfigModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -15,7 +15,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         const dbType = configService.get<string>('DB_TYPE', 'postgres');
         if (dbType === 'sqlite') {
           return {
-            type: 'sqlite',
+            type!: 'sqlite',
             database: configService.get<string>('SQLITE_DB_PATH', 'dev.sqlite'),
             autoLoadEntities: true,
             synchronize: true,

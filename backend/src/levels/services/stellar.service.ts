@@ -6,20 +6,20 @@ import type { LevelUpEvent } from '../events/level-up.event';
 import { BadgeUnlockedEvent } from '../events/badge-unlocked.event';
 
 export interface StellarBadgeContract {
-  contractAddress: string;
-  networkPassphrase: string;
-  sourceAccount: string;
+  contractAddress!: string;
+  networkPassphrase!: string;
+  sourceAccount!: string;
 }
 
 export interface BadgeUnlockTransaction {
-  userId: string;
-  stellarAccountId: string;
-  badgeId: string;
-  level: number;
+  userId!: string;
+  stellarAccountId!: string;
+  badgeId!: string;
+  level!: number;
   transactionHash?: string;
-  status: 'pending' | 'success' | 'failed';
+  status!: 'pending' | 'success' | 'failed';
   error?: string;
-  createdAt: Date;
+  createdAt!: Date;
   completedAt?: Date;
 }
 
@@ -33,13 +33,11 @@ export class StellarService {
     private readonly eventEmitter: EventEmitter2,
   ) {
     this.contractConfig = {
-      contractAddress:
-        this.configService.get<string>('STELLAR_BADGE_CONTRACT_ADDRESS') || '',
+      contractAddress!: this.configService.get<string>('STELLAR_BADGE_CONTRACT_ADDRESS') || '',
       networkPassphrase:
         this.configService.get<string>('STELLAR_NETWORK_PASSPHRASE') ||
         'Test SDF Network ; September 2015',
-      sourceAccount:
-        this.configService.get<string>('STELLAR_SOURCE_ACCOUNT') || '',
+      sourceAccount!: this.configService.get<string>('STELLAR_SOURCE_ACCOUNT') || '',
     };
   }
 
@@ -82,7 +80,7 @@ export class StellarService {
   }
 
   async unlockBadgeOnStellar(
-    userId: string,
+    userId!: string,
     stellarAccountId: string,
     badgeId: string,
     level: number,
@@ -148,7 +146,7 @@ export class StellarService {
   }
 
   private async submitBadgeUnlockTransaction(
-    stellarAccountId: string,
+    stellarAccountId!: string,
     badgeId: string,
     level: number,
   ): Promise<string> {
@@ -173,7 +171,7 @@ export class StellarService {
     
     // Create the transaction
     const transaction = new TransactionBuilder(sourceAccount, {
-      fee: await server.fetchBaseFee(),
+      fee!: await server.fetchBaseFee(),
       networkPassphrase: this.contractConfig.networkPassphrase,
     })
     .addOperation(
@@ -224,7 +222,7 @@ export class StellarService {
   }
 
   async getBadgeUnlockStatus(
-    userId: string,
+    userId!: string,
     badgeId: string,
   ): Promise<BadgeUnlockTransaction | null> {
     // This would query your database for the badge unlock transaction status
@@ -244,7 +242,7 @@ export class StellarService {
   }
 
   async retryFailedBadgeUnlock(
-    transactionId: string,
+    transactionId!: string,
   ): Promise<BadgeUnlockTransaction> {
     // This would retry a failed badge unlock transaction
     // Implementation would load the transaction, retry the Stellar operation,
@@ -254,7 +252,7 @@ export class StellarService {
   }
 
   async validateBadgeOwnership(
-    stellarAccountId: string,
+    stellarAccountId!: string,
     badgeId: string,
   ): Promise<boolean> {
     // This would query the Stellar network to verify if the user owns the badge

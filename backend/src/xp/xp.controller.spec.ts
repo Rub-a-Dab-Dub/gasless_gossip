@@ -9,13 +9,13 @@ describe('XpController', () => {
 
   beforeEach(async () => {
     const mockXpService = {
-      getXpForUser: jest.fn().mockResolvedValue(42),
+      getXpForUser!: jest.fn().mockResolvedValue(42),
       addXp: jest.fn().mockResolvedValue({ userId: 'u-1', xpValue: 50 }),
       handleEvent: jest.fn().mockResolvedValue({ userId: 'u-1', xpValue: 5 }),
     };
 
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [XpController],
+      controllers!: [XpController],
       providers: [
         { provide: XpService, useValue: mockXpService },
         {

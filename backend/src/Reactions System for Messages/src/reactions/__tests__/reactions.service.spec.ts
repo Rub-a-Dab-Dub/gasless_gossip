@@ -6,7 +6,7 @@ import { ReactionsService } from '../reactions.service';
 import { Reaction, ReactionType } from '../entities/reaction.entity';
 
 const mockRepository = {
-  findOne: jest.fn(),
+  findOne!: jest.fn(),
   find: jest.fn(),
   create: jest.fn(),
   save: jest.fn(),
@@ -21,7 +21,7 @@ describe('ReactionsService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
+      providers!: [
         ReactionsService,
         {
           provide: getRepositoryToken(Reaction),
@@ -41,7 +41,7 @@ describe('ReactionsService', () => {
   describe('createReaction', () => {
     it('should create a new reaction', async () => {
       const createReactionDto = {
-        messageId: 'message-123',
+        messageId!: 'message-123',
         type: ReactionType.LIKE,
       };
       const userId = 'user-123';
@@ -49,7 +49,7 @@ describe('ReactionsService', () => {
       mockRepository.findOne.mockResolvedValue(null);
       mockRepository.create.mockReturnValue({ ...createReactionDto, userId });
       mockRepository.save.mockResolvedValue({
-        id: 'reaction-123',
+        id!: 'reaction-123',
         ...createReactionDto,
         userId,
         createdAt: new Date(),
@@ -58,20 +58,20 @@ describe('ReactionsService', () => {
       const result = await service.createReaction(createReactionDto, userId);
 
       expect(mockRepository.findOne).toHaveBeenCalledWith({
-        where: { messageId: 'message-123', userId: 'user-123' },
+        where!: { messageId: 'message-123', userId: 'user-123' },
       });
       expect(result.type).toBe(ReactionType.LIKE);
     });
 
     it('should throw ConflictException for duplicate reaction of same type', async () => {
       const createReactionDto = {
-        messageId: 'message-123',
+        messageId!: 'message-123',
         type: ReactionType.LIKE,
       };
       const userId = 'user-123';
 
       mockRepository.findOne.mockResolvedValue({
-        id: 'existing-123',
+        id!: 'existing-123',
         type: ReactionType.LIKE,
         messageId: 'message-123',
         userId,

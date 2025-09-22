@@ -11,7 +11,7 @@ describe('PredictionsController', () => {
   let service: PredictionsService;
 
   const mockPredictionsService = {
-    createPrediction: jest.fn(),
+    createPrediction!: jest.fn(),
     voteOnPrediction: jest.fn(),
     resolvePrediction: jest.fn(),
     getPredictionsByRoom: jest.fn(),
@@ -21,7 +21,7 @@ describe('PredictionsController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [PredictionsController],
+      controllers!: [PredictionsController],
       providers: [
         {
           provide: PredictionsService,
@@ -49,14 +49,14 @@ describe('PredictionsController', () => {
     it('should create a prediction', async () => {
       const userId = 'user-123';
       const createPredictionDto: CreatePredictionDto = {
-        roomId: 'room-123',
+        roomId!: 'room-123',
         title: 'Test Prediction',
         prediction: 'This will happen',
         expiresAt: '2024-12-31T23:59:59Z',
       };
 
       const mockPrediction = {
-        id: 'prediction-123',
+        id!: 'prediction-123',
         ...createPredictionDto,
         userId,
         status: 'active',
@@ -80,12 +80,12 @@ describe('PredictionsController', () => {
     it('should vote on a prediction', async () => {
       const userId = 'user-123';
       const votePredictionDto: VotePredictionDto = {
-        predictionId: 'prediction-123',
+        predictionId!: 'prediction-123',
         isCorrect: true,
       };
 
       const mockVote = {
-        id: 'vote-123',
+        id!: 'vote-123',
         ...votePredictionDto,
         userId,
         createdAt: new Date(),
@@ -107,12 +107,12 @@ describe('PredictionsController', () => {
     it('should resolve a prediction', async () => {
       const userId = 'user-123';
       const resolvePredictionDto: ResolvePredictionDto = {
-        predictionId: 'prediction-123',
+        predictionId!: 'prediction-123',
         isCorrect: true,
       };
 
       const mockResolvedPrediction = {
-        id: 'prediction-123',
+        id!: 'prediction-123',
         userId,
         status: 'resolved',
         outcome: 'correct',
@@ -137,7 +137,7 @@ describe('PredictionsController', () => {
       const roomId = 'room-123';
       const mockPredictions = [
         {
-          id: 'prediction-1',
+          id!: 'prediction-1',
           roomId,
           title: 'Test Prediction 1',
           status: 'active',
@@ -163,7 +163,7 @@ describe('PredictionsController', () => {
     it('should get prediction by id', async () => {
       const predictionId = 'prediction-123';
       const mockPrediction = {
-        id: predictionId,
+        id!: predictionId,
         title: 'Test Prediction',
         user: { id: 'user-123' },
         room: { id: 'room-123' },
@@ -184,7 +184,7 @@ describe('PredictionsController', () => {
       const userId = 'user-123';
       const mockUserPredictions = [
         {
-          id: 'prediction-1',
+          id!: 'prediction-1',
           userId,
           title: 'User Prediction 1',
         },

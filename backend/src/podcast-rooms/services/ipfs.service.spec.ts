@@ -7,7 +7,7 @@ describe('IPFSService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [IPFSService],
+      providers!: [IPFSService],
     }).compile();
 
     service = module.get<IPFSService>(IPFSService);

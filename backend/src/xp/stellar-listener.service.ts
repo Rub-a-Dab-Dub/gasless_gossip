@@ -29,7 +29,7 @@ export class StellarListenerService implements OnModuleInit {
         .payments()
         .cursor('now')
         .stream({
-          onmessage: async (payment: any) => {
+          onmessage!: async (payment: any) => {
             try {
               // For native payments or token transfers
               const type = payment.type; // e.g., "payment"
@@ -41,7 +41,7 @@ export class StellarListenerService implements OnModuleInit {
               // Map Stellar payment types to our xp types
               // Here we treat any payment as 'token_send'
               const xpEvent = {
-                eventId: `payment:${eventId}`,
+                eventId!: `payment:${eventId}`,
                 type: 'token_send',
                 userId: from,
                 data: payment,
@@ -52,7 +52,7 @@ export class StellarListenerService implements OnModuleInit {
               this.logger.error('Error processing payment event', err as Error);
             }
           },
-          onerror: (err: any) => {
+          onerror!: (err: any) => {
             this.logger.error('Stellar payment stream error', err);
           },
         });
@@ -62,14 +62,14 @@ export class StellarListenerService implements OnModuleInit {
         .transactions()
         .cursor('now')
         .stream({
-          onmessage: async (tx: any) => {
+          onmessage!: async (tx: any) => {
             try {
               // If transactions contain manage_data or memo that indicates a message
               const eventId = tx.id || tx.hash || tx.paging_token;
               const memo = tx.memo;
               if (memo) {
                 const xpEvent = {
-                  eventId: `tx:${eventId}`,
+                  eventId!: `tx:${eventId}`,
                   type: 'message',
                   userId: tx.source_account,
                   data: { memo },
@@ -83,7 +83,7 @@ export class StellarListenerService implements OnModuleInit {
               );
             }
           },
-          onerror: (err: any) => {
+          onerror!: (err: any) => {
             this.logger.error('Stellar transaction stream error', err);
           },
         });

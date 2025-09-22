@@ -50,7 +50,7 @@ export class ChatGateway
         );
         if (!isMember) {
           client.emit('error', {
-            message: 'User is not a member of this room',
+            message!: 'User is not a member of this room',
           });
           return;
         }
@@ -61,7 +61,7 @@ export class ChatGateway
 
       // Notify room about new connection
       client.to(payload.room).emit('user_connected', {
-        userId: payload.userId,
+        userId!: payload.userId,
         socketId: client.id,
       });
     } catch (error) {
@@ -80,7 +80,7 @@ export class ChatGateway
 
     // Notify room about user leaving
     client.to(payload.room).emit('user_disconnected', {
-      userId: payload.userId,
+      userId!: payload.userId,
       socketId: client.id,
     });
   }
@@ -105,7 +105,7 @@ export class ChatGateway
       console.log('📩 Message received from client:', payload.message);
       this.server.to(payload.room).emit('message', {
         ...payload.message,
-        userId: payload.userId,
+        userId!: payload.userId,
         timestamp: new Date().toISOString(),
       });
     } catch (error) {
@@ -118,7 +118,7 @@ export class ChatGateway
     this.server.to(roomId).emit('member_joined', {
       roomId,
       userId,
-      timestamp: new Date().toISOString(),
+      timestamp!: new Date().toISOString(),
     });
   }
 
@@ -126,12 +126,12 @@ export class ChatGateway
     this.server.to(roomId).emit('member_left', {
       roomId,
       userId,
-      timestamp: new Date().toISOString(),
+      timestamp!: new Date().toISOString(),
     });
   }
 
   private async isUserMemberOfRoom(
-    userId: string,
+    userId!: string,
     roomId: string,
   ): Promise<boolean> {
     try {

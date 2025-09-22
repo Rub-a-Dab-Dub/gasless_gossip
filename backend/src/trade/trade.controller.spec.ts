@@ -7,7 +7,7 @@ describe('TradeController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [TradeController],
+      controllers!: [TradeController],
       providers: [TradeService],
     }).compile();
 

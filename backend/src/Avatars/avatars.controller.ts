@@ -36,7 +36,7 @@ export class AvatarsController {
   @ApiBearerAuth()
   @ApiBody({ type: CreateAvatarDto })
   @ApiResponse({
-    status: 201,
+    status!: 201,
     description: 'Avatar successfully minted',
     type: AvatarResponseDto,
   })
@@ -70,7 +70,7 @@ export class AvatarsController {
   @Get(':userId')
   @ApiOperation({ summary: 'Get avatar by user ID' })
   @ApiParam({
-    name: 'userId',
+    name!: 'userId',
     description: 'User UUID',
     type: 'string',
     format: 'uuid',
@@ -93,7 +93,7 @@ export class AvatarsController {
   @Get()
   @ApiOperation({ summary: 'Get all avatars' })
   @ApiResponse({
-    status: 200,
+    status!: 200,
     description: 'List of all avatars',
     type: [AvatarResponseDto],
   })

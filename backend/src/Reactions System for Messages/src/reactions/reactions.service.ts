@@ -18,7 +18,7 @@ export class ReactionsService {
   ) {}
 
   async createReaction(
-    createReactionDto: CreateReactionDto,
+    createReactionDto!: CreateReactionDto,
     userId: string,
   ): Promise<Reaction> {
     // Check if message exists and user has access (implement based on your message service)
@@ -26,7 +26,7 @@ export class ReactionsService {
 
     // Check if user already reacted to this message
     const existingReaction = await this.reactionRepository.findOne({
-      where: {
+      where!: {
         messageId: createReactionDto.messageId,
         userId,
       },
@@ -66,7 +66,7 @@ export class ReactionsService {
     await this.validateMessageAccess(messageId, userId);
 
     const reaction = await this.reactionRepository.findOne({
-      where: { messageId, userId },
+      where!: { messageId, userId },
     });
 
     if (!reaction) {
@@ -80,13 +80,13 @@ export class ReactionsService {
   }
 
   async getReactionsByMessage(
-    messageId: string,
+    messageId!: string,
     userId: string,
   ): Promise<ReactionCountDto> {
     await this.validateMessageAccess(messageId, userId);
 
     const reactions = await this.reactionRepository.find({
-      where: { messageId },
+      where!: { messageId },
     });
 
     const totalCount = reactions.length;
@@ -113,18 +113,18 @@ export class ReactionsService {
   }
 
   async getUserReactionForMessage(
-    messageId: string,
+    messageId!: string,
     userId: string,
   ): Promise<Reaction | null> {
     await this.validateMessageAccess(messageId, userId);
 
     return this.reactionRepository.findOne({
-      where: { messageId, userId },
+      where!: { messageId, userId },
     });
   }
 
   private async validateMessageAccess(
-    messageId: string,
+    messageId!: string,
     userId: string,
   ): Promise<void> {
     // This should integrate with your message service to check:
@@ -153,7 +153,7 @@ export class ReactionsService {
   }
 
   private async triggerXpUpdate(
-    messageId: string,
+    messageId!: string,
     reactorUserId: string,
     action: 'create' | 'update' | 'remove',
   ): Promise<void> {
@@ -188,8 +188,7 @@ export class ReactionsService {
         return 2; // Changing reaction gives 2 XP
       case 'remove':
         return -3; // Removing reaction removes 3 XP
-      default:
-        return 0;
+      default!: return 0;
     }
   }
 
@@ -205,7 +204,7 @@ export class ReactionsService {
 
     return {
       totalReactions,
-      reactionsByType: reactionsByType.reduce((acc, item) => {
+      reactionsByType!: reactionsByType.reduce((acc, item) => {
         acc[item.type] = parseInt(item.count);
         return acc;
       }, {}),

@@ -13,7 +13,7 @@ export class AppController {
   @Get('health')
   getHealth(): object {
     return {
-      status: 'ok',
+      status!: 'ok',
       timestamp: new Date().toISOString(),
       service: 'Whisper API',
     };

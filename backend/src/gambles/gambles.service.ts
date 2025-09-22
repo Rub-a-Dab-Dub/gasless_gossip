@@ -18,7 +18,7 @@ export class GamblesService {
 
     if (gamble) {
       gamble.bets.push({
-        userId: dto.userId,
+        userId!: dto.userId,
         amount: dto.amount,
         choice: dto.choice,
         txId: dto.txId,
@@ -27,7 +27,7 @@ export class GamblesService {
     }
 
     const newGamble = this.gambleRepo.create({
-      gossipId: dto.gossipId,
+      gossipId!: dto.gossipId,
       bets: [
         {
           userId: dto.userId,

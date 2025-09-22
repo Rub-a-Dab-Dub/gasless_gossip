@@ -15,7 +15,7 @@ export class Hook {
   eventType!: string;
 
   @Column('jsonb')
-  data: any;
+  data!: any;
 
   @CreateDateColumn()
   createdAt!: Date;

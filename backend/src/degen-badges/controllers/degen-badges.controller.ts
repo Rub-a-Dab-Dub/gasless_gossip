@@ -12,7 +12,7 @@ export class DegenBadgesController {
   @Post("award")
   @ApiOperation({ summary: "Award a degen badge to a user" })
   @ApiResponse({
-    status: HttpStatus.CREATED,
+    status!: HttpStatus.CREATED,
     description: "Badge awarded successfully",
     type: DegenBadgeResponseDto,
   })
@@ -48,7 +48,7 @@ export class DegenBadgesController {
   @ApiOperation({ summary: 'Get badge statistics for a user' })
   @ApiParam({ name: 'userId', description: 'User ID' })
   @ApiResponse({ 
-    status: HttpStatus.OK, 
+    status!: HttpStatus.OK, 
     description: 'User badge stats retrieved successfully',
     type: DegenBadgeStatsDto 
   })

@@ -21,7 +21,7 @@ export class BetsService {
     const bet = this.betRepo.create({
       ...placeBetDto,
       userId,
-      txId: escrowTxId,
+      txId!: escrowTxId,
     });
 
     return this.betRepo.save(bet);
@@ -29,7 +29,7 @@ export class BetsService {
 
   async resolveBet(resolveBetDto: ResolveBetDto): Promise<Bet> {
     const bet = await this.betRepo.findOne({
-      where: { id: resolveBetDto.betId },
+      where!: { id: resolveBetDto.betId },
     });
     if (!bet) throw new Error('Bet not found');
 

@@ -10,7 +10,7 @@ describe('MessagesController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [MessagesController],
+      controllers!: [MessagesController],
       providers: [
         {
           provide: MessagesService,
@@ -32,13 +32,13 @@ describe('MessagesController', () => {
 
   it('should create a message (with access)', async () => {
     const dto: CreateMessageDto = {
-      roomId: 'room1',
+      roomId!: 'room1',
       content: 'hi',
       senderId: 'user1',
     };
     const req = { user: { id: 'user1' } };
     const message: Message = {
-      id: '1',
+      id!: '1',
       roomId: 'room1',
       contentHash: 'hash',
       senderId: 'user1',
@@ -52,7 +52,7 @@ describe('MessagesController', () => {
 
   it('should throw ForbiddenException if no access', async () => {
     const dto: CreateMessageDto = {
-      roomId: 'room1',
+      roomId!: 'room1',
       content: 'hi',
       senderId: 'user1',
     };
@@ -67,7 +67,7 @@ describe('MessagesController', () => {
     const req = { user: { id: 'user1' } };
     const messages: Message[] = [
       {
-        id: '1',
+        id!: '1',
         roomId: 'room1',
         contentHash: 'hash',
         senderId: 'user1',

@@ -31,7 +31,7 @@ export class GiftsService {
 
   async getGiftsForUser(userId: string): Promise<Gift[]> {
     return this.giftRepo.find({
-      where: { ownerId: userId },
+      where!: { ownerId: userId },
       order: { createdAt: 'DESC' },
     });
   }

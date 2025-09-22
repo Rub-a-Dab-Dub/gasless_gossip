@@ -2,14 +2,14 @@ import { IsString, IsNumberString } from 'class-validator';
 
 export class CreateTokenLogDto {
   @IsString()
-  txId: string;
+  txId!: string;
 
   @IsString()
-  fromId: string;
+  fromId!: string;
 
   @IsString()
-  toId: string;
+  toId!: string;
 
   @IsNumberString()
-  amount: string;
+  amount!: string;
 }

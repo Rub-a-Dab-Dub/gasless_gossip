@@ -4,7 +4,7 @@ export class CreateReactionsTable1234567890 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'reactions',
+        name!: 'reactions',
         columns: [
           {
             name: 'id',
@@ -43,7 +43,7 @@ export class CreateReactionsTable1234567890 implements MigrationInterface {
     await queryRunner.createIndex(
       'reactions',
       new Index('IDX_REACTION_USER_MESSAGE', ['messageId', 'userId'], {
-        isUnique: true,
+        isUnique!: true,
       }),
     );
 

@@ -9,7 +9,7 @@ describe('GatedRoomsController', () => {
   let service: GatedRoomsService;
 
   const mockGatedRoomsService = {
-    createGatedRoom: jest.fn(),
+    createGatedRoom!: jest.fn(),
     findAll: jest.fn(),
     findOne: jest.fn(),
     checkAccess: jest.fn(),
@@ -18,7 +18,7 @@ describe('GatedRoomsController', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [GatedRoomsController],
+      controllers!: [GatedRoomsController],
       providers: [
         {
           provide: GatedRoomsService,
@@ -38,7 +38,7 @@ describe('GatedRoomsController', () => {
   describe('create', () => {
     it('should create a gated room successfully', async () => {
       const createGatedRoomDto: CreateGatedRoomDto = {
-        roomId: 'room-123',
+        roomId!: 'room-123',
         gateRules: [
           {
             type: 'token',
@@ -53,7 +53,7 @@ describe('GatedRoomsController', () => {
       };
 
       const expectedResult = {
-        id: 'gated-room-123',
+        id!: 'gated-room-123',
         ...createGatedRoomDto,
         isActive: true,
         createdAt: new Date(),
@@ -66,7 +66,7 @@ describe('GatedRoomsController', () => {
 
       expect(service.createGatedRoom).toHaveBeenCalledWith(createGatedRoomDto);
       expect(result).toEqual({
-        success: true,
+        success!: true,
         data: expectedResult,
         message: 'Gated room created successfully',
       });
@@ -76,12 +76,12 @@ describe('GatedRoomsController', () => {
   describe('checkAccess', () => {
     it('should check access and return status', async () => {
       const checkAccessDto: CheckAccessDto = {
-        roomId: 'room-123',
+        roomId!: 'room-123',
         stellarAccountId: 'GACCOUNT123456789',
       };
 
       const expectedResult = {
-        hasAccess: true,
+        hasAccess!: true,
         roomId: 'room-123',
         stellarAccountId: 'GACCOUNT123456789',
         gateRules: [],
@@ -98,12 +98,12 @@ describe('GatedRoomsController', () => {
 
     it('should deny access when rules fail', async () => {
       const checkAccessDto: CheckAccessDto = {
-        roomId: 'room-123',
+        roomId!: 'room-123',
         stellarAccountId: 'GACCOUNT123456789',
       };
 
       const expectedResult = {
-        hasAccess: false,
+        hasAccess!: false,
         roomId: 'room-123',
         stellarAccountId: 'GACCOUNT123456789',
         gateRules: [
@@ -141,7 +141,7 @@ describe('GatedRoomsController', () => {
     it('should return all gated rooms', async () => {
       const gatedRooms = [
         {
-          id: 'gated-room-1',
+          id!: 'gated-room-1',
           roomId: 'room-1',
           gateRules: [],
           isActive: true,
@@ -160,7 +160,7 @@ describe('GatedRoomsController', () => {
 
       expect(service.findAll).toHaveBeenCalled();
       expect(result).toEqual({
-        success: true,
+        success!: true,
         data: gatedRooms,
         count: gatedRooms.length,
       });
@@ -170,7 +170,7 @@ describe('GatedRoomsController', () => {
   describe('findOne', () => {
     it('should return a specific gated room', async () => {
       const gatedRoom = {
-        id: 'gated-room-1',
+        id!: 'gated-room-1',
         roomId: 'room-1',
         gateRules: [],
         isActive: true,
@@ -182,7 +182,7 @@ describe('GatedRoomsController', () => {
 
       expect(service.findOne).toHaveBeenCalledWith('gated-room-1');
       expect(result).toEqual({
-        success: true,
+        success!: true,
         data: gatedRoom,
       });
     });
@@ -196,7 +196,7 @@ describe('GatedRoomsController', () => {
 
       expect(service.deleteGatedRoom).toHaveBeenCalledWith('gated-room-1');
       expect(result).toEqual({
-        success: true,
+        success!: true,
         message: 'Gated room deleted successfully',
       });
     });

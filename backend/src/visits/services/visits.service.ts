@@ -21,7 +21,7 @@ export class VisitsService {
       // Check for duplicate visits within the last hour
       const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000)
       const existingVisit = await this.visitRepository.findOne({
-        where: {
+        where!: {
           roomId: createVisitDto.roomId,
           userId: createVisitDto.userId,
           createdAt: Between(oneHourAgo, new Date()),

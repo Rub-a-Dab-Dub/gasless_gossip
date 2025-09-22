@@ -4,17 +4,17 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeor
 @Entity()
 export class Gamble {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column()
-  gossipId: string;
+  gossipId!: string;
 
   @Column('jsonb', { default: [] })
-  bets: { userId: string; amount: number; choice: 'truth' | 'fake'; txId: string }[];
+  bets!: { userId: string; amount: number; choice: 'truth' | 'fake'; txId: string }[];
 
   @Column({ nullable: true })
-  resolvedChoice: 'truth' | 'fake';
+  resolvedChoice!: 'truth' | 'fake';
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 }

@@ -1,6 +1,6 @@
 export interface XpThresholdConfig {
-  level: number;
-  xpRequired: number;
+  level!: number;
+  xpRequired!: number;
   badgeUnlocked?: string;
 }
 

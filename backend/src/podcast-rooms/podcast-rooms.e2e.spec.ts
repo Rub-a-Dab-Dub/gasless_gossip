@@ -10,7 +10,7 @@ describe('PodcastRoomsController (e2e)', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [
+      imports!: [
         TypeOrmModule.forRoot({
           type: 'sqlite',
           database: ':memory:',
@@ -33,7 +33,7 @@ describe('PodcastRoomsController (e2e)', () => {
   describe('/podcast-rooms (POST)', () => {
     it('should create a new podcast room', () => {
       const createDto = {
-        roomId: 'room-123',
+        roomId!: 'room-123',
         audioHash: 'audio-hash-123',
         creatorId: 'creator-123',
         title: 'Test Podcast',
@@ -57,7 +57,7 @@ describe('PodcastRoomsController (e2e)', () => {
 
     it('should return 400 for invalid data', () => {
       const invalidDto = {
-        roomId: '', // Invalid: empty string
+        roomId!: '', // Invalid: empty string
         audioHash: 'audio-hash-123',
         creatorId: 'creator-123',
         title: 'Test Podcast',

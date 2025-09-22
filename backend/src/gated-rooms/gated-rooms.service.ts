@@ -22,7 +22,7 @@ export class GatedRoomsService {
   }
 
   async createGatedRoom(
-    createGatedRoomDto: CreateGatedRoomDto,
+    createGatedRoomDto!: CreateGatedRoomDto,
   ): Promise<GatedRoom> {
     const gatedRoom = this.gatedRoomRepository.create(createGatedRoomDto);
     return await this.gatedRoomRepository.save(gatedRoom);
@@ -30,14 +30,14 @@ export class GatedRoomsService {
 
   async findAll(): Promise<GatedRoom[]> {
     return await this.gatedRoomRepository.find({
-      where: { isActive: true },
+      where!: { isActive: true },
       order: { createdAt: 'DESC' },
     });
   }
 
   async findOne(id: string): Promise<GatedRoom> {
     const gatedRoom = await this.gatedRoomRepository.findOne({
-      where: { id, isActive: true },
+      where!: { id, isActive: true },
     });
 
     if (!gatedRoom) {
@@ -49,7 +49,7 @@ export class GatedRoomsService {
 
   async findByRoomId(roomId: string): Promise<GatedRoom | null> {
     return await this.gatedRoomRepository.findOne({
-      where: { roomId, isActive: true },
+      where!: { roomId, isActive: true },
     });
   }
 
@@ -61,7 +61,7 @@ export class GatedRoomsService {
 
     if (!gatedRoom) {
       return {
-        hasAccess: true, // If room is not gated, allow access
+        hasAccess!: true, // If room is not gated, allow access
         roomId,
         stellarAccountId,
         gateRules: [],
@@ -83,13 +83,13 @@ export class GatedRoomsService {
       hasAccess,
       roomId,
       stellarAccountId,
-      gateRules: gatedRoom.gateRules,
+      gateRules!: gatedRoom.gateRules,
       verificationResults,
     };
   }
 
   private async verifyGateRule(
-    stellarAccountId: string,
+    stellarAccountId!: string,
     rule: GateRule,
   ): Promise<any> {
     try {
@@ -107,14 +107,14 @@ export class GatedRoomsService {
       }
 
       return {
-        passed: false,
+        passed!: false,
         rule,
         error: 'Unknown rule type',
       };
     } catch (error) {
       this.logger.error(`Error verifying gate rule: ${error.message}`);
       return {
-        passed: false,
+        passed!: false,
         rule,
         error: error.message,
       };
@@ -134,7 +134,7 @@ export class GatedRoomsService {
 
     if (!balance) {
       return {
-        passed: false,
+        passed!: false,
         rule,
         error: 'Token not found in account',
         actualBalance: 0,
@@ -150,7 +150,7 @@ export class GatedRoomsService {
       rule,
       actualBalance,
       requiredAmount,
-      error: passed
+      error!: passed
         ? null
         : `Insufficient balance. Required: ${requiredAmount}, Actual: ${actualBalance}`,
     };
@@ -171,7 +171,7 @@ export class GatedRoomsService {
 
     if (!nftBalance) {
       return {
-        passed: false,
+        passed!: false,
         rule,
         error: 'NFT not found in account',
       };
@@ -181,7 +181,7 @@ export class GatedRoomsService {
     const hasNft = parseFloat(nftBalance.balance) > 0;
 
     return {
-      passed: hasNft,
+      passed!: hasNft,
       rule,
       balance: nftBalance.balance,
       error: hasNft ? null : 'NFT not owned by account',
