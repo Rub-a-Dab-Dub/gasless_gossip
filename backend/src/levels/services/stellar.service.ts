@@ -1,67 +1,82 @@
-import { Injectable, Logger } from "@nestjs/common"
-import type { ConfigService } from "@nestjs/config"
-import { OnEvent } from "@nestjs/event-emitter"
-import type { EventEmitter2 } from "@nestjs/event-emitter"
-import type { LevelUpEvent } from "../events/level-up.event"
-import { BadgeUnlockedEvent } from "../events/badge-unlocked.event"
+import { Injectable, Logger } from '@nestjs/common';
+import type { ConfigService } from '@nestjs/config';
+import { OnEvent } from '@nestjs/event-emitter';
+import type { EventEmitter2 } from '@nestjs/event-emitter';
+import type { LevelUpEvent } from '../events/level-up.event';
+import { BadgeUnlockedEvent } from '../events/badge-unlocked.event';
 
 export interface StellarBadgeContract {
-  contractAddress: string
-  networkPassphrase: string
-  sourceAccount: string
+  contractAddress: string;
+  networkPassphrase: string;
+  sourceAccount: string;
 }
 
 export interface BadgeUnlockTransaction {
-  userId: string
-  stellarAccountId: string
-  badgeId: string
-  level: number
-  transactionHash?: string
-  status: "pending" | "success" | "failed"
-  error?: string
-  createdAt: Date
-  completedAt?: Date
+  userId: string;
+  stellarAccountId: string;
+  badgeId: string;
+  level: number;
+  transactionHash?: string;
+  status: 'pending' | 'success' | 'failed';
+  error?: string;
+  createdAt: Date;
+  completedAt?: Date;
 }
 
 @Injectable()
 export class StellarService {
-  private readonly logger = new Logger(StellarService.name)
-  private readonly contractConfig: StellarBadgeContract
+  private readonly logger = new Logger(StellarService.name);
+  private readonly contractConfig: StellarBadgeContract;
 
   constructor(
     private readonly configService: ConfigService,
     private readonly eventEmitter: EventEmitter2,
   ) {
     this.contractConfig = {
-      contractAddress: this.configService.get<string>("STELLAR_BADGE_CONTRACT_ADDRESS") || "",
+      contractAddress:
+        this.configService.get<string>('STELLAR_BADGE_CONTRACT_ADDRESS') || '',
       networkPassphrase:
-        this.configService.get<string>("STELLAR_NETWORK_PASSPHRASE") || "Test SDF Network ; September 2015",
-      sourceAccount: this.configService.get<string>("STELLAR_SOURCE_ACCOUNT") || "",
-    }
+        this.configService.get<string>('STELLAR_NETWORK_PASSPHRASE') ||
+        'Test SDF Network ; September 2015',
+      sourceAccount:
+        this.configService.get<string>('STELLAR_SOURCE_ACCOUNT') || '',
+    };
   }
 
-  @OnEvent("level.up")
+  @OnEvent('level.up')
   async handleLevelUpBadgeUnlock(event: LevelUpEvent) {
     if (event.badgesUnlocked.length === 0) {
-      return
+      return;
     }
 
-    this.logger.log(`Processing badge unlocks for user ${event.userId}: ${event.badgesUnlocked.join(", ")}`)
+    this.logger.log(
+      `Processing badge unlocks for user ${event.userId}: ${event.badgesUnlocked.join(', ')}`,
+    );
 
     // Get user's Stellar account ID (this would come from your user service)
-    const stellarAccountId = await this.getUserStellarAccount(event.userId)
+    const stellarAccountId = await this.getUserStellarAccount(event.userId);
 
     if (!stellarAccountId) {
-      this.logger.warn(`User ${event.userId} does not have a Stellar account ID`)
-      return
+      this.logger.warn(
+        `User ${event.userId} does not have a Stellar account ID`,
+      );
+      return;
     }
 
     // Process each badge unlock
     for (const badgeId of event.badgesUnlocked) {
       try {
-        await this.unlockBadgeOnStellar(event.userId, stellarAccountId, badgeId, event.newLevel)
+        await this.unlockBadgeOnStellar(
+          event.userId,
+          stellarAccountId,
+          badgeId,
+          event.newLevel,
+        );
       } catch (error) {
-        this.logger.error(`Failed to unlock badge ${badgeId} for user ${event.userId}:`, error)
+        this.logger.error(
+          `Failed to unlock badge ${badgeId} for user ${event.userId}:`,
+          error,
+        );
       }
     }
   }
@@ -77,42 +92,59 @@ export class StellarService {
       stellarAccountId,
       badgeId,
       level,
-      status: "pending",
+      status: 'pending',
       createdAt: new Date(),
-    }
+    };
 
     try {
-      this.logger.log(`Initiating Stellar badge unlock: ${badgeId} for user ${userId} at level ${level}`)
+      this.logger.log(
+        `Initiating Stellar badge unlock: ${badgeId} for user ${userId} at level ${level}`,
+      );
 
       // Here you would implement the actual Stellar contract interaction
       // This is a placeholder for the Stellar SDK integration
 
-      const transactionHash = await this.submitBadgeUnlockTransaction(stellarAccountId, badgeId, level)
+      const transactionHash = await this.submitBadgeUnlockTransaction(
+        stellarAccountId,
+        badgeId,
+        level,
+      );
 
-      transaction.transactionHash = transactionHash
-      transaction.status = "success"
-      transaction.completedAt = new Date()
+      transaction.transactionHash = transactionHash;
+      transaction.status = 'success';
+      transaction.completedAt = new Date();
 
-      this.logger.log(`Successfully unlocked badge ${badgeId} for user ${userId}. Transaction: ${transactionHash}`)
+      this.logger.log(
+        `Successfully unlocked badge ${badgeId} for user ${userId}. Transaction: ${transactionHash}`,
+      );
 
       // Emit badge unlocked event
-      const badgeUnlockedEvent = new BadgeUnlockedEvent(userId, badgeId, level, transactionHash)
+      const badgeUnlockedEvent = new BadgeUnlockedEvent(
+        userId,
+        badgeId,
+        level,
+        transactionHash,
+      );
 
-      this.eventEmitter.emit("badge.unlocked", badgeUnlockedEvent)
+      this.eventEmitter.emit('badge.unlocked', badgeUnlockedEvent);
     } catch (error) {
-      transaction.status = "failed"
-      transaction.error = error instanceof Error ? error.message : "Unknown error"
-      transaction.completedAt = new Date()
+      transaction.status = 'failed';
+      transaction.error =
+        error instanceof Error ? error.message : 'Unknown error';
+      transaction.completedAt = new Date();
 
-      this.logger.error(`Failed to unlock badge ${badgeId} for user ${userId}:`, error)
+      this.logger.error(
+        `Failed to unlock badge ${badgeId} for user ${userId}:`,
+        error,
+      );
 
-      throw error
+      throw error;
     }
 
     // In a real implementation, you would save this transaction to the database
     // await this.badgeTransactionRepository.save(transaction);
 
-    return transaction
+    return transaction;
   }
 
   private async submitBadgeUnlockTransaction(
@@ -172,12 +204,12 @@ export class StellarService {
     */
 
     // For now, return a mock transaction hash
-    const mockTransactionHash = `stellar_tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+    const mockTransactionHash = `stellar_tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     // Simulate network delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    return mockTransactionHash
+    return mockTransactionHash;
   }
 
   private async getUserStellarAccount(userId: string): Promise<string | null> {
@@ -188,14 +220,19 @@ export class StellarService {
     // const user = await this.userService.findById(userId);
     // return user.stellarAccountId;
 
-    return `GABC${userId.replace(/-/g, "").substring(0, 52).toUpperCase()}`
+    return `GABC${userId.replace(/-/g, '').substring(0, 52).toUpperCase()}`;
   }
 
-  async getBadgeUnlockStatus(userId: string, badgeId: string): Promise<BadgeUnlockTransaction | null> {
+  async getBadgeUnlockStatus(
+    userId: string,
+    badgeId: string,
+  ): Promise<BadgeUnlockTransaction | null> {
     // This would query your database for the badge unlock transaction status
     // For now, return null indicating no transaction found
 
-    this.logger.log(`Checking badge unlock status for user ${userId}, badge ${badgeId}`)
+    this.logger.log(
+      `Checking badge unlock status for user ${userId}, badge ${badgeId}`,
+    );
 
     // In a real implementation:
     // return await this.badgeTransactionRepository.findOne({
@@ -203,24 +240,31 @@ export class StellarService {
     //   order: { createdAt: 'DESC' },
     // });
 
-    return null
+    return null;
   }
 
-  async retryFailedBadgeUnlock(transactionId: string): Promise<BadgeUnlockTransaction> {
+  async retryFailedBadgeUnlock(
+    transactionId: string,
+  ): Promise<BadgeUnlockTransaction> {
     // This would retry a failed badge unlock transaction
     // Implementation would load the transaction, retry the Stellar operation,
     // and update the transaction status
 
-    throw new Error("Retry functionality not implemented yet")
+    throw new Error('Retry functionality not implemented yet');
   }
 
-  async validateBadgeOwnership(stellarAccountId: string, badgeId: string): Promise<boolean> {
+  async validateBadgeOwnership(
+    stellarAccountId: string,
+    badgeId: string,
+  ): Promise<boolean> {
     // This would query the Stellar network to verify if the user owns the badge
     // by checking their account for the specific badge asset/NFT
 
-    this.logger.log(`Validating badge ownership: ${badgeId} for account ${stellarAccountId}`)
+    this.logger.log(
+      `Validating badge ownership: ${badgeId} for account ${stellarAccountId}`,
+    );
 
     // Mock implementation - in reality, you would query the Stellar network
-    return true
+    return true;
   }
 }

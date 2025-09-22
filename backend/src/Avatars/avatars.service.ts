@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, ConflictException, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+  Logger,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Avatar } from './entities/avatar.entity';
@@ -22,10 +27,10 @@ export class AvatarsService {
     userStellarPublicKey: string,
   ): Promise<AvatarResponseDto> {
     // Check if user already has an avatar
-    const existingAvatar = await this.avatarRepository.findOne({ 
-      where: { userId, isActive: true } 
+    const existingAvatar = await this.avatarRepository.findOne({
+      where: { userId, isActive: true },
     });
-    
+
     if (existingAvatar) {
       throw new ConflictException('User already has an active avatar');
     }
@@ -33,8 +38,8 @@ export class AvatarsService {
     try {
       // Generate unique asset code
       const assetCode = this.stellarNftService.generateUniqueAssetCode(
-        userId, 
-        createAvatarDto.level
+        userId,
+        createAvatarDto.level,
       );
 
       // Mint NFT on Stellar
@@ -54,9 +59,9 @@ export class AvatarsService {
       });
 
       const savedAvatar = await this.avatarRepository.save(avatar);
-      
+
       this.logger.log(`Avatar created for user ${userId}: ${savedAvatar.id}`);
-      
+
       return this.mapToResponseDto(savedAvatar);
     } catch (error) {
       this.logger.error(`Failed to mint avatar for user ${userId}:`, error);
@@ -82,13 +87,13 @@ export class AvatarsService {
       order: { createdAt: 'DESC' },
     });
 
-    return avatars.map(avatar => this.mapToResponseDto(avatar));
+    return avatars.map((avatar) => this.mapToResponseDto(avatar));
   }
 
   async deactivateAvatar(userId: string): Promise<void> {
     const result = await this.avatarRepository.update(
       { userId, isActive: true },
-      { isActive: false }
+      { isActive: false },
     );
 
     if (result.affected === 0) {

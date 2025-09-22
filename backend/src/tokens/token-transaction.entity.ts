@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, Index } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  Index,
+} from 'typeorm';
 
 @Entity('token_transaction')
 export class TokenTransaction {
@@ -23,5 +29,3 @@ export class TokenTransaction {
   @CreateDateColumn({ type: 'timestamp with time zone' })
   createdAt!: Date;
 }
-
-

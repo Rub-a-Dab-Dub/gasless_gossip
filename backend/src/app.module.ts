@@ -7,10 +7,6 @@ import * as fs from 'fs';
 import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
 import { TradeModule } from './trade/trade.module';
-import { SecretsModule } from './modules/secrets/secrets.module';
-import { EventEmitterModule } from '@nestjs/event-emitter';
-import { PodcastRoomsModule } from './podcast-rooms/podcast-rooms.module';
-import { GamblesModule } from './gambles/gambles.module';
 
 function loadModules(): (new () => any)[] {
   const modulesDir = path.join(__dirname);

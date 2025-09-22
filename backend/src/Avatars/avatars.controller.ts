@@ -10,10 +10,10 @@ import {
   HttpStatus,
   HttpCode,
 } from '@nestjs/common';
-import { 
-  ApiTags, 
-  ApiOperation, 
-  ApiResponse, 
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
   ApiParam,
   ApiBearerAuth,
   ApiBody,
@@ -54,12 +54,17 @@ export class AvatarsController {
   ): Promise<AvatarResponseDto> {
     // Extract user info from request (adjust based on your auth implementation)
     const userId = req.user?.id || req.user?.userId;
-    const stellarPublicKey = req.user?.stellarPublicKey || req.body.stellarPublicKey;
-    
+    const stellarPublicKey =
+      req.user?.stellarPublicKey || req.body.stellarPublicKey;
+
     // For demo purposes, you might need to pass stellarPublicKey in the request body
     // In production, this should come from the authenticated user's profile
-    
-    return this.avatarsService.mintAvatar(userId, createAvatarDto, stellarPublicKey);
+
+    return this.avatarsService.mintAvatar(
+      userId,
+      createAvatarDto,
+      stellarPublicKey,
+    );
   }
 
   @Get(':userId')

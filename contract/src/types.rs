@@ -1,4 +1,4 @@
-use soroban_sdk::{contracttype, Address, String, Vec, Map};
+use soroban_sdk::{contracttype, Address, Map, String, Vec};
 
 /// Level thresholds defining XP required for each level (10 levels)
 /// Level 1: 0-99 XP (implicit, starts at 0)
@@ -28,12 +28,12 @@ pub fn calculate_level(xp: u64) -> u32 {
     if xp < LEVEL_THRESHOLDS[0] {
         return 1;
     }
-    
+
     // Special case for Level 10 (5200+ XP)
     if xp >= LEVEL_THRESHOLDS[9] {
         return 10;
     }
-    
+
     // Calculate cumulative thresholds for each level
     let mut prev_threshold = 0;
     for (index, &threshold) in LEVEL_THRESHOLDS.iter().enumerate() {
@@ -42,8 +42,16 @@ pub fn calculate_level(xp: u64) -> u32 {
         }
         prev_threshold = threshold;
     }
-    
+
     10 // Should never reach here due to earlier checks, but rust needs this
+}
+
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct XpHistoryEntry {
+    pub timestamp: u64,
+    pub reason: XpReason,
+    pub amount: u64,
 }
 
 #[contracttype]
@@ -53,8 +61,9 @@ pub struct UserProfile {
     pub username: String,
     pub xp: u64,
     pub level: u32,
-    pub reputation: i64, 
+    pub reputation: i64,
     pub created_at: u64,
+    pub xp_history: Vec<XpHistoryEntry>,
 }
 
 #[contracttype]
@@ -91,7 +100,7 @@ mod tests {
         // Test Level 1 edge cases
         assert_eq!(calculate_level(0), 1, "0 XP should be Level 1");
         assert_eq!(calculate_level(99), 1, "99 XP should be Level 1");
-        
+
         // Test exact threshold values
         assert_eq!(calculate_level(100), 2, "100 XP should be Level 2");
         assert_eq!(calculate_level(300), 3, "300 XP should be Level 3");
@@ -102,14 +111,24 @@ mod tests {
         assert_eq!(calculate_level(3000), 8, "3000 XP should be Level 8");
         assert_eq!(calculate_level(4000), 9, "4000 XP should be Level 9");
         assert_eq!(calculate_level(5200), 10, "5200 XP should be Level 10");
-        
+
         // Test mid-range values
         assert_eq!(calculate_level(150), 2, "150 XP should be Level 2");
         assert_eq!(calculate_level(550), 3, "550 XP should be Level 3");
         assert_eq!(calculate_level(2500), 7, "2500 XP should be Level 7");
-        
+
         // Test max level cap
         assert_eq!(calculate_level(6600), 10, "6600 XP should be Level 10");
         assert_eq!(calculate_level(9999), 10, "9999 XP should be Level 10");
     }
+}
+
+#[contracttype]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum XpReason {
+    MessageSent,
+    RoomCreated,
+    InviteAccepted,
+    DailyLogin,
+    Custom(String),
 }

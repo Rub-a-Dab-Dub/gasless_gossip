@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Bid } from './bid.entity';
 
 @Entity('auctions')
@@ -24,7 +31,7 @@ export class Auction {
   @Column({ nullable: true })
   stellarEscrowAccount: string;
 
-  @OneToMany(() => Bid, bid => bid.auction)
+  @OneToMany(() => Bid, (bid) => bid.auction)
   bids: Bid[];
 
   @CreateDateColumn()

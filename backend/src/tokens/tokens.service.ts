@@ -21,7 +21,9 @@ export class TokensService {
   ) {}
 
   async send(dto: SendTokenDto) {
-    const horizon = this.config.get<string>('STELLAR_HORIZON_URL') || 'https://horizon-testnet.stellar.org';
+    const horizon =
+      this.config.get<string>('STELLAR_HORIZON_URL') ||
+      'https://horizon-testnet.stellar.org';
     const server = new StellarSdk.Server(horizon);
 
     const sourceSecret = this.config.get<string>('STELLAR_SENDER_SECRET');
@@ -34,7 +36,9 @@ export class TokensService {
     // Resolve destination: if dto.toId looks like a Stellar G... key, use directly; otherwise, map via table
     let destination = dto.toId;
     if (!/^G[A-Z2-7]{55}$/.test(destination)) {
-      const mapping = await this.stellarAccountRepo.findOne({ where: { userId: destination } });
+      const mapping = await this.stellarAccountRepo.findOne({
+        where: { userId: destination },
+      });
       if (!mapping) {
         throw new Error('Destination user has no linked Stellar account');
       }
@@ -43,20 +47,28 @@ export class TokensService {
 
     const assetCode = this.config.get<string>('STELLAR_ASSET_CODE');
     const assetIssuer = this.config.get<string>('STELLAR_ASSET_ISSUER');
-    const asset = assetCode && assetIssuer
-      ? new StellarSdk.Asset(assetCode, assetIssuer)
-      : StellarSdk.Asset.native();
+    const asset =
+      assetCode && assetIssuer
+        ? new StellarSdk.Asset(assetCode, assetIssuer)
+        : StellarSdk.Asset.native();
 
     const account = await server.loadAccount(sourcePublic);
     const fee = await server.fetchBaseFee();
-    const networkPassphrase = this.config.get<string>('STELLAR_NETWORK_PASSPHRASE') || StellarSdk.Networks.TESTNET;
+    const networkPassphrase =
+      this.config.get<string>('STELLAR_NETWORK_PASSPHRASE') ||
+      StellarSdk.Networks.TESTNET;
 
-    const tx = new StellarSdk.TransactionBuilder(account, { fee: fee.toString(), networkPassphrase })
-      .addOperation(StellarSdk.Operation.payment({
-        destination,
-        asset,
-        amount: dto.amount,
-      }))
+    const tx = new StellarSdk.TransactionBuilder(account, {
+      fee: fee.toString(),
+      networkPassphrase,
+    })
+      .addOperation(
+        StellarSdk.Operation.payment({
+          destination,
+          asset,
+          amount: dto.amount,
+        }),
+      )
       .setTimeout(60)
       .build();
 
@@ -82,5 +94,3 @@ export class TokensService {
     });
   }
 }
-
-

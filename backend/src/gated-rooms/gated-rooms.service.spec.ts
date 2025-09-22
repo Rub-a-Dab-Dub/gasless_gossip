@@ -29,7 +29,9 @@ describe('GatedRoomsService', () => {
     }).compile();
 
     service = module.get<GatedRoomsService>(GatedRoomsService);
-    repository = module.get<Repository<GatedRoom>>(getRepositoryToken(GatedRoom));
+    repository = module.get<Repository<GatedRoom>>(
+      getRepositoryToken(GatedRoom),
+    );
   });
 
   it('should be defined', () => {

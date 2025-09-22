@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+} from 'typeorm';
 import { Auction } from './auction.entity';
 
 @Entity('bids')
@@ -18,7 +24,7 @@ export class Bid {
   @Column({ nullable: true })
   stellarTransactionId: string;
 
-  @ManyToOne(() => Auction, auction => auction.bids)
+  @ManyToOne(() => Auction, (auction) => auction.bids)
   auction: Auction;
 
   @CreateDateColumn()

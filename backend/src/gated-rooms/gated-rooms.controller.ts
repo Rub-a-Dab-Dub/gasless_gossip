@@ -24,7 +24,8 @@ export class GatedRoomsController {
   async create(@Body() createGatedRoomDto: CreateGatedRoomDto) {
     try {
       this.logger.log(`Creating gated room: ${createGatedRoomDto.roomId}`);
-      const gatedRoom = await this.gatedRoomsService.createGatedRoom(createGatedRoomDto);
+      const gatedRoom =
+        await this.gatedRoomsService.createGatedRoom(createGatedRoomDto);
       return {
         success: true,
         data: gatedRoom,
@@ -66,13 +67,20 @@ export class GatedRoomsController {
   }
 
   @Get('check')
-  async checkAccess(@Query() checkAccessDto: CheckAccessDto): Promise<AccessStatusDto> {
+  async checkAccess(
+    @Query() checkAccessDto: CheckAccessDto,
+  ): Promise<AccessStatusDto> {
     try {
-      this.logger.log(`Checking access for room ${checkAccessDto.roomId} and account ${checkAccessDto.stellarAccountId}`);
+      this.logger.log(
+        `Checking access for room ${checkAccessDto.roomId} and account ${checkAccessDto.stellarAccountId}`,
+      );
 
-      const accessStatus = await this.gatedRoomsService.checkAccess(checkAccessDto);
+      const accessStatus =
+        await this.gatedRoomsService.checkAccess(checkAccessDto);
 
-      this.logger.log(`Access check result: ${accessStatus.hasAccess ? 'GRANTED' : 'DENIED'}`);
+      this.logger.log(
+        `Access check result: ${accessStatus.hasAccess ? 'GRANTED' : 'DENIED'}`,
+      );
 
       return accessStatus;
     } catch (error) {

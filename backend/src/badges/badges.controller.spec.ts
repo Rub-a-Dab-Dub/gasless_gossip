@@ -23,7 +23,9 @@ describe('BadgesController', () => {
   });
 
   it('should get badges for user', async () => {
-    (service.getBadgesByUser as jest.Mock).mockResolvedValue([{ id: 1, userId: 1, type: 'Lord of the Leaks', metadata: {} }]);
+    (service.getBadgesByUser as jest.Mock).mockResolvedValue([
+      { id: 1, userId: 1, type: 'Lord of the Leaks', metadata: {} },
+    ]);
     const result = await controller.getBadges(1);
     expect(result).toHaveLength(1);
     expect(result[0].type).toBe('Lord of the Leaks');

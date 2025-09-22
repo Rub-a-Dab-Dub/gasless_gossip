@@ -64,7 +64,9 @@ describe('UsersService', () => {
 
       mockRepository.findOne.mockResolvedValue({ id: '1' });
 
-      await expect(service.create(createUserDto)).rejects.toThrow(ConflictException);
+      await expect(service.create(createUserDto)).rejects.toThrow(
+        ConflictException,
+      );
     });
   });
 
@@ -73,8 +75,9 @@ describe('UsersService', () => {
       const userId = '1';
       const invalidStellarId = 'invalid-stellar-id';
 
-      await expect(service.linkStellarAccount(userId, invalidStellarId))
-        .rejects.toThrow(BadRequestException);
+      await expect(
+        service.linkStellarAccount(userId, invalidStellarId),
+      ).rejects.toThrow(BadRequestException);
     });
   });
 });

@@ -6,11 +6,8 @@ import { WebSocketsService } from './websockets.service';
 import { RoomsModule } from '../rooms/rooms.module';
 
 @Module({
-  imports: [
-    RoomsModule,
-    TypeOrmModule.forFeature([Message, Notification]),
-  ],
+  imports: [RoomsModule, TypeOrmModule.forFeature([Message, Notification])],
   providers: [WebSocketsGateway, WebSocketsService],
-  exports: [WebSocketsService],
+  exports: [WebSocketsService, WebSocketsGateway],
 })
 export class WebSocketsModule {}

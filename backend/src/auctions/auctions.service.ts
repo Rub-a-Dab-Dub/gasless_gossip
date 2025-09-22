@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, MoreThan } from 'typeorm';
 import { Cron, CronExpression } from '@nestjs/schedule';
@@ -20,20 +24,21 @@ export class AuctionsService {
 
   async startAuction(startAuctionDto: StartAuctionDto): Promise<Auction> {
     const endTime = new Date(startAuctionDto.endTime);
-    
+
     if (endTime <= new Date()) {
       throw new BadRequestException('End time must be in the future');
     }
 
     // Create Stellar escrow account for this auction
-    const stellarEscrowAccount = await this.stellarService.createEscrowAccount();
+    const stellarEscrowAccount =
+      await this.stellarService.createEscrowAccount();
 
     const auction = this.auctionRepository.create({
       giftId: startAuctionDto.giftId,
       endTime,
       highestBid: startAuctionDto.startingBid || 0,
       stellarEscrowAccount,
-      status: 'ACTIVE'
+      status: 'ACTIVE',
     });
 
     return await this.auctionRepository.save(auction);
@@ -42,7 +47,7 @@ export class AuctionsService {
   async placeBid(placeBidDto: PlaceBidDto): Promise<Bid> {
     const auction = await this.auctionRepository.findOne({
       where: { id: placeBidDto.auctionId },
-      relations: ['bids']
+      relations: ['bids'],
     });
 
     if (!auction) {
@@ -58,14 +63,16 @@ export class AuctionsService {
     }
 
     if (placeBidDto.amount <= auction.highestBid) {
-      throw new BadRequestException(`Bid must be higher than current highest bid of ${auction.highestBid}`);
+      throw new BadRequestException(
+        `Bid must be higher than current highest bid of ${auction.highestBid}`,
+      );
     }
 
     // Process Stellar payment to escrow
     const stellarTransactionId = await this.stellarService.processEscrowPayment(
       placeBidDto.bidderId,
       auction.stellarEscrowAccount,
-      placeBidDto.amount
+      placeBidDto.amount,
     );
 
     // Create bid record
@@ -73,7 +80,7 @@ export class AuctionsService {
       auctionId: placeBidDto.auctionId,
       bidderId: placeBidDto.bidderId,
       amount: placeBidDto.amount,
-      stellarTransactionId
+      stellarTransactionId,
     });
 
     await this.bidRepository.save(bid);
@@ -91,7 +98,7 @@ export class AuctionsService {
   async getAuctionById(id: string): Promise<Auction> {
     const auction = await this.auctionRepository.findOne({
       where: { id },
-      relations: ['bids']
+      relations: ['bids'],
     });
 
     if (!auction) {
@@ -105,16 +112,19 @@ export class AuctionsService {
     return await this.auctionRepository.find({
       where: {
         status: 'ACTIVE',
-        endTime: MoreThan(new Date())
+        endTime: MoreThan(new Date()),
       },
       relations: ['bids'],
-      order: { endTime: 'ASC' }
+      order: { endTime: 'ASC' },
     });
   }
 
-  private async refundPreviousBidders(auction: Auction, currentBidderId: string): Promise<void> {
+  private async refundPreviousBidders(
+    auction: Auction,
+    currentBidderId: string,
+  ): Promise<void> {
     const previousBids = auction.bids
-      .filter(bid => bid.bidderId !== currentBidderId)
+      .filter((bid) => bid.bidderId !== currentBidderId)
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
     for (const bid of previousBids) {
@@ -122,7 +132,7 @@ export class AuctionsService {
         auction.stellarEscrowAccount,
         bid.bidderId,
         bid.amount,
-        bid.stellarTransactionId
+        bid.stellarTransactionId,
       );
     }
   }
@@ -132,9 +142,9 @@ export class AuctionsService {
     const expiredAuctions = await this.auctionRepository.find({
       where: {
         status: 'ACTIVE',
-        endTime: MoreThan(new Date())
+        endTime: MoreThan(new Date()),
       },
-      relations: ['bids']
+      relations: ['bids'],
     });
 
     for (const auction of expiredAuctions) {
@@ -151,14 +161,13 @@ export class AuctionsService {
     }
 
     // Find winning bid (highest amount)
-    const winningBid = auction.bids
-      .sort((a, b) => b.amount - a.amount)[0];
+    const winningBid = auction.bids.sort((a, b) => b.amount - a.amount)[0];
 
     // Transfer escrowed funds to gift owner
     await this.stellarService.transferToGiftOwner(
       auction.stellarEscrowAccount,
       auction.giftId,
-      winningBid.amount
+      winningBid.amount,
     );
 
     // Update auction with winner
@@ -169,7 +178,7 @@ export class AuctionsService {
     // Transfer the digital collectible to winner
     await this.stellarService.transferGiftToWinner(
       auction.giftId,
-      winningBid.bidderId
+      winningBid.bidderId,
     );
   }
 }

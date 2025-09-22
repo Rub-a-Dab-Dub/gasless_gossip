@@ -43,6 +43,13 @@
                 },
                 {
                   "u64": "50"
+                },
+                {
+                  "vec": [
+                    {
+                      "symbol": "DailyLogin"
+                    }
+                  ]
                 }
               ]
             }
@@ -66,6 +73,13 @@
                 },
                 {
                   "u64": "60"
+                },
+                {
+                  "vec": [
+                    {
+                      "symbol": "DailyLogin"
+                    }
+                  ]
                 }
               ]
             }
@@ -89,6 +103,13 @@
                 },
                 {
                   "u64": "500"
+                },
+                {
+                  "vec": [
+                    {
+                      "symbol": "DailyLogin"
+                    }
+                  ]
                 }
               ]
             }
@@ -112,6 +133,13 @@
                 },
                 {
                   "u64": "390"
+                },
+                {
+                  "vec": [
+                    {
+                      "symbol": "DailyLogin"
+                    }
+                  ]
                 }
               ]
             }
@@ -135,6 +163,13 @@
                 },
                 {
                   "u64": "6000"
+                },
+                {
+                  "vec": [
+                    {
+                      "symbol": "DailyLogin"
+                    }
+                  ]
                 }
               ]
             }
@@ -224,6 +259,175 @@
                       },
                       "val": {
                         "u64": "7000"
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "xp_history"
+                      },
+                      "val": {
+                        "vec": [
+                          {
+                            "map": [
+                              {
+                                "key": {
+                                  "symbol": "amount"
+                                },
+                                "val": {
+                                  "u64": "50"
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "reason"
+                                },
+                                "val": {
+                                  "vec": [
+                                    {
+                                      "symbol": "DailyLogin"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "timestamp"
+                                },
+                                "val": {
+                                  "u64": "0"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "map": [
+                              {
+                                "key": {
+                                  "symbol": "amount"
+                                },
+                                "val": {
+                                  "u64": "60"
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "reason"
+                                },
+                                "val": {
+                                  "vec": [
+                                    {
+                                      "symbol": "DailyLogin"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "timestamp"
+                                },
+                                "val": {
+                                  "u64": "0"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "map": [
+                              {
+                                "key": {
+                                  "symbol": "amount"
+                                },
+                                "val": {
+                                  "u64": "500"
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "reason"
+                                },
+                                "val": {
+                                  "vec": [
+                                    {
+                                      "symbol": "DailyLogin"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "timestamp"
+                                },
+                                "val": {
+                                  "u64": "0"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "map": [
+                              {
+                                "key": {
+                                  "symbol": "amount"
+                                },
+                                "val": {
+                                  "u64": "390"
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "reason"
+                                },
+                                "val": {
+                                  "vec": [
+                                    {
+                                      "symbol": "DailyLogin"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "timestamp"
+                                },
+                                "val": {
+                                  "u64": "0"
+                                }
+                              }
+                            ]
+                          },
+                          {
+                            "map": [
+                              {
+                                "key": {
+                                  "symbol": "amount"
+                                },
+                                "val": {
+                                  "u64": "6000"
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "reason"
+                                },
+                                "val": {
+                                  "vec": [
+                                    {
+                                      "symbol": "DailyLogin"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "timestamp"
+                                },
+                                "val": {
+                                  "u64": "0"
+                                }
+                              }
+                            ]
+                          }
+                        ]
                       }
                     }
                   ]

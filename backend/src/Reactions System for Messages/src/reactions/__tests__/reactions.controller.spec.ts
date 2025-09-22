@@ -1,7 +1,7 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { ReactionsController } from "../reactions.controller";
-import { ReactionsService } from "../reactions.service";
-import { ReactionType } from "../entities/reaction.entity";
+import { Test, TestingModule } from '@nestjs/testing';
+import { ReactionsController } from '../reactions.controller';
+import { ReactionsService } from '../reactions.service';
+import { ReactionType } from '../entities/reaction.entity';
 
 const mockReactionsService = {
   createReaction: jest.fn(),
@@ -11,7 +11,7 @@ const mockReactionsService = {
   getReactionStats: jest.fn(),
 };
 
-describe("ReactionsController", () => {
+describe('ReactionsController', () => {
   let controller: ReactionsController;
   let service: ReactionsService;
 
@@ -30,18 +30,18 @@ describe("ReactionsController", () => {
     service = module.get<ReactionsService>(ReactionsService);
   });
 
-  describe("createReaction", () => {
-    it("should create a reaction", async () => {
+  describe('createReaction', () => {
+    it('should create a reaction', async () => {
       const createReactionDto = {
-        messageId: "message-123",
+        messageId: 'message-123',
         type: ReactionType.LIKE,
       };
-      const req = { user: { id: "user-123" } };
+      const req = { user: { id: 'user-123' } };
 
       const expectedResult = {
-        id: "reaction-123",
+        id: 'reaction-123',
         ...createReactionDto,
-        userId: "user-123",
+        userId: 'user-123',
         createdAt: new Date(),
       };
 
@@ -51,16 +51,16 @@ describe("ReactionsController", () => {
 
       expect(service.createReaction).toHaveBeenCalledWith(
         createReactionDto,
-        "user-123"
+        'user-123',
       );
       expect(result).toEqual(expectedResult);
     });
   });
 
-  describe("getReactionsByMessage", () => {
-    it("should return reaction counts", async () => {
-      const messageId = "message-123";
-      const req = { user: { id: "user-123" } };
+  describe('getReactionsByMessage', () => {
+    it('should return reaction counts', async () => {
+      const messageId = 'message-123';
+      const req = { user: { id: 'user-123' } };
 
       const expectedResult = {
         messageId,
@@ -76,14 +76,14 @@ describe("ReactionsController", () => {
       };
 
       mockReactionsService.getReactionsByMessage.mockResolvedValue(
-        expectedResult
+        expectedResult,
       );
 
       const result = await controller.getReactionsByMessage(messageId, req);
 
       expect(service.getReactionsByMessage).toHaveBeenCalledWith(
         messageId,
-        "user-123"
+        'user-123',
       );
       expect(result).toEqual(expectedResult);
     });

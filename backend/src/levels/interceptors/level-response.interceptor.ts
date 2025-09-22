@@ -1,7 +1,12 @@
-import { Injectable, type NestInterceptor, type ExecutionContext, type CallHandler } from "@nestjs/common"
-import type { Observable } from "rxjs"
-import { map } from "rxjs/operators"
-import type { LevelResponseDto } from "../dto/level-response.dto"
+import {
+  Injectable,
+  type NestInterceptor,
+  type ExecutionContext,
+  type CallHandler,
+} from '@nestjs/common';
+import type { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import type { LevelResponseDto } from '../dto/level-response.dto';
 
 @Injectable()
 export class LevelResponseInterceptor implements NestInterceptor {
@@ -9,8 +14,8 @@ export class LevelResponseInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((data) => {
         // Add additional computed fields or format response
-        if (data && typeof data === "object" && "level" in data) {
-          const levelData = data as LevelResponseDto
+        if (data && typeof data === 'object' && 'level' in data) {
+          const levelData = data as LevelResponseDto;
 
           return {
             ...levelData,
@@ -19,11 +24,11 @@ export class LevelResponseInterceptor implements NestInterceptor {
             nextLevelExists: levelData.level < 20,
             // Format progress as a more readable string
             progressText: `${levelData.currentXp}/${levelData.xpThreshold} XP (${levelData.progressPercentage}%)`,
-          }
+          };
         }
 
-        return data
+        return data;
       }),
-    )
+    );
   }
 }

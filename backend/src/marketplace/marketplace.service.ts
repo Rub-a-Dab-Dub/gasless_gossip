@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Listing } from './entities/listing.entity';
@@ -13,7 +17,10 @@ export class MarketplaceService {
     private stellarService: StellarService,
   ) {}
 
-  async createListing(sellerId: string, createListingDto: CreateListingDto): Promise<Listing> {
+  async createListing(
+    sellerId: string,
+    createListingDto: CreateListingDto,
+  ): Promise<Listing> {
     const listing = this.listingRepository.create({
       ...createListingDto,
       sellerId,
@@ -46,7 +53,11 @@ export class MarketplaceService {
     return this.listingRepository.find({ where: { isActive: true } });
   }
 
-  private async transferTokens(from: string, to: string, amount: number): Promise<void> {
+  private async transferTokens(
+    from: string,
+    to: string,
+    amount: number,
+  ): Promise<void> {
     // Placeholder for Stellar token transfer
     // In real implementation, this would use stellar-sdk to transfer tokens
     console.log(`Transferring ${amount} tokens from ${from} to ${to}`);

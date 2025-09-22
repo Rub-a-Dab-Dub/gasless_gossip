@@ -38,7 +38,7 @@ export class RoomMembership {
   @Column({ name: 'is_active', default: true })
   isActive!: boolean;
 
-  @ManyToOne(() => Room, room => room.memberships)
+  @ManyToOne(() => Room, (room) => room.memberships)
   @JoinColumn({ name: 'room_id' })
   room!: Room;
 

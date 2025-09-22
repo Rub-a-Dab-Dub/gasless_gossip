@@ -15,7 +15,11 @@ export class BadgesService {
 
   async assignBadge(dto: AssignBadgeDto): Promise<Badge> {
     // Mint badge token on Stellar
-    await this.stellarService.mintBadgeToken(dto.userId, dto.type, dto.metadata);
+    await this.stellarService.mintBadgeToken(
+      dto.userId,
+      dto.type,
+      dto.metadata,
+    );
     // Store badge in DB
     const badge = this.badgeRepository.create(dto);
     return this.badgeRepository.save(badge);

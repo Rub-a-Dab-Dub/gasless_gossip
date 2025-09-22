@@ -1,4 +1,13 @@
-import { Controller, Post, Get, Body, Param, UseGuards, Request, Query } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Param,
+  UseGuards,
+  Request,
+  Query,
+} from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 import { JoinRoomDto, LeaveRoomDto } from './dto/room-membership.dto';
 import { CreateRoomDto } from './dto/create-room.dto';

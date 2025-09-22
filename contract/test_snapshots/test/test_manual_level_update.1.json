@@ -42,6 +42,13 @@
                 },
                 {
                   "u64": "350"
+                },
+                {
+                  "vec": [
+                    {
+                      "symbol": "DailyLogin"
+                    }
+                  ]
                 }
               ]
             }
@@ -151,6 +158,47 @@
                       },
                       "val": {
                         "u64": "350"
+                      }
+                    },
+                    {
+                      "key": {
+                        "symbol": "xp_history"
+                      },
+                      "val": {
+                        "vec": [
+                          {
+                            "map": [
+                              {
+                                "key": {
+                                  "symbol": "amount"
+                                },
+                                "val": {
+                                  "u64": "350"
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "reason"
+                                },
+                                "val": {
+                                  "vec": [
+                                    {
+                                      "symbol": "DailyLogin"
+                                    }
+                                  ]
+                                }
+                              },
+                              {
+                                "key": {
+                                  "symbol": "timestamp"
+                                },
+                                "val": {
+                                  "u64": "0"
+                                }
+                              }
+                            ]
+                          }
+                        ]
                       }
                     }
                   ]

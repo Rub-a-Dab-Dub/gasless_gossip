@@ -16,10 +16,14 @@ export class GatedRoomsService {
     private gatedRoomRepository: Repository<GatedRoom>,
   ) {
     // Initialize Stellar server (use testnet for development)
-    this.server = new StellarSdk.Horizon.Server('https://horizon-testnet.stellar.org');
+    this.server = new StellarSdk.Horizon.Server(
+      'https://horizon-testnet.stellar.org',
+    );
   }
 
-  async createGatedRoom(createGatedRoomDto: CreateGatedRoomDto): Promise<GatedRoom> {
+  async createGatedRoom(
+    createGatedRoomDto: CreateGatedRoomDto,
+  ): Promise<GatedRoom> {
     const gatedRoom = this.gatedRoomRepository.create(createGatedRoomDto);
     return await this.gatedRoomRepository.save(gatedRoom);
   }
@@ -67,11 +71,13 @@ export class GatedRoomsService {
 
     // Verify each gate rule
     const verificationResults = await Promise.all(
-      gatedRoom.gateRules.map(rule => this.verifyGateRule(stellarAccountId, rule))
+      gatedRoom.gateRules.map((rule) =>
+        this.verifyGateRule(stellarAccountId, rule),
+      ),
     );
 
     // Check if all rules pass (AND logic)
-    const hasAccess = verificationResults.every(result => result.passed);
+    const hasAccess = verificationResults.every((result) => result.passed);
 
     return {
       hasAccess,
@@ -82,9 +88,14 @@ export class GatedRoomsService {
     };
   }
 
-  private async verifyGateRule(stellarAccountId: string, rule: GateRule): Promise<any> {
+  private async verifyGateRule(
+    stellarAccountId: string,
+    rule: GateRule,
+  ): Promise<any> {
     try {
-      this.logger.log(`Verifying gate rule for account ${stellarAccountId}: ${JSON.stringify(rule)}`);
+      this.logger.log(
+        `Verifying gate rule for account ${stellarAccountId}: ${JSON.stringify(rule)}`,
+      );
 
       // Load account from Stellar network
       const account = await this.server.loadAccount(stellarAccountId);
@@ -110,11 +121,15 @@ export class GatedRoomsService {
     }
   }
 
-  private async verifyTokenHolding(account: StellarSdk.Horizon.AccountResponse, rule: GateRule): Promise<any> {
-    const balance = account.balances.find(b =>
-      b.asset_type !== 'native' &&
-      b.asset_code === rule.assetCode &&
-      b.asset_issuer === rule.issuer
+  private async verifyTokenHolding(
+    account: StellarSdk.Horizon.AccountResponse,
+    rule: GateRule,
+  ): Promise<any> {
+    const balance = account.balances.find(
+      (b) =>
+        b.asset_type !== 'native' &&
+        b.asset_code === rule.assetCode &&
+        b.asset_issuer === rule.issuer,
     );
 
     if (!balance) {
@@ -135,17 +150,23 @@ export class GatedRoomsService {
       rule,
       actualBalance,
       requiredAmount,
-      error: passed ? null : `Insufficient balance. Required: ${requiredAmount}, Actual: ${actualBalance}`,
+      error: passed
+        ? null
+        : `Insufficient balance. Required: ${requiredAmount}, Actual: ${actualBalance}`,
     };
   }
 
-  private async verifyNftHolding(account: StellarSdk.Horizon.AccountResponse, rule: GateRule): Promise<any> {
+  private async verifyNftHolding(
+    account: StellarSdk.Horizon.AccountResponse,
+    rule: GateRule,
+  ): Promise<any> {
     // For NFTs on Stellar, we check if the account has the specific asset
     // NFTs are typically represented as assets with supply of 1
-    const nftBalance = account.balances.find(b =>
-      b.asset_type !== 'native' &&
-      b.asset_code === rule.assetCode &&
-      b.asset_issuer === rule.issuer
+    const nftBalance = account.balances.find(
+      (b) =>
+        b.asset_type !== 'native' &&
+        b.asset_code === rule.assetCode &&
+        b.asset_issuer === rule.issuer,
     );
 
     if (!nftBalance) {
