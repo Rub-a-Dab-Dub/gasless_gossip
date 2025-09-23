@@ -1,21 +1,9 @@
 use crate::types::{calculate_level, DataKey, Room, RoomType, UserProfile};
+use crate::error::{Error, handle_error};
 use soroban_sdk::{
-    contract, contracterror, contractevent, contractimpl, panic_with_error, symbol_short, Address,
-    Env, Map, String, Vec,
+    contract, contractevent, contractimpl, symbol_short, Address,
+    Env, Map, String, Vec,log
 };
-
-#[contracterror]
-#[derive(Copy, Clone, Debug, Eq, PartialEq)]
-pub enum RoomError {
-    RoomNotFound = 1,
-    UserAlreadyMember = 2,
-    UserNotMember = 3,
-    RoomCapacityFull = 4,
-    InsufficientLevel = 5,
-    InsufficientXp = 6,
-    RoomNotActive = 7,
-    InvalidRoomType = 8,
-}
 
 #[contractevent]
 #[derive(Clone, Debug)]
@@ -53,7 +41,7 @@ impl RoomManager {
         name: String,
         room_type: RoomType,
         settings: Map<String, String>,
-    ) -> u128 {
+    ) -> Result<u128, Error> {
         creator.require_auth();
 
         // Generate unique room ID
@@ -64,7 +52,7 @@ impl RoomManager {
         let room_key = DataKey::Room(room_id);
 
         if env.storage().persistent().has(&room_key) {
-            panic!("Room already exists");
+            return Err(Error::RoomAlreadyExists);
         }
 
         // Validate room name uniqueness (if required)
@@ -116,48 +104,62 @@ impl RoomManager {
         // TODO: Add proper event emission when Soroban SDK supports it better
         // For now, we'll skip events to focus on core functionality
 
-        room_id
+        Ok(room_id)
     }
 
     /// Join a room
-    pub fn join_room(env: &Env, user: Address, room_id: u128) -> bool {
+    pub fn join_room(env: &Env, user: Address, room_id: u128) ->  Result<bool, Error> {
         user.require_auth();
+
+        log!(&env, "Joining room: user={:?}, room_id={}", user, room_id);
 
         let room_key = DataKey::Room(room_id);
 
         if !env.storage().persistent().has(&room_key) {
-            panic_with_error!(env, RoomError::RoomNotFound);
+            return Err(Error::RoomNotFound);
         }
 
-        let mut room: Room = env.storage().persistent().get(&room_key).unwrap();
+        let mut room: Room = match env.storage().persistent().get(&room_key) {
+        Some(r) => r,
+        None => {
+            log!(&env, "Storage error: failed to retrieve room for room_id={}", room_id);
+            handle_error(&env, Error::StorageError)
+            }
+        };
 
         if !room.is_active {
-            panic_with_error!(env, RoomError::RoomNotActive);
+            return Err(Error::RoomNotActive);
         }
 
         // Check if user is already a member
         for member in room.members.iter() {
             if member == user {
-                panic_with_error!(env, RoomError::UserAlreadyMember);
+                return Err(Error::UserAlreadyMember);
             }
         }
 
         // Check capacity
         if room.members.len() >= room.max_members {
-            panic_with_error!(env, RoomError::RoomCapacityFull);
+            return Err(Error::RoomCapacityFull);
         }
 
         // Check user requirements if user profile exists
         let user_key = (symbol_short!("usr"), user.clone());
         if env.storage().persistent().has(&user_key) {
-            let user_profile: UserProfile = env.storage().persistent().get(&user_key).unwrap();
+            let user_profile: UserProfile = match env.storage().persistent().get(&user_key) {
+            Some(p) => p,
+            None => {
+                log!(&env, "Storage error: failed to retrieve profile for user={:?}", user);
+                handle_error(env, Error::StorageError);
+                }
+            };
 
             if user_profile.level < room.min_level {
-                panic_with_error!(env, RoomError::InsufficientLevel);
+                return Err(Error::InsufficientLevel);
             }
 
             if user_profile.xp < room.min_xp {
-                panic_with_error!(env, RoomError::InsufficientXp);
+                return Err(Error::InsufficientXp);
             }
         }
 
@@ -174,7 +176,13 @@ impl RoomManager {
 
         // Add XP to user if profile exists
         if env.storage().persistent().has(&user_key) {
-            let mut user_profile: UserProfile = env.storage().persistent().get(&user_key).unwrap();
+            let mut user_profile: UserProfile = match env.storage().persistent().get(&user_key) {
+            Some(p) => p,
+            None => {
+                log!(&env, "Storage error: failed to retrieve profile for user={:?}", user);
+                handle_error(env, Error::StorageError);
+            }
+        };
             user_profile.xp += xp_amount;
 
             // Check for level up
@@ -188,20 +196,27 @@ impl RoomManager {
 
         // TODO: Add proper event emission when Soroban SDK supports it better
 
-        true
+        Ok(true)
     }
 
     /// Leave a room
-    pub fn leave_room(env: &Env, user: Address, room_id: u128) -> bool {
+    pub fn leave_room(env: &Env, user: Address, room_id: u128) ->  Result<bool, Error> {
         user.require_auth();
 
         let room_key = DataKey::Room(room_id);
 
         if !env.storage().persistent().has(&room_key) {
-            panic_with_error!(env, RoomError::RoomNotFound);
+            return Err(Error::RoomNotFound);
         }
 
-        let mut room: Room = env.storage().persistent().get(&room_key).unwrap();
+        
+        let mut room: Room = match env.storage().persistent().get(&room_key) {
+        Some(r) => r,
+        None => {
+            log!(&env, "Storage error: failed to retrieve room for room_id={}", room_id);
+            handle_error(env, Error::StorageError);
+            }
+        };
 
         // Find and remove user from members
         let mut user_index = None;
@@ -219,52 +234,52 @@ impl RoomManager {
 
                 // TODO: Add proper event emission when Soroban SDK supports it better
 
-                true
+                Ok(true)
             }
-            None => panic_with_error!(env, RoomError::UserNotMember),
+             None => return Err(Error::UserNotMember)
         }
     }
 
     /// Get room information
-    pub fn get_room(env: &Env, room_id: u128) -> Room {
+    pub fn get_room(env: &Env, room_id: u128) ->  Result<Room, Error> {
         let room_key = DataKey::Room(room_id);
 
         if !env.storage().persistent().has(&room_key) {
-            panic_with_error!(env, RoomError::RoomNotFound);
+            return Err(Error::RoomNotFound)
         }
 
         env.storage().persistent().get(&room_key).unwrap()
     }
 
     /// Check if user is a member of a room
-    pub fn is_member(env: &Env, user: Address, room_id: u128) -> bool {
+    pub fn is_member(env: &Env, user: Address, room_id: u128) ->  Result<bool, Error> {
         let room_key = DataKey::Room(room_id);
 
         if !env.storage().persistent().has(&room_key) {
-            return false;
+            return Ok(false);
         }
 
         let room: Room = env.storage().persistent().get(&room_key).unwrap();
 
         for member in room.members.iter() {
             if member == user {
-                return true;
+                return Ok(true);
             }
         }
 
-        false
+        Ok(false)
     }
 
     /// Get member count for a room
-    pub fn get_member_count(env: &Env, room_id: u128) -> u32 {
+    pub fn get_member_count(env: &Env, room_id: u128) ->  Result<u32, Error> {
         let room_key = DataKey::Room(room_id);
 
         if !env.storage().persistent().has(&room_key) {
-            return 0;
+            return Ok(0);
         }
 
         let room: Room = env.storage().persistent().get(&room_key).unwrap();
-        room.members.len()
+        Ok(room.members.len())
     }
 
     /// Update room settings
@@ -273,20 +288,26 @@ impl RoomManager {
         creator: Address,
         room_id: u128,
         settings: Map<String, String>,
-    ) -> bool {
+    ) -> Result<bool, Error>  {
         creator.require_auth();
 
         let room_key = DataKey::Room(room_id);
 
         if !env.storage().persistent().has(&room_key) {
-            panic_with_error!(env, RoomError::RoomNotFound);
+            return Err(Error::RoomNotFound)
         }
 
-        let mut room: Room = env.storage().persistent().get(&room_key).unwrap();
+        let mut room: Room = match env.storage().persistent().get(&room_key) {
+        Some(r) => r,
+        None => {
+            log!(&env, "Storage error: failed to retrieve room for room_id={}", room_id);
+            handle_error(env, Error::StorageError);
+            }
+        };
 
         // Only creator can update settings
         if room.creator != creator {
-            panic!("Only room creator can update settings");
+            return Err(Error::OnlyRoomCreatorCanUpdate)
         }
 
         // Update settings
@@ -314,29 +335,35 @@ impl RoomManager {
         // env.events().publish((symbol_short!("settings_update"),), creator_str);
         env.storage().persistent().set(&room_key, &room);
 
-        true
+        Ok(true)
     }
 
     /// Deactivate a room (only creator can do this)
-    pub fn deactivate_room(env: &Env, creator: Address, room_id: u128) -> bool {
+    pub fn deactivate_room(env: &Env, creator: Address, room_id: u128) -> Result<bool, Error>  {
         creator.require_auth();
 
         let room_key = DataKey::Room(room_id);
 
         if !env.storage().persistent().has(&room_key) {
-            panic_with_error!(env, RoomError::RoomNotFound);
+            return Err(Error::RoomNotFound)
         }
 
-        let mut room: Room = env.storage().persistent().get(&room_key).unwrap();
+        let mut room: Room = match env.storage().persistent().get(&room_key) {
+        Some(r) => r,
+        None => {
+            log!(&env, "Storage error: failed to retrieve room for room_id={}", room_id);
+            handle_error(env, Error::StorageError);
+            }
+        };
 
         // Only creator can deactivate
         if room.creator != creator {
-            panic!("Only room creator can deactivate room");
+            return Err(Error::OnlyRoomCreatorCanDeactivate)
         }
 
         room.is_active = false;
         env.storage().persistent().set(&room_key, &room);
 
-        true
+        Ok(true)
     }
 }
