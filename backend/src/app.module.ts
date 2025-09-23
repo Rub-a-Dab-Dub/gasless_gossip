@@ -9,6 +9,7 @@ import { HealthModule } from './health/health.module';
 import { TradeModule } from './trade/trade.module';
 import { RoomThemesModule } from './room-themes/room-themes.module';
 import { RoomTagsModule } from './room-tags/room-tags.module';
+import { BlurredAvatarsModule } from './blurred-avatars/blurred-avatars.module';
 
 function loadModules(): (new () => any)[] {
   const modulesDir = path.join(__dirname);
@@ -57,6 +58,7 @@ function loadModules(): (new () => any)[] {
     GamblesModule,
     RoomThemesModule,
     RoomTagsModule,
+    BlurredAvatarsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
