@@ -8,6 +8,7 @@ import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
 import { TradeModule } from './trade/trade.module';
 import { RoomThemesModule } from './room-themes/room-themes.module';
+import { RoomTagsModule } from './room-tags/room-tags.module';
 
 function loadModules(): (new () => any)[] {
   const modulesDir = path.join(__dirname);
@@ -55,6 +56,7 @@ function loadModules(): (new () => any)[] {
     PodcastRoomsModule,
     GamblesModule,
     RoomThemesModule,
+    RoomTagsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
