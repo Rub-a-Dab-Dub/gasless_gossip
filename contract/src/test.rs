@@ -207,7 +207,7 @@ fn test_add_xp_unregistered_user() {
 }
 
 #[test]
-#[should_panic(expected = "User not registered")]
+#[should_panic(expected = "Error(Contract, #2)")]
 fn test_update_level_unregistered_user() {
     let env = Env::default();
     env.mock_all_auths();
@@ -518,7 +518,7 @@ fn test_full_contract_integration() {
 }
 
 #[test]
-#[should_panic(expected = "Error(Contract, #1)")]
+#[should_panic(expected = "Error(Contract, #5)")]
 fn test_get_nonexistent_room() {
     let (env, client) = setup_room_test_env();
 
@@ -527,7 +527,7 @@ fn test_get_nonexistent_room() {
 }
 
 #[test]
-#[should_panic(expected = "Error(Contract, #2)")]
+#[should_panic(expected = "Error(Contract, #6)")]
 fn test_join_room_already_member() {
     let (env, client) = setup_room_test_env();
     let creator = Address::generate(&env);
@@ -550,7 +550,7 @@ fn test_join_room_already_member() {
 }
 
 #[test]
-#[should_panic(expected = "Error(Contract, #3)")]
+#[should_panic(expected = "Error(Contract, #7)")]
 fn test_leave_room_not_member() {
     let (env, client) = setup_room_test_env();
     let creator = Address::generate(&env);
@@ -570,7 +570,7 @@ fn test_leave_room_not_member() {
 }
 
 #[test]
-#[should_panic(expected = "Error(Contract, #7)")]
+#[should_panic(expected = "Error(Contract, #11)")]
 fn test_join_inactive_room() {
     let (env, client) = setup_room_test_env();
     let creator = Address::generate(&env);
