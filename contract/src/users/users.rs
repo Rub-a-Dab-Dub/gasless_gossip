@@ -1,23 +1,15 @@
 use crate::types::{calculate_level, UserProfile, XpHistoryEntry, XpReason};
+use crate::error::{Error, handle_error};
 use soroban_sdk::{
-    contract, contracterror, contractevent, contractimpl, panic_with_error, symbol_short, vec,
-    Address, Env, String, Vec,
+    contract, contractevent, contractimpl, symbol_short,
+    Address, Env, String, Vec, log
 };
-
-#[contracterror]
-#[derive(Copy, Clone, Debug, Eq, PartialEq)]
-pub enum Error {
-    UserAlreadyRegistered = 1,
-    UserNotRegistered = 2,
-    InvalidUsernameLength = 3,
-    InvalidXpAmount = 4,
-}
 
 #[contractevent]
 #[derive(Clone, Debug)]
 pub struct UserRegistered {
     pub account: Address,
-    pub username: String,
+    pub username: String, 
 }
 
 #[contractevent]
@@ -40,17 +32,19 @@ pub struct UserManager;
 
 #[contractimpl]
 impl UserManager {
-    pub fn register_user(env: &Env, account_id: Address, username: String) {
+    pub fn register_user(env: &Env, account_id: Address, username: String) -> Result<(), Error> {
         account_id.require_auth();
+        log!(&env, "Registering user: account_id={:?}, username={}", account_id, username);
 
         if username.len() > 32 || username.len() == 0 {
-            panic_with_error!(env, Error::InvalidUsernameLength);
+            return Err(Error::InvalidUsernameLength);
         }
 
         let key = symbol_short!("usr");
 
         if env.storage().persistent().has(&key) {
-            panic_with_error!(env, Error::UserAlreadyRegistered);
+            return Err(Error::UserAlreadyRegistered);
+
         }
 
         let profile = UserProfile {
@@ -70,22 +64,32 @@ impl UserManager {
             (symbol_short!("user_reg"),),
             (account_id.clone(), username.clone()),
         );
+
+        log!(&env, "User successfully registered: account_id={:?}", account_id);
+        Ok(())
     }
 
     /// Add XP to a user and automatically update their level if it changes
-    pub fn add_xp(env: &Env, account_id: Address, amount: u64, reason: XpReason) {
+    pub fn add_xp(env: &Env, account_id: Address, amount: u64, reason: XpReason) -> Result<(), Error> {
         account_id.require_auth();
+        log!(&env, "Adding XP: account_id={:?}, amount={}, reason={:?}", account_id, amount, reason);
 
         if amount == 0 {
-            panic_with_error!(env, Error::InvalidXpAmount);
+            return Err(Error::InvalidXpAmount);
         }
 
         let key = symbol_short!("usr");
         if !env.storage().persistent().has(&key) {
-            panic_with_error!(env, Error::UserNotRegistered);
+            return Err(Error::UserNotRegistered);
         }
 
-        let mut profile: UserProfile = env.storage().persistent().get(&key).unwrap();
+        let mut profile: UserProfile = match env.storage().persistent().get(&key) {
+            Some(p) => p,
+            None => {
+                log!(&env, "Storage error: failed to retrieve profile for account_id={:?}", account_id);
+                handle_error(env, Error::StorageError);
+            }
+        };
         let old_level = profile.level;
 
         // Overflow protection
@@ -120,19 +124,27 @@ impl UserManager {
                 (account_id, old_level, new_level),
             );
         }
+        Ok(())
     }
 
     /// Update user's level based on their current XP
-    pub fn update_user_level(env: &Env, account_id: Address) {
+    pub fn update_user_level(env: &Env, account_id: Address) -> Result<(), Error> {
         account_id.require_auth();
+        log!(&env, "Updating user level: account_id={:?}", account_id);
 
         let key = symbol_short!("usr");
 
         if !env.storage().persistent().has(&key) {
-            panic!("User not registered");
+            return Err(Error::UserNotRegistered);
         }
 
-        let mut profile: UserProfile = env.storage().persistent().get(&key).unwrap();
+        let mut profile: UserProfile = match env.storage().persistent().get(&key) {
+            Some(p) => p,
+            None => {
+                log!(&env, "Storage error: failed to retrieve profile for account_id={:?}", account_id);
+                handle_error(env, Error::StorageError);
+            }
+        };
         let new_level = calculate_level(profile.xp);
 
         if new_level != profile.level {
@@ -146,16 +158,19 @@ impl UserManager {
                 (account_id, old_level, new_level),
             );
         }
+        Ok(())
     }
 
     /// Get user profile
-    pub fn get_user(env: &Env, _account_id: Address) -> UserProfile {
+    pub fn get_user(env: &Env, _account_id: Address) -> Result<UserProfile, Error> {
+        log!(&env, "Retrieving user profile: account_id={:?}", _account_id);
         let key = symbol_short!("usr");
 
         if !env.storage().persistent().has(&key) {
-            panic!("User not registered");
+            handle_error(&env, Error::UserNotRegistered);
         }
 
-        env.storage().persistent().get(&key).unwrap()
+        let profile = env.storage().persistent().get(&key).unwrap();
+        Ok(profile)
     }
 }
