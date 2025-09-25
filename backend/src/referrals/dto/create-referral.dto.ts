@@ -5,9 +5,9 @@ export class CreateReferralDto {
   @ApiProperty({ description: 'The referral code used by the new user' })
   @IsString()
   @Length(6, 20)
-  referralCode: string;
+  referralCode!: string;
 
   @ApiProperty({ description: 'ID of the user being referred' })
   @IsUUID()
-  refereeId: string;
+  refereeId!: string;
 }

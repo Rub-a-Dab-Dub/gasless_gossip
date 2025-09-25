@@ -1,9 +1,9 @@
 import { Injectable, ConflictException, NotFoundException, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Referral } from './entities/referral.entity';
-import { CreateReferralDto } from './dto/create-referral.dto';
-import { StellarService } from './services/stellar.service';
+import { Referral, ReferralStatus } from '../entities/referral.entity';
+import { CreateReferralDto } from '../dto/create-referral.dto';
+import { StellarService } from './stellar.service';
 import * as crypto from 'crypto';
 
 @Injectable()
@@ -74,7 +74,7 @@ export class ReferralsService {
       refereeId,
       referralCode,
       reward: 10, // Base reward amount
-      status: 'pending'
+      status: ReferralStatus.PENDING
     });
 
     const savedReferral = await this.referralRepository.save(referral);
@@ -110,18 +110,18 @@ export class ReferralsService {
 
       if (result.success) {
         await this.referralRepository.update(referral.id, {
-          status: 'completed',
+          status: ReferralStatus.COMPLETED,
           stellarTransactionId: result.transactionId,
           completedAt: new Date()
         });
       } else {
         await this.referralRepository.update(referral.id, {
-          status: 'failed'
+          status: ReferralStatus.FAILED
         });
       }
     } catch (error) {
       await this.referralRepository.update(referral.id, {
-        status: 'failed'
+        status: ReferralStatus.FAILED
       });
     }
   }
@@ -149,10 +149,10 @@ export class ReferralsService {
     });
 
     const totalReferrals = referrals.length;
-    const completedReferrals = referrals.filter(r => r.status === 'completed').length;
-    const pendingReferrals = referrals.filter(r => r.status === 'pending').length;
+    const completedReferrals = referrals.filter(r => r.status === ReferralStatus.COMPLETED).length;
+    const pendingReferrals = referrals.filter(r => r.status === ReferralStatus.PENDING).length;
     const totalRewards = referrals
-      .filter(r => r.status === 'completed')
+      .filter(r => r.status === ReferralStatus.COMPLETED)
       .reduce((sum, r) => sum + Number(r.reward), 0);
 
     return {

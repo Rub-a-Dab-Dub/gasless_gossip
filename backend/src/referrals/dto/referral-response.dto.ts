@@ -1,26 +1,27 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ReferralStatus } from '../entities/referral.entity';
 
 export class ReferralResponseDto {
   @ApiProperty()
-  id: string;
+  id!: string;
 
   @ApiProperty()
-  referrerId: string;
+  referrerId!: string;
 
   @ApiProperty()
-  refereeId: string;
+  refereeId!: string;
 
   @ApiProperty()
-  reward: number;
+  reward!: number;
 
   @ApiProperty()
-  referralCode: string;
+  referralCode!: string;
+
+  @ApiProperty({ enum: ReferralStatus })
+  status!: ReferralStatus;
 
   @ApiProperty()
-  status: string;
-
-  @ApiProperty()
-  createdAt: Date;
+  createdAt!: Date;
 
   @ApiProperty({ required: false })
   completedAt?: Date;

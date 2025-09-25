@@ -1,31 +1,45 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, Index } from 'typeorm';
+
+export enum ReferralStatus {
+  PENDING = 'pending',
+  COMPLETED = 'completed',
+  FAILED = 'failed'
+}
 
 @Entity('referrals')
+@Index(['referrerId'])
+@Index(['refereeId'])
+@Index(['referralCode'])
+@Index(['status'])
 export class Referral {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id!: string;
 
   @Column('uuid')
-  referrerId: string;
+  referrerId!: string;
 
   @Column('uuid')
-  refereeId: string;
+  refereeId!: string;
 
   @Column('decimal', { precision: 10, scale: 7, default: 0 })
-  reward: number;
+  reward!: number;
 
   @Column({ length: 100, unique: true })
-  referralCode: string;
+  referralCode!: string;
 
-  @Column({ default: 'pending' })
-  status: 'pending' | 'completed' | 'failed';
+  @Column({
+    type: 'enum',
+    enum: ReferralStatus,
+    default: ReferralStatus.PENDING
+  })
+  status!: ReferralStatus;
 
   @Column({ nullable: true })
-  stellarTransactionId: string;
+  stellarTransactionId?: string;
 
   @CreateDateColumn()
-  createdAt: Date;
+  createdAt!: Date;
 
   @Column({ type: 'timestamp', nullable: true })
-  completedAt: Date;
+  completedAt?: Date;
 }
