@@ -61,6 +61,7 @@ export class LevelsService {
   async addXpToUser(
     userId: string,
     xpToAdd: number,
+    source: string = 'unknown',
   ): Promise<LevelResponseDto> {
     const level = await this.levelRepository.findOne({
       where: { userId },
@@ -79,6 +80,14 @@ export class LevelsService {
     level.currentXp =
       newTotalXp - XpThresholdsConfig.getThresholdForLevel(newLevel);
     level.xpThreshold = XpThresholdsConfig.getNextLevelThreshold(newLevel);
+
+    // Emit XP gained event for cache invalidation
+    this.eventEmitter.emit('xp.gained', {
+      userId,
+      xpAmount: xpToAdd,
+      source,
+      timestamp: new Date(),
+    });
 
     // Check for level up
     if (newLevel > previousLevel) {
