@@ -9,7 +9,6 @@ import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
 import { TradeModule } from './trade/trade.module';
 import { RoomThemesModule } from './room-themes/room-themes.module';
-import { ChallengesModule } from './challenges/challenges.module';
 import { SecretsModule } from './secrets/secrets.module';
 import { PodcastRoomsModule } from './podcast-rooms/podcast-rooms.module';
 import { GamblesModule } from './gambles/gambles.module';
@@ -61,7 +60,6 @@ function loadModules(): (new () => any)[] {
     PodcastRoomsModule,
     GamblesModule,
     RoomThemesModule,
-    ChallengesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
