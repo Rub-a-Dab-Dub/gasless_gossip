@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import * as path from 'path';
@@ -8,6 +9,10 @@ import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
 import { TradeModule } from './trade/trade.module';
 import { RoomThemesModule } from './room-themes/room-themes.module';
+import { WalletIntegrationModule } from './wallet-integration/wallet-integration.module';
+import { SecretsModule } from './secrets/secrets.module';
+import { PodcastRoomsModule } from './podcast-rooms/podcast-rooms.module';
+import { GamblesModule } from './gambles/gambles.module';
 
 
 function loadModules(): (new () => any)[] {
@@ -56,6 +61,7 @@ function loadModules(): (new () => any)[] {
     PodcastRoomsModule,
     GamblesModule,
     RoomThemesModule,
+    WalletIntegrationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
