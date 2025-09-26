@@ -25,7 +25,7 @@ const HeroSection = () => {
         </div>
 
         <p className="text-lg md:text-xl max-w-2xl font-normal mb-12 text-black text-center">
-          A social messaging app built on Starknet, real-time chat and token
+          A social messaging app built on Stellar, real-time chat and token
           tipping chat and token tipping all — gasless.
         </p>
 
@@ -35,7 +35,12 @@ const HeroSection = () => {
       </div>
 
       <div className="w-full h-[500px] sm:h-[700px] relative">
-        <Image src="/landingpage/hero.png" alt="hero-image" className="object-contain sm:object-cover" fill />
+        <Image
+          src="/landingpage/hero.png"
+          alt="hero-image"
+          className="object-contain sm:object-cover"
+          fill
+        />
       </div>
     </div>
   );

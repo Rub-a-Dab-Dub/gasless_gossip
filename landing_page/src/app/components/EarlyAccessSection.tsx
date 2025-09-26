@@ -14,7 +14,7 @@ const EarlyAccessSection = () => {
         >
           The future of Web3 communication is here. Be part of the first
           community to experience gasless, on-chain conversations powered by
-          Starknet. No fees, no friction, just pure connection.
+          Stellar. No fees, no friction, just pure connection.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
