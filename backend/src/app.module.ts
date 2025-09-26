@@ -9,6 +9,7 @@ import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
 import { TradeModule } from './trade/trade.module';
 import { RoomThemesModule } from './room-themes/room-themes.module';
+import { SessionsModule } from './sessions/sessions.module';
 
 
 
@@ -60,6 +61,7 @@ function loadModules(): (new () => any)[] {
     PodcastRoomsModule,
     GamblesModule,
     RoomThemesModule,
+    SessionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
