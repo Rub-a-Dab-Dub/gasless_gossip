@@ -1,12 +1,31 @@
-import { Injectable, Logger, NotFoundException, BadRequestException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  NotFoundException,
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, LessThan, MoreThan } from 'typeorm';
+import { Repository } from 'typeorm';
+import { Challenge } from '../entities/challenge.entity';
+import { ChallengeParticipation } from '../entities/challenge-participation.entity';
+import { CreateChallengeDto } from '../dtos/create-challenge.dto';
+import { JoinChallengeDto } from '../dtos/join-challenge.dto';
 import { ConfigService } from '@nestjs/config';
-import { Challenge, ChallengeStatus, ChallengeType } from '../entities/challenge.entity';
-import { ChallengeParticipation, ParticipationStatus } from '../entities/challenge-participation.entity';
-import { CreateChallengeDto } from '../dto/create-challenge.dto';
-import { JoinChallengeDto } from '../dto/join-challenge.dto';
-import { ChallengeProgressUpdate, ChallengeCompletionResult, ChallengeRewardResult, ChallengeStats, UserChallengeProgress } from '../interfaces/challenge.interface';
+import { StellarService } from '@/stellar/stellar.service';
+import { UsersService } from '@/users/users.service';
+
+export enum ChallengeStatus {
+  ACTIVE = 'ACTIVE',
+  COMPLETED = 'COMPLETED',
+  EXPIRED = 'EXPIRED',
+}
+
+export interface ChallengeRewardResult {
+  success: boolean;
+  transactionId?: string;
+  error?: string;
+}
 
 @Injectable()
 export class ChallengesService {
@@ -18,261 +37,146 @@ export class ChallengesService {
     @InjectRepository(ChallengeParticipation)
     private readonly participationRepository: Repository<ChallengeParticipation>,
     private readonly configService: ConfigService,
+    private readonly stellarService: StellarService,
+    private readonly usersService: UsersService,
   ) {}
 
-  async createChallenge(createChallengeDto: CreateChallengeDto, createdBy?: string): Promise<Challenge> {
-    const { title, description, type, goal, reward, expiresAt, metadata } = createChallengeDto;
-
-    // Validate expiration date
-    const expiryDate = new Date(expiresAt);
-    if (expiryDate <= new Date()) {
-      throw new BadRequestException('Challenge expiration date must be in the future');
-    }
-
+  /**
+   * Create a new challenge
+   */
+  async createChallenge(dto: CreateChallengeDto): Promise<Challenge> {
     const challenge = this.challengeRepository.create({
-      title,
-      description,
-      type,
-      goal,
-      reward,
-      expiresAt: expiryDate,
-      createdBy,
-      metadata,
-      status: ChallengeStatus.ACTIVE
+      title: dto.title,
+      goal: dto.goal,
+      expiry: dto.expiry,
+      reward: dto.reward,
     });
 
-    const savedChallenge = await this.challengeRepository.save(challenge);
-    
-    this.logger.log(`Challenge created: ${title} (${type}) by ${createdBy || 'system'}`);
-    
-    return savedChallenge;
+    return this.challengeRepository.save(challenge);
   }
 
-  async getActiveChallenges(): Promise<Challenge[]> {
+  /**
+   * Get all active challenges
+   */
+  async getChallenges(): Promise<Challenge[]> {
     return this.challengeRepository.find({
-      where: { 
-        status: ChallengeStatus.ACTIVE,
-        expiresAt: MoreThan(new Date())
-      },
-      order: { createdAt: 'DESC' }
+      where: { expiry: () => 'expiry > NOW()' },
     });
   }
 
-  async getAllChallenges(): Promise<Challenge[]> {
-    return this.challengeRepository.find({
-      order: { createdAt: 'DESC' }
-    });
-  }
-
-  async getChallengeById(challengeId: string): Promise<Challenge> {
+  /**
+   * User joins a challenge
+   */
+  async joinChallenge(userId: string, dto: JoinChallengeDto): Promise<ChallengeParticipation> {
     const challenge = await this.challengeRepository.findOne({
-      where: { id: challengeId }
+      where: { id: dto.challengeId },
     });
 
     if (!challenge) {
-      throw new NotFoundException('Challenge not found');
+      throw new NotFoundException(`Challenge ${dto.challengeId} not found`);
     }
 
-    return challenge;
-  }
-
-  async joinChallenge(userId: string, joinChallengeDto: JoinChallengeDto): Promise<ChallengeParticipation> {
-    const { challengeId } = joinChallengeDto;
-
-    const challenge = await this.getChallengeById(challengeId);
-
-    // Check if challenge is still active
-    if (challenge.status !== ChallengeStatus.ACTIVE || challenge.expiresAt <= new Date()) {
-      throw new BadRequestException('Challenge is no longer active');
-    }
-
-    // Check if user already joined
-    const existingParticipation = await this.participationRepository.findOne({
-      where: { userId, challengeId }
+    const existing = await this.participationRepository.findOne({
+      where: { userId, challenge: { id: dto.challengeId } },
+      relations: ['challenge'],
     });
 
-    if (existingParticipation) {
-      throw new ConflictException('User has already joined this challenge');
+    if (existing) {
+      throw new BadRequestException('User already joined this challenge');
     }
 
     const participation = this.participationRepository.create({
       userId,
-      challengeId,
-      status: ParticipationStatus.ACTIVE,
+      challenge,
       progress: 0,
-      rewardEarned: 0
+      status: ChallengeStatus.ACTIVE,
     });
 
-    const savedParticipation = await this.participationRepository.save(participation);
-
-    // Update challenge participant count
-    await this.challengeRepository.increment({ id: challengeId }, 'participantCount', 1);
-
-    this.logger.log(`User ${userId} joined challenge: ${challenge.title}`);
-
-    return savedParticipation;
+    return this.participationRepository.save(participation);
   }
 
-  async updateProgress(progressUpdate: ChallengeProgressUpdate): Promise<ChallengeCompletionResult> {
-    const { userId, challengeId, progress, progressData } = progressUpdate;
-
+  /**
+   * Update progress on a challenge
+   */
+  async updateProgress(userId: string, challengeId: string, increment: number): Promise<ChallengeParticipation> {
     const participation = await this.participationRepository.findOne({
-      where: { userId, challengeId },
-      relations: ['challenge']
+      where: { userId, challenge: { id: challengeId } },
+      relations: ['challenge'],
     });
 
     if (!participation) {
       throw new NotFoundException('Participation not found');
     }
 
-    if (participation.status !== ParticipationStatus.ACTIVE) {
-      throw new BadRequestException('Participation is not active');
+    if (participation.status !== ChallengeStatus.ACTIVE) {
+      throw new BadRequestException('Challenge is not active');
     }
 
-    // Update progress
-    participation.progress = Math.min(progress, participation.challenge.goal);
-    participation.progressData = progressData;
+    participation.progress += increment;
 
-    // Check if challenge is completed
     if (participation.progress >= participation.challenge.goal) {
-      return await this.completeChallenge(participation);
-    }
-
-    await this.participationRepository.save(participation);
-    
-    return {
-      success: true,
-      participationId: participation.id
-    };
-  }
-
-  private async completeChallenge(participation: ChallengeParticipation): Promise<ChallengeCompletionResult> {
-    try {
-      // Mark participation as completed
-      participation.status = ParticipationStatus.COMPLETED;
+      participation.status = ChallengeStatus.COMPLETED;
       participation.completedAt = new Date();
-      participation.rewardEarned = participation.challenge.reward;
-
-      await this.participationRepository.save(participation);
-
-      // Update challenge completion count
-      await this.challengeRepository.increment(
-        { id: participation.challengeId }, 
-        'completionCount', 
-        1
-      );
 
       // Process reward
       const rewardResult = await this.processReward(participation);
-      
-      if (rewardResult.success) {
-        participation.stellarTransactionId = rewardResult.transactionId;
-        await this.participationRepository.save(participation);
+
+      if (!rewardResult.success) {
+        this.logger.error(`Reward distribution failed: ${rewardResult.error}`);
+        // Do not throw, allow participation to remain completed but log failure
       }
-
-      this.logger.log(`Challenge completed: ${participation.challenge.title} by user ${participation.userId}`);
-
-      return {
-        success: true,
-        participationId: participation.id,
-        rewardAmount: participation.rewardEarned,
-        stellarTransactionId: rewardResult.transactionId
-      };
-    } catch (error) {
-      this.logger.error(`Failed to complete challenge: ${error.message}`);
-      return {
-        success: false,
-        error: error.message
-      };
     }
+
+    return this.participationRepository.save(participation);
   }
 
+  /**
+   * Process Stellar reward distribution for a completed challenge
+   */
   private async processReward(participation: ChallengeParticipation): Promise<ChallengeRewardResult> {
     try {
-      // In a real implementation, this would integrate with Stellar service
-      // For now, we'll simulate the reward process
-      
-      const mockTransactionId = `stellar_tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      
-      this.logger.log(`Processing reward: ${participation.rewardEarned} tokens for user ${participation.userId}`);
-      
-      // TODO: Integrate with actual Stellar service
-      // const stellarService = this.moduleRef.get(StellarService);
-      // const result = await stellarService.distributeReward(
-      //   participation.userId,
-      //   participation.rewardEarned
-      // );
-
-      return {
-        success: true,
-        transactionId: mockTransactionId
-      };
-    } catch (error) {
-      this.logger.error(`Reward processing failed: ${error.message}`);
-      return {
-        success: false,
-        error: error.message
-      };
-    }
-  }
-
-  async getUserChallenges(userId: string): Promise<UserChallengeProgress[]> {
-    const participations = await this.participationRepository.find({
-      where: { userId },
-      relations: ['challenge'],
-      order: { createdAt: 'DESC' }
-    });
-
-    return participations.map(participation => ({
-      challengeId: participation.challengeId,
-      challengeTitle: participation.challenge.title,
-      progress: participation.progress,
-      goal: participation.challenge.goal,
-      status: participation.status,
-      reward: participation.rewardEarned,
-      expiresAt: participation.challenge.expiresAt
-    }));
-  }
-
-  async getChallengeStats(): Promise<ChallengeStats> {
-    const [totalChallenges, activeChallenges, completedChallenges] = await Promise.all([
-      this.challengeRepository.count(),
-      this.challengeRepository.count({ where: { status: ChallengeStatus.ACTIVE } }),
-      this.challengeRepository.count({ where: { status: ChallengeStatus.COMPLETED } })
-    ]);
-
-    const totalRewardsEarned = await this.participationRepository
-      .createQueryBuilder('participation')
-      .select('SUM(participation.rewardEarned)', 'total')
-      .where('participation.status = :status', { status: ParticipationStatus.COMPLETED })
-      .getRawOne();
-
-    const participationRate = totalChallenges > 0 
-      ? (completedChallenges / totalChallenges) * 100 
-      : 0;
-
-    return {
-      totalChallenges,
-      activeChallenges,
-      completedChallenges,
-      totalRewardsEarned: parseFloat(totalRewardsEarned?.total || '0'),
-      participationRate
-    };
-  }
-
-  async expireChallenges(): Promise<void> {
-    const expiredChallenges = await this.challengeRepository.find({
-      where: {
-        status: ChallengeStatus.ACTIVE,
-        expiresAt: LessThan(new Date())
+      // Idempotency: skip if already rewarded
+      if (participation.stellarTransactionId) {
+        this.logger.log(
+          `Reward already distributed for participation ${participation.id}: ${participation.stellarTransactionId}`,
+        );
+        return { success: true, transactionId: participation.stellarTransactionId };
       }
-    });
 
-    for (const challenge of expiredChallenges) {
-      challenge.status = ChallengeStatus.EXPIRED;
-      await this.challengeRepository.save(challenge);
-      
-      this.logger.log(`Challenge expired: ${challenge.title}`);
+      // Lookup user’s Stellar public key
+      const user = await this.usersService.findById(participation.userId);
+      const userStellarPublicKey =
+        user?.stellarPublicKey || user?.walletInfo?.stellarPublicKey;
+
+      if (!userStellarPublicKey) {
+        throw new Error(`User ${participation.userId} has no Stellar public key`);
+      }
+
+      // Distribute reward
+      const rewardAmount = participation.challenge.reward || 0;
+      const result = await this.stellarService.distributeReward(
+        userStellarPublicKey,
+        rewardAmount,
+      );
+
+      if (!result.success) {
+        participation.rewardFailedReason = result.error || 'Unknown error';
+        await this.participationRepository.save(participation);
+
+        return { success: false, error: participation.rewardFailedReason };
+      }
+
+      participation.stellarTransactionId = result.txHash;
+      await this.participationRepository.save(participation);
+
+      this.logger.log(
+        `Reward distributed for participation ${participation.id}: tx ${result.txHash}`,
+      );
+
+      return { success: true, transactionId: result.txHash };
+    } catch (error: any) {
+      this.logger.error(`processReward error: ${error.message}`);
+      return { success: false, error: error.message || String(error) };
     }
   }
 }

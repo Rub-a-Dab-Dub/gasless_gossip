@@ -1,14 +1,25 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Index, ManyToOne, JoinColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Index,
+  ManyToOne,
+  JoinColumn,
+  Unique,
+} from 'typeorm';
 import { Challenge } from './challenge.entity';
 
 export enum ParticipationStatus {
   ACTIVE = 'active',
   COMPLETED = 'completed',
   FAILED = 'failed',
-  ABANDONED = 'abandoned'
+  ABANDONED = 'abandoned',
 }
 
 @Entity('challenge_participations')
+@Unique(['userId', 'challengeId'])
 @Index(['userId'])
 @Index(['challengeId'])
 @Index(['status'])
@@ -26,7 +37,7 @@ export class ChallengeParticipation {
   @Column({
     type: 'enum',
     enum: ParticipationStatus,
-    default: ParticipationStatus.ACTIVE
+    default: ParticipationStatus.ACTIVE,
   })
   status!: ParticipationStatus;
 
@@ -45,7 +56,9 @@ export class ChallengeParticipation {
   @Column({ length: 100, nullable: true })
   stellarTransactionId?: string;
 
-  @ManyToOne(() => Challenge, (challenge) => challenge.participations, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Challenge, (challenge) => challenge.participations, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'challengeId' })
   challenge!: Challenge;
 
