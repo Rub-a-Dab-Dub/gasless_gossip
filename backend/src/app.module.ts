@@ -1,11 +1,16 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import * as path from 'path';
 import * as fs from 'fs';
 import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
+import { TradeModule } from './trade/trade.module';
+import { RoomThemesModule } from './room-themes/room-themes.module';
+
+
 
 function loadModules(): (new () => any)[] {
   const modulesDir = path.join(__dirname);
@@ -46,7 +51,15 @@ function loadModules(): (new () => any)[] {
     }),
     DatabaseModule,
     HealthModule,
+    EventEmitterModule.forRoot(),
+    CacheModule,
+    LeaderboardsModule,
     ...loadModules(),
+    TradeModule,
+    SecretsModule,
+    PodcastRoomsModule,
+    GamblesModule,
+    RoomThemesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
