@@ -23,7 +23,7 @@ const FeaturesSection = () => {
                 style={{ color: "var(--primary-green)" }}
               >
                 Say goodbye to gas fees. Gasless Gossip uses account abstraction
-                and Starknet's L2 scalability to let you send messages without
+                and Stellar's L2 scalability to let you send messages without
                 ever worrying about transaction costs.
               </p>
 

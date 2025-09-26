@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Gasless Gossip - Social Messaging on Starknet",
-  description: "A social messaging app built on Starknet with real-time chat and token tipping - all gasless.",
+  title: "Gasless Gossip - Social Messaging on Stellar",
+  description:
+    "A social messaging app built on Stellar with real-time chat and token tipping - all gasless.",
 };
 
 export default function RootLayout({
