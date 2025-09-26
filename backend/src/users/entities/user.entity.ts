@@ -1,4 +1,5 @@
 import { Badge } from '../../badges/entities/badge.entity';
+import { Reputation } from '../../reputation/entities/reputation.entity';
 import {
   Entity,
   Column,
@@ -27,6 +28,9 @@ export class User {
 
   @OneToMany(() => Badge, (badge) => badge.user)
   badges!: Badge[];
+
+  @OneToMany(() => Reputation, (reputation) => reputation.user)
+  reputations!: Reputation[];
 
   @Column({ default: true })
   isActive!: boolean;

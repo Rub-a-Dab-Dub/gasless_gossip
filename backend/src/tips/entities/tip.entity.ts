@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { User } from '../user/entities/user.entity'; // Adjust import based on your User entity location
+import { User } from '../../users/entities/user.entity';
 
 @Entity('tips')
 export class Tip {
@@ -30,3 +30,4 @@ export class Tip {
   @JoinColumn({ name: 'sender_id' })
   sender?: User;
 }
+
