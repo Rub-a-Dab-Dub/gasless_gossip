@@ -17,7 +17,9 @@ export class BansModule {}
 // Database migration file: src/migrations/YYYYMMDDHHMMSS-create-bans-reports-tables.ts
 import { MigrationInterface, QueryRunner, Table, Index } from 'typeorm';
 
-export class CreateBansReportsTables1234567890123 implements MigrationInterface {
+export class CreateBansReportsTables1234567890123
+  implements MigrationInterface
+{
   name = 'CreateBansReportsTables1234567890123';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -98,7 +100,14 @@ export class CreateBansReportsTables1234567890123 implements MigrationInterface 
           {
             name: 'type',
             type: 'enum',
-            enum: ['harassment', 'spam', 'inappropriate_content', 'hate_speech', 'scam', 'other'],
+            enum: [
+              'harassment',
+              'spam',
+              'inappropriate_content',
+              'hate_speech',
+              'scam',
+              'other',
+            ],
             isNullable: false,
           },
           {
@@ -129,5 +138,16 @@ export class CreateBansReportsTables1234567890123 implements MigrationInterface 
           },
           {
             name: 'createdAt',
-            type: ""
-          }
+            type: '',
+          },
+        ],
+      }),
+      true,
+    );
+  }
+
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.dropTable('reports', true);
+    await queryRunner.dropTable('bans', true);
+  }
+}

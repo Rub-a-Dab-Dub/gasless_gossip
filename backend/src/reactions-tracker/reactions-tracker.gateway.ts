@@ -1,4 +1,3 @@
-teDto } from './dto/reaction-update.dto';
 import {
   WebSocketGateway,
   WebSocketServer,
@@ -9,7 +8,8 @@ import {
 import { Server, Socket } from 'socket.io';
 import { Logger } from '@nestjs/common';
 import { ReactionsTrackerService } from './reactions-tracker.service';
-import { ReactionUpda
+import { ReactionUpdateDto } from './dto/reaction-metrics-filter.dto';
+
 @WebSocketGateway({
   cors: {
     origin: '*',
@@ -18,7 +18,7 @@ import { ReactionUpda
 })
 export class ReactionsTrackerGateway {
   @WebSocketServer()
-  server: Server;
+  server!: Server;
 
   private readonly logger = new Logger(ReactionsTrackerGateway.name);
 
