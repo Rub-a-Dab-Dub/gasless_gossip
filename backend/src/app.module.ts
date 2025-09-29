@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { NotificationsModule } from './notifications/notifications.module';
 import { IntentGossipModule } from './intent-gossip/intent-gossip.module';
+import { DataEncryptionModule } from './security/data-encryption.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { IntentGossipModule } from './intent-gossip/intent-gossip.module';
     TypeOrmModule.forRoot(),
     NotificationsModule,
     IntentGossipModule,
+    DataEncryptionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
