@@ -60,12 +60,12 @@ impl Contract {
     }
 
     // Updates a user's level. This would be called from the backend service after a user reaches a new level.
-    
+
     pub fn update_level(env: Env, user: Address, new_level: u32) {
         env.storage()
             .persistent()
             .set::<Address, UserProfile>(&user, &UserProfile { current_level: new_level });
-        
+
         env.events().publish((symbol_short!("lvl_up"), user), (new_level,));
     }
 
@@ -85,7 +85,7 @@ impl Contract {
             .persistent()
             .get::<Address, UserProfile>(&user)
             .unwrap_or_else(|| panic!("user profile not found"));
-        
+
         let claimed_rewards: Vec<u32> = env
             .storage()
             .persistent()
@@ -118,7 +118,7 @@ impl Contract {
                 (level_to_claim, reward.reward_type, reward.amount, token_contract),
             );
         } else {
-            
+
             env.events().publish(
                 (symbol_short!("reward"), user.clone()),
                 (level_to_claim, reward.reward_type, reward.amount),

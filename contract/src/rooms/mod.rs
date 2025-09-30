@@ -1,1 +1,1 @@
-pub(crate) mod rooms;
+pub mod rooms;
