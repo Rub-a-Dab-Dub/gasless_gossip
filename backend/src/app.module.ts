@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { NotificationsModule } from './notifications/notifications.module';
 import { IntentGossipModule } from './intent-gossip/intent-gossip.module';
 import { DataEncryptionModule } from './security/data-encryption.module';
+import { PaymasterModule } from './services/paymaster.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { DataEncryptionModule } from './security/data-encryption.module';
     NotificationsModule,
     IntentGossipModule,
     DataEncryptionModule,
+    PaymasterModule,
   ],
   controllers: [AppController],
   providers: [AppService],

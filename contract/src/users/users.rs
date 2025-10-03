@@ -9,7 +9,7 @@ use soroban_sdk::{
 #[derive(Clone, Debug)]
 pub struct UserRegistered {
     pub account: Address,
-    pub username: String, 
+    pub username: String,
 }
 
 #[contractevent]
