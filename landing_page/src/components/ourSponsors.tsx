@@ -4,8 +4,8 @@ import ArrowIcon from "../../public/images/arrow.svg";
 
 export default function whatWeOffer() {
   return (
-    <div className="p-8 mt-32 flex flex-col gap-6">
-      <h2 className="font-medium text-4xl md:text-[64px] leading-[100%] text:[#121418] md:text-[#121418]">
+    <div className="max-w-[1440px] mx-auto p-8 mt-32 flex flex-col gap-6">
+      <h2 className="font-medium text-xl md:text-2xl leading-[100%] text:[#121418] md:text-[#121418]">
         Our partners & sponsors
       </h2>
       <p className="font-normal font-baloo_2 text-base leading-[30px] text-[#A3A9A6]">

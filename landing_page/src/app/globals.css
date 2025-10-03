@@ -22,6 +22,8 @@
   --font-mono: var(--font-geist-mono);
   --font-fredoka: var(--font-fredoka);
   --font-baloo_2: var(--font-baloo_2);
+
+  --breakpoint-xs: 375px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -59,12 +61,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2d5a2d;
+  background: #15fde4;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #1e3d1e;
+  background: #13e5ce;
 }
 
 /* Smooth scrolling */

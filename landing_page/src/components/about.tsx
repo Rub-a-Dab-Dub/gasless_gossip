@@ -4,9 +4,9 @@ import AboutImage from "../../public/images/about-us.svg";
 
 const About = () => {
   return (
-    <div className="flex flex-row justify-between gap-5 mt-16 w-full ">
-      <div className="flex flex-col  md:w-[500px] gap-2 px-8">
-        <h2 className="font-medium text-4xl md:text-[64px] leading-[100%] text:[#121418] md:text-[#121418]">
+    <div className="flex flex-row justify-center gap-5 mt-16 w-full ">
+      <div className="flex flex-col md:w-[700px] lg:w-[500px] gap-2 px-8">
+        <h2 className="font-medium text-4xl md:text-3xl lg:text-[64px] leading-[100%] text:[#121418] md:text-[#121418]">
           About Us
         </h2>
         <p className="font-normal font-baloo_2 text-base leading-[30px] text-[#A3A9A6]">

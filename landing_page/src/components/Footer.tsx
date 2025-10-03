@@ -1,4 +1,3 @@
-import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Twitter from "../../public/images/twitter_logo.svg";
@@ -7,8 +6,8 @@ import Github from "../../public/images/githun_logo.svg";
 
 const Footer = () => {
   return (
-    <footer className="relative bg-[url(/images/mobile_footer_bg.svg)] md:bg-[url(/images/footer_bg.svg)] bg-contain bg-no-repeat w-full min-h-[423px] px-[10px] md:px-16 flex flex-cols items-center">
-      <div className="flex flex-col justify-center gap-16 w-full">
+    <footer className="bg-[url(/images/mobile_footer_bg.svg)] md:bg-[url(/images/footer_bg.svg)] bg-cover bg-no-repeat w-full min-h-[423px] md:bg-cover px-[10px] md:px-16 flex flex-cols items-center">
+      <div className="max-w-[1440px] mx-auto flex flex-col justify-center 2xl:mt-24 gap-16 w-full">
         <div className="text-[#FFFFFF] flex justify-between md:justify-center md:gap-16 items-center">
           <Link
             href=""

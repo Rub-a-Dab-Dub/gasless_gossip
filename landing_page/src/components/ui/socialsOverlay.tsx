@@ -6,7 +6,7 @@ import Github from "../../../public/images/githun_logo.svg";
 
 export default function socialsOverlay() {
   return (
-    <div className="hidden text-[#FFFFFF] shadow-[0px_0px_12px_0px_#16F2DA14_inset] backdrop-blur-[20px] w-full max-w-sm mx-auto bg-[#1214187A] border border-[#3C4A47] rounded-[20px] p-4 md:flex flex-col items-center gap-4">
+    <div className="hidden text-[#FFFFFF] shadow-[0px_0px_12px_0px_#16F2DA14_inset] backdrop-blur-[20px] w-full max-w-sm mx-auto bg-[#1214187A] border border-[#3C4A47] rounded-[20px] p-4 xl:flex flex-col items-center gap-4">
       <Link
         href=""
         aria-label="Gasless Gossips page"
