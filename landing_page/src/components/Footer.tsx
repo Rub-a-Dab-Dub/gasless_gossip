@@ -61,8 +61,9 @@ const Footer = () => {
           <span className="text-[#3C4A47]">
             &copy; copyright gaslessgossip{new Date().getFullYear()}
           </span>
-          <div className="text-[#A3A9A6]">
+          <div className="text-[#A3A9A6] flex items-center gap-1">
             <span>Privacy policy</span>
+            <span className="text-lg leading-none ">•</span>
             <span>terms & conditions</span>
           </div>
         </div>

@@ -10,7 +10,7 @@ const HeroSection = () => {
         <h2 className="font-medium text-[32px] text:[#121418] md:text-[#F1F7F6] leading-9">
           Header Texts
         </h2>
-        <p className="font-normal text-base text-[#A3A9A6]">
+        <p className="font-normal font-baloo_2 text-base text-[#A3A9A6]">
           Chat, share secrets, send tokens, and level up in the first gamified
           messaging app built on-chain.
         </p>

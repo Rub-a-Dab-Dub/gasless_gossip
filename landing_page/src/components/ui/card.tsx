@@ -24,7 +24,7 @@ export default function Card({
           className="object-contain"
         />
         <h3 className="text-[#121418] text-lg font-semibold">{title}</h3>
-        <p className="text-sm text-[#6B7A77]">{description}</p>
+        <p className="text-sm font-baloo_2 text-[#6B7A77]">{description}</p>
       </div>
     </div>
   );
