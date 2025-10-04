@@ -1,5 +1,9 @@
-// src/token-transactions/transactions.service.ts
-import { Injectable, Logger, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  OnModuleInit,
+  OnModuleDestroy,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { ethers } from 'ethers';
@@ -13,7 +17,7 @@ import { ReverseTransactionDto } from './dto/reverse-transaction.dto';
 @Injectable()
 export class TransactionsService implements OnModuleInit, OnModuleDestroy {
   private readonly logger = new Logger(TransactionsService.name);
-  private ethersProvider: ethers.providers.Provider;
+  private ethersProvider: ethers.Provider;
   private listening = false;
 
   constructor(
@@ -23,7 +27,7 @@ export class TransactionsService implements OnModuleInit, OnModuleDestroy {
     // inject other services like UsersService, AlertsService, HttpService for webhooks...
   ) {
     // provider config via env
-    this.ethersProvider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+    this.ethersProvider = new ethers.JsonRpcProvider(process.env.RPC_URL);
   }
 
   async onModuleInit() {
@@ -92,7 +96,11 @@ export class TransactionsService implements OnModuleInit, OnModuleDestroy {
 
     // mark reversed
     tx.status = TransactionStatus.REVERSED;
-    tx.meta = { ...(tx.meta || {}), reverseReason: dto.reason, reversedAt: new Date().toISOString() };
+    tx.meta = {
+      ...(tx.meta || {}),
+      reverseReason: dto.reason,
+      reversedAt: new Date().toISOString(),
+    };
     const saved = await this.txRepo.save(tx);
 
     // create a compensating accounting record in your ledger elsewhere (not included)
@@ -106,12 +114,16 @@ export class TransactionsService implements OnModuleInit, OnModuleDestroy {
     const tx = await this.txRepo.findOne({ where: { traceId } });
     if (!tx) throw new Error('Transaction not found');
     tx.status = TransactionStatus.VOIDED;
-    tx.meta = { ...(tx.meta || {}), voidReason: reason, voidedAt: new Date().toISOString() };
+    tx.meta = {
+      ...(tx.meta || {}),
+      voidReason: reason,
+      voidedAt: new Date().toISOString(),
+    };
     return this.txRepo.save(tx);
   }
 
   // Accept a confirmed on-chain tx
-  async acceptOnChainTx(txHash: string, receipt: ethers.providers.TransactionReceipt) {
+  async acceptOnChainTx(txHash: string, receipt: ethers.TransactionReceipt) {
     let tx = await this.findByTxHash(txHash);
     if (!tx) {
       // create a record if missing
@@ -146,13 +158,15 @@ export class TransactionsService implements OnModuleInit, OnModuleDestroy {
     const usdValue = await this.estimateUsdValue(tx.amount, tx.tokenSymbol);
     if (usdValue > 1000) {
       // trigger high-value alert (webhook/email/push)
-      this.logger.log(`High value tx > $1000: trace=${tx.traceId} usd=${usdValue}`);
+      this.logger.log(
+        `High value tx > $1000: trace=${tx.traceId} usd=${usdValue}`,
+      );
       // send alert via AlertsService
     }
   }
 
   // Simple USD estimation — replace with price oracle
-  private async estimateUsdValue(amount: string, token='TOKEN') {
+  private async estimateUsdValue(amount: string, token = 'TOKEN') {
     // naive: if token is ETH or a known token, call price feed; here stub:
     const price = token === 'ETH' ? 2000 : 1; // stubbed values
     return parseFloat(amount) * price;
@@ -212,10 +226,10 @@ export class TransactionsService implements OnModuleInit, OnModuleDestroy {
   }
 
   // inside TransactionsService
-async getTopSenders(limit = 10) {
-  // raw SQL using Postgres aggregation for speed
-  const rows = await this.dataSource.query(
-    `
+  async getTopSenders(limit = 10) {
+    // raw SQL using Postgres aggregation for speed
+    const rows = await this.dataSource.query(
+      `
     SELECT "senderId" as "userId", SUM(amount::numeric) as total
     FROM token_transactions
     WHERE status = $1
@@ -223,11 +237,16 @@ async getTopSenders(limit = 10) {
     ORDER BY total DESC
     LIMIT $2
     `,
-    [TransactionStatus.CONFIRMED, limit],
-  );
+      [TransactionStatus.CONFIRMED, limit],
+    );
 
-  // optionally map to user details via usersService
-  return rows;
-}
+    // optionally map to user details via usersService
+    return rows;
+  }
 
+  async findPendingTransactions() {
+    return this.txRepo.find({
+      where: { status: TransactionStatus.PENDING },
+    });
+  }
 }
