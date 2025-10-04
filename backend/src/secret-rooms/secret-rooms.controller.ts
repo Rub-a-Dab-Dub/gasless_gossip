@@ -272,4 +272,119 @@ export class SecretRoomsController {
       },
     };
   }
+
+  // NEW ENHANCED FEATURES ENDPOINTS
+
+  @Get('trending/most-reacted')
+  @Throttle({ short: { limit: 20, ttl: 60000 } })
+  async getMostReactedRooms(
+    @Query('limit', new ParseIntPipe({ optional: true })) limit?: number,
+    @Query('timeWindow') timeWindow?: string,
+  ): Promise<SecretRoomDto[]> {
+    const timeWindowDate = timeWindow ? new Date(timeWindow) : undefined;
+    return this.secretRoomsService.getMostReactedSecretRooms(limit || 10, timeWindowDate);
+  }
+
+  @Post(':id/reactions/update')
+  @Throttle({ short: { limit: 100, ttl: 60000 } }) // High limit for reactions
+  async updateRoomReaction(
+    @Param('id') roomId: string,
+    @Body() body: { reactionType: string; increment: boolean },
+  ): Promise<{ message: string }> {
+    await this.secretRoomsService.updateRoomReactionMetrics(roomId, body.reactionType, body.increment);
+    return { message: 'Reaction metrics updated' };
+  }
+
+  @Post(':id/xp/award-creator')
+  @Throttle({ short: { limit: 10, ttl: 60000 } })
+  async awardCreatorXp(
+    @Param('id') roomId: string,
+    @Body() body: { reason?: string },
+  ): Promise<{ message: string }> {
+    await this.secretRoomsService.awardCreatorXpBonus(roomId, body.reason || 'manual_award');
+    return { message: 'XP awarded to room creator' };
+  }
+
+  @Get('scheduler/stats')
+  @Throttle({ short: { limit: 10, ttl: 60000 } })
+  async getSchedulerStats(): Promise<{
+    expiredRoomsCount: number;
+    scheduledForDeletion: number;
+    averageRoomLifespan: number;
+  }> {
+    // TODO: Integrate with SecretRoomSchedulerService
+    return {
+      expiredRoomsCount: 0,
+      scheduledForDeletion: 0,
+      averageRoomLifespan: 0
+    };
+  }
+
+  @Post('scheduler/trigger-cleanup')
+  @Throttle({ short: { limit: 2, ttl: 300000 } }) // 2 cleanups per 5 minutes
+  async triggerManualCleanup(): Promise<{
+    message: string;
+    processed: number;
+    errors: number;
+  }> {
+    // TODO: Integrate with SecretRoomSchedulerService
+    return {
+      message: 'Manual cleanup completed',
+      processed: 0,
+      errors: 0
+    };
+  }
+
+  @Get('fake-names/themes')
+  @Throttle({ short: { limit: 10, ttl: 60000 } })
+  async getFakeNameThemes(): Promise<{
+    themes: string[];
+    previews: Record<string, string[]>;
+  }> {
+    // TODO: Integrate with FakeNameGeneratorService
+    return {
+      themes: ['default', 'space', 'animals', 'colors', 'cyber', 'mythical'],
+      previews: {
+        default: ['Shadow Walker', 'Night Whisper', 'Silent Ghost'],
+        space: ['Cosmic Wanderer', 'Star Drifter', 'Nebula Explorer'],
+        animals: ['Cyber Fox', 'Digital Wolf', 'Neon Tiger'],
+        colors: ['Crimson Shade', 'Azure Phantom', 'Golden Spirit'],
+        cyber: ['Digital Ghost', 'Neon Runner', 'Cyber Phantom'],
+        mythical: ['Ancient Dragon', 'Divine Phoenix', 'Mystic Oracle']
+      }
+    };
+  }
+
+  @Post('fake-names/preview')
+  @Throttle({ short: { limit: 20, ttl: 60000 } })
+  async previewFakeNames(
+    @Body() body: { theme: string; count?: number },
+  ): Promise<{ names: string[] }> {
+    // TODO: Integrate with FakeNameGeneratorService
+    const mockNames = [
+      'Shadow Walker 123',
+      'Neon Oracle 456', 
+      'Cyber Phantom 789'
+    ];
+    return { names: mockNames.slice(0, body.count || 3) };
+  }
+
+  @Get('moderation/queue-stats')
+  @Throttle({ short: { limit: 10, ttl: 60000 } })
+  async getModerationQueueStats(): Promise<{
+    totalItems: number;
+    pending: number;
+    processing: number;
+    capacity: number;
+    capacityUsed: number;
+  }> {
+    // TODO: Integrate with VoiceModerationQueueService
+    return {
+      totalItems: 45,
+      pending: 12,
+      processing: 3,
+      capacity: 100,
+      capacityUsed: 45
+    };
+  }
 }

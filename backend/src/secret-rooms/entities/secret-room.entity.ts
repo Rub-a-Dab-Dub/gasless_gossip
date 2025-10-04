@@ -82,6 +82,32 @@ export class SecretRoom {
   @Column({ type: 'timestamptz', nullable: true })
   archivedAt?: Date;
 
+  @Column({ type: 'jsonb', nullable: true })
+  moderationSettings?: {
+    creatorModPrivileges?: boolean;
+    autoModeration?: boolean;
+    voiceModerationQueue?: boolean;
+    maxViolationsBeforeAutoDelete?: number;
+    pseudonymDecryption?: boolean;
+  };
+
+  @Column({ type: 'jsonb', nullable: true })
+  reactionMetrics?: {
+    totalReactions?: number;
+    mostReactedMessageId?: string;
+    trendingScore?: number;
+    lastTrendingUpdate?: Date;
+  };
+
+  @Column({ type: 'boolean', default: true })
+  enablePseudonyms!: boolean;
+
+  @Column({ type: 'varchar', length: 50, default: 'default' })
+  fakeNameTheme!: string;
+
+  @Column({ type: 'int', default: 0 })
+  xpMultiplier!: number;
+
   @CreateDateColumn()
   createdAt!: Date;
 

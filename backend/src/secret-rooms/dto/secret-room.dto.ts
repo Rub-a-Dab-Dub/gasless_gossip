@@ -1,4 +1,4 @@
-import { IsString, IsBoolean, IsNumber, IsOptional, IsEnum, IsArray, Min, Max, Length } from 'class-validator';
+import { IsString, IsBoolean, IsNumber, IsOptional, IsEnum, IsArray, Min, Max, Length, IsDate } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class CreateSecretRoomDto {
@@ -31,6 +31,20 @@ export class CreateSecretRoomDto {
   theme?: string;
 
   @IsOptional()
+  @IsBoolean()
+  enablePseudonyms?: boolean;
+
+  @IsOptional()
+  @IsString()
+  @IsEnum(['default', 'space', 'animals', 'colors', 'cyber', 'mythical'])
+  fakeNameTheme?: 'default' | 'space' | 'animals' | 'colors' | 'cyber' | 'mythical';
+
+  @IsOptional()
+  @Transform(({ value }) => new Date(value))
+  @IsDate()
+  expiresAt?: Date;
+
+  @IsOptional()
   settings?: {
     allowAnonymous?: boolean;
     requireApproval?: boolean;
@@ -39,6 +53,15 @@ export class CreateSecretRoomDto {
     allowFileSharing?: boolean;
     maxFileSize?: number;
     moderationLevel?: 'low' | 'medium' | 'high';
+  };
+
+  @IsOptional()
+  moderationSettings?: {
+    creatorModPrivileges?: boolean;
+    autoModeration?: boolean;
+    voiceModerationQueue?: boolean;
+    maxViolationsBeforeAutoDelete?: number;
+    pseudonymDecryption?: boolean;
   };
 
   @IsOptional()
@@ -158,7 +181,23 @@ export class SecretRoomDto {
   currentUsers!: number;
   category?: string;
   theme?: string;
+  enablePseudonyms!: boolean;
+  fakeNameTheme!: string;
+  xpMultiplier!: number;
   settings?: Record<string, any>;
+  moderationSettings?: {
+    creatorModPrivileges?: boolean;
+    autoModeration?: boolean;
+    voiceModerationQueue?: boolean;
+    maxViolationsBeforeAutoDelete?: number;
+    pseudonymDecryption?: boolean;
+  };
+  reactionMetrics?: {
+    totalReactions?: number;
+    mostReactedMessageId?: string;
+    trendingScore?: number;
+    lastTrendingUpdate?: Date;
+  };
   metadata?: Record<string, any>;
   lastActivityAt?: Date;
   expiresAt?: Date;

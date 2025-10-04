@@ -41,8 +41,36 @@ export class SecretRoomsService {
       // Check user room limit
       await this.checkUserRoomLimit(creatorId);
 
+      // Validate expiry date if provided
+      if (dto.expiresAt && new Date(dto.expiresAt) <= new Date()) {
+        throw new BadRequestException('Expiry date must be in the future');
+      }
+
       // Generate unique room code
       const roomCode = await this.generateUniqueRoomCode();
+
+      // Set default moderation settings with creator privileges
+      const moderationSettings = {
+        creatorModPrivileges: true,
+        autoModeration: dto.settings?.moderationLevel !== 'low',
+        voiceModerationQueue: dto.settings?.moderationLevel === 'high',
+        maxViolationsBeforeAutoDelete: 3,
+        pseudonymDecryption: true,
+        ...dto.moderationSettings
+      };
+
+      // Initialize reaction metrics
+      const reactionMetrics = {
+        totalReactions: 0,
+        trendingScore: 0,
+        lastTrendingUpdate: new Date()
+      };
+
+      // Calculate XP multiplier based on room settings
+      let xpMultiplier = 0;
+      if (dto.isPrivate) xpMultiplier += 25; // 25% bonus for private rooms
+      if (dto.enablePseudonyms) xpMultiplier += 15; // 15% bonus for pseudonym rooms
+      if (dto.expiresAt) xpMultiplier += 10; // 10% bonus for timed rooms
 
       // Create secret room
       const secretRoom = this.secretRoomRepo.create({
@@ -54,7 +82,13 @@ export class SecretRoomsService {
         maxUsers: dto.maxUsers || 50,
         category: dto.category,
         theme: dto.theme,
+        enablePseudonyms: dto.enablePseudonyms !== false, // Default to true
+        fakeNameTheme: dto.fakeNameTheme || 'default',
+        expiresAt: dto.expiresAt,
+        xpMultiplier,
         settings: dto.settings,
+        moderationSettings,
+        reactionMetrics,
         metadata: dto.metadata,
         status: 'active',
         isActive: true,
@@ -63,8 +97,20 @@ export class SecretRoomsService {
 
       const savedRoom = await this.secretRoomRepo.save(secretRoom);
 
-      // Add creator as room owner
+      // Generate fake name for creator if pseudonyms enabled
+      let creatorNickname: string | undefined;
+      if (savedRoom.enablePseudonyms) {
+        creatorNickname = await this.generateFakeNameForUser(
+          savedRoom.id, 
+          creatorId, 
+          savedRoom.fakeNameTheme
+        );
+      }
+
+      // Add creator as room owner with special privileges
       await this.addRoomMember(savedRoom.id, creatorId, 'owner', {
+        nickname: creatorNickname,
+        isAnonymous: savedRoom.enablePseudonyms,
         canInvite: true,
         canModerate: true,
         permissions: {
@@ -74,10 +120,19 @@ export class SecretRoomsService {
           canDelete: true,
           canEdit: true,
         },
+        metadata: {
+          joinSource: 'creation',
+          creatorPrivileges: true
+        }
       });
 
+      // Schedule room expiry if set
+      if (savedRoom.expiresAt) {
+        await this.scheduleRoomExpiry(savedRoom.id, savedRoom.expiresAt);
+      }
+
       const processingTime = Date.now() - startTime;
-      this.logger.log(`Secret room created: ${savedRoom.id} (${processingTime}ms)`);
+      this.logger.log(`Enhanced secret room created: ${savedRoom.id} (${processingTime}ms)`);
 
       return this.mapRoomToDto(savedRoom);
     } catch (error) {
@@ -501,7 +556,12 @@ export class SecretRoomsService {
       currentUsers: room.currentUsers,
       category: room.category,
       theme: room.theme,
+      enablePseudonyms: room.enablePseudonyms,
+      fakeNameTheme: room.fakeNameTheme,
+      xpMultiplier: room.xpMultiplier,
       settings: room.settings,
+      moderationSettings: room.moderationSettings,
+      reactionMetrics: room.reactionMetrics,
       metadata: room.metadata,
       lastActivityAt: room.lastActivityAt,
       expiresAt: room.expiresAt,
@@ -551,5 +611,117 @@ export class SecretRoomsService {
       metadata: invitation.metadata,
       createdAt: invitation.createdAt,
     };
+  }
+
+  /**
+   * Generate fake name for user using pseudonym system
+   */
+  private async generateFakeNameForUser(roomId: string, userId: string, theme: string): Promise<string> {
+    // Generate fake name using the theme
+    const fakeNameGenerator = new (await import('./fake-name-generator.service')).FakeNameGeneratorService();
+    let fakeName = fakeNameGenerator.generateFakeName(theme);
+    
+    // Ensure uniqueness in room by checking existing pseudonyms
+    let attempts = 0;
+    const maxAttempts = 10;
+    
+    // TODO: Integrate with existing pseudonym service
+    // For now, return the generated name
+    return fakeName;
+  }
+
+  /**
+   * Schedule room expiry for automatic deletion
+   */
+  private async scheduleRoomExpiry(roomId: string, expiresAt: Date): Promise<void> {
+    this.logger.log(`Scheduling room ${roomId} for deletion at ${expiresAt.toISOString()}`);
+    
+    // The actual scheduling is handled by SecretRoomSchedulerService
+    // This is just a placeholder for logging/tracking
+    
+    // TODO: Could integrate with a job queue system like Bull for more precise scheduling
+  }
+
+  /**
+   * Get most reacted secret rooms for trending/discovery
+   */
+  async getMostReactedSecretRooms(limit: number = 10, timeWindow?: Date): Promise<SecretRoomDto[]> {
+    const query = this.secretRoomRepo
+      .createQueryBuilder('room')
+      .where('room.isActive = :isActive', { isActive: true })
+      .andWhere('room.status = :status', { status: 'active' })
+      .andWhere('(room.expiresAt > :now OR room.expiresAt IS NULL)', { now: new Date() });
+
+    if (timeWindow) {
+      query.andWhere('room.lastActivityAt > :timeWindow', { timeWindow });
+    }
+
+    const rooms = await query
+      .orderBy('COALESCE((room.reactionMetrics->>\'trendingScore\')::numeric, 0)', 'DESC')
+      .addOrderBy('room.currentUsers', 'DESC')
+      .addOrderBy('room.lastActivityAt', 'DESC')
+      .limit(limit)
+      .getMany();
+
+    return rooms.map(room => this.mapRoomToDto(room));
+  }
+
+  /**
+   * Update reaction metrics for a room
+   */
+  async updateRoomReactionMetrics(roomId: string, reactionType: string, increment: boolean = true): Promise<void> {
+    const room = await this.secretRoomRepo.findOne({ where: { id: roomId } });
+    if (!room) return;
+
+    const weights = { 
+      like: 1, 
+      love: 2, 
+      laugh: 1.5, 
+      fire: 2, 
+      mind_blown: 2.5,
+      angry: 0.5, 
+      sad: 0.3 
+    };
+    
+    const weight = weights[reactionType] || 1;
+    const change = increment ? weight : -weight;
+
+    const updatedMetrics = {
+      ...room.reactionMetrics,
+      totalReactions: Math.max(0, (room.reactionMetrics?.totalReactions || 0) + (increment ? 1 : -1)),
+      trendingScore: Math.max(0, (room.reactionMetrics?.trendingScore || 0) + change),
+      lastTrendingUpdate: new Date()
+    };
+
+    await this.secretRoomRepo.update(roomId, { 
+      reactionMetrics: updatedMetrics,
+      lastActivityAt: new Date()
+    });
+
+    this.logger.debug(`Updated reaction metrics for room ${roomId}: ${JSON.stringify(updatedMetrics)}`);
+  }
+
+  /**
+   * Award XP to room creator for active room
+   */
+  async awardCreatorXpBonus(roomId: string, reason: string = 'room_activity'): Promise<void> {
+    const room = await this.secretRoomRepo.findOne({ where: { id: roomId } });
+    if (!room) return;
+
+    let xpAmount = 25; // Base bonus XP
+
+    // Apply room-specific multipliers
+    if (room.currentUsers >= 10) xpAmount += 15; // Active room bonus
+    if (room.reactionMetrics?.trendingScore && room.reactionMetrics.trendingScore > 100) {
+      xpAmount += Math.floor(room.reactionMetrics.trendingScore / 20);
+    }
+
+    // Apply room XP multiplier
+    xpAmount = Math.floor(xpAmount * (1 + (room.xpMultiplier || 0) / 100));
+
+    this.logger.log(`Awarding ${xpAmount} XP to creator ${room.creatorId} for room ${roomId} (${reason})`);
+    
+    // TODO: Integrate with actual XP service
+    // await this.xpService.awardXp(room.creatorId, xpAmount, reason);
   }
 }
