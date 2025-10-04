@@ -9,6 +9,7 @@ import { IntentGossipModule } from './intent-gossip/intent-gossip.module';
 import { DataEncryptionModule } from './security/data-encryption.module';
 import { PaymasterModule } from './services/paymaster.module';
 import { EventBoostService } from './event-boost/event-boost.service';
+import { TokenTransactionsModule } from './token-transactions/token-transactions.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { EventBoostService } from './event-boost/event-boost.service';
 
     DataEncryptionModule,
     PaymasterModule,
+    TokenTransactionsModule,
   ],
   controllers: [AppController],
   providers: [AppService, EventBoostService],
