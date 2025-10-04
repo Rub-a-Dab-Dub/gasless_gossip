@@ -19,7 +19,7 @@ import { EventBoostService } from './event-boost/event-boost.service';
     TypeOrmModule.forRoot(),
     NotificationsModule,
     IntentGossipModule,
-    providers: [EventBoostService],
+
     DataEncryptionModule,
     PaymasterModule,
   ],
