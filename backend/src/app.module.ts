@@ -8,6 +8,8 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { IntentGossipModule } from './intent-gossip/intent-gossip.module';
 import { DataEncryptionModule } from './security/data-encryption.module';
 import { PaymasterModule } from './services/paymaster.module';
+import { EventBoostService } from './event-boost/event-boost.service';
+import { EventBoostService } from './event-boost/event-boost.service';
 
 @Module({
   imports: [
@@ -22,6 +24,6 @@ import { PaymasterModule } from './services/paymaster.module';
     PaymasterModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, EventBoostService],
 })
 export class AppModule {}
