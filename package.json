@@ -1,0 +1,23 @@
+{
+  "name": "whspr_stellar",
+  "version": "1.0.0",
+  "description": "Whisper is a gamified, on-chain messaging app built on the Stellar network. Users chat, send/receive tokens, gift digital collectibles, share secrets, and level up — all with near‑zero fees on Stellar Testnet.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OgboiEhioma/whspr_stellar.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OgboiEhioma/whspr_stellar/issues"
+  },
+  "homepage": "https://github.com/OgboiEhioma/whspr_stellar#readme",
+  "keywords": [],
+  "dependencies": {
+    "@nestjs/cli": "^11.0.10"
+  }
+}
