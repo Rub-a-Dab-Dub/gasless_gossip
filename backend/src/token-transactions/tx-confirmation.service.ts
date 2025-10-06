@@ -1,6 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ethers } from 'ethers';
 import { TransactionsService } from './token-transactions.service';
+import { TransactionStatus } from './entities/transaction.entity';\
+
+
 
 @Injectable()
 export class TxConfirmationWorker {
