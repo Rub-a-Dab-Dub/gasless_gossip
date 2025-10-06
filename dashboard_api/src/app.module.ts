@@ -8,6 +8,7 @@ import { AuditLogModule } from './audit-log/audit-log.module';
 import { AdminModule } from './admin/admin.module';
 import { AdminUsersModule } from './admin/user/admin-users.module';
 import { ReportsModule } from './reports/reports.module';
+import { FinanceMetricsModule } from './finance-metrics/finance-metrics.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ReportsModule } from './reports/reports.module';
     AdminModule,
     AdminUsersModule,
     ReportsModule,
+    FinanceMetricsModule,
   ],
 })
 export class AppModule {}
