@@ -1,0 +1,42 @@
+import { Cache } from 'cache-manager';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { DataSource } from 'typeorm';
+import { XPTransactionRepository } from './repositories/xp-transaction.repository';
+import { CreateXPTransactionDto } from './dto/create-xp-transaction.dto';
+import { UpdateXPTransactionDto } from './dto/update-xp-transaction.dto';
+import { VoidXPTransactionDto } from './dto/void-xp-transaction.dto';
+import { QueryXPTransactionDto } from './dto/query-xp-transaction.dto';
+import { XPTransaction, TransactionStatus } from './entities/xp-transaction.entity';
+export declare class XPTransactionService {
+    private readonly xpRepository;
+    private cacheManager;
+    private eventEmitter;
+    private dataSource;
+    private readonly logger;
+    private readonly FRAUD_THRESHOLD;
+    private readonly CACHE_TTL;
+    constructor(xpRepository: XPTransactionRepository, cacheManager: Cache, eventEmitter: EventEmitter2, dataSource: DataSource);
+    create(dto: CreateXPTransactionDto): Promise<XPTransaction>;
+    findAll(query: QueryXPTransactionDto): Promise<{}>;
+    findOne(id: string): Promise<XPTransaction>;
+    update(id: string, dto: UpdateXPTransactionDto): Promise<XPTransaction>;
+    void(id: string, dto: VoidXPTransactionDto): Promise<XPTransaction>;
+    getAggregates(startDate?: string, endDate?: string): Promise<{}>;
+    getUserTotal(userId: string): Promise<number>;
+    exportToCSV(query: QueryXPTransactionDto, anonymize?: boolean): Promise<{
+        id: string;
+        userId: string;
+        username: any;
+        actionType: import("./entities/xp-transaction.entity").ActionType;
+        amount: number;
+        multiplier: number;
+        finalAmount: number;
+        status: TransactionStatus;
+        reason: string;
+        transactionId: string;
+        createdAt: string;
+    }[]>;
+    private checkFraudAndAlert;
+    private invalidateUserCache;
+    private anonymizeUserId;
+}
