@@ -43,6 +43,15 @@ export class User {
   xp: number;
 
   @Column({ default: false })
+  isCreator: boolean;
+
+  @Column({ type: 'timestamp', nullable: true })
+  creatorSince: Date | null;
+
+  @Column({ type: 'varchar', length: 32, default: 'inactive' })
+  creatorStatus: 'inactive' | 'pending' | 'active' | 'downgraded';
+
+  @Column({ default: false })
   isVerified: boolean;
 
   @Column({ default: false })

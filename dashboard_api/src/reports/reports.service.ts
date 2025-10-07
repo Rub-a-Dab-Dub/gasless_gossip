@@ -9,6 +9,7 @@ import { Message } from '../../entities/message.entity';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Readable } from 'stream';
+import PDFDocument from 'pdfkit';
 
 @Injectable()
 export class ReportsService {
@@ -112,8 +113,26 @@ export class ReportsService {
 
     const fileName = `report_${report.id}.${report.format}`;
     const filePath = path.join(uploadsDir, fileName);
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+    if (report.format === ReportFormat.PDF) {
+      await this.generatePdf(filePath, data);
+    } else {
+      fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+    }
     return filePath;
+  }
+
+  private async generatePdf(filePath: string, data: any): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const doc = new PDFDocument({ margin: 50 });
+      const stream = fs.createWriteStream(filePath);
+      doc.pipe(stream);
+      doc.fontSize(18).text('Bulk Report', { underline: true });
+      doc.moveDown();
+      doc.fontSize(10).text(JSON.stringify(data, null, 2));
+      doc.end();
+      stream.on('finish', resolve);
+      stream.on('error', reject);
+    });
   }
 
   createDownloadStream(filePath: string): Readable {
