@@ -10,6 +10,7 @@ export enum ReportStatus {
 export enum ReportFormat {
   JSON = 'json',
   CSV = 'csv',
+  PDF = 'pdf',
 }
 
 @Entity('bulk_reports')
