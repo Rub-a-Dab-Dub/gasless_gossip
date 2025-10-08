@@ -14,7 +14,7 @@ import {
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { RoomType, RoomStatus } from '../entities/room.entity';
-import { FakeNameTheme } from '../services/fake-name-generator.service';
+import { FakeNameTheme } from '../chain-monitor/services/fake-name-generator.service';
 
 export class CreateSecretRoomDto {
   @IsString()
