@@ -11,6 +11,7 @@ import { SwaggerDocsModule } from './admin/swagger-docs/swagger-docs.module';
 import { ReportsModule } from './reports/reports.module';
 import { FinanceMetricsModule } from './finance-metrics/finance-metrics.module';
 import { AdminCreatorModule } from './admin/creator/admin-creator.module';
+import { RestoreProcedureModule } from './restore-procedure/restore-procedure.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AdminCreatorModule } from './admin/creator/admin-creator.module';
     ReportsModule,
     FinanceMetricsModule,
     AdminCreatorModule,
+    RestoreProcedureModule,
   ],
 })
 export class AppModule {}
