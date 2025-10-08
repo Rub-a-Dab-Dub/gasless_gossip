@@ -10,6 +10,7 @@ import { AdminUsersModule } from './admin/user/admin-users.module';
 import { SwaggerDocsModule } from './admin/swagger-docs/swagger-docs.module';
 import { ReportsModule } from './reports/reports.module';
 import { FinanceMetricsModule } from './finance-metrics/finance-metrics.module';
+import { AdminCreatorModule } from './admin/creator/admin-creator.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { FinanceMetricsModule } from './finance-metrics/finance-metrics.module';
     SwaggerDocsModule,
     ReportsModule,
     FinanceMetricsModule,
+    AdminCreatorModule,
   ],
 })
 export class AppModule {}
