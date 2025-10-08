@@ -5,11 +5,15 @@ import { ChatService } from './chat.service';
 import { ChatController } from './chat.controller';
 import { Message } from './entities/message.entity';
 import { User } from '../users/entities/user.entity';
-import { JwtModule } from '@nestjs/jwt';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
+import { Room } from './entities/room.entity';
+import { RoomMember } from './entities/room-member.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Message, User]), AuthModule],
+  imports: [
+    TypeOrmModule.forFeature([Message, User, Room, RoomMember]),
+    AuthModule,
+  ],
   providers: [ChatGateway, ChatService],
   controllers: [ChatController],
 })

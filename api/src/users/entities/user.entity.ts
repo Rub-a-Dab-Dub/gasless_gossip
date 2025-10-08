@@ -9,7 +9,8 @@ import {
 import { Post } from '../../posts/entities/post.entity';
 import { Comment } from '../../posts/entities/comment.entity';
 import { Like } from '../../posts/entities/like.entity';
-import { Message } from 'src/chat/entities/message.entity';
+import { Message } from '../../chat/entities/message.entity';
+import { RoomMember } from '../../chat/entities/room-member.entity';
 
 @Entity()
 export class User {
@@ -51,4 +52,7 @@ export class User {
 
   @OneToMany(() => Message, (message) => message.receiver)
   receivedMessages: Message[];
+
+  @OneToMany(() => RoomMember, (member) => member.user)
+  roomMemberships: RoomMember[];
 }
