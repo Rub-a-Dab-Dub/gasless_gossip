@@ -10,6 +10,8 @@ import { UpdateRoomDto } from './dto/update-room.dto';
 import { QueryRoomsDto } from './dto/query-rooms.dto';
 import { BulkUpdateRoomsDto } from './dto/bulk-update-rooms.dto';
 import { RoomExpiryService } from './services/room-expiry.service';
+import { RoomAuditService } from './room-audit.service';
+import { RoomAuditAction } from '../entities/room-audit.entity';
 
 @Injectable()
 export class RoomsService {
@@ -24,6 +26,7 @@ export class RoomsService {
     private transactionRepo: Repository<Transaction>,
     private dataSource: DataSource,
     private expiryService: RoomExpiryService,
+    private roomAuditService: RoomAuditService,
   ) {}
 
   async create(dto: CreateRoomDto, creatorId: string): Promise<Room> {
@@ -38,6 +41,20 @@ export class RoomsService {
     if (saved.expiresAt) {
       await this.expiryService.scheduleExpiry(saved.id, saved.expiresAt);
     }
+
+    // Create audit log
+    await this.roomAuditService.create({
+      roomId: saved.id,
+      creatorId,
+      action: RoomAuditAction.CREATED,
+      metadata: {
+        roomType: saved.type,
+        settings: dto,
+        maxParticipants: dto.maxParticipants,
+        xpRequired: dto.xpRequired,
+      },
+      description: `Room "${saved.name}" created by user ${creatorId}`,
+    });
 
     return saved;
   }
@@ -109,7 +126,7 @@ export class RoomsService {
     return room;
   }
 
-  async update(id: string, dto: UpdateRoomDto): Promise<Room> {
+  async update(id: string, dto: UpdateRoomDto, moderatorId?: string): Promise<Room> {
     const room = await this.roomRepo.findOne({ where: { id } });
     if (!room) throw new NotFoundException('Room not found');
 
@@ -120,7 +137,23 @@ export class RoomsService {
       await this.expiryService.scheduleExpiry(room.id, room.expiresAt);
     }
 
-    return this.roomRepo.save(room);
+    const updated = await this.roomRepo.save(room);
+
+    // Create audit log
+    await this.roomAuditService.create({
+      roomId: room.id,
+      creatorId: moderatorId || room.creatorId,
+      action: RoomAuditAction.UPDATED,
+      metadata: {
+        roomType: room.type,
+        settings: dto,
+        maxParticipants: dto.maxParticipants,
+        xpRequired: dto.xpRequired,
+      },
+      description: `Room "${room.name}" updated by ${moderatorId ? 'moderator' : 'creator'} ${moderatorId || room.creatorId}`,
+    });
+
+    return updated;
   }
 
   async bulkUpdate(dto: BulkUpdateRoomsDto): Promise<{ updated: number }> {
@@ -165,12 +198,38 @@ export class RoomsService {
     room.isClosed = true;
     await this.roomRepo.save(room);
     
+    // Create audit log
+    await this.roomAuditService.create({
+      roomId: room.id,
+      creatorId: room.creatorId,
+      action: RoomAuditAction.SUSPENDED,
+      metadata: {
+        roomType: room.type,
+        settings: {},
+        reasonForAction: 'Soft delete requested',
+      },
+      description: `Room "${room.name}" was soft deleted (closed)`,
+    });
+    
     // Notify via pub/sub (handled in gateway)
   }
 
   async hardDelete(id: string): Promise<void> {
     const room = await this.roomRepo.findOne({ where: { id } });
     if (!room) throw new NotFoundException('Room not found');
+
+    // Create audit log before deletion
+    await this.roomAuditService.create({
+      roomId: room.id,
+      creatorId: room.creatorId,
+      action: RoomAuditAction.DELETED,
+      metadata: {
+        roomType: room.type,
+        settings: {},
+        reasonForAction: 'Hard delete requested',
+      },
+      description: `Room "${room.name}" was permanently deleted`,
+    });
 
     await this.roomRepo.remove(room); // Cascade deletes messages, participants, transactions
     
