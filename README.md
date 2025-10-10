@@ -42,51 +42,6 @@ PORT=3001
 
 
 
-### 1) Backend Setup
-
-```bash
-cd backend
-npm install
-
-# Create environment file
-cat > .env << EOF
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=whspr_user
-DB_PASSWORD=yourpassword
-DB_NAME=whspr
-NODE_ENV=development
-PORT=3001
-STELLAR_NETWORK=testnet
-STELLAR_HORIZON_URL=https://horizon-testnet.stellar.org
-STELLAR_NETWORK_PASSPHRASE=Test SDF Network ; September 2015
-JWT_SECRET=your-super-secret-jwt-key-here
-JWT_EXPIRES_IN=24h
-EOF
-
-# Start the backend
-npm run start:dev
-```
-
-The backend will be available at `http://localhost:3001` with health check at `http://localhost:3001/health`.
-
-### 2) Mobile Setup
-
-```bash
-cd mobile
-flutter pub get
-
-
-# Run the app
-flutter run
-```
-
-### 3) Verify Setup
-
-1. **Backend Health Check**: Visit `http://localhost:3001/health` - should return `{"status":"ok"}`
-2. **Database Health Check**: Visit `http://localhost:3001/health/db` - should return `{"status":"DB Connected"}`
-3. **Mobile App**: Should connect to backend and display the home screen
-
 
 
 
