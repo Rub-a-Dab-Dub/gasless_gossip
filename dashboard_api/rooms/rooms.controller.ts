@@ -46,8 +46,8 @@ export class RoomsController {
   @Put(':id')
   @ApiOperation({ summary: 'Update room settings' })
   @Moderator()
-  async update(@Param('id') id: string, @Body() dto: UpdateRoomDto) {
-    return this.roomsService.update(id, dto);
+  async update(@Param('id') id: string, @Body() dto: UpdateRoomDto, @Req() req: any) {
+    return this.roomsService.update(id, dto, req.user.id);
   }
 
   @Put('bulk')
