@@ -19,13 +19,19 @@ import { RoomSchedulerService } from './services/room-scheduler.service';
 import { SecretRoomsGateway } from './gateways/secret-rooms.gateway';
 // Entities
 import { Room } from '../entities/room.entity';
+import { RoomAudit } from '../entities/room-audit.entity';
 import { Participant } from '../entities/participant.entity';
 import { Message } from '../entities/message.entity';
 import { Transaction } from '../entities/transaction.entity';
 
+// Import Room Audit components
+import { RoomAuditController } from './controllers/room-audit.controller';
+import { RoomAuditService } from './services/room-audit.service';
+import { ExportService } from './services/export.service';
+
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Room, Participant, Message, Transaction]),
+    TypeOrmModule.forFeature([Room, RoomAudit, Participant, Message, Transaction]),
     BullModule.registerQueue({
       name: 'room-expiry',
     }),
@@ -40,13 +46,16 @@ import { Transaction } from '../entities/transaction.entity';
   ],
   controllers: [
     RoomsController,
+    RoomAuditController,
     SecretRoomsController, // Enhanced secret rooms controller
   ],
   providers: [
     // Existing providers
     RoomsService,
+    RoomAuditService,
     RoomExpiryService,
     RoomExportService,
+    ExportService,
     RoomExpiryProcessor,
     RoomEventsGateway,
     ModeratorGuard,
@@ -58,6 +67,7 @@ import { Transaction } from '../entities/transaction.entity';
   ],
   exports: [
     RoomsService,
+    RoomAuditService,
     FakeNameGeneratorService,
     VoiceModerationQueueService,
     RoomSchedulerService,
