@@ -12,6 +12,7 @@ import { ReportsModule } from './reports/reports.module';
 import { FinanceMetricsModule } from './finance-metrics/finance-metrics.module';
 import { AdminCreatorModule } from './admin/creator/admin-creator.module';
 import { AnalyticsOverviewModule } from './analytics-overview/analytics-overview.module';
+import { SessionModule } from './session-management/session.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { AnalyticsOverviewModule } from './analytics-overview/analytics-overview
     FinanceMetricsModule,
     AdminCreatorModule,
     AnalyticsOverviewModule,
+    SessionModule,
   ],
 })
 export class AppModule {}
