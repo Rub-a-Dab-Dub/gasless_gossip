@@ -1,0 +1,59 @@
+class AppAssets {
+  //svgs
+  static const String vector1 = 'lib/assets/svg/Vector1.svg';
+  static const String vector2 = 'lib/assets/svg/Vector2.svg';
+  static const String password = 'lib/assets/svg/password.svg';
+  static const String home = 'lib/assets/svg/home.svg';
+  static const String quest = 'lib/assets/svg/quest.svg';
+  static const String chat = 'lib/assets/svg/chat.svg';
+  static const String room = 'lib/assets/svg/room.svg';
+  static const String profile = 'lib/assets/svg/profile.svg';
+  static const String search = 'lib/assets/svg/search.svg';
+  static const String forward = 'lib/assets/svg/forward.svg';
+  static const String option = 'lib/assets/svg/options.svg';
+  static const String share = 'lib/assets/svg/share.svg';
+  static const String files = 'lib/assets/svg/files.svg';
+  static const String nft = 'lib/assets/svg/nft.svg';
+  static const String wallet = 'lib/assets/svg/wallet.svg';
+  static const String add = 'lib/assets/svg/add.svg';
+  static const String gallery = 'lib/assets/svg/gallery.svg';
+  static const String gift = 'lib/assets/svg/gift.svg';
+  static const String receive = 'lib/assets/svg/receive.svg';
+  static const String swap = 'lib/assets/svg/swap.svg';
+  static const String shuffle = 'lib/assets/svg/shuffle.svg';
+  static const String convert = 'lib/assets/svg/convert.svg';
+  static const String splash = 'lib/assets/svg/splash.json';
+  static const String anima = 'lib/assets/svg/logo.json';
+  static const String chkn = 'lib/assets/svg/chkn.json';
+  static const String splashScreen = 'lib/assets/svg/Splash-screen.gif';
+
+  //images
+  static const String logo = 'lib/assets/image/logo.png';
+  static const String image1 = 'lib/assets/image/image1.png';
+  static const String image2 = 'lib/assets/image/image2.png';
+  static const String image3 = 'lib/assets/image/image3.png';
+  static const String image4 = 'lib/assets/image/image4.png';
+  static const String image5 = 'lib/assets/image/image5.png';
+  static const String image6 = 'lib/assets/image/image6.png';
+  static const String image7 = 'lib/assets/image/image7.png';
+  static const String image8 = 'lib/assets/image/image8.jpg';
+  static const String pic = 'lib/assets/image/pic.png';
+  static const String imag1 = 'lib/assets/image/imag1.png';
+  static const String imag2 = 'lib/assets/image/imag2.png';
+  static const String imag3 = 'lib/assets/image/imag3.png';
+  static const String imag4 = 'lib/assets/image/imag4.png';
+  static const String eggshell = 'lib/assets/image/eggshell.png';
+  static const String xp = 'lib/assets/image/xp.png';
+  static const String nft1 = 'lib/assets/image/nft1.png';
+  static const String nft2 = 'lib/assets/image/nft2.jpg';
+  static const String nft3 = 'lib/assets/image/nft3.jpg';
+  static const String nft4 = 'lib/assets/image/nft4.jpg';
+  static const String profilepic = 'lib/assets/image/profilepic.png';
+  static const String chick = 'lib/assets/image/chick.png';
+  static const String successful = 'lib/assets/image/successful.png';
+  static const String bigprofile = 'lib/assets/image/bigprofile.png';
+  static const String xlm = 'lib/assets/image/xlm.png';
+  static const String stark = 'lib/assets/image/stark.png';
+  static const String usdt = 'lib/assets/image/usdt.png';
+  static const String base = 'lib/assets/image/base.png';
+}
