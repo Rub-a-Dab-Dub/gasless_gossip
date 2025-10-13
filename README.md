@@ -19,7 +19,7 @@ Gasless Gossip is a gamified, on-chain messaging app. Users chat, send/receive t
 ```bash
 # 1. Setup database
 brew install postgresql && brew services start postgresql
-psql -U postgres -c "CREATE DATABASE gasless; CREATE USER whspr_user WITH PASSWORD 'yourpassword'; GRANT ALL PRIVILEGES ON DATABASE whspr TO whspr_user;"
+psql -U postgres -c "CREATE DATABASE gasless; CREATE USER whspr_user WITH PASSWORD 'yourpassword'; GRANT ALL PRIVILEGES ON DATABASE gasless TO whspr_user;"
 
 # 2. Start backend
 cd backend && npm install
@@ -28,9 +28,27 @@ DB_HOST=localhost
 DB_PORT=5432
 DB_USER=whspr_user
 DB_PASSWORD=yourpassword
-DB_NAME=whspr
+DB_NAME=gasless
 NODE_ENV=development
 PORT=3001
+EOF
+npm run start:dev
+
+
+# 3. Setup Flutter mobile app (Stacked CLI)
+cd mobile
+
+# Install dependencies
+flutter pub get
+
+# Install Stacked CLI globally (if not installed)
+dart pub global activate stacked_cli
+
+# Run Flutter app (iOS/Android)
+flutter run
+
+# Create a view, a service, and a dialog in one go
+stacked create view Home && stacked create service Auth && stacked create dialog Confirm
 
 
 ## Tech Stack
@@ -39,12 +57,3 @@ PORT=3001
 - Mobile: starknet.dart (iOS/Android)
 - Backend: NestJS (port 3001, starknet sepolia configuration)
 - Storage: IPFS/Arweave for media (hashed references on-chain)
-
-
-
-
-
-
-
-
-

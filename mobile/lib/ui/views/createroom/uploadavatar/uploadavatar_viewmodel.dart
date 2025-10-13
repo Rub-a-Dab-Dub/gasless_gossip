@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:mobile/app/app.router.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -165,6 +166,6 @@ class UploadavatarViewModel extends BaseViewModel {
   void createRoom() {
     // TODO: Implement room creation with avatar and images
     // For now, navigate back to home
-    _navigationService.clearStackAndShow('/bottomnav-view');
+    _navigationService.replaceWithBottomnavView();
   }
 }

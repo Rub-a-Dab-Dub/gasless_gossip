@@ -43,7 +43,7 @@ class BottomnavView extends StackedView<BottomnavViewModel> {
             final item = _navItems[index];
             final bool isActive = viewModel.currentIndex == index;
 
-            return GestureDetector(
+            return InkWell(
               onTap: () => viewModel.setIndex(index),
               child: Column(
                 mainAxisSize: MainAxisSize.min,

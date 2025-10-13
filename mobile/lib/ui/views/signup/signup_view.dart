@@ -79,49 +79,86 @@ class SignupView extends StackedView<SignupViewModel> {
                           ),
                           const SizedBox(height: 24),
 
-                          // Get Started button
                           Align(
                             alignment: Alignment.centerRight,
-                            child: Container(
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
                               width: 177,
                               height: 51,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF121418),
-                                boxShadow: const [
-                                  BoxShadow(
-                                      color: Color(0xFF0F5951),
-                                      offset: Offset(0, 1),
-                                      blurRadius: 10,
-                                      blurStyle: BlurStyle.inner,
-                                      inset: true),
-                                ],
-                                borderRadius: BorderRadius.circular(12),
-                              ),
+                              decoration: viewModel.allFilled
+                                  ? BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        begin: Alignment.bottomRight,
+                                        end: Alignment.topLeft,
+                                        colors: [
+                                          Color(0xFF15FDE4),
+                                          Color(0xFF13E5CE),
+                                        ],
+                                      ),
+                                      borderRadius: BorderRadius.circular(32),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Color(0xFF1E9E90),
+                                          offset: Offset(-6, -6),
+                                          blurRadius: 12,
+                                          spreadRadius: 0,
+                                          inset: true,
+                                        ),
+                                        BoxShadow(
+                                          color: Color(0xFF24FFE7),
+                                          offset: Offset(6, 6),
+                                          blurRadius: 10,
+                                          spreadRadius: 0,
+                                          inset: true,
+                                        ),
+                                      ],
+                                    )
+                                  : BoxDecoration(
+                                      color: const Color(0xFF121418),
+                                      borderRadius: BorderRadius.circular(32),
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Color(0xFF2F2F2F),
+                                          offset: Offset(0, 1),
+                                          blurRadius: 12,
+                                          spreadRadius: 0,
+                                          inset: true,
+                                        ),
+                                      ],
+                                    ),
                               child: Material(
                                 color: Colors.transparent,
                                 child: InkWell(
-                                  borderRadius: BorderRadius.circular(12),
-                                  onTap: viewModel.getStarted,
-                                  child: const Padding(
-                                    padding: EdgeInsets.symmetric(
+                                  borderRadius: BorderRadius.circular(32),
+                                  onTap: viewModel.allFilled
+                                      ? viewModel.getStarted
+                                      : null,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
                                         horizontal: 24, vertical: 16),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          "CONTINUE",
-                                          style: TextStyle(
-                                            fontFamily: 'Fredoka',
+                                          "Continue",
+                                          style: GoogleFonts.fredoka(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w500,
-                                            color: Color(0xFFF1F7F6),
+                                            color: viewModel.allFilled
+                                                ? const Color(0xFF121418)
+                                                : const Color(0xFFF1F7F6),
                                             letterSpacing: -0.02,
                                           ),
                                         ),
-                                        SizedBox(width: 16),
-                                        Icon(Icons.arrow_forward,
-                                            color: Color(0xFFF1F7F6), size: 24),
+                                        const SizedBox(width: 16),
+                                        Icon(
+                                          Icons.arrow_forward,
+                                          color: viewModel.allFilled
+                                              ? const Color(0xFF121418)
+                                              : const Color(0xFFF1F7F6),
+                                          size: 24,
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -383,10 +420,10 @@ class SignupView extends StackedView<SignupViewModel> {
                       child: TextField(
                         controller: controller,
                         obscureText: isPassword && !showPassword,
+                        cursorColor: const Color(0xFF14F1D9),
                         style: GoogleFonts.inter(
                           fontSize: 14,
-                          fontStyle: FontStyle.italic,
-                          color: const Color(0xFF7C837F),
+                          color: Colors.white, // 👈 user input text color
                           letterSpacing: -0.02,
                           height: 1.43,
                         ),
@@ -395,10 +432,13 @@ class SignupView extends StackedView<SignupViewModel> {
                           hintStyle: GoogleFonts.inter(
                             fontSize: 14,
                             fontStyle: FontStyle.italic,
-                            color: const Color(0xFF7C837F),
+                            color: const Color(
+                                0xFF7C837F), 
                             letterSpacing: -0.02,
                           ),
                           border: InputBorder.none,
+                          isCollapsed: true,
+                          contentPadding: EdgeInsets.zero,
                         ),
                       ),
                     ),
@@ -420,7 +460,7 @@ class SignupView extends StackedView<SignupViewModel> {
               ),
             ),
           ),
-          // floating label above box
+          // floating label
           Positioned(
             left: 12,
             top: 0,
