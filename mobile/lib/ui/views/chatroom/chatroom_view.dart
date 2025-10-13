@@ -278,10 +278,7 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
           if (message.content.isNotEmpty)
             Text(
               message.content,
-              style: GoogleFonts.baloo2(
-                fontSize: 14,
-                color: Colors.white
-              ),
+              style: GoogleFonts.baloo2(fontSize: 14, color: Colors.white),
             ),
           const SizedBox(height: 4),
           Row(

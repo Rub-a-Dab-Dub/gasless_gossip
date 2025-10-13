@@ -218,7 +218,7 @@ class ChatsView extends StackedView<ChatsViewModel> {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center, 
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     chat.userName,

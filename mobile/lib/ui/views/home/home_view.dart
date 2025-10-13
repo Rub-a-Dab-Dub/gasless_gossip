@@ -34,7 +34,7 @@ class HomeView extends StackedView<HomeViewModel> {
                 ],
               ),
             ),
-        
+
             // ---------- dim overlay (cover entire screen) ----------
             // We always include it but toggle its opacity and hit testing via IgnorePointer
             IgnorePointer(
@@ -50,7 +50,7 @@ class HomeView extends StackedView<HomeViewModel> {
                 ),
               ),
             ),
-        
+
             // ---------- stacked buttons (right aligned above FAB) ----------
             // We use AnimatedPositioned + AnimatedOpacity so they animate in/out nicely
             // Create Post (upper)
@@ -69,7 +69,7 @@ class HomeView extends StackedView<HomeViewModel> {
                 }),
               ),
             ),
-        
+
             // Create Room (lower of the two)
             AnimatedPositioned(
               duration: const Duration(milliseconds: 220),

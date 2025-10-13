@@ -197,7 +197,7 @@ class PostsuccessView extends StackedView<PostsuccessViewModel> {
                     offset: Offset(0, 1),
                     blurRadius: 12,
                     spreadRadius: 0,
-                    inset: true, 
+                    inset: true,
                   ),
                 ],
               ),

@@ -432,8 +432,7 @@ class SignupView extends StackedView<SignupViewModel> {
                           hintStyle: GoogleFonts.inter(
                             fontSize: 14,
                             fontStyle: FontStyle.italic,
-                            color: const Color(
-                                0xFF7C837F), 
+                            color: const Color(0xFF7C837F),
                             letterSpacing: -0.02,
                           ),
                           border: InputBorder.none,
