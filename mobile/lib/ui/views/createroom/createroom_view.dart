@@ -104,7 +104,7 @@ class CreateroomView extends StackedView<CreateroomViewModel> {
       children: [
         // Title
         Text(
-          'nickname',
+          'room name',
           style: GoogleFonts.fredoka(
             fontSize: 12,
             fontWeight: FontWeight.w400,
@@ -287,10 +287,10 @@ class CreateroomView extends StackedView<CreateroomViewModel> {
           height: 51,
           decoration: BoxDecoration(
             color: isActive ? const Color(0xFF14F1D9) : const Color(0xFF121418),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(32),
             boxShadow: [
               BoxShadow(
-                color: isActive ? const Color(0xFF0F5951) : Color(0xFF0F5951),
+                color: isActive ? const Color(0xFF121418) : Color(0xFF2F2F2F),
                 offset: const Offset(0, 1),
                 blurRadius: 12,
                 inset: true,
@@ -301,7 +301,7 @@ class CreateroomView extends StackedView<CreateroomViewModel> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'NEXT',
+                'Next',
                 style: GoogleFonts.fredoka(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,

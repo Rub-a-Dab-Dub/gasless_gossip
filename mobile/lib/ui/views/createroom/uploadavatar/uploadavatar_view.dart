@@ -93,12 +93,6 @@ class UploadavatarView extends StackedView<UploadavatarViewModel> {
               ),
             ),
           ),
-          // Logo
-          SizedBox(
-            width: 18,
-            height: 32,
-            child: Image.asset(AppAssets.logo),
-          ),
         ],
       ),
     );
