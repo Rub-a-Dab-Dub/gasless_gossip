@@ -1,0 +1,224 @@
+"use client"
+
+import {Dialog, DialogPanel, Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
+import {
+  ArrowLeft,
+  ChevronDownIcon,
+  ArrowRight,
+  File,
+  Image as ImageIcon,
+  Wallet,
+  BitcoinIcon
+} from 'lucide-react';
+import { useState } from "react";
+
+import TokenReceivedDialog from "@/components/TokenReceivedDialog";
+
+import { EthIcon } from "@/components/icons";
+
+interface SendTokenDialogProps {
+  isOpen: boolean
+  onClose: () => void
+}
+
+const TOKENS = [
+  {
+    id: 0,
+    name: 'BASE ETH',
+    value: 'base-eth',
+    logo: EthIcon
+  },
+  {
+    id: 1,
+    name: 'Bitcoin',
+    value: 'btc',
+    logo: BitcoinIcon
+  }
+]
+
+export default function SendTokenDialog({ isOpen, onClose }: SendTokenDialogProps) {
+  const [amount, setAmount] = useState('0')
+  const [recipient, setRecipient] = useState('Dv_nmd')
+  const [selectedToken, setSelectedToken] = useState(TOKENS[0]);
+  const [isTokenSentDialogOpen, setIsTokenSentDialog] = useState(false);
+
+  const balance = 2345.46
+
+  const quickAmounts = [5, 10, 20, 30]
+
+  const handleQuickAmount = (value: number) => {
+    setAmount(value.toString())
+  }
+
+  const handleMaxAmount = () => {
+    setAmount(balance.toString())
+  }
+
+  const handleSend = () => {
+    setIsTokenSentDialog(true)
+    onClose()
+  }
+
+  return (
+    <>
+      <TokenReceivedDialog isOpen={isTokenSentDialogOpen} onClose={() => setIsTokenSentDialog(false)} />
+
+      <Dialog open={isOpen} onClose={onClose} className="relative z-50">
+        <div className="fixed inset-0" />
+
+        <div className="fixed inset-0 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="pointer-events-none flex justify-center fixed inset-x-0 bottom-0 flex max-h-full pt-10 sm:pt-16">
+              <DialogPanel
+                transition
+                className="pointer-events-auto w-screen rounded-t-4xl bg-[#0f1419] md:max-w-6xl md:-mr-[20rem] flex justify-end transform transition duration-500 ease-in-out data-closed:translate-y-full sm:duration-700"
+              >
+                <div className="w-full">
+                  <div className="rounded-t-4xl border-1 border-dark-teal">
+                    {/* Header */}
+                    <div className="flex items-start justify-between px-5 py-3 border-b border-dark-teal">
+                      <div>
+                        <p className="text-sm text-light-grey mb-1">Send To:</p>
+                        <p className="text-teal-300 font-medium">{recipient}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-sm text-light-grey mb-1">Your Balance:</p>
+                        <p className="text-lg text-white font-semibold">${balance.toLocaleString('en-US', {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2
+                        })}</p>
+                      </div>
+                    </div>
+
+                    {/* Amount Input */}
+                    <div className="text-center mb-8 mt-5">
+                      <input
+                        type="text"
+                        value={amount}
+                        onChange={(e) => {
+                          const value = e.target.value
+                          if (/^\d*\.?\d*$/.test(value)) {
+                            setAmount(value)
+                          }
+                        }}
+                        className="text-4xl font-light text-teal-300 font-bold bg-transparent text-center w-full focus:outline-none mb-2"
+                        placeholder="0"
+                      />
+                      <p className="text-light-grey">≈ {amount || '0'} USDT</p>
+                    </div>
+
+                    {/* Token Selector */}
+                    <div className="flex justify-center mb-8">
+                      <Listbox value={selectedToken} onChange={setSelectedToken}>
+                        <div className="relative">
+                          <div className="inline-flex rounded-full outline-hidden">
+                            <ListboxButton
+                              className="inline-flex items-center gap-x-1.5 rounded-full border-light-grey px-3 py-2 text-dark-white border-1 border-y-1">
+                              {selectedToken.logo && <selectedToken.logo className="w-5 h-5" />}
+                              <p className="text-sm font-semibold">{selectedToken.name}</p>
+                              <div className="inline-flex items-center">
+                                <ChevronDownIcon aria-hidden="true"
+                                                 className="size-5 text-white forced-colors:text-[Highlight]"/>
+                              </div>
+                            </ListboxButton>
+                          </div>
+
+                          <ListboxOptions
+                            transition
+                            className="absolute right-0 z-10 mt-2 w-72 origin-top-right divide-y divide-light-grey overflow-hidden rounded-md bg-white shadow-lg outline-1 outline-black/5 data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 dark:bg-gray-800"
+                          >
+                            {TOKENS.map((token) => (
+                              <ListboxOption
+                                key={token.id}
+                                value={token}
+                                className="group cursor-default p-4 text-sm text-white select-none data-focus:bg-teal data-focus:text-white"
+                              >
+                                <div className="flex space-x-2">
+                                  <token.logo />
+                                  <div className="flex justify-between">
+                                    <p className="font-normal group-data-selected:font-semibold">{token.name}</p>
+                                  </div>
+                                </div>
+                              </ListboxOption>
+                            ))}
+                          </ListboxOptions>
+                        </div>
+                      </Listbox>
+                    </div>
+
+                    {/* Quick Amount Buttons */}
+                    <div className="flex md:flex-row flex-col items-center justify-center gap-4 mb-12">
+                      <div className="space-x-2 flex items-center">
+                        {quickAmounts.map((value) => (
+                          <button
+                            key={value}
+                            onClick={() => handleQuickAmount(value)}
+                            className="py-3 px-4 text-white rounded-lg border-1 border-dark-teal hover:border-[#14F1D9] hover:bg-[#14F1D9]/10 transition-colors text-sm font-medium"
+                          >
+                            +{value}
+                          </button>
+                        ))}
+                        <button
+                          onClick={handleMaxAmount}
+                          className="text-sm font-medium"
+                        >
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M3.75 8.24807H6.84375C7.00898 8.89338 7.38428 9.46535 7.91048 9.8738C8.43669 10.2823 9.08387 10.504 9.75 10.504C10.4161 10.504 11.0633 10.2823 11.5895 9.8738C12.1157 9.46535 12.491 8.89338 12.6562 8.24807H20.25C20.4489 8.24807 20.6397 8.16905 20.7803 8.0284C20.921 7.88775 21 7.69698 21 7.49807C21 7.29916 20.921 7.10839 20.7803 6.96774C20.6397 6.82709 20.4489 6.74807 20.25 6.74807H12.6562C12.491 6.10276 12.1157 5.53079 11.5895 5.12234C11.0633 4.71389 10.4161 4.49219 9.75 4.49219C9.08387 4.49219 8.43669 4.71389 7.91048 5.12234C7.38428 5.53079 7.00898 6.10276 6.84375 6.74807H3.75C3.55109 6.74807 3.36032 6.82709 3.21967 6.96774C3.07902 7.10839 3 7.29916 3 7.49807C3 7.69698 3.07902 7.88775 3.21967 8.0284C3.36032 8.16905 3.55109 8.24807 3.75 8.24807ZM9.75 5.99807C10.0467 5.99807 10.3367 6.08604 10.5834 6.25087C10.83 6.41569 11.0223 6.64996 11.1358 6.92405C11.2494 7.19813 11.2791 7.49973 11.2212 7.79071C11.1633 8.08168 11.0204 8.34895 10.8107 8.55873C10.6009 8.76851 10.3336 8.91137 10.0426 8.96925C9.75166 9.02713 9.45006 8.99742 9.17597 8.88389C8.90189 8.77036 8.66762 8.5781 8.5028 8.33143C8.33797 8.08475 8.25 7.79474 8.25 7.49807C8.25 7.10025 8.40804 6.71871 8.68934 6.43741C8.97064 6.15611 9.35218 5.99807 9.75 5.99807ZM20.25 15.7481H18.6562C18.491 15.1028 18.1157 14.5308 17.5895 14.1223C17.0633 13.7139 16.4161 13.4922 15.75 13.4922C15.0839 13.4922 14.4367 13.7139 13.9105 14.1223C13.3843 14.5308 13.009 15.1028 12.8438 15.7481H3.75C3.55109 15.7481 3.36032 15.8271 3.21967 15.9677C3.07902 16.1084 3 16.2992 3 16.4981C3 16.697 3.07902 16.8877 3.21967 17.0284C3.36032 17.1691 3.55109 17.2481 3.75 17.2481H12.8438C13.009 17.8934 13.3843 18.4653 13.9105 18.8738C14.4367 19.2823 15.0839 19.504 15.75 19.504C16.4161 19.504 17.0633 19.2823 17.5895 18.8738C18.1157 18.4653 18.491 17.8934 18.6562 17.2481H20.25C20.4489 17.2481 20.6397 17.1691 20.7803 17.0284C20.921 16.8877 21 16.697 21 16.4981C21 16.2992 20.921 16.1084 20.7803 15.9677C20.6397 15.8271 20.4489 15.7481 20.25 15.7481ZM15.75 17.9981C15.4533 17.9981 15.1633 17.9101 14.9166 17.7453C14.67 17.5805 14.4777 17.3462 14.3642 17.0721C14.2506 16.798 14.2209 16.4964 14.2788 16.2054C14.3367 15.9145 14.4796 15.6472 14.6893 15.4374C14.8991 15.2276 15.1664 15.0848 15.4574 15.0269C15.7483 14.969 16.0499 14.9987 16.324 15.1123C16.5981 15.2258 16.8324 15.418 16.9972 15.6647C17.162 15.9114 17.25 16.2014 17.25 16.4981C17.25 16.8959 17.092 17.2774 16.8107 17.5587C16.5294 17.84 16.1478 17.9981 15.75 17.9981Z"
+                              fill="#6B7A77"/>
+                          </svg>
+                        </button>
+                      </div>
+
+                      <button
+                        onClick={handleSend}
+                        disabled={!amount || amount === '0'}
+                        className="flex items-center gap-3 px-12 py-4 glass-effect text-black rounded-full disabled:cursor-not-allowed transition-colors font-semibold text-lg"
+                      >
+                        <span>Send Token</span>
+                        <ArrowRight size={20}/>
+                      </button>
+                    </div>
+
+                  </div>
+                  {/* Bottom Navigation */}
+                  <div className="grid grid-cols-3 py-3 px-6 divide-x divide-dark-teal pb-32 md:pb-0">
+                    <div className="flex items-center justify-between w-full  md:pr-20 pr-4">
+                      <button
+                        onClick={onClose}
+                        className="p-3 bg-white/5 text-light-grey rounded-full transition-colors"
+                      >
+                        <ArrowLeft size={24}/>
+                      </button>
+                      <div className="place-items-center text-white text-center space-y-0.5">
+                        <button
+                          className="flex flex-col items-center bg-white/5 p-2 text-light-grey rounded-full text-gray-400">
+                          <File size={20}/>
+                        </button>
+                        <span className="text-xs">Files</span>
+                      </div>
+                    </div>
+                    <div className="place-items-center text-white text-center space-y-0.5">
+                      <button
+                        className="flex flex-col items-center bg-white/5 p-2 text-light-grey rounded-full text-gray-400">
+                        <ImageIcon size={15}/>
+                      </button>
+                      <span className="text-xs">NFTs</span>
+                    </div>
+                    <div className="place-items-center text-light-teal text-center space-y-0.5">
+                      <button
+                        className="flex flex-col items-center rounded-full bg-white/5 p-2 gap-2 transition-colors">
+                        <Wallet size={15}/>
+                      </button>
+                      <span className="text-xs">Wallet</span>
+                    </div>
+                  </div>
+                </div>
+              </DialogPanel>
+            </div>
+          </div>
+        </div>
+      </Dialog>
+    </>
+  )
+}
