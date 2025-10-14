@@ -1,11 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { ArrowRight, Eye, EyeClosed } from "lucide-react";
 import Lottie from "lottie-react";
 import animationData from "@/public/logo flsah screen4.json";
 import { Fredoka, Baloo_2 } from "next/font/google";
-import { useRouter } from "next/navigation";
 import WelcomeScreen from "@/components/WelcomeScreen";
 
 const fredoka = Fredoka({
@@ -59,8 +58,6 @@ export default function Auth() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const router = useRouter();
 
   const handleSubmit = () => {
     setIsSubmitted(true);
