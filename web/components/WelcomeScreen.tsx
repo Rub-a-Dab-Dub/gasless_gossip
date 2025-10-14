@@ -59,7 +59,10 @@ export default function WelcomeScreen({ username = "username" }) {
           </button>
 
           {/* Continue Button */}
-          <button className="bg-gradient-to-r w-73 justify-center from-[#15FDE4] to-[#13E5CE] shadow-[inset_0_0_10px_0px_#2F2F2F] cursor-pointer hover:bg-cyan-500 text-black font-semibold px-12 py-3 rounded-full inline-flex items-center gap-2 transition-all">
+          <button
+            className="w-73 justify-center bg-[linear-gradient(135deg,_#15FDE4_100%,_#13E5CE_0%)]
+  shadow-[inset_-6px_-6px_12px_#1E9E90,_inset_6px_6px_10px_#24FFE7] cursor-pointer hover:bg-cyan-500 text-black font-semibold px-12 py-3 rounded-full inline-flex items-center gap-2 transition-all"
+          >
             <span>Continue</span>
             <ArrowRight className="w-5 h-5" />
           </button>
