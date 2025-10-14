@@ -147,7 +147,8 @@ export default function Onboarding() {
         <div className="relative top-40 z-50 space-y-4 max-w-md text-center">
           <button
             onClick={() => router.push("/auth")}
-            className={`w-75 inset-0 shadow-[inset_-1px_0px_10px_1px_#2F2F2F] cursor-pointer bg-linear-to-r from-[#15FDE4] to-[#13E5CE] text-[#121418] px-6 py-3 rounded-full hover:opacity-80 flex justify-between transition-opacity ${fredoka.className} font-medium`}
+            className={`w-75 inset-0  cursor-pointer bg-[linear-gradient(135deg,_#15FDE4_100%,_#13E5CE_0%)]
+  shadow-[inset_-6px_-6px_12px_#1E9E90,_inset_6px_6px_10px_#24FFE7] text-[#121418] px-6 py-3 rounded-full hover:opacity-80 flex justify-between transition-opacity ${fredoka.className} font-medium`}
           >
             Get Started
             <ArrowRight />
