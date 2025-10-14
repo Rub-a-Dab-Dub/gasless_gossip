@@ -1,23 +1,29 @@
-'use client'
+"use client";
 
-import { Dialog, DialogPanel } from '@headlessui/react';
-import { CheckCircle2, ArrowRight, Rocket, Share } from 'lucide-react';
+import { Dialog, DialogPanel } from "@headlessui/react";
+import { CheckCircle2, ArrowRight, Rocket, Share } from "lucide-react";
 
 import Image from "next/image";
 import SuccessPost from "@/images/logos/success-post.svg";
-import Avatar from "@/components/ui/Avatar";
 
 interface PostSuccessDialogProps {
-  isOpen: boolean
-  onClose: () => void
-  xpEarned?: number
+  isOpen: boolean;
+  onClose: () => void;
+  xpEarned?: number;
 }
 
-export default function PostSuccessDialog({ isOpen, onClose, xpEarned = 30 }: PostSuccessDialogProps) {
+export default function PostSuccessDialog({
+  isOpen,
+  onClose,
+  xpEarned = 30,
+}: PostSuccessDialogProps) {
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-100">
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm" aria-hidden="true" />
+      <div
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm"
+        aria-hidden="true"
+      />
 
       {/* Full-screen container */}
       <div className="fixed inset-0 flex items-center justify-center p-4">
@@ -26,12 +32,13 @@ export default function PostSuccessDialog({ isOpen, onClose, xpEarned = 30 }: Po
             {/* Success Banner */}
             <div className="flex items-center justify-center gap-3 mb-12 bg-teal-800 shadow-xl rounded-2xl py-4 px-6">
               <CheckCircle2 size={24} className="text-[#14F1D9]" />
-              <p className="text-white text-lg">Your post was successfully uploaded</p>
+              <p className="text-white text-lg">
+                Your post was successfully uploaded
+              </p>
             </div>
 
             {/* Character and XP Display */}
             <div className="flex flex-col items-center my-14">
-
               <div className="relative">
                 <div className="relative w-48 h-48 flex items-center justify-center">
                   {/* Character Placeholder - Using emoji as placeholder for the yellow bird */}
@@ -45,7 +52,7 @@ export default function PostSuccessDialog({ isOpen, onClose, xpEarned = 30 }: Po
 
               {/* Message */}
               <h2 className="text-2xl text-white font-semibold mb-2">
-                You've earned some XP!
+                You&apos;ve earned some XP!
               </h2>
 
               {/* Rocket Icon */}
@@ -62,7 +69,7 @@ export default function PostSuccessDialog({ isOpen, onClose, xpEarned = 30 }: Po
                   onClick={onClose}
                   className="flex items-center justify-center w-14 h-14 glass-effect rounded-xl transition-all"
                 >
-                  <Share size={20} className="text-[#14F1D9]"/>
+                  <Share size={20} className="text-[#14F1D9]" />
                 </button>
 
                 {/* Continue Button */}
@@ -71,7 +78,7 @@ export default function PostSuccessDialog({ isOpen, onClose, xpEarned = 30 }: Po
                   className=" flex items-center px-28 justify-center gap-3 bg-[#14F1D9] text-black py-4 rounded-full hover:bg-[#12d9c4] transition-colors font-semibold text-lg"
                 >
                   <span>Continue</span>
-                  <ArrowRight size={20}/>
+                  <ArrowRight size={20} />
                 </button>
               </div>
             </div>
@@ -79,5 +86,5 @@ export default function PostSuccessDialog({ isOpen, onClose, xpEarned = 30 }: Po
         </DialogPanel>
       </div>
     </Dialog>
-  )
+  );
 }

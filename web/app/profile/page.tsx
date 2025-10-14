@@ -1,38 +1,38 @@
-'use client'
+"use client";
 
-import { ArrowLeft } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 import Header from "@/components/ui/Header";
+import Image from "next/image";
 
 interface ProfileData {
-  username: string
-  about: string
-  email: string
-  avatarUrl?: string
+  username: string;
+  about: string;
+  email: string;
+  avatarUrl?: string;
 }
 
 export default function ProfilePage() {
-  const router = useRouter()
+  const router = useRouter();
 
   const profileData: ProfileData = {
-    username: 'username',
-    about: 'basically a certified talker',
-    email: 'username@gmail.com',
-    avatarUrl: '/images/avatar-boy.png'
-  }
+    username: "username",
+    about: "basically a certified talker",
+    email: "username@gmail.com",
+    avatarUrl: "/images/avatar-boy.png",
+  };
 
   return (
     <div className="mt-18">
       <Header />
 
       <section className="max-w-7xl mx-auto px-6 py-8">
-
         <div className="py-6 flex items-center text-white">
           <button
             onClick={() => router.back()}
             className="w-12 h-12 flex items-center justify-center hover:bg-white/5 rounded-xl transition-colors"
           >
-            <ArrowLeft size={24}/>
+            <ArrowLeft size={24} />
           </button>
           <h1 className="">swap token</h1>
         </div>
@@ -42,17 +42,19 @@ export default function ProfilePage() {
           <div className="flex flex-col lg:flex-row gap-12 items-start">
             {/* Left - Avatar */}
             <div className="flex-shrink-0">
-              <div
-                className="w-96 h-96 bg-gradient-to-br from-gray-200 to-gray-300 rounded-3xl flex items-center justify-center overflow-hidden">
+              <div className="w-96 h-96 bg-gradient-to-br from-gray-200 to-gray-300 rounded-3xl flex items-center justify-center overflow-hidden">
                 {profileData.avatarUrl ? (
-                  <img
+                  <Image
                     src={profileData.avatarUrl}
                     alt="Profile Avatar"
+                    width={384}
+                    height={384}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      const target = e.target as HTMLImageElement
-                      target.style.display = 'none'
-                      target.parentElement!.innerHTML = '<span class="text-8xl">👨</span>'
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = "none";
+                      target.parentElement!.innerHTML =
+                        '<span class="text-8xl">👨</span>';
                     }}
                   />
                 ) : (
@@ -74,20 +76,32 @@ export default function ProfilePage() {
               <div className="space-y-10 flex-1">
                 {/* Username */}
                 <div>
-                  <label className="block font-fredoka text-tertiary mb-3">username</label>
-                  <div className="text-lg text-dark-white font-normal">{profileData.username}</div>
+                  <label className="block font-fredoka text-tertiary mb-3">
+                    username
+                  </label>
+                  <div className="text-lg text-dark-white font-normal">
+                    {profileData.username}
+                  </div>
                 </div>
 
                 {/* About */}
                 <div>
-                  <label className="block font-fredoka text-tertiary mb-3">about</label>
-                  <div className="text-lg text-dark-white font-normal">{profileData.about}</div>
+                  <label className="block font-fredoka text-tertiary mb-3">
+                    about
+                  </label>
+                  <div className="text-lg text-dark-white font-normal">
+                    {profileData.about}
+                  </div>
                 </div>
 
                 {/* Email */}
                 <div>
-                  <label className="block font-fredoka text-tertiary mb-3">email</label>
-                  <div className="text-lg text-dark-white font-normal">{profileData.email}</div>
+                  <label className="block font-fredoka text-tertiary mb-3">
+                    email
+                  </label>
+                  <div className="text-lg text-dark-white font-normal">
+                    {profileData.email}
+                  </div>
                 </div>
               </div>
             </div>
@@ -95,5 +109,5 @@ export default function ProfilePage() {
         </div>
       </section>
     </div>
-  )
+  );
 }
