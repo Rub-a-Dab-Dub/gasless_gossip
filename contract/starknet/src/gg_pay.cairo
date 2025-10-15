@@ -1,12 +1,28 @@
+use starknet::ContractAddress;
+#[derive(Drop, Serde, PartialEq, starknet::Store)]
+pub struct UserProfile {
+    pub username: felt252,
+    pub user_wallet: ContractAddress,
+    pub exists: bool,
+}
+
 #[starknet::contract]
 mod GaslessGossipPayments {
     use core::num::traits::Zero;
     use gg_pay::interface::IGGPay;
     use openzeppelin_access::ownable::OwnableComponent;
     use openzeppelin_token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
-    use starknet::storage::{StoragePointerReadAccess, StoragePointerWriteAccess};
-    use starknet::{ContractAddress, get_block_timestamp, get_caller_address, get_contract_address};
-
+    use starknet::class_hash::ClassHash;
+    use starknet::storage::{
+        Map, StorageMapReadAccess, StorageMapWriteAccess, StoragePointerReadAccess,
+        StoragePointerWriteAccess,
+    };
+    use starknet::syscalls::deploy_syscall;
+    use starknet::{
+        ContractAddress, SyscallResultTrait, contract_address_const, get_block_timestamp,
+        get_caller_address, get_contract_address,
+    };
+    use super::UserProfile;
     component!(path: OwnableComponent, storage: ownable, event: OwnableEvent);
 
     #[abi(embed_v0)]
@@ -20,6 +36,10 @@ mod GaslessGossipPayments {
         strk_token: ContractAddress,
         platform_fee_bps: u16, // Fee for all paid actions (200 = 2%)
         accumulated_fees: u256,
+        wallet_class_hash: ClassHash,
+        is_user_registered: Map<felt252, bool>,
+        user_profiles: Map<felt252, UserProfile>,
+        wallet_to_username: Map<ContractAddress, felt252>,
         paused: bool,
         #[substorage(v0)]
         ownable: OwnableComponent::Storage,
@@ -36,9 +56,26 @@ mod GaslessGossipPayments {
         FeesWithdrawn: FeesWithdrawn,
         PlatformFeeUpdated: PlatformFeeUpdated,
         ContractPaused: ContractPaused,
+        UserRegistered: UserRegistered,
+        UsernameUpdated: UsernameUpdated,
         #[flat]
         OwnableEvent: OwnableComponent::Event,
     }
+
+
+    #[derive(Drop, starknet::Event)]
+    struct UserRegistered {
+        username: felt252,
+        wallet_address: ContractAddress,
+    }
+
+    #[derive(Drop, starknet::Event)]
+    struct UsernameUpdated {
+        old_username: felt252,
+        new_username: felt252,
+        wallet_address: ContractAddress,
+    }
+
 
     #[derive(Drop, starknet::Event)]
     pub struct TipSent {
@@ -110,6 +147,7 @@ mod GaslessGossipPayments {
         admin: ContractAddress,
         strk_token: ContractAddress,
         platform_fee_bps: u16,
+        wallet_class_hash: ClassHash,
     ) {
         assert(!admin.is_zero(), Errors::ZERO_ADDRESS);
         assert(!strk_token.is_zero(), Errors::ZERO_ADDRESS);
@@ -119,6 +157,7 @@ mod GaslessGossipPayments {
         self.strk_token.write(strk_token);
         self.platform_fee_bps.write(platform_fee_bps);
         self.paused.write(false);
+        self.wallet_class_hash.write(wallet_class_hash);
     }
 
     // ==================== EXTERNAL FUNCTIONS ====================
@@ -269,6 +308,74 @@ mod GaslessGossipPayments {
                 );
         }
 
+        fn create_user(ref self: ContractState, username: felt252) -> ContractAddress {
+            let zero_address: ContractAddress = contract_address_const::<'0x0'>();
+            let is_tag_registered = self.is_user_registered.read(username);
+            assert(!is_tag_registered, 'username already taken');
+            self.is_user_registered.write(username, true);
+
+            let contract_address = get_contract_address();
+            assert(contract_address != zero_address, 'Invalid owner address');
+
+            let wallet_class_hash = self.wallet_class_hash.read();
+
+            let mut wallet_constructor_calldata = array![contract_address.into()];
+            let salt: felt252 = get_block_timestamp().into();
+            let (wallet_address, _) = deploy_syscall(
+                wallet_class_hash, salt, wallet_constructor_calldata.span(), true,
+            )
+                .unwrap_syscall();
+            assert(wallet_address != zero_address, 'Wallet deployment failed');
+
+            let user_profile = UserProfile { username, user_wallet: wallet_address, exists: true };
+            self.user_profiles.write(username, user_profile);
+            self.wallet_to_username.write(wallet_address, username);
+            self.emit(UserRegistered { username, wallet_address });
+
+            wallet_address
+        }
+
+        fn update_username(ref self: ContractState, old_username: felt252, new_username: felt252) {
+            //Read existing profile
+            let old_user = self.user_profiles.read(old_username);
+            assert(old_user.exists, 'Old username does not exist');
+
+            //Prevent using a taken or same username
+            let is_new_username_taken = self.is_user_registered.read(new_username);
+            assert(!is_new_username_taken, 'New username already taken');
+            assert(old_username != new_username, 'New username must be different');
+
+            //Update registration mapping
+            self.is_user_registered.write(old_username, false);
+            self.is_user_registered.write(new_username, true);
+
+            //Create new profile under new username
+            let updated_user = UserProfile {
+                username: new_username, user_wallet: old_user.user_wallet, exists: true,
+            };
+            self.user_profiles.write(new_username, updated_user);
+            self.wallet_to_username.write(old_user.user_wallet, new_username);
+
+            //Clear old profile completely (optional: exists = false)
+            self
+                .user_profiles
+                .write(
+                    old_username,
+                    UserProfile {
+                        username: old_username, user_wallet: old_user.user_wallet, exists: false,
+                    },
+                );
+
+            // Emit event with wallet address
+            self
+                .emit(
+                    UsernameUpdated {
+                        old_username, new_username, wallet_address: old_user.user_wallet,
+                    },
+                );
+        }
+
+
         fn set_paused(ref self: ContractState, paused: bool) {
             self.ownable.assert_only_owner();
             self.paused.write(paused);
@@ -295,6 +402,18 @@ mod GaslessGossipPayments {
 
         fn get_balance(self: @ContractState) -> u256 {
             self.get_user_balance(get_caller_address())
+        }
+
+        fn get_user_onchain_address(self: @ContractState, username: felt252) -> ContractAddress {
+            let user_profile = self.user_profiles.read(username);
+            assert(user_profile.exists, 'Username does not exist');
+            user_profile.user_wallet
+        }
+
+        fn get_username_by_wallet(self: @ContractState, wallet: ContractAddress) -> felt252 {
+            let username = self.wallet_to_username.read(wallet);
+            assert(username != 0, 'No username found for wallet');
+            username
         }
     }
 
