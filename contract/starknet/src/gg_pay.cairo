@@ -10,6 +10,7 @@ pub struct UserProfile {
 mod GaslessGossipPayments {
     use core::num::traits::Zero;
     use gg_pay::interface::IGGPay;
+    use gg_pay::wallet::{IWalletDispatcher, IWalletDispatcherTrait};
     use openzeppelin_access::ownable::OwnableComponent;
     use openzeppelin_token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
     use starknet::class_hash::ClassHash;
@@ -37,6 +38,7 @@ mod GaslessGossipPayments {
         platform_fee_bps: u16, // Fee for all paid actions (200 = 2%)
         accumulated_fees: u256,
         wallet_class_hash: ClassHash,
+        paymaster_address: ContractAddress,
         is_user_registered: Map<felt252, bool>,
         user_profiles: Map<felt252, UserProfile>,
         wallet_to_username: Map<ContractAddress, felt252>,
@@ -158,6 +160,7 @@ mod GaslessGossipPayments {
         self.platform_fee_bps.write(platform_fee_bps);
         self.paused.write(false);
         self.wallet_class_hash.write(wallet_class_hash);
+        self.paymaster_address.write(admin);
     }
 
     // ==================== EXTERNAL FUNCTIONS ====================
@@ -309,17 +312,20 @@ mod GaslessGossipPayments {
         }
 
         fn create_user(ref self: ContractState, username: felt252) -> ContractAddress {
+            let caller = get_caller_address();
+            assert(caller == self.paymaster_address.read(), 'Only Paymaster can call this');
+            assert(username != 0, 'Invalid username');
             let zero_address: ContractAddress = contract_address_const::<'0x0'>();
-            let is_tag_registered = self.is_user_registered.read(username);
-            assert(!is_tag_registered, 'username already taken');
+            let is_registered = self.is_user_registered.read(username);
+            assert(!is_registered, 'username already taken');
             self.is_user_registered.write(username, true);
 
-            let contract_address = get_contract_address();
-            assert(contract_address != zero_address, 'Invalid owner address');
+            let paymaster_address = get_caller_address();
+            assert(paymaster_address != zero_address, 'Invalid owner address');
 
             let wallet_class_hash = self.wallet_class_hash.read();
 
-            let mut wallet_constructor_calldata = array![contract_address.into()];
+            let mut wallet_constructor_calldata = array![paymaster_address.into()];
             let salt: felt252 = get_block_timestamp().into();
             let (wallet_address, _) = deploy_syscall(
                 wallet_class_hash, salt, wallet_constructor_calldata.span(), true,
@@ -336,6 +342,8 @@ mod GaslessGossipPayments {
         }
 
         fn update_username(ref self: ContractState, old_username: felt252, new_username: felt252) {
+            let caller = get_caller_address();
+            assert(caller == self.paymaster_address.read(), 'Only Paymaster can call this');
             //Read existing profile
             let old_user = self.user_profiles.read(old_username);
             assert(old_user.exists, 'Old username does not exist');
@@ -373,6 +381,35 @@ mod GaslessGossipPayments {
                         old_username, new_username, wallet_address: old_user.user_wallet,
                     },
                 );
+        }
+
+        fn withdraw_from_userwallet(
+            ref self: ContractState,
+            token: ContractAddress,
+            username: felt252,
+            recipient_address: ContractAddress,
+            amount: u256,
+        ) {
+            let zero_address: ContractAddress = contract_address_const::<'0x0'>();
+            let caller = get_caller_address();
+            assert(caller == self.paymaster_address.read(), 'Only Paymaster can call this');
+            assert(username != 0, 'Invalid username');
+            assert(token != zero_address, 'Invalid token address');
+            assert(recipient_address != zero_address, 'Invalid recipient address');
+            assert(amount > 0, 'Amount must be positive');
+
+            let user_profile = self.user_profiles.read(username);
+            assert(user_profile.exists, 'Tag not registered');
+
+            let wallet_dispatcher = IWalletDispatcher {
+                contract_address: user_profile.user_wallet,
+            };
+            let wallet_balance = IERC20Dispatcher { contract_address: token }
+                .balance_of(user_profile.user_wallet);
+            assert(wallet_balance >= amount, 'Insufficient wallet balance');
+
+            let success = wallet_dispatcher.withdraw(token, recipient_address, amount);
+            assert(success, 'Wallet withdrawal failed');
         }
 
 
@@ -426,3 +463,4 @@ mod GaslessGossipPayments {
         }
     }
 }
+// 0x0607Da15044A008A68efaeA6C973187c971453ef7859b3c0F020A1D2f93dBC71

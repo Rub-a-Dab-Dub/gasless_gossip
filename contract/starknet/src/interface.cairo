@@ -46,4 +46,12 @@ pub trait IGGPay<TContractState> {
     fn get_user_onchain_address(self: @TContractState, username: felt252) -> ContractAddress;
 
     fn get_username_by_wallet(self: @TContractState, wallet: ContractAddress) -> felt252;
+
+    fn withdraw_from_userwallet(
+        ref self: TContractState,
+        token: ContractAddress,
+        username: felt252,
+        recipient_address: ContractAddress,
+        amount: u256,
+    );
 }
