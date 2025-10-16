@@ -1,15 +1,15 @@
 'use client'
 
-import HomePage from "@/components/HomePage";
-import Header from "@/components/ui/Header";
+import Landing from "@/components/Landing";
+import LandingHeader from "@/components/ui/LandingHeader";
 // import WalletPage from "@/components/WalletPage";
 
 export default function Home() {
   return (
     <main className="min-h-screen text-white">
-      <Header />
+      <LandingHeader />
 
-      <HomePage />
+      <Landing />
     </main>
   )
 }
