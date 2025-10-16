@@ -187,7 +187,6 @@ export default function Auth() {
               </div>
             </div>
 
-            {/* Submit Button */}
             <div className="flex justify-end pt-4 mb-10">
               <button
                 onClick={handleSubmit}
