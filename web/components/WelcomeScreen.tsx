@@ -1,6 +1,7 @@
 import { ArrowRight, CircleCheck, Share } from "lucide-react";
 import Image from "next/image";
 import { Fredoka, Baloo_2 } from "next/font/google";
+import { useRouter } from "next/navigation";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -12,7 +13,12 @@ const baloo_2 = Baloo_2({
   weight: ["400", "500", "600", "700"],
 });
 
-export default function WelcomeScreen({ username = "username" }) {
+interface WelcomeScreenProps {
+  username: string;
+}
+
+export default function WelcomeScreen({ username }: WelcomeScreenProps) {
+  const router = useRouter();
   return (
     <div className="w-222 bg-gradient-to-r from-[#121A19] to-[#121A19] flex flex-col items-center justify-center relative overflow-hidden">
       {/* Success Message */}
@@ -59,7 +65,7 @@ export default function WelcomeScreen({ username = "username" }) {
           </button>
 
           {/* Continue Button */}
-          <button
+          <button onClick={() => router.push("/")}
             className="w-73 justify-center bg-[linear-gradient(135deg,_#15FDE4_100%,_#13E5CE_0%)]
   shadow-[inset_-6px_-6px_12px_#1E9E90,_inset_6px_6px_10px_#24FFE7] cursor-pointer hover:bg-cyan-500 text-black font-semibold px-12 py-3 rounded-full inline-flex items-center gap-2 transition-all"
           >

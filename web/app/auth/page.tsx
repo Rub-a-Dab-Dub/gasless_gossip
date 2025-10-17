@@ -1,11 +1,19 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ArrowRight, Eye, EyeClosed } from "lucide-react";
 import Lottie from "lottie-react";
 import animationData from "@/public/logo flsah screen4.json";
 import { Fredoka, Baloo_2 } from "next/font/google";
 import WelcomeScreen from "@/components/WelcomeScreen";
+import { ILogin, ISignup } from "@/types/auth";
+import toast from "react-hot-toast";
+import api from "@/lib/axios";
+import { ApiResponse } from "@/types/api";
+import { IUser } from "@/types/user";
+import { setToCookie } from "@/lib/cookies";
+import { setToLocalStorage } from "@/lib/local-storage";
+import { useRouter } from "next/navigation";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -52,23 +60,65 @@ function Header() {
 }
 
 export default function Auth() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const router = useRouter();
+  const [page, setPage] = useState<string>("login");
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [signupSuccess, setSignupSuccess] = useState<boolean>(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
-  const handleSubmit = () => {
-    setIsSubmitted(true);
+  useEffect(() => {
+    setPage("login")
+  }, [])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    try {
+      setSubmitting(true)
+      if (username === "" || password === "") {
+        toast.error("All fields are required")
+        return;
+      }
+      if (page !== "login" && password !== confirmPassword) {
+        toast.error("Password confirmation failed")
+        return;
+      }
+      const url = page === "login" ? "auth/login" : "auth/signup";
+      let body: ISignup | ILogin = { username, password };
+      if (page !== "login")
+        body = { ...body, email, address };
+      const res = await api.post<ApiResponse<{ token: string, user: IUser }>>(url, body);
+      if (res.data.error) {
+        toast.error(res.data.message)
+        return;
+      }
+      setToCookie("token", res.data.data.token)
+      setToLocalStorage("user", JSON.stringify(res.data.data.user));
+      if (page === "login") {
+        router.push("/")
+      } else {
+        setSignupSuccess(true);
+      }
+
+    } catch (err) {
+      console.log(err)
+      toast.error("Error while creating account, please try again...")
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  if (isSubmitted) {
+  if (signupSuccess) {
     return (
       <div className="">
         <Header />
         <div className="flex flex-col items-center justify-center flex-grow">
-          <WelcomeScreen username={"username"} />
+          <WelcomeScreen username={username} />
         </div>
       </div>
     );
@@ -80,7 +130,7 @@ export default function Auth() {
 
       <div className="flex flex-col items-center justify-center flex-grow">
         <div className="max-w-xl w-full space-y-6 rounded-b-4xl pb-30 shadow-[inset_0_0_32px_1px_#0F59513D] flex flex-col items-center">
-          <div className="w-64 h-64 relative -top-30">
+          <div className="w-64 h-80 relative -top-30">
             <Lottie
               animationData={animationData}
               loop={true}
@@ -98,19 +148,34 @@ export default function Auth() {
             >
               Ready to spill the tea?
             </p>
-
-            <h2
-              className={`${fredoka.className} text-[#7AF8EB] text-center relative -top-20 font-medium text-4xl`}
-            >
-              Sign Up
-            </h2>
+            <div className="w-full flex flex-col space-y-2">
+              <h2
+                className={`${fredoka.className} text-[#7AF8EB] text-center relative -top-20 font-medium text-4xl`}
+              >
+                {page === "login" ? "Log In" : "Sign Up"}
+              </h2>
+              <div className="w-full relative -top-16">
+                {page === "login" ? <>
+                  <div className="w-full flex items-center font-normal text-zinc-300">
+                    Don't have an account?
+                    <span onClick={() => setPage("register")} className="pl-2 cursor-pointer font-bold text-[#7AF8EB]">Sign up</span>
+                  </div>
+                </> : <>
+                  <div className="w-full flex items-center font-normal text-zinc-300">
+                    Already have an account?
+                    <span onClick={() => setPage("login")} className="pl-2 cursor-pointer font-bold text-[#7AF8EB]">Log in</span>
+                  </div>
+                </>}
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="mt-10 flex items-center justify-center">
         <div className="w-full max-w-xl">
-          <div className="space-y-6">
+          <form method="POST"
+            onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
                 htmlFor="username"
@@ -132,7 +197,7 @@ export default function Auth() {
                 htmlFor="password"
                 className="block text-[#7AF8EB] text-sm font-medium mb-2"
               >
-                create password
+                password
               </label>
               <div className="relative">
                 <input
@@ -157,47 +222,56 @@ export default function Auth() {
               </div>
             </div>
 
-            <div>
-              <label
-                htmlFor="confirmPassword"
-                className="block text-[#7AF8EB] text-sm font-medium mb-2"
-              >
-                confirm password
-              </label>
-              <div className="relative">
-                <input
-                  id="confirmPassword"
-                  type={showConfirmPassword ? "text" : "password"}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="e.g. asjdkskajn"
-                  className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors pr-12"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
+            {page !== "login" && (
+              <div>
+                <label
+                  htmlFor="confirmPassword"
+                  className="block text-[#7AF8EB] text-sm font-medium mb-2"
                 >
-                  {showConfirmPassword ? (
-                    <EyeClosed className="w-5 h-5" />
-                  ) : (
-                    <Eye className="w-5 h-5" />
-                  )}
-                </button>
+                  confirm password
+                </label>
+                <div className="relative">
+                  <input
+                    id="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="e.g. asjdkskajn"
+                    className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors pr-12"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
+                  >
+                    {showConfirmPassword ? (
+                      <EyeClosed className="w-5 h-5" />
+                    ) : (
+                      <Eye className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Submit Button */}
             <div className="flex justify-end pt-4 mb-10">
               <button
-                onClick={handleSubmit}
+                type="submit"
+                disabled={submitting}
                 className="flex shadow-[inset_0_0_12px_1px_#2F2F2F] items-center space-x-2 px-6 py-4 rounded-full hover:opacity-80 cursor-pointer transition-colors text-white"
               >
-                <span>Continue</span>
-                <ArrowRight className="w-5 h-5" />
+                {submitting ?
+                  <span>Please wait..</span>
+                  :
+                  <>
+                    <span>Continue</span>
+                    <ArrowRight className="w-5 h-5" />
+                  </>
+                }
               </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </>

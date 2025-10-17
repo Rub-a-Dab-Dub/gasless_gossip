@@ -1,36 +1,45 @@
-import Header from "@/components/ui/Header";
-import {Tab, TabGroup, TabList, TabPanel, TabPanels} from "@headlessui/react";
-import RoomsTab from "@/components/tabs/Rooms";
-import React from "react";
-import CreateNewRoom from "@/components/CreateNewRoom";
+"use client";
 
-export default function Rooms() {
+import Header from "@/components/ui/Header";
+import {
+  Tab,
+  TabGroup,
+  TabList,
+  TabPanel,
+  TabPanels,
+} from "@headlessui/react";
+import CreateNewRoom from "@/components/CreateNewRoom";
+import React from "react";
+import AllRooms from "@/components/room/AllRooms";
+import CreatedRooms from "@/components/room/CreatedRooms";
+
+export default function RoomsPage() {
   return (
     <>
       <Header />
 
-      <div className="max-w-7xl pt-32 mx-auto px-4 py-8 text-white">
-        {/* Tabs Section */}
+      <div className="max-w-7xl pt-32 mx-auto px-4 pt-8 pb-32 text-white">
         <TabGroup>
-          <TabList className="flex justify-center text-center gap-8 mb-8 border-b border-dark-teal">
-            <Tab className="pb-2 data-selected:text-light-teal data-selected:border-b data-selected:border-dark-teal w-full flex justify-center">
+          <TabList className="flex justify-center text-center mb-4 border-b border-dark-teal">
+            <Tab className="data-[selected]:rounded-tl-xl outline-none data-[selected]:bg-emerald-900/15 py-3 data-[selected]:text-light-teal data-[selected]:border-b-4 data-[selected]:border-dark-teal w-full flex justify-center">
               All Rooms
             </Tab>
-            <Tab className="pb-2 data-selected:text-light-teal data-selected:border-b data-selected:border-dark-teal w-full flex justify-center">
+            <Tab className="data-[selected]:rounded-tr-xl outline-none data-[selected]:bg-emerald-900/15 py-3 data-[selected]:text-light-teal data-[selected]:border-b-4 data-[selected]:border-dark-teal w-full flex justify-center">
               My Rooms
             </Tab>
           </TabList>
+
           <TabPanels>
+            {/* All Rooms Tab */}
             <TabPanel>
-              <ul className="my-6">
-                <span className="inline-flex items-center rounded-xl border-2 border-dark-teal py-2 px-4 text-light-grey">
-                Sports
-              </span>
-              </ul>
-              <RoomsTab/>
+              <AllRooms />
             </TabPanel>
+
+            {/* My Rooms Tab */}
             <TabPanel>
-              <RoomsTab/>
+              <div className="space-y-6">
+                <CreatedRooms />
+              </div>
             </TabPanel>
           </TabPanels>
         </TabGroup>
@@ -41,5 +50,5 @@ export default function Rooms() {
         </div>
       </div>
     </>
-  )
+  );
 }

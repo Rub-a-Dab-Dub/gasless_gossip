@@ -10,7 +10,7 @@ export default function CreateNewRoom() {
   if (pathname === "/rooms") {
     return (
       <Link
-        href="/rooms/create"
+        href="/rooms/new"
         className="flex items-center gap-3 bg-darker-grey text-white px-6 py-2 rounded-full border-2 border-dark-teal hover:bg-dark transition-colors">
         <div className="flex-shrink-0 btn-glass-effect p-4">
           <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -26,7 +26,7 @@ export default function CreateNewRoom() {
 
   return (
     <Link
-      href="/rooms/create"
+      href="/rooms/new"
       className="flex items-center gap-3 bg-darker-grey text-white px-6 py-2 rounded-full border-1 border-teal-border hover:bg-dark transition-colors">
       <div className="flex-shrink-0 btn-glass-effect p-4">
         <svg width="24" height="24" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

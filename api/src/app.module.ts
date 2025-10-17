@@ -4,12 +4,19 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { PostsModule } from './posts/posts.module';
-import { ChatModule } from './chat/chat.module';
-
+import { CommonModule } from './common/common.module';
+import { ChatsModule } from './chats/chats.module';
+import { MessagesModule } from './messages/messages.module';
+import { RoomCategoriesModule } from './room-categories/room-categories.module';
+import { RoomMessagesModule } from './room-messages/room-messages.module';
+import { RoomsModule } from './rooms/rooms.module';
+import { StarknetModule } from './starknet/starknet.module';
+import starknetConfig from './config/starknet.config';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      load: [starknetConfig],
       envFilePath: '.env',
     }),
     TypeOrmModule.forRoot({
@@ -25,7 +32,13 @@ import { ChatModule } from './chat/chat.module';
     UsersModule,
     AuthModule,
     PostsModule,
-    ChatModule,
+    ChatsModule,
+    CommonModule,
+    MessagesModule,
+    RoomCategoriesModule,
+    RoomMessagesModule,
+    RoomsModule,
+    StarknetModule,
   ],
 })
 export class AppModule {}

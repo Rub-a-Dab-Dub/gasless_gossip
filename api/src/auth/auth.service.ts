@@ -4,6 +4,9 @@ import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../users/entities/user.entity';
+import { LoginDto, SignupDto } from './dtos/auth.dto';
+import { StarknetService } from 'src/starknet/starknet.service';
+import { shortString } from 'starknet';
 
 @Injectable()
 export class AuthService {
@@ -11,41 +14,70 @@ export class AuthService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     private jwtService: JwtService,
+    private starknetService: StarknetService,
   ) {}
 
-  async signup(username: string, password: string) {
+  async signup(body: SignupDto) {
     const existingUser = await this.usersRepository.findOne({
-      where: { username },
+      where: { username: body.username },
     });
     if (existingUser) {
       throw new UnauthorizedException('Username already taken');
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const get_onchain_address = await this.starknetService.read(
+      'get_user_onchain_address',
+      [body.username],
+    );
+    if (get_onchain_address.success) {
+      throw new UnauthorizedException('Username already taken');
+    }
+
+    const username_felt = shortString.encodeShortString(body.username);
+    const create_onchain_address = await this.starknetService.write(
+      'create_user',
+      [username_felt],
+    );
+
+    if (!create_onchain_address.success) {
+      throw new UnauthorizedException('Please try again');
+    }
+    return create_onchain_address;
+
+    const hashedPassword = await bcrypt.hash(body.password, 10);
     const user = this.usersRepository.create({
-      username,
+      username: body.username,
       password: hashedPassword,
+      ...(body.address && { address: body.address }),
+      ...(body.email && { email: body.email }),
     });
     await this.usersRepository.save(user);
 
-    return { message: 'User created successfully' };
+    return await this.login({
+      username: body.username,
+      password: body.password,
+    });
+
+    // return { message: 'User created successfully' };
   }
 
-  async login(username: string, password: string) {
-    const user = await this.usersRepository.findOne({ where: { username } });
+  async login(body: LoginDto) {
+    const user = await this.usersRepository.findOne({
+      where: { username: body.username },
+    });
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (!user || !(await bcrypt.compare(body.password, user.password))) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
     const payload = {
       id: user.id,
-      address: user.address,
       username: user.username,
+      address: user.address,
       sub: user.id,
     };
     const token = await this.jwtService.signAsync(payload);
 
-    return { access_token: token };
+    return { user, token };
   }
 }

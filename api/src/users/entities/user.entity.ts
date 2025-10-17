@@ -4,13 +4,16 @@ import {
   Column,
   OneToMany,
   ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 import { Post } from '../../posts/entities/post.entity';
 import { Comment } from '../../posts/entities/comment.entity';
 import { Like } from '../../posts/entities/like.entity';
-import { Message } from '../../chat/entities/message.entity';
-import { RoomMember } from '../../chat/entities/room-member.entity';
+import { Message } from '../../messages/entities/message.entity';
+import { RoomMember } from '../../rooms/entities/room-member.entity';
+import { Chat } from '../../chats/entities/chat.entity';
+import { Room } from '../../rooms/entities/room.entity';
 
 @Entity()
 export class User {
@@ -25,6 +28,9 @@ export class User {
 
   @Column({ nullable: true })
   photo: string;
+
+  @Column({ nullable: true })
+  email: string;
 
   @Column({ nullable: true })
   address: string;
@@ -47,12 +53,35 @@ export class User {
   @OneToMany(() => Like, (like) => like.user)
   likes: Like[];
 
-  @OneToMany(() => Message, (message) => message.sender)
-  sentMessages: Message[];
-
-  @OneToMany(() => Message, (message) => message.receiver)
-  receivedMessages: Message[];
-
   @OneToMany(() => RoomMember, (member) => member.user)
-  roomMemberships: RoomMember[];
+  room_members: RoomMember[];
+
+  @ManyToMany(() => User, (user) => user.following)
+  @JoinTable({
+    name: 'user_followers',
+    joinColumn: {
+      name: 'followed_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'follower_id',
+      referencedColumnName: 'id',
+    },
+  })
+  followers: User[];
+
+  @ManyToMany(() => User, (user) => user.followers)
+  following: User[];
+
+  @OneToMany(() => Chat, (chat) => chat.sender)
+  sentChats: Chat[];
+
+  @OneToMany(() => Chat, (chat) => chat.receiver)
+  receivedChats: Chat[];
+
+  @OneToMany(() => Message, (message) => message.sender)
+  messages: Message[];
+
+  @OneToMany(() => Room, (room) => room.owner)
+  createdRooms: Room[];
 }
