@@ -38,4 +38,20 @@ pub trait IGGPay<TContractState> {
 
     // View: Get STRK balance of caller
     fn get_balance(self: @TContractState) -> u256;
+
+    fn create_user(ref self: TContractState, username: felt252) -> ContractAddress;
+
+    fn update_username(ref self: TContractState, old_username: felt252, new_username: felt252);
+
+    fn get_user_onchain_address(self: @TContractState, username: felt252) -> ContractAddress;
+
+    fn get_username_by_wallet(self: @TContractState, wallet: ContractAddress) -> felt252;
+
+    fn withdraw_from_userwallet(
+        ref self: TContractState,
+        token: ContractAddress,
+        username: felt252,
+        recipient_address: ContractAddress,
+        amount: u256,
+    );
 }

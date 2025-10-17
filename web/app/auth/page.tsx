@@ -254,7 +254,6 @@ export default function Auth() {
               </div>
             )}
 
-            {/* Submit Button */}
             <div className="flex justify-end pt-4 mb-10">
               <button
                 type="submit"

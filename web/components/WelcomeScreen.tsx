@@ -29,9 +29,7 @@ export default function WelcomeScreen({ username }: WelcomeScreenProps) {
         </span>
       </div>
 
-      {/* Main Content */}
       <div className="flex flex-col items-center max-w-xl w-222 py-15 px-6">
-        {/* Chick Image with Glow */}
         <div className="relative mb-8">
           <Image
             src={"/chick.svg"}
@@ -48,7 +46,6 @@ export default function WelcomeScreen({ username }: WelcomeScreenProps) {
           Welcome, {username}
         </p>
 
-        {/* Description */}
         <p
           className={`${baloo_2.className} text-sm text-[#A3A9A6] mb-12 text-center max-w-sm`}
         >
@@ -57,9 +54,7 @@ export default function WelcomeScreen({ username }: WelcomeScreenProps) {
           to grow your pet
         </p>
 
-        {/* Buttons */}
         <div className="flex items-center gap-4">
-          {/* Share Button */}
           <button className="w-12 h-12 bg-[#121418] hover:bg-gray-700 rounded-lg flex items-center justify-center transition-colors shadow-[inset_0_0_12px_1px_#0F5951]">
             <Share className="w-5 h-5 text-white" />
           </button>
@@ -68,6 +63,7 @@ export default function WelcomeScreen({ username }: WelcomeScreenProps) {
           <button onClick={() => router.push("/")}
             className="w-73 justify-center bg-[linear-gradient(135deg,_#15FDE4_100%,_#13E5CE_0%)]
   shadow-[inset_-6px_-6px_12px_#1E9E90,_inset_6px_6px_10px_#24FFE7] cursor-pointer hover:bg-cyan-500 text-black font-semibold px-12 py-3 rounded-full inline-flex items-center gap-2 transition-all"
+
           >
             <span>Continue</span>
             <ArrowRight className="w-5 h-5" />
