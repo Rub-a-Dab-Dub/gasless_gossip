@@ -1,6 +1,6 @@
 use gg_pay::interface::{IGGPayDispatcher, IGGPayDispatcherTrait};
-use openzeppelin_token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
 use gg_pay::wallet::{IWalletDispatcher, IWalletDispatcherTrait};
+use openzeppelin_token::erc20::interface::{IERC20Dispatcher, IERC20DispatcherTrait};
 use snforge_std::{
     ContractClassTrait, DeclareResultTrait, declare, start_cheat_caller_address,
     stop_cheat_caller_address,
@@ -15,7 +15,7 @@ fn deploy_gg_pay() -> (ContractAddress, ContractAddress, ContractAddress) {
     let platform_fee_bps: u16 = 200; // 2%
 
     let wallet_classhash = declare("Wallet").unwrap().contract_class();
-      
+
     let mut calldata = ArrayTrait::new();
     admin.serialize(ref calldata);
     strk_token.serialize(ref calldata);
@@ -724,7 +724,7 @@ fn test_set_username() {
 
     // Change fee to 3%
     start_cheat_caller_address(contract_address, admin);
-   let wallet = gg_pay.create_user('aji');
+    let wallet = gg_pay.create_user('aji');
 
     assert!(gg_pay.get_user_onchain_address('aji') == wallet, "Username should be 'aji'");
     assert!(gg_pay.get_username_by_wallet(wallet) == 'aji', "Wallet should map to 'aji'");
