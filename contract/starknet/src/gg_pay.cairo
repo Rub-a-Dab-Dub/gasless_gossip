@@ -312,8 +312,8 @@ mod GaslessGossipPayments {
         }
 
         fn create_user(ref self: ContractState, username: felt252) -> ContractAddress {
-            let caller = get_caller_address();
-            assert(caller == self.paymaster_address.read(), 'Only Paymaster can call this');
+            // let caller = get_caller_address();
+            // assert(caller == self.paymaster_address.read(), 'Only Paymaster can call this');
             assert(username != 0, 'Invalid username');
             let zero_address: ContractAddress = contract_address_const::<'0x0'>();
             let is_registered = self.is_user_registered.read(username);
