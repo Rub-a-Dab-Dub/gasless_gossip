@@ -699,15 +699,18 @@ class ProfileView extends StackedView<ProfileViewModel> {
   }
 
   Widget _buildPostsContent(ProfileViewModel viewModel) {
-    return Column(
-      children: [
-        // User's posts
-        _buildUserPost(),
-        const SizedBox(height: 8),
-        _buildUserPost(),
-        const SizedBox(height: 8),
-        _buildUserPost(),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: [
+          // User's posts
+          _buildUserPost(),
+          const SizedBox(height: 8),
+          _buildUserPost(),
+          const SizedBox(height: 8),
+          _buildUserPost(),
+        ],
+      ),
     );
   }
 
@@ -748,7 +751,7 @@ class ProfileView extends StackedView<ProfileViewModel> {
     return Column(
       children: viewModel.userRooms
           .map((room) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
                 child: _buildRoomCard(room),
               ))
           .toList(),

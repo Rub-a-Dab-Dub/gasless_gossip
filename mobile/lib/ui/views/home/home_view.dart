@@ -15,7 +15,7 @@ class HomeView extends StackedView<HomeViewModel> {
   Widget builder(BuildContext context, HomeViewModel viewModel, Widget? child) {
     return Scaffold(
         backgroundColor: const Color(0xFF121418),
-        // We put the full screen content in a Stack so we can overlay the dim + stacked buttons
+        // We put the full screen content in a Stack so we can overlay everything including bottom nav
         body: Stack(
           children: [
             // ---------- main content (your original Column) ----------
@@ -85,18 +85,28 @@ class HomeView extends StackedView<HomeViewModel> {
                 }),
               ),
             ),
-          ],
-        ),
 
-        // ---------- FAB (keeps same look, toggles overlay) ----------
-        floatingActionButton: viewModel.selectedTabIndex == 0
-            ? _buildFloatingActionButton(viewModel)
-            : _buildMyPageFloatingActionButton());
+            // ---------- FAB (positioned above bottom nav) ----------
+            Positioned(
+              bottom: 15, // bottom nav height + margin
+              right: 15,
+              child: viewModel.selectedTabIndex == 0
+                  ? _buildFloatingActionButton(viewModel)
+                  : _buildMyPageFloatingActionButton(),
+            ),
+
+            // ---------- Success Modal (appears after post creation) ----------
+            // This MUST be last to render on top of everything
+            if (viewModel.showSuccessModal)
+              _buildSuccessModal(context, viewModel),
+          ],
+        ));
   }
 
   Widget _buildFeedContent(HomeViewModel viewModel) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.fromLTRB(
+          16, 0, 16, 110 + 24), // Add bottom padding for nav bar
       child: Column(
         children: [
           const SizedBox(height: 24),
@@ -391,134 +401,190 @@ class HomeView extends StackedView<HomeViewModel> {
 
   Widget _buildQuestCard(HomeViewModel viewModel) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      width: double.infinity,
+      height: 202,
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: const Color(0xFF121418),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF222222),
+            blurRadius: 32,
+            inset: true,
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          // Text and Quests Section
+          Column(
+            children: [
+              // Header Row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Quests',
+                    style: GoogleFonts.fredoka(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFFAEB8B6),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () => viewModel.onViewAllQuests(),
+                    child: Text(
+                      'View All',
+                      style: GoogleFonts.baloo2(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xFF0E9186),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              // Horizontal Scrollable Quest Cards
+              SizedBox(
+                height: 93,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 3,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: 16),
+                  itemBuilder: (context, index) {
+                    return _buildHorizontalQuestCard(viewModel);
+                  },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          // Pagination Dots
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildPaginationDot(true),
+              const SizedBox(width: 6),
+              _buildPaginationDot(false),
+              const SizedBox(width: 6),
+              _buildPaginationDot(false),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHorizontalQuestCard(HomeViewModel viewModel) {
+    return Container(
+      width: 172,
+      height: 93,
+      padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
       decoration: BoxDecoration(
         color: const Color(0xFF121A19),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Row(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Quest Info
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Drop 10 whispers in a room',
-                  style: GoogleFonts.baloo2(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                    color: const Color(0xFFF1F7F6),
+          // Quest Title
+          Text(
+            'Drop 10 whispers in a room',
+            style: GoogleFonts.baloo2(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: const Color(0xFFF1F7F6),
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 8),
+          // Reward and CTA Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // Reward
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'REWARD:',
+                    style: GoogleFonts.baloo2(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFF6B7A77),
+                    ),
                   ),
-                ),
-                const SizedBox(height: 6),
-                // Progress bar
-                Container(
-                  height: 16,
+                  const SizedBox(height: 4),
+                  ShaderMask(
+                    shaderCallback: (bounds) => const LinearGradient(
+                      colors: [Color(0xFF14F1D9), Color(0xFFA0F9F1)],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ).createShader(bounds),
+                    child: Text(
+                      '30 XP',
+                      style: GoogleFonts.fredoka(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                        height: 0.875,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              // GO Button
+              GestureDetector(
+                onTap: () => viewModel.onQuestTap(),
+                child: Container(
+                  width: 68,
+                  height: 33,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF222A2A),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Stack(
-                    children: [
-                      Container(
-                        width: 69,
-                        height: 16,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF11998A), Color(0xFF48FFEB)],
-                          ),
-                          color: const Color(0xFF14F1D9),
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color(0xFF11998A),
-                              offset: Offset(-2, -4),
-                              blurRadius: 6,
-                              inset: true,
-                            ),
-                            BoxShadow(
-                              color: Color(0xFF48FFEB),
-                              offset: Offset(2, 4),
-                              blurRadius: 4,
-                              inset: true,
-                            ),
-                          ],
-                        ),
-                        child: Center(
-                          child: Text(
-                            '4/10',
-                            style: GoogleFonts.fredoka(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xFF102E2B),
-                            ),
-                          ),
-                        ),
+                    color: const Color(0xFFF1F7F6),
+                    borderRadius: BorderRadius.circular(32),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color(0xFF222A2A),
+                        offset: Offset(3, 3),
+                        blurRadius: 0,
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 20),
-          // Reward
-          Column(
-            children: [
-              Text(
-                'REWARD',
-                style: GoogleFonts.baloo2(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w500,
-                  color: const Color(0xFF6B7A77),
-                ),
-              ),
-              const SizedBox(height: 4),
-              ShaderMask(
-                shaderCallback: (bounds) => const LinearGradient(
-                  colors: [Color(0xFF14F1D9), Color(0xFFA0F9F1)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ).createShader(bounds),
-                child: Text(
-                  '30 XP',
-                  style: GoogleFonts.fredoka(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white,
+                  child: Center(
+                    child: Text(
+                      'GO',
+                      style: GoogleFonts.fredoka(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xFF121418),
+                        letterSpacing: -0.28,
+                      ),
+                    ),
                   ),
                 ),
               ),
             ],
           ),
-          const SizedBox(width: 20),
-          // Go Button
-          GestureDetector(
-            onTap: () => viewModel.onQuestTap(),
-            child: Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF1F7F6),
-                borderRadius: BorderRadius.circular(32),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0xFF222A2A),
-                    offset: Offset(3, 3),
-                  ),
-                ],
-              ),
-              child: Text(
-                'GO',
-                style: GoogleFonts.fredoka(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: const Color(0xFF121418),
-                ),
-              ),
-            ),
-          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildPaginationDot(bool isActive) {
+    return Container(
+      width: 6,
+      height: 6,
+      decoration: BoxDecoration(
+        color: isActive ? const Color(0xFF0E9186) : const Color(0xFF191E1D),
+        shape: BoxShape.circle,
       ),
     );
   }
@@ -528,12 +594,15 @@ class HomeView extends StackedView<HomeViewModel> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 140,
+        width: 145,
         height: 48,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 7),
         decoration: BoxDecoration(
           color: const Color(0xFF191E1D),
           borderRadius: BorderRadius.circular(32),
+          border: Border.all(
+            color: Color(0xFF0F443E),
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -578,12 +647,15 @@ class HomeView extends StackedView<HomeViewModel> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 140,
+        width: 145,
         height: 48,
-        padding: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 7),
         decoration: BoxDecoration(
           color: const Color(0xFF191E1D),
           borderRadius: BorderRadius.circular(32),
+          border: Border.all(
+            color: Color(0xFF0F443E),
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -776,4 +848,252 @@ class SegmentedRingPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+// Success Modal Widget (moved from PostsuccessView to be an overlay)
+Widget _buildSuccessModal(BuildContext context, HomeViewModel viewModel) {
+  return Positioned.fill(
+    child: Container(
+      color: const Color(0xFF121A19).withOpacity(0.96),
+      child: Column(
+        children: [
+          // Success Message at top
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            decoration: BoxDecoration(
+              color: const Color(0xFF121A19),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(12),
+                bottomRight: Radius.circular(12),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF14F1D9).withOpacity(0.12),
+                  blurRadius: 14,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: SafeArea(
+              bottom: false,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.check_circle,
+                    color: Color(0xFF14F1D9),
+                    size: 24,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Your post was successfully uploaded',
+                    style: GoogleFonts.fredoka(
+                      fontSize: 14,
+                      height: 1.2,
+                      letterSpacing: -0.28,
+                      color: const Color(0xFFF1F7F6),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Spacer to push content to center
+          const Spacer(),
+
+          // XP Reward Image and Text - centered content
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // XP Image
+              SizedBox(
+                width: 215.17,
+                height: 260,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    // Background image with glow
+                    Positioned.fill(
+                      child: Image.asset(
+                        AppAssets.successful,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    // Chick image with rounded bottom
+                    Positioned(
+                      left: 25.91,
+                      top: 20,
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                          bottom: Radius.circular(1540),
+                        ),
+                        child: Image.asset(
+                          AppAssets.chick,
+                          width: 156,
+                          height: 167,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    // XP badge with stroke
+                    Positioned(
+                      left: (215.17 / 2) - (55 / 2) + 0.5,
+                      top: 210,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // Stroke (border text)
+                          Text(
+                            '${viewModel.xpEarned}',
+                            style: GoogleFonts.fredoka(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 48,
+                              height: 33 / 48,
+                              foreground: Paint()
+                                ..style = PaintingStyle.stroke
+                                ..strokeWidth = 6
+                                ..color = const Color(0xFF072824),
+                            ),
+                          ),
+                          // Fill (main text)
+                          Text(
+                            '${viewModel.xpEarned}',
+                            style: GoogleFonts.fredoka(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 48,
+                              height: 33 / 48,
+                              color: const Color(0xFFF1F7F6),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 60),
+              // Success Text with rocket icon
+              Column(
+                children: [
+                  Text(
+                    "You've earned some XP!",
+                    style: GoogleFonts.fredoka(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 24,
+                      height: 1.3,
+                      color: const Color(0xFFF1F7F6),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const Icon(
+                    Icons.rocket_launch_outlined,
+                    color: Color(0xFF14F1D9),
+                    size: 20,
+                  ),
+                ],
+              ),
+            ],
+          ),
+
+          // Spacer to push buttons to bottom
+          const Spacer(),
+
+          // CTA Buttons
+          SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+              child: Row(
+                children: [
+                  // Share Button
+                  GestureDetector(
+                    onTap: viewModel.onShareSuccess,
+                    child: Container(
+                      width: 52,
+                      height: 52,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF121418),
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0xFF0F5951),
+                            offset: Offset(0, 1),
+                            blurRadius: 12,
+                            spreadRadius: 0,
+                            inset: true,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.ios_share,
+                        color: Color(0xFF14F1D9),
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  // Continue Button
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: viewModel.onContinueAfterSuccess,
+                      child: Container(
+                        height: 52,
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topRight,
+                            end: Alignment.bottomLeft,
+                            colors: [
+                              Color(0xFF15FDE4),
+                              Color(0xFF13E5CE),
+                            ],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xFF1E9E90),
+                              offset: Offset(-6, -6),
+                              blurRadius: 12,
+                              inset: true,
+                            ),
+                            BoxShadow(
+                              color: Color(0xFF24FFE7),
+                              offset: Offset(6, 6),
+                              blurRadius: 10,
+                              inset: true,
+                            ),
+                          ],
+                          borderRadius: BorderRadius.all(Radius.circular(32)),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Continue',
+                              style: GoogleFonts.fredoka(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                height: 1.2,
+                                color: const Color(0xFF121418),
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            const Icon(
+                              Icons.arrow_forward,
+                              color: Color(0xFF121418),
+                              size: 24,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
 }

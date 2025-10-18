@@ -4,7 +4,7 @@ import 'package:mobile/app/app.locator.dart';
 import '../helpers/test_helpers.dart';
 
 void main() {
-  group('PostsuccessViewModel Tests -', () {
+  group('SwapViewModel Tests -', () {
     setUp(() => registerServices());
     tearDown(() => locator.reset());
   });

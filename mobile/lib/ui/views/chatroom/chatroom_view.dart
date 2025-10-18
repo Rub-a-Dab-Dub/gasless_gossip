@@ -20,40 +20,48 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
   ) {
     return Scaffold(
       backgroundColor: const Color(0xFF121418),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Column(
+      body: Stack(
+        children: [
+          // Main content wrapped in SafeArea
+          SafeArea(
+            child: Stack(
               children: [
-                // Top Header
-                _buildTopHeader(viewModel),
-                // Messages
-                Expanded(
-                  child: _buildMessagesList(viewModel),
+                Column(
+                  children: [
+                    // Top Header
+                    _buildTopHeader(viewModel),
+                    // Messages
+                    Expanded(
+                      child: _buildMessagesList(viewModel),
+                    ),
+                    // Message Input
+                    _buildMessageInput(viewModel),
+                  ],
                 ),
-                // Message Input
-                _buildMessageInput(viewModel),
+                // Bottom Sheet (appears behind attachment picker)
+                if (viewModel.showBottomSheet)
+                  GestureDetector(
+                    onTap: () => viewModel.hideBottomSheet(),
+                    behavior: HitTestBehavior.translucent,
+                    child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
+                      child: GestureDetector(
+                        onTap: () {}, // Prevent tap from bubbling up
+                        child: _buildBottomSheetContent(context, viewModel),
+                      ),
+                    ),
+                  ),
+                // Attachment Picker Overlay (always on top)
+                if (viewModel.showAttachmentPicker)
+                  _buildAttachmentPickerOverlay(context, viewModel),
               ],
             ),
-            // Bottom Sheet (appears behind attachment picker)
-            if (viewModel.showBottomSheet)
-              GestureDetector(
-                onTap: () => viewModel.hideBottomSheet(),
-                behavior: HitTestBehavior.translucent,
-                child: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  child: GestureDetector(
-                    onTap: () {}, // Prevent tap from bubbling up
-                    child: _buildBottomSheetContent(context, viewModel),
-                  ),
-                ),
-              ),
-            // Attachment Picker Overlay (always on top)
-            if (viewModel.showAttachmentPicker)
-              _buildAttachmentPickerOverlay(context, viewModel),
-          ],
-        ),
+          ),
+          // Success Modal OUTSIDE SafeArea - this is the key change
+          if (viewModel.showSuccessModal)
+            _buildSuccessModal(context, viewModel),
+        ],
       ),
     );
   }
@@ -155,6 +163,15 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
 
   Widget _buildMessageItem(
       ChatRoomMessage message, ChatroomViewModel viewModel) {
+    // Transaction messages have their own layout
+    if (message.type == MessageType.transaction) {
+      return Container(
+        margin: const EdgeInsets.only(bottom: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: _buildTransactionInfoCard(viewModel, message),
+      );
+    }
+
     return Container(
       margin: const EdgeInsets.only(bottom: 40),
       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -186,67 +203,7 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
 
   Widget _buildMessageContent(ChatRoomMessage message) {
     if (message.type == MessageType.nft || message.type == MessageType.image) {
-      return SizedBox(
-        width: 252,
-        height: 349,
-        child: Container(
-          width: 252,
-          height: 349,
-          decoration: BoxDecoration(
-            border: Border.all(color: const Color(0xFF1A2221), width: 2),
-            borderRadius: BorderRadius.circular(12),
-            image: DecorationImage(
-              image:
-                  AssetImage(message.imageUrl ?? 'assets/placeholder_nft.png'),
-              fit: BoxFit.cover,
-              onError: (exception, stackTrace) {},
-            ),
-          ),
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: message.isSentByMe
-                  ? CrossAxisAlignment.end
-                  : CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: message.isSentByMe
-                      ? MainAxisAlignment.end
-                      : MainAxisAlignment.start,
-                  children: [
-                    // Timestamp
-                    Text(
-                      message.timestamp,
-                      style: GoogleFonts.baloo2(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFFD6D8D3),
-                        shadows: [
-                          const Shadow(
-                            color: Colors.black54,
-                            blurRadius: 4,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    // Read status for sent messages
-                    if (message.isSentByMe)
-                      Icon(
-                        Icons.done_all,
-                        size: 14,
-                        color: message.isRead
-                            ? const Color(0xFF7AF8EB)
-                            : const Color(0xFFA3A9A6),
-                      ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
+      return _buildNftMessage(message);
     }
 
     // Regular text message
@@ -533,7 +490,7 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
         viewModel.showBottomSheet && viewModel.selectedAttachmentType == type;
     final Color displayColor = isSelected ? const Color(0xFF14F1D9) : color;
 
-    return GestureDetector(
+    return InkWell(
       onTap: () => _handleAttachmentSelection(context, viewModel, type),
       child: SizedBox(
         height: 48,
@@ -860,28 +817,115 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
                       ),
                       itemCount: nftImages.length,
                       itemBuilder: (context, index) {
+                        final isSelected = viewModel.isNftSelected(index);
+
                         return GestureDetector(
+                          onLongPress: () =>
+                              viewModel.toggleNftSelection(index),
                           onTap: () {
-                            viewModel.hideBottomSheet();
-                            // Handle NFT selection
+                            if (viewModel.hasSelectedNfts) {
+                              viewModel.toggleNftSelection(index);
+                            } else {
+                              viewModel.hideBottomSheet();
+                              // Handle single NFT send
+                            }
                           },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF2A3533),
-                              borderRadius: BorderRadius.circular(12),
-                              border:
-                                  Border.all(color: const Color(0xFF161F1E)),
-                              image: DecorationImage(
-                                image: AssetImage(nftImages[index]),
-                                fit: BoxFit.cover,
-                                onError: (exception, stackTrace) {},
+                          child: Stack(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF2A3533),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: isSelected
+                                        ? const Color(0xFF14F1D9)
+                                        : const Color(0xFF161F1E),
+                                    width: isSelected ? 3 : 1,
+                                  ),
+                                  image: DecorationImage(
+                                    image: AssetImage(nftImages[index]),
+                                    fit: BoxFit.cover,
+                                    onError: (exception, stackTrace) {},
+                                  ),
+                                ),
                               ),
-                            ),
+                              // Selection indicator
+                              if (isSelected)
+                                Positioned(
+                                  top: 8,
+                                  right: 8,
+                                  child: Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF14F1D9),
+                                      shape: BoxShape.circle,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: const Color(0xFF14F1D9)
+                                              .withOpacity(0.4),
+                                          blurRadius: 8,
+                                          spreadRadius: 2,
+                                        ),
+                                      ],
+                                    ),
+                                    child: const Icon(
+                                      Icons.check,
+                                      color: Color(0xFF121418),
+                                      size: 16,
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                         );
                       },
                     ),
                   ),
+                  const SizedBox(height: 16),
+
+                  // Send button (appears when NFTs are selected)
+                  if (viewModel.hasSelectedNfts)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: GestureDetector(
+                        onTap: viewModel.sendSelectedNfts,
+                        child: Container(
+                          width: double.infinity,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [
+                                Color(0xFF15FDE4),
+                                Color(0xFF13E5CE),
+                              ],
+                            ),
+                            borderRadius: BorderRadius.circular(32),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Send ${viewModel.selectedNftIndices.length} NFT${viewModel.selectedNftIndices.length > 1 ? 's' : ''}',
+                                style: GoogleFonts.fredoka(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  color: const Color(0xFF121418),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              const Icon(
+                                Icons.send,
+                                color: Color(0xFF121418),
+                                size: 20,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                   const SizedBox(height: 16),
                 ],
               ),
@@ -936,20 +980,27 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  // Send Token Content
+                  // Content
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       children: [
-                        // Token Info Section
+                        // Token Info Section (always visible)
                         _buildTokenInfoSection(viewModel),
-                        const SizedBox(height: 39),
-                        // Amount Section
-                        _buildAmountSection(),
-                        const SizedBox(height: 35),
-                        // Send Button
-                        _buildSendButton(context, viewModel),
-                        const SizedBox(height: 40),
+                        const SizedBox(height: 10),
+                        // Conditional: Token Selection or Amount/Send
+                        viewModel.showTokenSelection
+                            ? _buildTokenSelectionContent(viewModel)
+                            : Column(
+                                children: [
+                                  // Amount Section
+                                  _buildAmountSection(viewModel),
+                                  const SizedBox(height: 35),
+                                  // Send Button
+                                  _buildSendButton(context, viewModel),
+                                  const SizedBox(height: 40),
+                                ],
+                              ),
                       ],
                     ),
                   ),
@@ -1027,7 +1078,7 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
     );
   }
 
-  Widget _buildAmountSection() {
+  Widget _buildAmountSection(ChatroomViewModel viewModel) {
     final amountController = TextEditingController();
 
     return Column(
@@ -1077,51 +1128,54 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
         const SizedBox(height: 10),
 
         // Token Selector
-        Container(
-          height: 39,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          decoration: BoxDecoration(
-            color: const Color(0xFF171C1B),
-            border: Border.all(color: const Color(0xFF212424)),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 24,
-                    height: 24,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0xFF26A17B),
-                    ),
-                    child: ClipOval(
-                      child: Image.asset(
-                        AppAssets.base,
-                        fit: BoxFit.cover,
+        GestureDetector(
+          onTap: () => viewModel.showTokenSelectionSheet(),
+          child: Container(
+            height: 39,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: BoxDecoration(
+              color: const Color(0xFF171C1B),
+              border: Border.all(color: const Color(0xFF212424)),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xFF26A17B),
+                      ),
+                      child: ClipOval(
+                        child: Image.asset(
+                          viewModel.selectedToken?.iconUrl ?? AppAssets.base,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    'BASE ETH',
-                    style: GoogleFonts.baloo2(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: const Color(0xFFF1F7F6),
+                    const SizedBox(width: 4),
+                    Text(
+                      viewModel.selectedToken?.symbol ?? 'Base Eth',
+                      style: GoogleFonts.baloo2(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xFFF1F7F6),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(width: 8),
-              const Icon(
-                Icons.keyboard_arrow_down,
-                size: 20,
-                color: Color(0xFFA3A9A6),
-              ),
-            ],
+                  ],
+                ),
+                const SizedBox(width: 8),
+                const Icon(
+                  Icons.keyboard_arrow_down,
+                  size: 20,
+                  color: Color(0xFFA3A9A6),
+                ),
+              ],
+            ),
           ),
         ),
         const SizedBox(height: 30),
@@ -1168,10 +1222,7 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
 
   Widget _buildSendButton(BuildContext context, ChatroomViewModel viewModel) {
     return GestureDetector(
-      onTap: () {
-        viewModel.hideBottomSheet();
-        // Handle send token
-      },
+      onTap: () => viewModel.sendToken(),
       child: Container(
         width: 152,
         height: 51,
@@ -1206,6 +1257,510 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
               color: Color(0xFF14F1D9),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTransactionInfoCard(
+      ChatroomViewModel viewModel, ChatRoomMessage message) {
+    return Row(
+      mainAxisAlignment:
+          message.isSentByMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+      children: [
+        Flexible(
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: const Color(0xFF121A19),
+              border: Border.all(color: const Color(0xFF102E2B)),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: IntrinsicWidth(
+              // makes width fit its content
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Transaction Text
+                  Row(
+                    mainAxisSize: MainAxisSize.min, // 👈 important
+                    children: [
+                      Text(
+                        'You transferred ',
+                        style: GoogleFonts.baloo2(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: const Color(0xFFA3A9A6),
+                        ),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '2 ',
+                            style: GoogleFonts.baloo2(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(0xFF0E9186),
+                            ),
+                          ),
+                          Container(
+                            width: 14,
+                            height: 14,
+                            margin: const EdgeInsets.symmetric(horizontal: 2),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Color(0xFF26A17B),
+                            ),
+                            child: ClipOval(
+                              child: Image.asset(
+                                AppAssets.base,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            'Base Eth',
+                            style: GoogleFonts.baloo2(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              color: const Color(0xFF0E9186),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        ' to ${viewModel.chatUser.name}',
+                        style: GoogleFonts.baloo2(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: const Color(0xFFA3A9A6),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  // Timestamp
+                  Text(
+                    message.timestamp,
+                    style: GoogleFonts.baloo2(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFF3C4A47),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        // Info Icon
+        Container(
+          width: 24,
+          height: 24,
+          decoration: const BoxDecoration(shape: BoxShape.circle),
+          child: const Icon(
+            Icons.info,
+            color: Color(0xFF14F1D9),
+            size: 24,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTokenSelectionContent(ChatroomViewModel viewModel) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Token Options
+        ...viewModel.tokens.map((token) => Container(
+              margin: const EdgeInsets.only(bottom: 6),
+              child: _buildTokenOption(token, viewModel),
+            )),
+        const SizedBox(height: 20),
+        // Close Button
+        GestureDetector(
+          onTap: () => viewModel.hideTokenSelectionSheet(),
+          child: Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: const Color(0xFF1A2221),
+              borderRadius: BorderRadius.circular(32),
+            ),
+            child: const Icon(
+              Icons.close,
+              color: Color(0xFFF1F7F6),
+              size: 24,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+      ],
+    );
+  }
+
+  Widget _buildTokenOption(Token token, ChatroomViewModel viewModel) {
+    final isSelected = token.isSelected;
+    return GestureDetector(
+      onTap: () => viewModel.selectToken(token),
+      child: Container(
+        height: 48,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFF102E2B) : const Color(0xFF17191D),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            // Token Icon
+            Container(
+              width: 24,
+              height: 24,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+              ),
+              child: ClipOval(
+                child: Image.asset(
+                  token.iconUrl,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            // Token Name
+            Expanded(
+              child: Text(
+                token.symbol,
+                style: GoogleFonts.baloo2(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: const Color(0xFFF1F7F6),
+                ),
+              ),
+            ),
+            // Selection Indicator (matching create room style)
+            Container(
+              width: 20,
+              height: 20,
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? const Color(0xFF14F1D9) // active background
+                    : const Color(0xFF121418), // inactive background
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: isSelected
+                      ? const Color(0xFF0E9186) // active border
+                      : const Color(0xFF2A3533), // inactive border
+                  width: 2,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSuccessModal(BuildContext context, ChatroomViewModel viewModel) {
+    return Positioned.fill(
+      child: Container(
+        color: const Color(0xFF121A19).withOpacity(0.96),
+        child: Column(
+          children: [
+            // Success Message at top
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              decoration: BoxDecoration(
+                color: const Color(0xFF121A19),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(12),
+                  bottomRight: Radius.circular(12),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF14F1D9).withOpacity(0.12),
+                    blurRadius: 14,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: SafeArea(
+                bottom: false,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.check_circle,
+                      color: Color(0xFF14F1D9),
+                      size: 24,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'You\'ve sent ${viewModel.chatUser.name} 2 Base Eth',
+                      style: GoogleFonts.fredoka(
+                        fontSize: 14,
+                        height: 1.2,
+                        letterSpacing: -0.28,
+                        color: const Color(0xFFF1F7F6),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            // Spacer to push content to center
+            const Spacer(),
+
+            // XP Reward Image and Text - centered content
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // XP Image
+                SizedBox(
+                  width: 215.17,
+                  height: 260,
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      // Background image with glow
+                      Positioned.fill(
+                        child: Image.asset(
+                          AppAssets.successful,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      // Chick image with rounded bottom
+                      Positioned(
+                        left: 30.91,
+                        top: 25,
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            bottom: Radius.circular(1540),
+                          ),
+                          child: Image.asset(
+                            AppAssets.bigbase,
+                            width: 156,
+                            height: 167,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                      // XP badge with stroke
+                      Positioned(
+                        left: (215.17 / 2) - (55 / 4),
+                        top: 210,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            // Stroke (border text)
+                            Text(
+                              '2',
+                              style: GoogleFonts.fredoka(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 48,
+                                height: 33 / 48,
+                                foreground: Paint()
+                                  ..style = PaintingStyle.stroke
+                                  ..strokeWidth = 12
+                                  ..color = const Color(0xFF072824),
+                              ),
+                            ),
+                            // Fill (main text)
+                            Text(
+                              '2',
+                              style: GoogleFonts.fredoka(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 48,
+                                height: 33 / 48,
+                                color: const Color(0xFFF1F7F6),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 40),
+                // Success Text
+                Text(
+                  "Tokens sent successfully",
+                  style: GoogleFonts.fredoka(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 24,
+                    height: 1.3,
+                    color: const Color(0xFFF1F7F6),
+                  ),
+                ),
+              ],
+            ),
+
+            // Spacer to push buttons to bottom
+            const Spacer(),
+
+            // CTA Buttons
+            SafeArea(
+              top: false,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                child: Row(
+                  children: [
+                    // Share Button
+                    GestureDetector(
+                      onTap: () {
+                        // Handle share
+                      },
+                      child: Container(
+                        width: 52,
+                        height: 52,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFF121418),
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xFF0F5951),
+                              offset: Offset(0, 1),
+                              blurRadius: 12,
+                              spreadRadius: 0,
+                              inset: true,
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.ios_share,
+                          color: Color(0xFF14F1D9),
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    // Continue Button
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () => viewModel.onContinueAfterSuccess(),
+                        child: Container(
+                          height: 52,
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
+                              colors: [
+                                Color(0xFF15FDE4),
+                                Color(0xFF13E5CE),
+                              ],
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color(0xFF1E9E90),
+                                offset: Offset(-6, -6),
+                                blurRadius: 12,
+                                inset: true,
+                              ),
+                              BoxShadow(
+                                color: Color(0xFF24FFE7),
+                                offset: Offset(6, 6),
+                                blurRadius: 10,
+                                inset: true,
+                              ),
+                            ],
+                            borderRadius: BorderRadius.all(Radius.circular(32)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Continue',
+                                style: GoogleFonts.fredoka(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 16,
+                                  height: 1.2,
+                                  color: const Color(0xFF121418),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              const Icon(
+                                Icons.arrow_forward,
+                                color: Color(0xFF121418),
+                                size: 24,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNftMessage(ChatRoomMessage message) {
+    return SizedBox(
+      width: 252,
+      height: 349,
+      child: Container(
+        width: 252,
+        height: 349,
+        decoration: BoxDecoration(
+          border: Border.all(color: const Color(0xFF1A2221), width: 2),
+          borderRadius: BorderRadius.circular(12),
+          image: DecorationImage(
+            image: AssetImage(message.imageUrl ?? 'assets/placeholder_nft.png'),
+            fit: BoxFit.cover,
+            onError: (exception, stackTrace) {},
+          ),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: message.isSentByMe
+                ? CrossAxisAlignment.end
+                : CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: message.isSentByMe
+                    ? MainAxisAlignment.end
+                    : MainAxisAlignment.start,
+                children: [
+                  // Timestamp
+                  Text(
+                    message.timestamp,
+                    style: GoogleFonts.baloo2(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFFD6D8D3),
+                      shadows: [
+                        const Shadow(
+                          color: Colors.black54,
+                          blurRadius: 4,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  // Read status for sent messages
+                  if (message.isSentByMe)
+                    Icon(
+                      Icons.done_all,
+                      size: 14,
+                      color: message.isRead
+                          ? const Color(0xFF7AF8EB)
+                          : const Color(0xFFA3A9A6),
+                    ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

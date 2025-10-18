@@ -13,7 +13,9 @@ import 'package:mobile/ui/views/rooms/rooms_view.dart';
 import 'package:mobile/ui/common/app_assets.dart';
 
 class BottomnavView extends StackedView<BottomnavViewModel> {
-  const BottomnavView({Key? key}) : super(key: key);
+  final int initialIndex;
+
+  const BottomnavView({Key? key, this.initialIndex = 0}) : super(key: key);
 
   @override
   Widget builder(
@@ -118,8 +120,14 @@ class BottomnavView extends StackedView<BottomnavViewModel> {
   }
 
   @override
-  BottomnavViewModel viewModelBuilder(BuildContext context) =>
-      BottomnavViewModel();
+  BottomnavViewModel viewModelBuilder(BuildContext context) {
+    final viewModel = BottomnavViewModel();
+    // Set initial index if provided
+    if (initialIndex != 0) {
+      viewModel.setIndex(initialIndex);
+    }
+    return viewModel;
+  }
 }
 
 /// NAV ITEMS CONFIG using your AppAssets

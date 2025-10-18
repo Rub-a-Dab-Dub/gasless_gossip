@@ -15,10 +15,12 @@ import 'package:mobile/ui/views/chatroom/chatroom_view.dart';
 import 'package:mobile/ui/views/createroom/createroom_view.dart';
 import 'package:mobile/ui/views/createpost/createpost_view.dart';
 import 'package:mobile/ui/views/mypage/mypage_view.dart';
-import 'package:mobile/ui/views/postsuccess/postsuccess_view.dart';
 import 'package:mobile/ui/views/wallet/wallet_view.dart';
 import 'package:mobile/ui/views/createroom/uploadavatar/uploadavatar_view.dart';
 import 'package:mobile/ui/views/send/send_view.dart';
+import 'package:mobile/ui/views/swap/swap_view.dart';
+import 'package:mobile/ui/views/signup_successful/signup_successful_view.dart';
+import 'package:mobile/ui/views/receive_scan/receive_scan_view.dart';
 // @stacked-import
 
 @StackedApp(
@@ -36,10 +38,13 @@ import 'package:mobile/ui/views/send/send_view.dart';
     MaterialRoute(page: CreateroomView),
     MaterialRoute(page: CreatepostView),
     MaterialRoute(page: MyPageView),
-    MaterialRoute(page: PostsuccessView),
     MaterialRoute(page: WalletView),
     MaterialRoute(page: UploadavatarView),
     MaterialRoute(page: SendView),
+    MaterialRoute(page: SwapView),
+    MaterialRoute(page: SendView),
+    MaterialRoute(page: SignupSuccessfulView),
+    MaterialRoute(page: ReceiveScanView),
 // @stacked-route
   ],
   dependencies: [
