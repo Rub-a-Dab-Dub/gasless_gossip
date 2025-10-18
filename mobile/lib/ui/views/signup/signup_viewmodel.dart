@@ -49,7 +49,7 @@ class SignupViewModel extends BaseViewModel {
     debugPrint("Confirm Password: ${confirmPasswordController.text}");
 
     // 🔥 Navigate to your main screen (replace with your route name)
-    _navigationService.replaceWithBottomnavView();
+    _navigationService.replaceWithSignupSuccessfulView();
     // or use:
     // _navigationService.navigateToBottomnavView();
   }

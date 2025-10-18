@@ -443,20 +443,6 @@ class QuestsView extends StackedView<QuestsViewModel> {
     );
   }
 
-  Widget _buildQuestsList(QuestsViewModel viewModel) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 17),
-      child: Column(
-        children: viewModel.quests.map((quest) {
-          return Container(
-            margin: const EdgeInsets.only(bottom: 8),
-            child: _buildQuestCard(quest, viewModel),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
   Widget _buildQuestCard(Quest quest, QuestsViewModel viewModel) {
     const trackWidth = 193.0;
     const trackHeight = 16.0;
@@ -599,6 +585,300 @@ class QuestsView extends StackedView<QuestsViewModel> {
     );
   }
 
+  /// Today's Task Section
+  Widget _buildTodaysTaskSection(QuestsViewModel viewModel) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Title
+          Text(
+            "today's Task",
+            style: GoogleFonts.fredoka(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+              color: const Color(0xFFD6D8D3),
+            ),
+          ),
+          const SizedBox(height: 24),
+          // Task Cards
+          Column(
+            children: viewModel.todayTasks.map((task) {
+              return Container(
+                margin: const EdgeInsets.only(bottom: 8),
+                child: _buildTodayTaskCard(task, viewModel),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Today's Task Card
+  Widget _buildTodayTaskCard(TodayTask task, QuestsViewModel viewModel) {
+    return Container(
+      width: double.infinity,
+      height: 88,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1A1D22),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          // Image with reward badge
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: const Color(0xFF2A2D32),
+              borderRadius: BorderRadius.circular(8),
+              image: const DecorationImage(
+                image: AssetImage(AppAssets.image9),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 19,
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF121418),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '${task.rewardXP} XP',
+                      style: GoogleFonts.fredoka(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        color: const Color(0xFF14F1D9),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          // Texts
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  task.title,
+                  style: GoogleFonts.fredoka(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFFF1F7F6),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  task.description,
+                  style: GoogleFonts.baloo2(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xFFA3A9A6),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          // Tracker and Button
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Tracker
+              Text(
+                '${task.currentProgress}/${task.totalProgress}',
+                style: GoogleFonts.fredoka(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w400,
+                  color: const Color(0xFFD6FFF6),
+                ),
+              ),
+              const SizedBox(height: 6),
+              // GO Button
+              Container(
+                width: 70,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF102E2B),
+                  border: Border.all(color: const Color(0xFF0F443E)),
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                child: Center(
+                  child: Text(
+                    'GO',
+                    style: GoogleFonts.baloo2(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: const Color(0xFF14F1D9),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Quests and Referral Section
+  Widget _buildQuestsAndReferralSection(QuestsViewModel viewModel) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        children: [
+          // Quests Container
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(24, 32, 24, 32),
+            decoration: BoxDecoration(
+              color: const Color(0xFF121418),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(32),
+                topRight: Radius.circular(32),
+                bottomLeft: Radius.circular(4),
+                bottomRight: Radius.circular(4),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF1FF4DD).withOpacity(0.11),
+                  blurRadius: 24,
+                  inset: true,
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                // Title
+                Text(
+                  'Quests',
+                  style: GoogleFonts.fredoka(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFF14F1D9),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                // Quest Cards
+                Column(
+                  children: viewModel.quests.map((quest) {
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 8),
+                      child: _buildQuestCard(quest, viewModel),
+                    );
+                  }).toList(),
+                ),
+              ],
+            ),
+          ),
+
+          SizedBox(height: 10),
+          // Referral Section
+          _buildReferralSection(viewModel),
+        ],
+      ),
+    );
+  }
+
+  /// Referral Section
+  Widget _buildReferralSection(QuestsViewModel viewModel) {
+    final referral = viewModel.referralInfo;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+      decoration: BoxDecoration(
+        color: const Color(0xFF121418),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(32),
+          bottomRight: Radius.circular(32),
+          topLeft: Radius.circular(4),
+          topRight: Radius.circular(4),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF14F1D9).withOpacity(0.06),
+            blurRadius: 12,
+            inset: true,
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Referral Info
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Refer 5 people, earn ${referral.rewardXP}XP',
+                  style: GoogleFonts.baloo2(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: const Color(0xFFF1F7F6),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${referral.currentReferrals}/${referral.targetReferrals}',
+                  style: GoogleFonts.baloo2(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xFFA3A9A6),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Referral Code
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'referral code',
+                style: GoogleFonts.baloo2(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: const Color(0xFFA3A9A6),
+                ),
+              ),
+              const SizedBox(height: 3),
+              Row(
+                children: [
+                  Text(
+                    referral.referralCode,
+                    style: GoogleFonts.baloo2(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFFF1F7F6),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  const Icon(
+                    Icons.copy,
+                    size: 12,
+                    color: Color(0xFFA3A9A6),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildMyStatsContent(QuestsViewModel viewModel) {
     return Column(
       children: [
@@ -624,9 +904,12 @@ class QuestsView extends StackedView<QuestsViewModel> {
         const SizedBox(height: 280),
         // Daily Check-in
         _buildDailyCheckIn(viewModel),
-        const SizedBox(height: 28),
-        // Quest Cards
-        _buildQuestsList(viewModel),
+        const SizedBox(height: 32),
+        // Today's Task Section
+        _buildTodaysTaskSection(viewModel),
+        const SizedBox(height: 32),
+        // Quests and Referral Section
+        _buildQuestsAndReferralSection(viewModel),
         const SizedBox(height: 100), // Space for bottom nav
       ],
     );
@@ -737,6 +1020,7 @@ class QuestsView extends StackedView<QuestsViewModel> {
           // 3rd Place (Left)
           Expanded(
             child: _buildPodiumProfile(
+              imagePath: AppAssets.image12,
               name: 'Mikkey',
               xp: '387 XP',
               rank: '#3',
@@ -756,6 +1040,7 @@ class QuestsView extends StackedView<QuestsViewModel> {
           // 1st Place (Center)
           Expanded(
             child: _buildPodiumProfile(
+              imagePath: AppAssets.image11,
               name: 'Mikkey',
               xp: '700 XP',
               rank: '#1',
@@ -776,6 +1061,7 @@ class QuestsView extends StackedView<QuestsViewModel> {
           // 2nd Place (Right)
           Expanded(
             child: _buildPodiumProfile(
+              imagePath: AppAssets.image10,
               name: 'Mikkey',
               xp: '562 XP',
               rank: '#2',
@@ -804,6 +1090,7 @@ class QuestsView extends StackedView<QuestsViewModel> {
     required Color badgeColor,
     required Color borderColor,
     required Color rankColor,
+    required String imagePath,
     bool showTrophy = false,
   }) {
     return Column(
@@ -814,10 +1101,7 @@ class QuestsView extends StackedView<QuestsViewModel> {
             Container(
               width: 48,
               height: 48,
-              decoration: BoxDecoration(
-                color: const Color(0xFFD9D9D9),
-                borderRadius: BorderRadius.circular(24),
-              ),
+              child: Image.asset(imagePath),
             ),
             const SizedBox(height: 4),
             Text(
