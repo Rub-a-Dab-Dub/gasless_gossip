@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="265a9252-b8d8-4a75-aa9d-917421d0a39a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/app/chat/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/chats/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/me/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/profile/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/quests/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/rooms/create/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/rooms/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/wallet/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/CreateNewRoom.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/CreatePostDialog.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/HomePage.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/Leaderboard.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/MobileProgresBar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/PostSuccessDialog.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/QuesList.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/Quest.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/SendTokenDialog.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/Stats.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/TokenReceivedDialog.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/TransactionHistory.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/icons.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/tabs/Nfts.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/tabs/Rooms.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/ui/Avatar.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/components/ui/Header.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/app/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/app/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="33Tqgr5KxMVEqNGpM3FFNsXrzf9" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "/Users/mac/Desktop/projects/gasless",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "cairo.settings.AppSettingsConfigurable",
+    "ts.external.directory.path": "/Users/mac/Desktop/projects/gasless/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-WS-241.18034.50" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="265a9252-b8d8-4a75-aa9d-917421d0a39a" name="Changes" comment="" />
+      <created>1759351523973</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1759351523973</updated>
+      <workItem from="1759351525152" duration="14006000" />
+      <workItem from="1759719511693" duration="25000" />
+      <workItem from="1759821875994" duration="9000" />
+      <workItem from="1759821906217" duration="13749000" />
+      <workItem from="1759870742794" duration="8805000" />
+      <workItem from="1760010007880" duration="596000" />
+      <workItem from="1760131536950" duration="20560000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

@@ -2,23 +2,20 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_shadow/flutter_inset_shadow.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mobile/ui/common/app_assets.dart';
 import 'package:stacked/stacked.dart';
+import 'package:mobile/ui/common/app_assets.dart';
 
-import 'postsuccess_viewmodel.dart';
+import 'signup_successful_viewmodel.dart';
 
-class PostsuccessView extends StackedView<PostsuccessViewModel> {
-  final int xpEarned;
-  const PostsuccessView({
-    Key? key,
-    this.xpEarned = 100, // Default XP value
-  });
+class SignupSuccessfulView extends StackedView<SignupSuccessfulViewModel> {
+  const SignupSuccessfulView({Key? key}) : super(key: key);
 
   @override
   Widget builder(
     BuildContext context,
-    PostsuccessViewModel viewModel,
+    SignupSuccessfulViewModel viewModel,
     Widget? child,
   ) {
     return Scaffold(
@@ -31,7 +28,7 @@ class PostsuccessView extends StackedView<PostsuccessViewModel> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildSuccessMessage(),
-              _buildCenterContent(xpEarned),
+              _buildCenterContent(viewModel),
               _buildBottomCTA(viewModel),
             ],
           ),
@@ -58,33 +55,36 @@ class PostsuccessView extends StackedView<PostsuccessViewModel> {
         ],
       ),
       child: SafeArea(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.check_circle,
-              color: Color(0xFF14F1D9),
-              size: 24,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              'Your post was successfully uploaded',
-              style: GoogleFonts.fredoka(
-                fontSize: 14,
-                height: 1.2,
-                letterSpacing: -0.28,
-                color: const Color(0xFFF1F7F6),
+        bottom: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.check_circle,
+                color: Color(0xFF14F1D9),
+                size: 24,
               ),
-            ),
-          ],
+              const SizedBox(width: 8),
+              Text(
+                'You’ve successfully created an account',
+                style: GoogleFonts.fredoka(
+                  fontSize: 14,
+                  height: 1.2,
+                  letterSpacing: -0.28,
+                  color: const Color(0xFFF1F7F6),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildCenterContent(int xp) {
+  Widget _buildCenterContent(SignupSuccessfulViewModel viewModel) {
     return Column(
-      // mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
           width: 215.17,
@@ -119,14 +119,14 @@ class PostsuccessView extends StackedView<PostsuccessViewModel> {
 
               // 4. XP badge
               Positioned(
-                left: (200.17 / 2) - (55 / 2) + 0.5,
+                left: (200.17 / 10) - (55 / 1) + 0.5,
                 top: 210,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
                     // Stroke (border text)
                     Text(
-                      '$xp',
+                      'Chick-Chatter',
                       style: GoogleFonts.fredoka(
                         fontWeight: FontWeight.w600,
                         fontSize: 48,
@@ -139,7 +139,7 @@ class PostsuccessView extends StackedView<PostsuccessViewModel> {
                     ),
                     // Fill (main text)
                     Text(
-                      '$xp',
+                      'Chick-Chatter',
                       style: GoogleFonts.fredoka(
                         fontWeight: FontWeight.w600,
                         fontSize: 48,
@@ -153,23 +153,31 @@ class PostsuccessView extends StackedView<PostsuccessViewModel> {
             ],
           ),
         ),
-        const SizedBox(height: 60),
+        const SizedBox(height: 40),
         Column(
           children: [
             Text(
-              "You've earned some XP!",
+              "Welcome, Xaxxo",
               style: GoogleFonts.fredoka(
                 fontWeight: FontWeight.w500,
                 fontSize: 24,
                 height: 1.3,
-                color: Color(0xFFF1F7F6),
+                color: const Color(0xFFF1F7F6),
               ),
             ),
-            SizedBox(height: 4),
-            Icon(
-              Icons.rocket_launch_outlined,
-              color: Color(0xFF14F1D9),
-              size: 20,
+            const SizedBox(height: 16),
+            SizedBox(
+              width: 358,
+              child: Text(
+                'Complete task and earn points (XP)\n to grow your pet',
+                textAlign: TextAlign.center,
+                style: GoogleFonts.baloo2(
+                  fontSize: 16,
+                  height: 1.5,
+                  fontWeight: FontWeight.w400,
+                  color: const Color(0xFFA3A9A6),
+                ),
+              ),
             ),
           ],
         ),
@@ -177,7 +185,7 @@ class PostsuccessView extends StackedView<PostsuccessViewModel> {
     );
   }
 
-  Widget _buildBottomCTA(PostsuccessViewModel viewModel) {
+  Widget _buildBottomCTA(SignupSuccessfulViewModel viewModel) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 48),
       child: Row(
@@ -211,10 +219,10 @@ class PostsuccessView extends StackedView<PostsuccessViewModel> {
 
           const SizedBox(width: 16),
 
-          // Continue button
+          // Get Started button
           Expanded(
             child: InkWell(
-              onTap: viewModel.onContinue,
+              onTap: viewModel.onGetStarted,
               child: Container(
                 height: 51,
                 decoration: const BoxDecoration(
@@ -222,8 +230,8 @@ class PostsuccessView extends StackedView<PostsuccessViewModel> {
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
                     colors: [
-                      Color(0xFF15FDE4), // #15FDE4
-                      Color(0xFF13E5CE), // #13E5CE
+                      Color(0xFF15FDE4),
+                      Color(0xFF13E5CE),
                     ],
                   ),
                   boxShadow: [
@@ -251,11 +259,11 @@ class PostsuccessView extends StackedView<PostsuccessViewModel> {
                         fontWeight: FontWeight.w500,
                         fontSize: 16,
                         height: 1.2,
-                        color: Color(0xFF121418),
+                        color: const Color(0xFF121418),
                       ),
                     ),
-                    SizedBox(width: 16),
-                    Icon(
+                    const SizedBox(width: 16),
+                    const Icon(
                       Icons.arrow_forward,
                       color: Color(0xFF121418),
                       size: 24,
@@ -271,8 +279,8 @@ class PostsuccessView extends StackedView<PostsuccessViewModel> {
   }
 
   @override
-  PostsuccessViewModel viewModelBuilder(
+  SignupSuccessfulViewModel viewModelBuilder(
     BuildContext context,
   ) =>
-      PostsuccessViewModel(xpEarned: xpEarned);
+      SignupSuccessfulViewModel();
 }
