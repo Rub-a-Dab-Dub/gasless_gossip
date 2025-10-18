@@ -19,7 +19,6 @@ import 'package:mobile/ui/views/wallet/wallet_view.dart';
 import 'package:mobile/ui/views/createroom/uploadavatar/uploadavatar_view.dart';
 import 'package:mobile/ui/views/send/send_view.dart';
 import 'package:mobile/ui/views/swap/swap_view.dart';
-import 'package:mobile/ui/views/send/send_view.dart';
 import 'package:mobile/ui/views/signup_successful/signup_successful_view.dart';
 import 'package:mobile/ui/views/receive_scan/receive_scan_view.dart';
 // @stacked-import
