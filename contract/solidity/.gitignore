@@ -1,0 +1,20 @@
+# Compiler outputs
+out/
+cache/
+broadcast/
+
+# Dependencies
+lib/
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+
+# Foundry
+lcov.info
