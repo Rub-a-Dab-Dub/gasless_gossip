@@ -31,6 +31,40 @@ class DailyCheckIn {
   });
 }
 
+class TodayTask {
+  final String title;
+  final String description;
+  final String imageUrl;
+  final int rewardXP;
+  final int currentProgress;
+  final int totalProgress;
+  final bool isCompleted;
+
+  TodayTask({
+    required this.title,
+    required this.description,
+    required this.imageUrl,
+    required this.rewardXP,
+    required this.currentProgress,
+    required this.totalProgress,
+    this.isCompleted = false,
+  });
+}
+
+class ReferralInfo {
+  final String referralCode;
+  final int currentReferrals;
+  final int targetReferrals;
+  final int rewardXP;
+
+  ReferralInfo({
+    required this.referralCode,
+    required this.currentReferrals,
+    required this.targetReferrals,
+    required this.rewardXP,
+  });
+}
+
 class QuestsViewModel extends BaseViewModel {
   int selectedTabIndex = 0; // My Stats is active
   int selectedNavIndex = 1; // Shield/Security is active
@@ -73,6 +107,40 @@ class QuestsViewModel extends BaseViewModel {
         DailyCheckIn(day: 6, isCompleted: false, isToday: false),
         DailyCheckIn(day: 7, isCompleted: false, isToday: false),
       ];
+
+  List<TodayTask> get todayTasks => [
+        TodayTask(
+          title: 'Ad Break',
+          description: 'Watch a promotional video',
+          imageUrl: '3d-island-with-sea-landscape.jpg',
+          rewardXP: 30,
+          currentProgress: 0,
+          totalProgress: 1,
+        ),
+        TodayTask(
+          title: 'Ad Break',
+          description: 'Watch a promotional video',
+          imageUrl: '3d-island-with-sea-landscape.jpg',
+          rewardXP: 30,
+          currentProgress: 0,
+          totalProgress: 1,
+        ),
+        TodayTask(
+          title: 'Ad Break',
+          description: 'Watch a promotional video',
+          imageUrl: '3d-island-with-sea-landscape.jpg',
+          rewardXP: 30,
+          currentProgress: 0,
+          totalProgress: 1,
+        ),
+      ];
+
+  ReferralInfo get referralInfo => ReferralInfo(
+        referralCode: 'gasless3284',
+        currentReferrals: 1,
+        targetReferrals: 10,
+        rewardXP: 20,
+      );
 
   void selectTab(int index) {
     selectedTabIndex = index;

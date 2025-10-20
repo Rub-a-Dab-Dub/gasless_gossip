@@ -178,10 +178,9 @@ class CreatepostViewModel extends BaseViewModel {
         earnedXP += 5; // Bonus for longer posts
       }
 
-      // Navigate to success view
-      await _navigationService.navigateToPostsuccessView(
-          // xpEarned: earnedXP,
-          );
+      // Navigate back to home and show success modal
+      await _navigationService
+          .back(result: {'showSuccess': true, 'xp': earnedXP});
     } catch (e) {
       print('Error creating post: $e');
       // TODO: Show error dialog/snackbar

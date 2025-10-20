@@ -22,6 +22,10 @@ class AppAssets {
   static const String swap = 'lib/assets/svg/swap.svg';
   static const String shuffle = 'lib/assets/svg/shuffle.svg';
   static const String convert = 'lib/assets/svg/convert.svg';
+  static const String receive1 = 'lib/assets/svg/receive1.svg';
+  static const String swap1 = 'lib/assets/svg/swap1.svg';
+  static const String sent1 = 'lib/assets/svg/sent1.svg';
+  static const String bigstrk = 'lib/assets/svg/bigsttrk.svg';
   static const String splash = 'lib/assets/svg/splash.json';
   static const String anima = 'lib/assets/svg/logo.json';
   static const String chkn = 'lib/assets/svg/chkn.json';
@@ -56,4 +60,9 @@ class AppAssets {
   static const String stark = 'lib/assets/image/stark.png';
   static const String usdt = 'lib/assets/image/usdt.png';
   static const String base = 'lib/assets/image/base.png';
+  static const String bigbase = 'lib/assets/image/bigbase.png';
+  static const String image9 = 'lib/assets/image/image9.png';
+  static const String image10 = 'lib/assets/image/image10.png';
+  static const String image11 = 'lib/assets/image/image11.png';
+  static const String image12 = 'lib/assets/image/image12.png';
 }

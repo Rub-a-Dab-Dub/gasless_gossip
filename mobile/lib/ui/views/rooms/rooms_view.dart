@@ -264,7 +264,7 @@ class RoomsView extends StackedView<RoomsViewModel> {
         height: 100,
         decoration: BoxDecoration(
           color: const Color(0xFF131919),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
           children: [
