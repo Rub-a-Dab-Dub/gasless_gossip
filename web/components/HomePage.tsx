@@ -20,6 +20,7 @@ import Quest from "@/components/Quest";
 import CreatePostDialog from "@/components/post/CreatePostDialog";
 import CreateNewRoom from "@/components/CreateNewRoom";
 import CreatePostButtons from './post/CreatePostButtons';
+import React from "react";
 
 export default function HomePage() {
   return (
@@ -29,8 +30,8 @@ export default function HomePage() {
         {/* Feed Tabs */}
         <TabGroup>
           <TabList className="flex justify-center text-center gap-8 mb-8 border-b border-dark-teal">
-            <Tab className="pb-2 data-selected:text-light-teal fill-white drop-shadow-xl/50 data-selected:border-b data-selected:border-dark-teal w-full flex justify-center">For You</Tab>
-            <Tab className="pb-2 data-selected:text-light-teal data-selected:border-b data-selected:border-dark-teal w-full flex justify-center">Following</Tab>
+            <Tab  className="pb-2 data-selected:text-light-teal fill-white data-selected:shadow-xl/50 data-selected:shadow-teal-800 data-selected:border-b data-selected:border-dark-teal w-full flex justify-center">For You</Tab>
+            <Tab className="pb-2 data-selected:text-light-teal data-selected:shadow-xl/50 data-selected:shadow-teal-800 data-selected:border-b data-selected:border-dark-teal w-full flex justify-center">Following</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -93,14 +94,48 @@ export default function HomePage() {
       </section>
 
       {/* Fixed Bottom Action Bar */}
-      <div className="fixed md:bg-dark px-16 flex flex-col md:flex-row py-4 rounded-l-full bottom-22 right-0 flex items-center gap-4">
-        <CreateNewRoom />
-        <CreatePostButtons />
+      <div
+        className="fixed group md:bg-dark px-10 flex flex-col md:flex-row py-4 rounded-l-full bottom-22 transition-all duration-300 md:hover:right-0 -right-10 md:-right-140 flex items-center gap-4">
+
+        <div
+          className="overflow-hidden transition-all duration-300 md:w-auto md:mr-10 group-hover:w-0 group-hover:mr-0 md:block hidden">
+          <div className="p-3 border border-teal-800 bg-dark-teal rounded-full whitespace-nowrap">
+            <button
+              type="button"
+              style={{
+                borderRadius: "32px",
+                background: "linear-gradient(135deg, #15FDE4 100%, #13E5CE 0%)",
+                boxShadow:
+                  "-6px -6px 12px 0 rgba(30, 158, 144, 0.24) inset, 6px 6px 10px 0 rgba(36, 255, 231, 0.80) inset",
+              }}
+              className="rounded-full text-black p-4"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="lucide lucide-plus-icon lucide-plus"
+              >
+                <path d="M5 12h14"/>
+                <path d="M12 5v14"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <CreateNewRoom/>
+        <CreatePostButtons/>
         <button className="hidden md:flex">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M17.7806 11.4694C17.8504 11.539 17.9057 11.6217 17.9434 11.7128C17.9812 11.8038 18.0006 11.9014 18.0006 12C18.0006 12.0986 17.9812 12.1962 17.9434 12.2872C17.9057 12.3783 17.8504 12.461 17.7806 12.5306L11.0306 19.2806C10.9609 19.3503 10.8782 19.4056 10.7872 19.4433C10.6961 19.481 10.5985 19.5004 10.5 19.5004C10.4015 19.5004 10.3039 19.481 10.2128 19.4433C10.1218 19.4056 10.0391 19.3503 9.96937 19.2806C9.89969 19.2109 9.84442 19.1282 9.8067 19.0372C9.76899 18.9461 9.74958 18.8485 9.74958 18.75C9.74958 18.6515 9.76899 18.5539 9.8067 18.4628C9.84442 18.3718 9.89969 18.2891 9.96937 18.2194L15.4397 12.75H3C2.80109 12.75 2.61032 12.671 2.46967 12.5303C2.32902 12.3897 2.25 12.1989 2.25 12C2.25 11.8011 2.32902 11.6103 2.46967 11.4697C2.61032 11.329 2.80109 11.25 3 11.25H15.4397L9.96937 5.78062C9.82864 5.63989 9.74958 5.44902 9.74958 5.25C9.74958 5.05098 9.82864 4.86011 9.96937 4.71938C10.1101 4.57864 10.301 4.49958 10.5 4.49958C10.699 4.49958 10.8899 4.57864 11.0306 4.71938L17.7806 11.4694ZM20.25 3C20.0511 3 19.8603 3.07902 19.7197 3.21967C19.579 3.36032 19.5 3.55109 19.5 3.75V20.25C19.5 20.4489 19.579 20.6397 19.7197 20.7803C19.8603 20.921 20.0511 21 20.25 21C20.4489 21 20.6397 20.921 20.7803 20.7803C20.921 20.6397 21 20.4489 21 20.25V3.75C21 3.55109 20.921 3.36032 20.7803 3.21967C20.6397 3.07902 20.4489 3 20.25 3Z"
-              fill="#F1F7F6" />
+              fill="#F1F7F6"/>
           </svg>
         </button>
       </div>

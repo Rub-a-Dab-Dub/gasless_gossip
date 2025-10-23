@@ -38,7 +38,6 @@ export default function RootLayout({
         className={`${geistSans.variable}  ${fredoka.variable} antialiased bg-[#121418]`}
       >
         <Providers>{loading ? <></> : <>{children}</>}</Providers>
-        {children}
       </body>
     </html>
   );

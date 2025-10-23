@@ -27,6 +27,7 @@ import DeletePostDialog from "@/components/post/DeletePostDialog";
 import { setToLocalStorage } from "@/lib/local-storage";
 import EditPostDialog from "@/components/post/EditPostDialog";
 import MyRooms from "@/components/room/MyRooms";
+import {ArrowRight} from "@/components/icons";
 
 export default function Me() {
   const { profile, profileStats, myPosts, postsLoading } = useProfileData();
@@ -179,7 +180,9 @@ function ProfileHeader({
   onEditClick: () => void;
 }) {
   return (
-    <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 gap-8">
+    <div style={{
+      boxShadow: '0px 12px 13px -6px #14E3CD14'
+    }} className="p-3 rounded-bl-3xl rounded-br-3xl flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 gap-8">
       <div className="flex items-center gap-6">
         <div>
           <Image
@@ -216,10 +219,10 @@ function ProfileHeader({
       <div className="flex flex-col gap-3 w-full lg:w-64">
         <Link
           href="/wallet"
-          className="px-6 py-3 border-2 border-light-teal text-light-teal rounded-full hover:bg-emerald-500/10 flex items-center justify-center gap-2 font-medium"
+          className="text-white flex justify-center space-x-2 shadow-[inset_0_0_12px_1px_#2F2F2F]  items-center space-x-2 px-6 py-3 rounded-full hover:opacity-80 cursor-pointer transition-colors"
         >
-          View Wallet
-          <Image src={ArrowRightIcon} alt="" />
+          <span>View Wallet</span>
+          <ArrowRight className="w-6 h-6"/>
         </Link>
         <button
           onClick={onEditClick}
