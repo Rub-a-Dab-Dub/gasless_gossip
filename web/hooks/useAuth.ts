@@ -15,7 +15,7 @@ export const useAuth = () => {
     const token = getFromCookie("token");
     const get_user = getFromLocalStorage("user");
     if (!token) {
-      router.push("/auth");
+      //router.push("/auth");
     } else {
       if (get_user) {
         setUser(JSON.parse(get_user));
