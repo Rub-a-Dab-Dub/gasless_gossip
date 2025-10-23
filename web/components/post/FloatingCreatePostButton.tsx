@@ -10,11 +10,11 @@ export default function FloatingCreatePostButton() {
     <>
       {/* Floating Button */}
       <div className="fixed z-50 bottom-60 xl:bottom-48 right-4 xl:right-0 overflow-hidden">
-        <div className="border-none xl:border xl:border-r-none xl:border-zinc-800 bg-transparent xl:bg-zinc-900 p-8 w-[120px] xl:w-[200px] rounded-l-full rounded-r-none">
-          <div className="xl:bg-zinc-800 xl:border xl:border-emerald-900 xl:rounded-full xl:w-26 xl:h-26 xl:flex xl:items-center xl:justify-center">
+        <div className="border-none xl:border xl:border-r-none xl:border-zinc-800 bg-dark p-8 w-[120px] xl:w-[200px] rounded-l-full rounded-r-none">
+          <div className="bg-zinc-800 xl:border xl:border-emerald-900 xl:rounded-full xl:w-26 xl:h-22 xl:flex xl:items-center xl:justify-center">
             <button
               onClick={() => setIsDialogOpen(true)}
-              className="w-18 h-18 bg-emerald-300 rounded-full flex items-center justify-center drop-shadow-md drop-shadow-emerald-300 hover:bg-emerald-400 transition-colors"
+              className="w-18 h-18 bg-light-teal rounded-full flex items-center justify-center drop-shadow-md drop-shadow-emerald-300 hover:bg-emerald-400 transition-colors"
             >
               <svg
                 className="w-10 h-10 text-zinc-800 font-normal"
