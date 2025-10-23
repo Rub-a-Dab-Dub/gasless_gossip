@@ -4,6 +4,7 @@ import { ArrowRight } from "lucide-react";
 import React, { useState } from "react";
 import { usePathname } from "next/navigation";
 import CreatePostDialog from "@/components/post/CreatePostDialog";
+
 export default function CreatePostButtons() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const pathname = usePathname();
