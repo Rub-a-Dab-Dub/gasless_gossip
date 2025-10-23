@@ -24,8 +24,7 @@ export default function Landing() {
     <div className="overflow-hidden">
       <div
         className="
-        bg-black hero relative pb-16 min-h-screen bg-cover bg-center bg-no-repeat bg-[url('/wave-hero-pattern-mobile.png')]
-          md:bg-[url('/wave-hero-pattern.png)]"
+        bg-black hero relative pb-16 min-h-screen bg-cover bg-center bg-no-repeat bg-[url('/wave-hero-pattern-mobile.png')] md:bg-[url('/wave-hero-pattern.png')]"
         style={{
           backgroundSize: "cover",
           backgroundBlendMode: "difference",
@@ -83,7 +82,7 @@ export default function Landing() {
           <div className="flex items-center md:flex-row flex-col md:space-x-28 w-full mx-auto">
             {/* Right Statistics Sidebar */}
             <div
-              className="flex md:flex-col md:mt-0 hidden md:w-fit w-full gap-4 md:order-0 order-1"
+              className="md:flex md:flex-col md:mt-0 hidden md:w-fit w-full gap-4 md:order-0 order-1"
               style={{
                 borderRadius: "60px",
                 background: "rgba(18, 20, 24, 0.48)",
@@ -216,7 +215,7 @@ export default function Landing() {
         </div>
       </div>
 
-      <div className="px-6">
+      <div className="px-6 md:hidden flex">
         <div
           className="grid grid-cols-3 divide-x divide-[#1C1E22] mt-14 w-full gap-4"
           style={{
@@ -260,6 +259,7 @@ export default function Landing() {
           </div>
         </div>
       </div>
+
 
 
       {/* About Us Section */}
