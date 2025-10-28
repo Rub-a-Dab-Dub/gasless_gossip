@@ -52,7 +52,7 @@ function Header() {
       </div>
 
       <button className=" text-white flex shadow-[inset_0_0_12px_1px_#2F2F2F]  items-center space-x-2 px-6 py-4 rounded-full hover:opacity-80 cursor-pointer transition-colors">
-        <span>Connect Wallet</span>
+        <span>Get Started</span>
         <ArrowRight />
       </button>
     </nav>
@@ -68,46 +68,48 @@ export default function Auth() {
   const [address, setAddress] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState<boolean>(false);
   const [signupSuccess, setSignupSuccess] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
-    setPage("login")
-  }, [])
+    setPage("login");
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      setSubmitting(true)
+      setSubmitting(true);
       if (username === "" || password === "") {
-        toast.error("All fields are required")
+        toast.error("All fields are required");
         return;
       }
       if (page !== "login" && password !== confirmPassword) {
-        toast.error("Password confirmation failed")
+        toast.error("Password confirmation failed");
         return;
       }
       const url = page === "login" ? "auth/login" : "auth/signup";
       let body: ISignup | ILogin = { username, password };
-      if (page !== "login")
-        body = { ...body, email, address };
-      const res = await api.post<ApiResponse<{ token: string, user: IUser }>>(url, body);
+      if (page !== "login") body = { ...body, email, address };
+      const res = await api.post<ApiResponse<{ token: string; user: IUser }>>(
+        url,
+        body
+      );
       if (res.data.error) {
-        toast.error(res.data.message)
+        toast.error(res.data.message);
         return;
       }
-      setToCookie("token", res.data.data.token)
+      setToCookie("token", res.data.data.token);
       setToLocalStorage("user", JSON.stringify(res.data.data.user));
       if (page === "login") {
-        router.push("/")
+        router.push("/");
       } else {
         setSignupSuccess(true);
       }
-
     } catch (err) {
-      console.log(err)
-      toast.error("Error while creating account, please try again...")
+      console.log(err);
+      toast.error("Error while creating account, please try again...");
     } finally {
       setSubmitting(false);
     }
@@ -155,17 +157,31 @@ export default function Auth() {
                 {page === "login" ? "Log In" : "Sign Up"}
               </h2>
               <div className="w-full relative -top-16">
-                {page === "login" ? <>
-                  <div className="w-full flex items-center font-normal text-zinc-300">
-                    Don't have an account?
-                    <span onClick={() => setPage("register")} className="pl-2 cursor-pointer font-bold text-[#7AF8EB]">Sign up</span>
-                  </div>
-                </> : <>
-                  <div className="w-full flex items-center font-normal text-zinc-300">
-                    Already have an account?
-                    <span onClick={() => setPage("login")} className="pl-2 cursor-pointer font-bold text-[#7AF8EB]">Log in</span>
-                  </div>
-                </>}
+                {page === "login" ? (
+                  <>
+                    <div className="w-full flex items-center font-normal text-zinc-300">
+                      Don't have an account?
+                      <span
+                        onClick={() => setPage("register")}
+                        className="pl-2 cursor-pointer font-bold text-[#7AF8EB]"
+                      >
+                        Sign up
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-full flex items-center font-normal text-zinc-300">
+                      Already have an account?
+                      <span
+                        onClick={() => setPage("login")}
+                        className="pl-2 cursor-pointer font-bold text-[#7AF8EB]"
+                      >
+                        Log in
+                      </span>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -174,8 +190,7 @@ export default function Auth() {
 
       <div className="mt-10 flex items-center justify-center">
         <div className="w-full max-w-xl">
-          <form method="POST"
-            onSubmit={handleSubmit} className="space-y-6">
+          <form method="POST" onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
                 htmlFor="username"
@@ -260,14 +275,14 @@ export default function Auth() {
                 disabled={submitting}
                 className="flex shadow-[inset_0_0_12px_1px_#2F2F2F] items-center space-x-2 px-6 py-4 rounded-full hover:opacity-80 cursor-pointer transition-colors text-white"
               >
-                {submitting ?
+                {submitting ? (
                   <span>Please wait..</span>
-                  :
+                ) : (
                   <>
                     <span>Continue</span>
                     <ArrowRight className="w-5 h-5" />
                   </>
-                }
+                )}
               </button>
             </div>
           </form>
