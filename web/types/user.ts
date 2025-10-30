@@ -2,6 +2,7 @@ import { IChat } from "./chat";
 import { IMessage } from "./message";
 import { IComment, ILike, IPost } from "./post";
 import { IRoomMember } from "./room";
+import { IWallet } from "./wallet";
 
 export interface IUser {
   id: number;
@@ -23,6 +24,7 @@ export interface IUser {
   sentChats: IChat[];
   receivedChats: IChat[];
   messages: IMessage[];
+  wallet: IWallet[];
 }
 
 export interface IUpdateProfile {

@@ -10,8 +10,10 @@ import { MessagesModule } from './messages/messages.module';
 import { RoomCategoriesModule } from './room-categories/room-categories.module';
 import { RoomMessagesModule } from './room-messages/room-messages.module';
 import { RoomsModule } from './rooms/rooms.module';
-import { StarknetModule } from './starknet/starknet.module';
 import starknetConfig from './config/starknet.config';
+import { ContractsModule } from './contracts/contracts.module';
+import { WalletModule } from './wallets/wallet.module';
+import { QueueModule } from './queue/queue.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -38,7 +40,10 @@ import starknetConfig from './config/starknet.config';
     RoomCategoriesModule,
     RoomMessagesModule,
     RoomsModule,
-    StarknetModule,
+    ContractsModule,
+    WalletModule,
+    ContractsModule,
+    QueueModule,
   ],
 })
 export class AppModule {}
