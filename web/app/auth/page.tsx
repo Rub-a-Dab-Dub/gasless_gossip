@@ -128,8 +128,6 @@ export default function Auth() {
 
   return (
     <>
-      <Header />
-
       <div className="flex flex-col items-center justify-center flex-grow">
         <div className="max-w-xl w-full space-y-6 rounded-b-4xl pb-30 shadow-[inset_0_0_32px_1px_#0F59513D] flex flex-col items-center">
           <div className="w-64 h-80 relative -top-30">
@@ -203,7 +201,7 @@ export default function Auth() {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder='e.g. MaskedParrot85'
+                placeholder="e.g. MaskedParrot85"
                 className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors"
               />
             </div>
@@ -221,7 +219,7 @@ export default function Auth() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder='e.g. maskedparrot@gmail.com'
+                  placeholder="e.g. maskedparrot@gmail.com"
                   className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors"
                 />
               </div>
