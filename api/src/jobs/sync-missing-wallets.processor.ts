@@ -1,9 +1,4 @@
-import {
-  Processor,
-  Process,
-  OnQueueActive,
-  OnQueueCompleted,
-} from '@nestjs/bull';
+import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import { WalletService } from '../wallets/wallet.service';
 import { ContractsService } from '../contracts/contracts.service';
@@ -14,14 +9,15 @@ interface SyncMissingWalletsJobData {
 }
 
 @Processor('wallet-queue')
-export class SyncMissingWalletsProcessor {
+export class SyncMissingWalletsProcessor extends WorkerHost {
   constructor(
     private walletService: WalletService,
     private contractsService: ContractsService,
-  ) {}
+  ) {
+    super();
+  }
 
-  @Process('sync-missing-wallets')
-  async handleSyncMissingWallets(job: Job<SyncMissingWalletsJobData>) {
+  async process(job: Job<SyncMissingWalletsJobData>) {
     const batchSize = job.data.batchSize || 10;
     let processed = 0;
     let skipped = 0;
@@ -84,15 +80,5 @@ export class SyncMissingWalletsProcessor {
       base: baseAddr || wallet.base_address,
       celo: celoAddr || wallet.celo_address,
     });
-  }
-
-  @OnQueueActive()
-  onActive(job: Job) {
-    console.log(`Processing job ${job.id} - sync-missing-wallets`);
-  }
-
-  @OnQueueCompleted()
-  onComplete(job: Job, result: any) {
-    console.log(`Job ${job.id} completed:`, result);
   }
 }

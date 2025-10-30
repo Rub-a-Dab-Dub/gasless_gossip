@@ -1,4 +1,4 @@
-import { BullModule } from '@nestjs/bull';
+import { BullModule } from '@nestjs/bullmq';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CreateWalletProcessor } from '../jobs/create-wallet.processor';
@@ -13,24 +13,27 @@ import { WalletSyncScheduler } from '../jobs/sync-missing-wallets.scheduler';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
         const redisUrl = configService.get<string>('REDIS_URL');
-        const redisHost = configService.get<string>('REDIS_HOST');
-        const redisPortStr = configService.get<string>('REDIS_PORT');
-        const redisPort = Number(redisPortStr);
+        const redisHost = configService.get<string>('REDIS_HOST', '127.0.0.1');
+        const redisPort = Number(
+          configService.get<string>('REDIS_PORT', '6379'),
+        );
+        const redisPassword = configService.get<string>('REDIS_PASSWORD', '');
 
-        if (isNaN(redisPort) || redisPort < 0 || redisPort > 65535) {
-          throw new Error(
-            `Invalid REDIS_PORT: ${redisPortStr}. Must be a number between 0 and 65535.`,
-          );
-        }
-
+        // Prefer REDIS_URL if available (e.g., Railway or Upstash)
         if (redisUrl) {
-          return { redis: redisUrl };
+          return {
+            connection: {
+              url: redisUrl,
+            },
+          };
         }
 
+        // Fallback to host + port (local dev)
         return {
-          redis: {
+          connection: {
             host: redisHost,
             port: redisPort,
+            password: redisPassword || undefined,
           },
         };
       },

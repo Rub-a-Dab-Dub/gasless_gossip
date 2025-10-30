@@ -1,5 +1,5 @@
 import { Command, CommandRunner } from 'nest-commander';
-import { InjectQueue } from '@nestjs/bull';
+import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 
 @Command({ name: 'wallet:sync-missing', description: 'Sync missing wallets' })
