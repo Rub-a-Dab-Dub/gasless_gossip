@@ -1,4 +1,4 @@
-import { Processor, Process } from '@nestjs/bull';
+import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import { WalletService } from '../wallets/wallet.service';
 import { ContractsService } from '../contracts/contracts.service';
@@ -9,14 +9,15 @@ interface CreateWalletJobData {
 }
 
 @Processor('wallet-queue')
-export class CreateWalletProcessor {
+export class CreateWalletProcessor extends WorkerHost {
   constructor(
     private walletService: WalletService,
     private contractsService: ContractsService,
-  ) {}
+  ) {
+    super();
+  }
 
-  @Process('create-wallet')
-  async handleCreateWallet(job: Job<CreateWalletJobData>) {
+  async process(job: Job<CreateWalletJobData>) {
     const { user } = job.data;
 
     try {

@@ -11,9 +11,9 @@ import {
 import { WalletService } from './wallet.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { User } from '../users/entities/user.entity';
-import { InjectQueue } from '@nestjs/bull';
+import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
-import { StarknetService } from 'src/contracts/starknet.service';
+import { StarknetService } from '../contracts/starknet.service';
 
 interface AuthRequest extends Request {
   user: User;

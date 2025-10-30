@@ -4,7 +4,7 @@ import { Wallet } from './entities/wallet.entity';
 import { WalletService } from './wallet.service';
 import { User } from '../users/entities/user.entity';
 import { WalletController } from './wallet.controller';
-import { BullModule } from '@nestjs/bull';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
