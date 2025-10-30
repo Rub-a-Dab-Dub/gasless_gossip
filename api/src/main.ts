@@ -19,6 +19,8 @@ async function bootstrap() {
       'http://localhost:5173',
       'https://gaslessgossip.xyz',
       'http://gaslessgossip.xyz',
+      'https://www.gaslessgossip.xyz',
+      'http://www.gaslessgossip.xyz',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
