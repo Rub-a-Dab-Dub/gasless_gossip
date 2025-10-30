@@ -13,9 +13,9 @@ import { WalletSyncScheduler } from '../jobs/sync-missing-wallets.scheduler';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
         const redisUrl = configService.get<string>('REDIS_URL');
-        const redisHost = configService.get<string>('REDIS_HOST', 'localhost');
-        const redisPortStr = configService.get<string>('REDIS_PORT', '6379');
-        const redisPort = parseInt(redisPortStr, 10);
+        const redisHost = configService.get<string>('REDIS_HOST');
+        const redisPortStr = configService.get<string>('REDIS_PORT');
+        const redisPort = Number(redisPortStr);
 
         if (isNaN(redisPort) || redisPort < 0 || redisPort > 65535) {
           throw new Error(
