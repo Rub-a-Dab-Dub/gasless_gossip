@@ -5,6 +5,7 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
+  OneToOne,
 } from 'typeorm';
 
 import { Post } from '../../posts/entities/post.entity';
@@ -14,6 +15,7 @@ import { Message } from '../../messages/entities/message.entity';
 import { RoomMember } from '../../rooms/entities/room-member.entity';
 import { Chat } from '../../chats/entities/chat.entity';
 import { Room } from '../../rooms/entities/room.entity';
+import { Wallet } from '../../wallets/entities/wallet.entity';
 
 @Entity()
 export class User {
@@ -84,4 +86,7 @@ export class User {
 
   @OneToMany(() => Room, (room) => room.owner)
   createdRooms: Room[];
+
+  @OneToOne(() => Wallet, (wallet) => wallet.user)
+  wallet: Wallet;
 }

@@ -1,5 +1,4 @@
 import { registerAs } from '@nestjs/config';
-import { CONTRACTS } from '../starknet/starknet.constant';
 import { constants } from 'starknet';
 
 export default registerAs('starknet', () => ({
@@ -10,6 +9,5 @@ export default registerAs('starknet', () => ({
   network: process.env.STARKNET_NETWORK || 'mainnet-alpha',
   maxRetries: parseInt(process.env.MAX_RETRIES || '3', 10),
   retryDelayMs: parseInt(process.env.RETRY_DELAY_MS || '2000', 10),
-  contractAbi: CONTRACTS,
   txVersion: constants.TRANSACTION_VERSION.V3,
 }));

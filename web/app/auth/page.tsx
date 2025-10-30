@@ -203,10 +203,29 @@ export default function Auth() {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder='e.g. "MaskedParrot85"'
+                placeholder='e.g. MaskedParrot85'
                 className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors"
               />
             </div>
+
+            {page !== "login" && (
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-[#7AF8EB] text-sm font-medium mb-2"
+                >
+                  email address
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder='e.g. maskedparrot@gmail.com'
+                  className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors"
+                />
+              </div>
+            )}
             <div>
               <label
                 htmlFor="password"
@@ -220,7 +239,7 @@ export default function Auth() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="e.g. asjdkskajn"
+                  placeholder="********"
                   className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors pr-12"
                 />
                 <button
@@ -251,7 +270,7 @@ export default function Auth() {
                     type={showConfirmPassword ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="e.g. asjdkskajn"
+                    placeholder="********"
                     className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors pr-12"
                   />
                   <button

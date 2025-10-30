@@ -40,8 +40,8 @@ api.interceptors.response.use(
       return response;
     } else if (status === 401) {
       deleteFromCookie("token");
-      return response;
-      // return window.location.assign("/auth/login");
+      return window.location.assign("/auth");
+      // return response;
     } else if (status > 401 && status < 500) {
       return response;
     } else {
