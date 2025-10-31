@@ -655,11 +655,9 @@ export default function Landing() {
                           className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
                         >
                           <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
-                            Whisper is designed for anyone who wants to combine
-                            social interaction with blockchain technology. From
-                            crypto enthusiasts to casual users looking for a
-                            fun, gamified messaging experience, our platform
-                            serves a wide range of communities.
+                            It&apos;s a space where creators can build and host
+                            interactive rooms, connect with their audience, and
+                            earn tokens for engagement.
                           </p>
                         </Disclosure.Panel>
                       </motion.div>
@@ -706,8 +704,8 @@ export default function Landing() {
                           className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
                         >
                           <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
-                            Yes. You&apos;ll Need A Wallet To Receive Tokens And
-                            Manage Gated Room Access.
+                            Yes. You&apos;ll need a wallet to receive tokens and
+                            manage gated room access.
                           </p>
                         </Disclosure.Panel>
                       </motion.div>
@@ -754,11 +752,8 @@ export default function Landing() {
                           className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
                         >
                           <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
-                            Yes! Whisper is built on blockchain technology,
-                            ensuring transparency and security. Your messages
-                            and transactions are encrypted, and we prioritize
-                            user privacy while maintaining the benefits of
-                            decentralization.
+                            Yes! You don&apos;t need deep blockchain knowledge —
+                            everything is designed to be simple and intuitive.
                           </p>
                         </Disclosure.Panel>
                       </motion.div>
