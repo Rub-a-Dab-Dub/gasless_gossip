@@ -162,7 +162,7 @@ export default function Landing() {
               {/* 4 CHAINS */}
               <div className="">
                 <div className="text-2xl bg-[#1C1E22] rounded-full w-20 h-20 flex items-center justify-center font-medium text-white mb-2">
-                  {3}
+                  {2}
                 </div>
                 <div className="text-sm text-[#A3A9A6] uppercase text-center tracking-wide">
                   Chains

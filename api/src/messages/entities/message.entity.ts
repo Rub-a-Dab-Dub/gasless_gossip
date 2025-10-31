@@ -14,6 +14,12 @@ export class Message {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  chatId: number;
+
+  @Column()
+  senderId: number;
+
   @ManyToOne(() => Chat, (chat) => chat.messages, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'chatId' })
   chat: Chat;

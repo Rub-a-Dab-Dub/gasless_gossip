@@ -17,27 +17,22 @@ export class ChatsController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  createChat(@Body() dto: CreateChatDto) {
-    return this.chatService.createChat(dto);
-  }
-
-  @Post()
-  @UseGuards(JwtAuthGuard)
-  startNewChat(@Body() username: string, @Request() req) {
-    const userId = req.user.id;
-    return this.chatService.createNewChat(userId, username);
+  startNewChat(@Body() body: { username: string }, @Request() req) {
+    const { userId } = req.user;
+    return this.chatService.createNewChat(userId, body.username);
   }
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
   getUserChats(@Request() req) {
-    const userId = req.user.id;
+    const { userId } = req.user;
     return this.chatService.getUserChats(userId);
   }
 
   @Get(':chatId')
   @UseGuards(JwtAuthGuard)
-  getChatById(@Param('chatId') chatId: number) {
-    return this.chatService.getChatById(chatId);
+  getChatById(@Param('chatId') chatId: number, @Request() req) {
+    const { userId } = req.user;
+    return this.chatService.getChatById(chatId, userId);
   }
 }
