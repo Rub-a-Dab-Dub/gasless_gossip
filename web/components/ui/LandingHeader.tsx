@@ -100,7 +100,7 @@ export default function Header() {
             {/*</button>*/}
             <button
               onClick={handleGetStarted}
-              className=" text-white flex shadow-[inset_0_0_12px_1px_#2F2F2F]  items-center space-x-2 px-6 py-4 rounded-full hover:opacity-80 cursor-pointer transition-colors"
+              className="text-white flex shadow-[inset_0_0_12px_1px_#2F2F2F]  items-center space-x-2 px-6 py-4 rounded-full hover:opacity-80 cursor-pointer transition-colors"
             >
               <span>Get Started</span>
               <ArrowRight />

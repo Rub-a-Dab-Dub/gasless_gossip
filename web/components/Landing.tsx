@@ -5,7 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import Lottie from "lottie-react";
 import animationData from "@/public/logo flsah screen4.json";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Spinner } from "@/components/Spinner";
 
 import {
   Disclosure,
@@ -35,25 +37,31 @@ export default function Landing() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [userCount, setUserCount] = useState<number>(0);
   const [roomCount, setRoomCount] = useState<number>(0);
-
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const getUserCount = async () => {
-      const res = await api.get<ApiResponse>("/users/count")
+      const res = await api.get<ApiResponse>("/users/count");
       if (!res.data.error) {
-        setUserCount(res.data.data || 0)
+        setUserCount(res.data.data || 0);
       }
-    }
+    };
     const getRoomCount = async () => {
-      const res = await api.get<ApiResponse>("/rooms/count")
+      const res = await api.get<ApiResponse>("/rooms/count");
       if (!res.data.error) {
-        setRoomCount(res.data.data || 0)
+        setRoomCount(res.data.data || 0);
       }
-    }
+    };
     setIsAuthenticated(checkAuth());
     getUserCount();
     getRoomCount();
   }, []);
+
+  useEffect(() => {
+    if (userCount && roomCount) {
+      setIsLoading(false);
+    }
+  }, [userCount, roomCount]);
 
   return (
     <div className="overflow-hidden">
@@ -128,7 +136,7 @@ export default function Landing() {
               {/* 19.4k USERS */}
               <div className="">
                 <div className="text-2xl bg-[#1C1E22] rounded-full w-20 h-20 flex items-center justify-center font-medium text-white mb-2">
-                  {userCount}
+                  {isLoading ? <Spinner /> : userCount}
                 </div>
                 <div className="text-sm text-[#A3A9A6] uppercase text-center tracking-wide">
                   Users
@@ -141,7 +149,7 @@ export default function Landing() {
               {/* 8k ROOMS */}
               <div className="">
                 <div className="text-2xl bg-[#1C1E22] rounded-full w-20 h-20 flex items-center justify-center font-medium text-white mb-2">
-                  {roomCount}
+                  {isLoading ? <Spinner /> : roomCount}
                 </div>
                 <div className="text-sm text-[#A3A9A6] uppercase text-center tracking-wide">
                   Rooms
@@ -179,7 +187,7 @@ export default function Landing() {
                   background:
                     "linear-gradient(135deg, #15FDE4 100%, #13E5CE 0%)",
                   boxShadow:
-                    "-6px -6px 12px 0 rgba(30, 158, 144, 0.24) inset, 6px 6px 10px 0 rgba(36, 255, 231, 0.80) inset",
+                    "-6px -6px 12px 0 #1E9E90 inset, 6px 6px 10px 0 #24FFE7 inset",
                 }}
               >
                 Get Started
@@ -316,7 +324,7 @@ export default function Landing() {
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
-                  href="/dashboard"
+                  href={isAuthenticated ? "/dashboard" : "/auth"}
                   className="inline-flex items-center gap-3 text-[#121418] px-8 py-4 font-medium transition-all duration-200 font-fredoka"
                   style={{
                     borderRadius: "32px",
@@ -396,6 +404,10 @@ export default function Landing() {
                 loop
                 muted
                 controls
+                playsInline
+                disablePictureInPicture
+                controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+                onContextMenu={(e) => e.preventDefault()}
               >
                 <source src="/videos/gaslessgossipbase.mov" type="video/mp4" />
               </video>
@@ -601,7 +613,7 @@ export default function Landing() {
           {/* Launch App Button */}
           <div className="flex justify-end mt-12">
             <Link
-              href="/dashboard"
+              href={isAuthenticated ? "/dashboard" : "/auth"}
               className="inline-flex items-center gap-3 text-[#121418] px-8 py-4 font-medium transition-all duration-200 font-fredoka"
               style={{
                 borderRadius: "32px",
@@ -632,149 +644,252 @@ export default function Landing() {
 
           {/* FAQ Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            <Disclosure
-              as="div"
-              className="w-full h-fit bg-[#16191E] backdrop-blur-sm rounded-full px-10 py-6 border border-[#1B1E23]"
-              defaultOpen={false}
-            >
-              <DisclosureButton className="group flex w-full items-center justify-between">
-                <span className="text-lg font-fredoka text-dark-white group-data-open:text-teal-300">
-                  What is this platform about?
-                </span>
-                <ChevronDown className="size-6 text-light-grey group-data-open:rotate-180" />
-              </DisclosureButton>
-              <div className="overflow-hidden">
-                <DisclosurePanel
-                  transition
-                  className="origin-top transition duration-200 mt-4 ease-out data-closed:-translate-y-6 data-closed:opacity-0 text-sm text-gray-400"
-                >
-                  Whisper is designed for anyone who wants to combine social
-                  interaction with blockchain technology. From crypto
-                  enthusiasts to casual users looking for a fun, gamified
-                  messaging experience, our platform serves a wide range of
-                  communities.
-                </DisclosurePanel>
-              </div>
+            <Disclosure>
+              {({ open }) => (
+                <div className="h-fit">
+                  <Disclosure.Button
+                    className={`bg-[#16191E] ${
+                      open ? "rounded-t-4xl" : "rounded-full"
+                    } border border-[#1B1E23] group flex w-full items-center justify-between px-10 py-6 hover:bg-[#1A1D22] transition-all`}
+                  >
+                    <span
+                      className={`text-lg font-fredoka transition-colors ${
+                        open ? "text-teal-300" : "text-dark-white"
+                      }`}
+                    >
+                      What is this platform about?
+                    </span>
+                    <ChevronDown
+                      className={`size-6 transition-transform duration-200 ${
+                        open ? "rotate-180 text-teal-300" : "text-dark-white"
+                      }`}
+                    />
+                  </Disclosure.Button>
+
+                  <AnimatePresence initial={false}>
+                    {open && (
+                      <motion.div
+                        key="panel"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <Disclosure.Panel
+                          static
+                          className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
+                        >
+                          <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
+                            It&apos;s a space where creators can build and host
+                            interactive rooms, connect with their audience, and
+                            earn tokens for engagement.
+                          </p>
+                        </Disclosure.Panel>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
             </Disclosure>
 
-            <Disclosure
-              as="div"
-              className="bg-[#16191E] h-fit rounded-full border border-[#1B1E23] overflow-hidden"
-            >
-              <DisclosureButton className="group flex w-full items-center justify-between px-10 py-6 hover:bg-[#1A1D22] transition-all">
-                <span className="text-lg font-fredoka text-dark-white group-data-open:text-teal-300">
-                  Do I Need A Crypto Wallet To Get Started?
-                </span>
-                <ChevronDown className="size-6 group-data-open:text-teal-300 transition-transform duration-200 group-data-[open]:rotate-180" />
-              </DisclosureButton>
+            <Disclosure>
+              {({ open }) => (
+                <div className="h-fit">
+                  <Disclosure.Button
+                    className={`bg-[#16191E] ${
+                      open ? "rounded-t-4xl" : "rounded-full"
+                    } border border-[#1B1E23] group flex w-full items-center justify-between px-10 py-6 hover:bg-[#1A1D22] transition-all`}
+                  >
+                    <span
+                      className={`text-lg font-fredoka transition-colors ${
+                        open ? "text-teal-300" : "text-dark-white"
+                      }`}
+                    >
+                      Do I Need A Crypto Wallet To Get Started?
+                    </span>
+                    <ChevronDown
+                      className={`size-6 transition-transform duration-200 ${
+                        open ? "rotate-180 text-teal-300" : "text-dark-white"
+                      }`}
+                    />
+                  </Disclosure.Button>
 
-              <DisclosurePanel className="px-10 py-6 pt-0 text-[#A3A9A6] leading-relaxed border-t border-[#1B1E23]/50">
-                Yes. You&apos;ll Need A Wallet To Receive Tokens And Manage
-                Gated Room Access.
-              </DisclosurePanel>
+                  <AnimatePresence initial={false}>
+                    {open && (
+                      <motion.div
+                        key="panel"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <Disclosure.Panel
+                          static
+                          className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
+                        >
+                          <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
+                            Yes. You&apos;ll need a wallet to receive tokens and
+                            manage gated room access.
+                          </p>
+                        </Disclosure.Panel>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
             </Disclosure>
 
-            <Disclosure
-              as="div"
-              className="w-full h-fit bg-[#16191E] backdrop-blur-sm rounded-full px-10 py-6 border border-[#1B1E23]"
-              defaultOpen={false}
-            >
-              <DisclosureButton className="group flex w-full items-center justify-between">
-                <span className="text-lg font-fredoka text-dark-white group-data-open:text-teal-300">
-                  Is it beginner-friendly?
-                </span>
-                <ChevronDown className="size-6 text-light-grey group-data-open:rotate-180" />
-              </DisclosureButton>
-              <div className="overflow-hidden">
-                <DisclosurePanel
-                  transition
-                  className="origin-top transition duration-200 mt-4 ease-out data-closed:-translate-y-6 data-closed:opacity-0 text-sm text-gray-400"
-                >
-                  Yes! Whisper is built on blockchain technology, ensuring
-                  transparency and security. Your messages and transactions are
-                  encrypted, and we prioritize user privacy while maintaining
-                  the benefits of decentralization.
-                </DisclosurePanel>
-              </div>
+            <Disclosure>
+              {({ open }) => (
+                <div className="h-fit">
+                  <Disclosure.Button
+                    className={`bg-[#16191E] ${
+                      open ? "rounded-t-4xl" : "rounded-full"
+                    } border border-[#1B1E23] group flex w-full items-center justify-between px-10 py-6 hover:bg-[#1A1D22] transition-all`}
+                  >
+                    <span
+                      className={`text-lg font-fredoka transition-colors ${
+                        open ? "text-teal-300" : "text-dark-white"
+                      }`}
+                    >
+                      Is it beginner-friendly?
+                    </span>
+                    <ChevronDown
+                      className={`size-6 transition-transform duration-200 ${
+                        open ? "rotate-180 text-teal-300" : "text-dark-white"
+                      }`}
+                    />
+                  </Disclosure.Button>
+
+                  <AnimatePresence initial={false}>
+                    {open && (
+                      <motion.div
+                        key="panel"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <Disclosure.Panel
+                          static
+                          className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
+                        >
+                          <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
+                            Yes! You don&apos;t need deep blockchain knowledge —
+                            everything is designed to be simple and intuitive.
+                          </p>
+                        </Disclosure.Panel>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
             </Disclosure>
 
-            <Disclosure
-              as="div"
-              className="w-full h-fit bg-[#16191E] backdrop-blur-sm rounded-full px-10 py-6 border border-[#1B1E23]"
-              defaultOpen={false}
-            >
-              <DisclosureButton className="group flex w-full items-center justify-between">
-                <span className="text-lg font-fredoka text-dark-white group-data-open:text-teal-300">
-                  How do I earn rewards?
-                </span>
-                <ChevronDown className="size-6 text-light-grey group-data-open:rotate-180" />
-              </DisclosureButton>
-              <div className="overflow-hidden">
-                <DisclosurePanel
-                  transition
-                  className="origin-top transition duration-200 mt-4 ease-out data-closed:-translate-y-6 data-closed:opacity-0 text-sm text-gray-400"
-                >
-                  Yes! Whisper is built on blockchain technology, ensuring
-                  transparency and security. Your messages and transactions are
-                  encrypted, and we prioritize user privacy while maintaining
-                  the benefits of decentralization.
-                </DisclosurePanel>
-              </div>
+            <Disclosure>
+              {({ open }) => (
+                <div className="h-fit">
+                  <Disclosure.Button
+                    className={`bg-[#16191E] ${
+                      open ? "rounded-t-4xl" : "rounded-full"
+                    } border border-[#1B1E23] group flex w-full items-center justify-between px-10 py-6 hover:bg-[#1A1D22] transition-all`}
+                  >
+                    <span
+                      className={`text-lg font-fredoka transition-colors ${
+                        open ? "text-teal-300" : "text-dark-white"
+                      }`}
+                    >
+                      How do I earn rewards?
+                    </span>
+                    <ChevronDown
+                      className={`size-6 transition-transform duration-200 ${
+                        open ? "rotate-180 text-teal-300" : "text-dark-white"
+                      }`}
+                    />
+                  </Disclosure.Button>
+
+                  <AnimatePresence initial={false}>
+                    {open && (
+                      <motion.div
+                        key="panel"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <Disclosure.Panel
+                          static
+                          className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
+                        >
+                          <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
+                            You earn tokens through participation, room
+                            engagement, and community-driven activities.
+                          </p>
+                        </Disclosure.Panel>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
             </Disclosure>
 
-            <Disclosure
-              as="div"
-              className="w-full h-fit bg-[#16191E] backdrop-blur-sm rounded-full px-10 py-6 border border-[#1B1E23]"
-              defaultOpen={false}
-            >
-              <DisclosureButton className="group flex w-full items-center justify-between">
-                <span className="text-lg font-fredoka text-dark-white group-data-open:text-teal-300">
-                  Can I use the platform on mobile?
-                </span>
-                <ChevronDown className="size-6 text-light-grey group-data-open:rotate-180" />
-              </DisclosureButton>
-              <div className="overflow-hidden">
-                <DisclosurePanel
-                  transition
-                  className="origin-top transition duration-200 mt-4 ease-out data-closed:-translate-y-6 data-closed:opacity-0 text-sm text-gray-400"
-                >
-                  Yes! Whisper is built on blockchain technology, ensuring
-                  transparency and security. Your messages and transactions are
-                  encrypted, and we prioritize user privacy while maintaining
-                  the benefits of decentralization.
-                </DisclosurePanel>
-              </div>
-            </Disclosure>
+            <Disclosure>
+              {({ open }) => (
+                <div className="h-fit">
+                  <Disclosure.Button
+                    className={`bg-[#16191E] ${
+                      open ? "rounded-t-4xl" : "rounded-full"
+                    } border border-[#1B1E23] group flex w-full items-center justify-between px-10 py-6 hover:bg-[#1A1D22] transition-all`}
+                  >
+                    <span
+                      className={`text-lg font-fredoka transition-colors ${
+                        open ? "text-teal-300" : "text-dark-white"
+                      }`}
+                    >
+                      Can I create paid or private rooms?
+                    </span>
+                    <ChevronDown
+                      className={`size-6 transition-transform duration-200 ${
+                        open ? "rotate-180 text-teal-300" : "text-dark-white"
+                      }`}
+                    />
+                  </Disclosure.Button>
 
-            <Disclosure
-              as="div"
-              className="w-full h-fit bg-[#16191E] backdrop-blur-sm rounded-full px-10 py-6 border border-[#1B1E23]"
-              defaultOpen={false}
-            >
-              <DisclosureButton className="group flex w-full items-center justify-between">
-                <span className="text-lg font-fredoka text-dark-white group-data-open:text-teal-300">
-                  How do I earn rewards?
-                </span>
-                <ChevronDown className="size-6 text-light-grey group-data-open:rotate-180" />
-              </DisclosureButton>
-              <div className="overflow-hidden">
-                <DisclosurePanel
-                  transition
-                  className="origin-top transition duration-200 mt-4 ease-out data-closed:-translate-y-6 data-closed:opacity-0 text-sm text-gray-400"
-                >
-                  Yes! Whisper is built on blockchain technology, ensuring
-                  transparency and security. Your messages and transactions are
-                  encrypted, and we prioritize user privacy while maintaining
-                  the benefits of decentralization.
-                </DisclosurePanel>
-              </div>
+                  <AnimatePresence initial={false}>
+                    {open && (
+                      <motion.div
+                        key="panel"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <Disclosure.Panel
+                          static
+                          className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
+                        >
+                          <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
+                            Absolutely. You can set entry fees or keep your room
+                            invite-only through the settings page.
+                          </p>
+                        </Disclosure.Panel>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
             </Disclosure>
           </div>
 
           {/* Launch App Button - Bottom Left */}
           <div className="flex justify-start">
             <Link
-              href="/dashboard"
+              href={isAuthenticated ? "/dashboard" : "/auth"}
               className="inline-flex items-center gap-3 text-[#121418] px-8 py-4 font-medium transition-all duration-200 font-fredoka"
               style={{
                 borderRadius: "32px",
@@ -805,10 +920,6 @@ export default function Landing() {
           <div className="flex items-center justify-center gap-6">
             <div className="rounded-full bg-[#202226] p-5 text-white shadow-xs">
               <Image className="w-16 h-16" src={Partner1} alt="Partner 1" />
-            </div>
-
-            <div className="rounded-full bg-[#202226] p-5 text-white shadow-xs">
-              <Image className="w-16 h-16" src={Partner2} alt="Partner 2" />
             </div>
 
             <div className="rounded-full bg-[#202226] p-5 text-white shadow-xs">
@@ -865,7 +976,7 @@ export default function Landing() {
 
             {/* Telegram */}
             <a
-              href="https://t.me/GaslessGossip"
+              href="http://t.me/+Aiap4sFVRlUyZmU0"
               target="_blank"
               rel="noreferrer"
               className="group flex flex-col items-center gap-3"

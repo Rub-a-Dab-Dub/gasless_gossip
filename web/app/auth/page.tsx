@@ -77,6 +77,20 @@ export default function Auth() {
     setPage("login");
   }, []);
 
+  const isFormValid = () => {
+    if (page === "login") {
+      return username !== "" && password !== "";
+    } else {
+      return (
+        username !== "" &&
+        email !== "" &&
+        password !== "" &&
+        confirmPassword !== "" &&
+        password === confirmPassword
+      );
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -103,7 +117,7 @@ export default function Auth() {
       setToCookie("token", res.data.data.token);
       setToLocalStorage("user", JSON.stringify(res.data.data.user));
       if (page === "login") {
-        router.push("/");
+        router.push("/dashboard");
       } else {
         setSignupSuccess(true);
       }
@@ -128,8 +142,6 @@ export default function Auth() {
 
   return (
     <>
-      <Header />
-
       <div className="flex flex-col items-center justify-center flex-grow">
         <div className="max-w-xl w-full space-y-6 rounded-b-4xl pb-30 shadow-[inset_0_0_32px_1px_#0F59513D] flex flex-col items-center">
           <div className="w-64 h-80 relative -top-30">
@@ -160,7 +172,7 @@ export default function Auth() {
                 {page === "login" ? (
                   <>
                     <div className="w-full flex items-center font-normal text-zinc-300">
-                      Don't have an account?
+                      Don&apos;t have an account?
                       <span
                         onClick={() => setPage("register")}
                         className="pl-2 cursor-pointer font-bold text-[#7AF8EB]"
@@ -203,7 +215,7 @@ export default function Auth() {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder='e.g. MaskedParrot85'
+                placeholder="e.g. MaskedParrot85"
                 className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors"
               />
             </div>
@@ -221,7 +233,7 @@ export default function Auth() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder='e.g. maskedparrot@gmail.com'
+                  placeholder="e.g. maskedparrot@gmail.com"
                   className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors"
                 />
               </div>
@@ -292,7 +304,11 @@ export default function Auth() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex shadow-[inset_0_0_12px_1px_#2F2F2F] items-center space-x-2 px-6 py-4 rounded-full hover:opacity-80 cursor-pointer transition-colors text-white"
+                className={`${
+                  isFormValid()
+                    ? "text-black flex shadow-[inset_-6px_-6px_12px_#1E9E90,_inset_6px_6px_10px_#24FFE7] bg-[linear-gradient(135deg,_#15FDE4_100%,_#13E5CE_0%)] items-center space-x-2 px-6 py-4 rounded-full hover:opacity-80 cursor-pointer transition-colors"
+                    : "flex shadow-[inset_0_0_12px_1px_#2F2F2F] items-center space-x-2 px-6 py-4 rounded-full hover:opacity-80 cursor-pointer transition-colors text-white"
+                }`}
               >
                 {submitting ? (
                   <span>Please wait..</span>
