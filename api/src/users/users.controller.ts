@@ -71,8 +71,10 @@ export class UsersController {
     return this.usersService.totalUserCount();
   }
   @Get('search')
-  async search(@Query('username') username: string) {
-    return this.usersService.searchByUsername(username);
+  @UseGuards(JwtAuthGuard)
+  async search(@Query('username') username: string, @Request() req) {
+    const { userId } = req.user;
+    return this.usersService.searchByUsername(username, userId);
   }
 
   @Get(':id/stats')

@@ -40,10 +40,9 @@ import { QueueModule } from './queue/queue.module';
     RoomCategoriesModule,
     RoomMessagesModule,
     RoomsModule,
-    ContractsModule,
     WalletModule,
-    ContractsModule,
-    QueueModule,
+    // ContractsModule,
+    // QueueModule,
   ],
 })
 export class AppModule {}
