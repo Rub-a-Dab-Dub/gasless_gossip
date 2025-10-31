@@ -19,6 +19,8 @@ import Partner3 from "@/images/partners/partner-3.png";
 
 import HeroImage from "@/images/photos/hero-image.svg";
 import HeroImageMobile from "@/images/photos/hero-image-mobile.svg";
+import api from "@/lib/axios";
+import { ApiResponse } from "@/types/api";
 
 const checkAuth = () => {
   if (typeof window !== "undefined") {
@@ -30,10 +32,27 @@ const checkAuth = () => {
 };
 
 export default function Landing() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [userCount, setUserCount] = useState<number>(0);
+  const [roomCount, setRoomCount] = useState<number>(0);
+
 
   useEffect(() => {
+    const getUserCount = async () => {
+      const res = await api.get<ApiResponse>("/users/count")
+      if (!res.data.error) {
+        setUserCount(res.data.data || 0)
+      }
+    }
+    const getRoomCount = async () => {
+      const res = await api.get<ApiResponse>("/rooms/count")
+      if (!res.data.error) {
+        setRoomCount(res.data.data || 0)
+      }
+    }
     setIsAuthenticated(checkAuth());
+    getUserCount();
+    getRoomCount();
   }, []);
 
   return (
@@ -109,7 +128,7 @@ export default function Landing() {
               {/* 19.4k USERS */}
               <div className="">
                 <div className="text-2xl bg-[#1C1E22] rounded-full w-20 h-20 flex items-center justify-center font-medium text-white mb-2">
-                  20
+                  {userCount}
                 </div>
                 <div className="text-sm text-[#A3A9A6] uppercase text-center tracking-wide">
                   Users
@@ -122,7 +141,7 @@ export default function Landing() {
               {/* 8k ROOMS */}
               <div className="">
                 <div className="text-2xl bg-[#1C1E22] rounded-full w-20 h-20 flex items-center justify-center font-medium text-white mb-2">
-                  0
+                  {roomCount}
                 </div>
                 <div className="text-sm text-[#A3A9A6] uppercase text-center tracking-wide">
                   Rooms
@@ -135,7 +154,7 @@ export default function Landing() {
               {/* 4 CHAINS */}
               <div className="">
                 <div className="text-2xl bg-[#1C1E22] rounded-full w-20 h-20 flex items-center justify-center font-medium text-white mb-2">
-                  4
+                  {3}
                 </div>
                 <div className="text-sm text-[#A3A9A6] uppercase text-center tracking-wide">
                   Chains

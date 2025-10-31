@@ -18,16 +18,17 @@ import { UpdateRoomDto } from './dtos/update-room.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('rooms')
-@UseGuards(JwtAuthGuard)
 export class RoomController {
   constructor(private roomService: RoomService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   createRoom(@Body() dto: CreateRoomDto, @Request() req) {
     return this.roomService.createRoom(req.user.userId, dto);
   }
 
   @Put(':roomId')
+  @UseGuards(JwtAuthGuard)
   updateRoom(
     @Param('roomId') roomId: number,
     @Body() dto: UpdateRoomDto,
@@ -37,6 +38,7 @@ export class RoomController {
   }
 
   @Delete(':roomId')
+  @UseGuards(JwtAuthGuard)
   deleteRoom(@Param('roomId') roomId: number, @Request() req) {
     return this.roomService.deleteRoom(roomId, req.user.userId);
   }
@@ -47,13 +49,19 @@ export class RoomController {
   }
 
   @Get('/created')
+  @UseGuards(JwtAuthGuard)
   getMyCreatedRooms(@Request() req) {
     return this.roomService.getMyCreatedRooms(req.user.userId);
   }
 
   @Get('/me')
+  @UseGuards(JwtAuthGuard)
   getMyRooms(@Request() req) {
     return this.roomService.getMyRooms(req.user.userId);
+  }
+  @Get('/count')
+  getRoomCount() {
+    return this.roomService.totalRoomsCount();
   }
 
   @Get(':roomId')
@@ -67,11 +75,13 @@ export class RoomController {
   }
 
   @Post('add-member')
+  @UseGuards(JwtAuthGuard)
   addMember(@Body() dto: AddRoomMemberDto) {
     return this.roomService.addMember(dto);
   }
 
   @Delete(':roomId/remove/:userId')
+  @UseGuards(JwtAuthGuard)
   removeMember(
     @Param('roomId') roomId: number,
     @Param('userId') userId: number,

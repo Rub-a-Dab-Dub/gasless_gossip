@@ -25,6 +25,10 @@ export class RoomService {
     private roomCategoriesRepository: Repository<RoomCategory>,
   ) {}
 
+  async totalRoomsCount() {
+    return await this.roomsRepository.count();
+  }
+
   async createRoom(userId: number, dto: CreateRoomDto) {
     const user = await this.usersRepository.findOne({
       where: { id: userId },
