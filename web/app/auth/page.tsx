@@ -103,7 +103,7 @@ export default function Auth() {
       setToCookie("token", res.data.data.token);
       setToLocalStorage("user", JSON.stringify(res.data.data.user));
       if (page === "login") {
-        router.push("/");
+        router.push("/dashboard");
       } else {
         setSignupSuccess(true);
       }
@@ -158,7 +158,7 @@ export default function Auth() {
                 {page === "login" ? (
                   <>
                     <div className="w-full flex items-center font-normal text-zinc-300">
-                      Don't have an account?
+                      Don&apos;t have an account?
                       <span
                         onClick={() => setPage("register")}
                         className="pl-2 cursor-pointer font-bold text-[#7AF8EB]"
