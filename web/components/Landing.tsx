@@ -6,6 +6,7 @@ import Image from "next/image";
 import Lottie from "lottie-react";
 import animationData from "@/public/logo flsah screen4.json";
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 import {
   Disclosure,
@@ -297,7 +298,7 @@ export default function Landing() {
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
-                  href="/dashboard"
+                  href={isAuthenticated ? "/dashboard" : "/auth"}
                   className="inline-flex items-center gap-3 text-[#121418] px-8 py-4 font-medium transition-all duration-200 font-fredoka"
                   style={{
                     borderRadius: "32px",
@@ -377,6 +378,10 @@ export default function Landing() {
                 loop
                 muted
                 controls
+                playsInline
+                disablePictureInPicture
+                controlsList="nodownload nofullscreen noremoteplayback noplaybackrate"
+                onContextMenu={(e) => e.preventDefault()}
               >
                 <source src="/videos/gaslessgossipbase.mov" type="video/mp4" />
               </video>
@@ -582,7 +587,7 @@ export default function Landing() {
           {/* Launch App Button */}
           <div className="flex justify-end mt-12">
             <Link
-              href="/dashboard"
+              href={isAuthenticated ? "/dashboard" : "/auth"}
               className="inline-flex items-center gap-3 text-[#121418] px-8 py-4 font-medium transition-all duration-200 font-fredoka"
               style={{
                 borderRadius: "32px",
@@ -613,149 +618,314 @@ export default function Landing() {
 
           {/* FAQ Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            <Disclosure
-              as="div"
-              className="w-full h-fit bg-[#16191E] backdrop-blur-sm rounded-full px-10 py-6 border border-[#1B1E23]"
-              defaultOpen={false}
-            >
-              <DisclosureButton className="group flex w-full items-center justify-between">
-                <span className="text-lg font-fredoka text-dark-white group-data-open:text-teal-300">
-                  What is this platform about?
-                </span>
-                <ChevronDown className="size-6 text-light-grey group-data-open:rotate-180" />
-              </DisclosureButton>
-              <div className="overflow-hidden">
-                <DisclosurePanel
-                  transition
-                  className="origin-top transition duration-200 mt-4 ease-out data-closed:-translate-y-6 data-closed:opacity-0 text-sm text-gray-400"
-                >
-                  Whisper is designed for anyone who wants to combine social
-                  interaction with blockchain technology. From crypto
-                  enthusiasts to casual users looking for a fun, gamified
-                  messaging experience, our platform serves a wide range of
-                  communities.
-                </DisclosurePanel>
-              </div>
+            <Disclosure>
+              {({ open }) => (
+                <div className="h-fit">
+                  <Disclosure.Button
+                    className={`bg-[#16191E] ${
+                      open ? "rounded-t-4xl" : "rounded-full"
+                    } border border-[#1B1E23] group flex w-full items-center justify-between px-10 py-6 hover:bg-[#1A1D22] transition-all`}
+                  >
+                    <span
+                      className={`text-lg font-fredoka transition-colors ${
+                        open ? "text-teal-300" : "text-dark-white"
+                      }`}
+                    >
+                      What is this platform about?
+                    </span>
+                    <ChevronDown
+                      className={`size-6 transition-transform duration-200 ${
+                        open ? "rotate-180 text-teal-300" : "text-dark-white"
+                      }`}
+                    />
+                  </Disclosure.Button>
+
+                  <AnimatePresence initial={false}>
+                    {open && (
+                      <motion.div
+                        key="panel"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <Disclosure.Panel
+                          static
+                          className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
+                        >
+                          <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
+                            Whisper is designed for anyone who wants to combine
+                            social interaction with blockchain technology. From
+                            crypto enthusiasts to casual users looking for a
+                            fun, gamified messaging experience, our platform
+                            serves a wide range of communities.
+                          </p>
+                        </Disclosure.Panel>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
             </Disclosure>
 
-            <Disclosure
-              as="div"
-              className="bg-[#16191E] h-fit rounded-full border border-[#1B1E23] overflow-hidden"
-            >
-              <DisclosureButton className="group flex w-full items-center justify-between px-10 py-6 hover:bg-[#1A1D22] transition-all">
-                <span className="text-lg font-fredoka text-dark-white group-data-open:text-teal-300">
-                  Do I Need A Crypto Wallet To Get Started?
-                </span>
-                <ChevronDown className="size-6 group-data-open:text-teal-300 transition-transform duration-200 group-data-[open]:rotate-180" />
-              </DisclosureButton>
+            <Disclosure>
+              {({ open }) => (
+                <div className="h-fit">
+                  <Disclosure.Button
+                    className={`bg-[#16191E] ${
+                      open ? "rounded-t-4xl" : "rounded-full"
+                    } border border-[#1B1E23] group flex w-full items-center justify-between px-10 py-6 hover:bg-[#1A1D22] transition-all`}
+                  >
+                    <span
+                      className={`text-lg font-fredoka transition-colors ${
+                        open ? "text-teal-300" : "text-dark-white"
+                      }`}
+                    >
+                      Do I Need A Crypto Wallet To Get Started?
+                    </span>
+                    <ChevronDown
+                      className={`size-6 transition-transform duration-200 ${
+                        open ? "rotate-180 text-teal-300" : "text-dark-white"
+                      }`}
+                    />
+                  </Disclosure.Button>
 
-              <DisclosurePanel className="px-10 py-6 pt-0 text-[#A3A9A6] leading-relaxed border-t border-[#1B1E23]/50">
-                Yes. You&apos;ll Need A Wallet To Receive Tokens And Manage
-                Gated Room Access.
-              </DisclosurePanel>
+                  <AnimatePresence initial={false}>
+                    {open && (
+                      <motion.div
+                        key="panel"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <Disclosure.Panel
+                          static
+                          className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
+                        >
+                          <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
+                            Yes. You&apos;ll Need A Wallet To Receive Tokens And
+                            Manage Gated Room Access.
+                          </p>
+                        </Disclosure.Panel>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
             </Disclosure>
 
-            <Disclosure
-              as="div"
-              className="w-full h-fit bg-[#16191E] backdrop-blur-sm rounded-full px-10 py-6 border border-[#1B1E23]"
-              defaultOpen={false}
-            >
-              <DisclosureButton className="group flex w-full items-center justify-between">
-                <span className="text-lg font-fredoka text-dark-white group-data-open:text-teal-300">
-                  Is it beginner-friendly?
-                </span>
-                <ChevronDown className="size-6 text-light-grey group-data-open:rotate-180" />
-              </DisclosureButton>
-              <div className="overflow-hidden">
-                <DisclosurePanel
-                  transition
-                  className="origin-top transition duration-200 mt-4 ease-out data-closed:-translate-y-6 data-closed:opacity-0 text-sm text-gray-400"
-                >
-                  Yes! Whisper is built on blockchain technology, ensuring
-                  transparency and security. Your messages and transactions are
-                  encrypted, and we prioritize user privacy while maintaining
-                  the benefits of decentralization.
-                </DisclosurePanel>
-              </div>
+            <Disclosure>
+              {({ open }) => (
+                <div className="h-fit">
+                  <Disclosure.Button
+                    className={`bg-[#16191E] ${
+                      open ? "rounded-t-4xl" : "rounded-full"
+                    } border border-[#1B1E23] group flex w-full items-center justify-between px-10 py-6 hover:bg-[#1A1D22] transition-all`}
+                  >
+                    <span
+                      className={`text-lg font-fredoka transition-colors ${
+                        open ? "text-teal-300" : "text-dark-white"
+                      }`}
+                    >
+                      Is it beginner-friendly?
+                    </span>
+                    <ChevronDown
+                      className={`size-6 transition-transform duration-200 ${
+                        open ? "rotate-180 text-teal-300" : "text-dark-white"
+                      }`}
+                    />
+                  </Disclosure.Button>
+
+                  <AnimatePresence initial={false}>
+                    {open && (
+                      <motion.div
+                        key="panel"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <Disclosure.Panel
+                          static
+                          className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
+                        >
+                          <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
+                            Yes! Whisper is built on blockchain technology,
+                            ensuring transparency and security. Your messages
+                            and transactions are encrypted, and we prioritize
+                            user privacy while maintaining the benefits of
+                            decentralization.
+                          </p>
+                        </Disclosure.Panel>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
             </Disclosure>
 
-            <Disclosure
-              as="div"
-              className="w-full h-fit bg-[#16191E] backdrop-blur-sm rounded-full px-10 py-6 border border-[#1B1E23]"
-              defaultOpen={false}
-            >
-              <DisclosureButton className="group flex w-full items-center justify-between">
-                <span className="text-lg font-fredoka text-dark-white group-data-open:text-teal-300">
-                  How do I earn rewards?
-                </span>
-                <ChevronDown className="size-6 text-light-grey group-data-open:rotate-180" />
-              </DisclosureButton>
-              <div className="overflow-hidden">
-                <DisclosurePanel
-                  transition
-                  className="origin-top transition duration-200 mt-4 ease-out data-closed:-translate-y-6 data-closed:opacity-0 text-sm text-gray-400"
-                >
-                  Yes! Whisper is built on blockchain technology, ensuring
-                  transparency and security. Your messages and transactions are
-                  encrypted, and we prioritize user privacy while maintaining
-                  the benefits of decentralization.
-                </DisclosurePanel>
-              </div>
+            <Disclosure>
+              {({ open }) => (
+                <div className="h-fit">
+                  <Disclosure.Button
+                    className={`bg-[#16191E] ${
+                      open ? "rounded-t-4xl" : "rounded-full"
+                    } border border-[#1B1E23] group flex w-full items-center justify-between px-10 py-6 hover:bg-[#1A1D22] transition-all`}
+                  >
+                    <span
+                      className={`text-lg font-fredoka transition-colors ${
+                        open ? "text-teal-300" : "text-dark-white"
+                      }`}
+                    >
+                      How do I earn rewards?
+                    </span>
+                    <ChevronDown
+                      className={`size-6 transition-transform duration-200 ${
+                        open ? "rotate-180 text-teal-300" : "text-dark-white"
+                      }`}
+                    />
+                  </Disclosure.Button>
+
+                  <AnimatePresence initial={false}>
+                    {open && (
+                      <motion.div
+                        key="panel"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <Disclosure.Panel
+                          static
+                          className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
+                        >
+                          <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
+                            Yes! Whisper is built on blockchain technology,
+                            ensuring transparency and security. Your messages
+                            and transactions are encrypted, and we prioritize
+                            user privacy while maintaining the benefits of
+                            decentralization.
+                          </p>
+                        </Disclosure.Panel>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
             </Disclosure>
 
-            <Disclosure
-              as="div"
-              className="w-full h-fit bg-[#16191E] backdrop-blur-sm rounded-full px-10 py-6 border border-[#1B1E23]"
-              defaultOpen={false}
-            >
-              <DisclosureButton className="group flex w-full items-center justify-between">
-                <span className="text-lg font-fredoka text-dark-white group-data-open:text-teal-300">
-                  Can I use the platform on mobile?
-                </span>
-                <ChevronDown className="size-6 text-light-grey group-data-open:rotate-180" />
-              </DisclosureButton>
-              <div className="overflow-hidden">
-                <DisclosurePanel
-                  transition
-                  className="origin-top transition duration-200 mt-4 ease-out data-closed:-translate-y-6 data-closed:opacity-0 text-sm text-gray-400"
-                >
-                  Yes! Whisper is built on blockchain technology, ensuring
-                  transparency and security. Your messages and transactions are
-                  encrypted, and we prioritize user privacy while maintaining
-                  the benefits of decentralization.
-                </DisclosurePanel>
-              </div>
+            <Disclosure>
+              {({ open }) => (
+                <div className="h-fit">
+                  <Disclosure.Button
+                    className={`bg-[#16191E] ${
+                      open ? "rounded-t-4xl" : "rounded-full"
+                    } border border-[#1B1E23] group flex w-full items-center justify-between px-10 py-6 hover:bg-[#1A1D22] transition-all`}
+                  >
+                    <span
+                      className={`text-lg font-fredoka transition-colors ${
+                        open ? "text-teal-300" : "text-dark-white"
+                      }`}
+                    >
+                      Can I use the platform on mobile?
+                    </span>
+                    <ChevronDown
+                      className={`size-6 transition-transform duration-200 ${
+                        open ? "rotate-180 text-teal-300" : "text-dark-white"
+                      }`}
+                    />
+                  </Disclosure.Button>
+
+                  <AnimatePresence initial={false}>
+                    {open && (
+                      <motion.div
+                        key="panel"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <Disclosure.Panel
+                          static
+                          className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
+                        >
+                          <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
+                            Yes! Whisper is built on blockchain technology,
+                            ensuring transparency and security. Your messages
+                            and transactions are encrypted, and we prioritize
+                            user privacy while maintaining the benefits of
+                            decentralization.
+                          </p>
+                        </Disclosure.Panel>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
             </Disclosure>
 
-            <Disclosure
-              as="div"
-              className="w-full h-fit bg-[#16191E] backdrop-blur-sm rounded-full px-10 py-6 border border-[#1B1E23]"
-              defaultOpen={false}
-            >
-              <DisclosureButton className="group flex w-full items-center justify-between">
-                <span className="text-lg font-fredoka text-dark-white group-data-open:text-teal-300">
-                  How do I earn rewards?
-                </span>
-                <ChevronDown className="size-6 text-light-grey group-data-open:rotate-180" />
-              </DisclosureButton>
-              <div className="overflow-hidden">
-                <DisclosurePanel
-                  transition
-                  className="origin-top transition duration-200 mt-4 ease-out data-closed:-translate-y-6 data-closed:opacity-0 text-sm text-gray-400"
-                >
-                  Yes! Whisper is built on blockchain technology, ensuring
-                  transparency and security. Your messages and transactions are
-                  encrypted, and we prioritize user privacy while maintaining
-                  the benefits of decentralization.
-                </DisclosurePanel>
-              </div>
+            <Disclosure>
+              {({ open }) => (
+                <div className="h-fit">
+                  <Disclosure.Button
+                    className={`bg-[#16191E] ${
+                      open ? "rounded-t-4xl" : "rounded-full"
+                    } border border-[#1B1E23] group flex w-full items-center justify-between px-10 py-6 hover:bg-[#1A1D22] transition-all`}
+                  >
+                    <span
+                      className={`text-lg font-fredoka transition-colors ${
+                        open ? "text-teal-300" : "text-dark-white"
+                      }`}
+                    >
+                      How do I earn rewards?
+                    </span>
+                    <ChevronDown
+                      className={`size-6 transition-transform duration-200 ${
+                        open ? "rotate-180 text-teal-300" : "text-dark-white"
+                      }`}
+                    />
+                  </Disclosure.Button>
+
+                  <AnimatePresence initial={false}>
+                    {open && (
+                      <motion.div
+                        key="panel"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <Disclosure.Panel
+                          static
+                          className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
+                        >
+                          <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
+                            Yes! Whisper is built on blockchain technology,
+                            ensuring transparency and security. Your messages
+                            and transactions are encrypted, and we prioritize
+                            user privacy while maintaining the benefits of
+                            decentralization.
+                          </p>
+                        </Disclosure.Panel>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              )}
             </Disclosure>
           </div>
 
           {/* Launch App Button - Bottom Left */}
           <div className="flex justify-start">
             <Link
-              href="/dashboard"
+              href={isAuthenticated ? "/dashboard" : "/auth"}
               className="inline-flex items-center gap-3 text-[#121418] px-8 py-4 font-medium transition-all duration-200 font-fredoka"
               style={{
                 borderRadius: "32px",
@@ -786,10 +956,6 @@ export default function Landing() {
           <div className="flex items-center justify-center gap-6">
             <div className="rounded-full bg-[#202226] p-5 text-white shadow-xs">
               <Image className="w-16 h-16" src={Partner1} alt="Partner 1" />
-            </div>
-
-            <div className="rounded-full bg-[#202226] p-5 text-white shadow-xs">
-              <Image className="w-16 h-16" src={Partner2} alt="Partner 2" />
             </div>
 
             <div className="rounded-full bg-[#202226] p-5 text-white shadow-xs">
@@ -846,7 +1012,7 @@ export default function Landing() {
 
             {/* Telegram */}
             <a
-              href="https://t.me/GaslessGossip"
+              href="http://t.me/+Aiap4sFVRlUyZmU0"
               target="_blank"
               rel="noreferrer"
               className="group flex flex-col items-center gap-3"
