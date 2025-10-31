@@ -77,6 +77,20 @@ export default function Auth() {
     setPage("login");
   }, []);
 
+  const isFormValid = () => {
+    if (page === "login") {
+      return username !== "" && password !== "";
+    } else {
+      return (
+        username !== "" &&
+        email !== "" &&
+        password !== "" &&
+        confirmPassword !== "" &&
+        password === confirmPassword
+      );
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -290,7 +304,11 @@ export default function Auth() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex shadow-[inset_0_0_12px_1px_#2F2F2F] items-center space-x-2 px-6 py-4 rounded-full hover:opacity-80 cursor-pointer transition-colors text-white"
+                className={`${
+                  isFormValid()
+                    ? "text-black flex shadow-[inset_-6px_-6px_12px_#1E9E90,_inset_6px_6px_10px_#24FFE7] bg-[linear-gradient(135deg,_#15FDE4_100%,_#13E5CE_0%)] items-center space-x-2 px-6 py-4 rounded-full hover:opacity-80 cursor-pointer transition-colors"
+                    : "flex shadow-[inset_0_0_12px_1px_#2F2F2F] items-center space-x-2 px-6 py-4 rounded-full hover:opacity-80 cursor-pointer transition-colors text-white"
+                }`}
               >
                 {submitting ? (
                   <span>Please wait..</span>
