@@ -826,11 +826,8 @@ export default function Landing() {
                           className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
                         >
                           <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
-                            Yes! Whisper is built on blockchain technology,
-                            ensuring transparency and security. Your messages
-                            and transactions are encrypted, and we prioritize
-                            user privacy while maintaining the benefits of
-                            decentralization.
+                            You earn tokens through participation, room
+                            engagement, and community-driven activities.
                           </p>
                         </Disclosure.Panel>
                       </motion.div>
@@ -853,7 +850,7 @@ export default function Landing() {
                         open ? "text-teal-300" : "text-dark-white"
                       }`}
                     >
-                      Can I use the platform on mobile?
+                      Can I create paid or private rooms?
                     </span>
                     <ChevronDown
                       className={`size-6 transition-transform duration-200 ${
@@ -877,62 +874,8 @@ export default function Landing() {
                           className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
                         >
                           <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
-                            Yes! Whisper is built on blockchain technology,
-                            ensuring transparency and security. Your messages
-                            and transactions are encrypted, and we prioritize
-                            user privacy while maintaining the benefits of
-                            decentralization.
-                          </p>
-                        </Disclosure.Panel>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              )}
-            </Disclosure>
-
-            <Disclosure>
-              {({ open }) => (
-                <div className="h-fit">
-                  <Disclosure.Button
-                    className={`bg-[#16191E] ${
-                      open ? "rounded-t-4xl" : "rounded-full"
-                    } border border-[#1B1E23] group flex w-full items-center justify-between px-10 py-6 hover:bg-[#1A1D22] transition-all`}
-                  >
-                    <span
-                      className={`text-lg font-fredoka transition-colors ${
-                        open ? "text-teal-300" : "text-dark-white"
-                      }`}
-                    >
-                      How do I earn rewards?
-                    </span>
-                    <ChevronDown
-                      className={`size-6 transition-transform duration-200 ${
-                        open ? "rotate-180 text-teal-300" : "text-dark-white"
-                      }`}
-                    />
-                  </Disclosure.Button>
-
-                  <AnimatePresence initial={false}>
-                    {open && (
-                      <motion.div
-                        key="panel"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.4, ease: "easeInOut" }}
-                        className="overflow-hidden"
-                      >
-                        <Disclosure.Panel
-                          static
-                          className="box-border mb-2 flex justify-center items-center p-8 gap-[10px] md:w-[500px] border border-t-0 border-[#1B1E23] shadow-[0_0_16px_rgba(14,145,134,0.8)] rounded-b-[48px] relative md:left-17"
-                        >
-                          <p className="w-[436px] font-fredoka font-normal text-[16px] leading-6 capitalize text-[#F1F7F6]">
-                            Yes! Whisper is built on blockchain technology,
-                            ensuring transparency and security. Your messages
-                            and transactions are encrypted, and we prioritize
-                            user privacy while maintaining the benefits of
-                            decentralization.
+                            Absolutely. You can set entry fees or keep your room
+                            invite-only through the settings page.
                           </p>
                         </Disclosure.Panel>
                       </motion.div>
