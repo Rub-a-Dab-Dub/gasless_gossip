@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { Post } from '../posts/entities/post.entity';
+import { ILike } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -17,6 +18,10 @@ export class UsersService {
     @InjectRepository(User) private usersRepository: Repository<User>,
     @InjectRepository(Post) private postsRepository: Repository<Post>,
   ) {}
+
+  async totalUserCount(): Promise<number> {
+    return await this.usersRepository.count();
+  }
 
   async findById(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({ where: { id } });
@@ -28,6 +33,18 @@ export class UsersService {
     const user = await this.usersRepository.findOne({ where: { username } });
     if (!user) throw new NotFoundException('User not found');
     return user;
+  }
+
+  async searchByUsername(username: string): Promise<User[]> {
+    const users = await this.usersRepository.find({
+      where: { username: ILike(`%${username}%`) },
+      select: ['id', 'username', 'photo', 'title'],
+    });
+
+    if (!users.length) {
+      throw new NotFoundException('User not found');
+    }
+    return users;
   }
 
   async updateProfile(id: number, updateData: Partial<User>): Promise<User> {

@@ -37,6 +37,37 @@ export class ChatsService {
     return this.chatsRepository.save(chat);
   }
 
+  async createNewChat(userId: number, username: string) {
+    const senderId = userId;
+    const recipient = await this.usersRepository.findOne({
+      where: { username },
+    });
+    const receiverId = recipient ? recipient.id : null;
+
+    if (!receiverId) throw new NotFoundException('Recipient not found');
+
+    const existingChat = await this.chatsRepository.findOne({
+      where: {
+        sender: { id: senderId },
+        receiver: { id: receiverId },
+      },
+    });
+
+    if (existingChat) return existingChat;
+
+    const sender = await this.usersRepository.findOne({
+      where: { id: senderId },
+    });
+    const receiver = await this.usersRepository.findOne({
+      where: { id: receiverId },
+    });
+
+    if (!sender || !receiver) throw new NotFoundException('User not found');
+
+    const chat = this.chatsRepository.create({ sender, receiver });
+    return this.chatsRepository.save(chat);
+  }
+
   async getUserChats(userId: number) {
     return this.chatsRepository.find({
       where: [{ sender: { id: userId } }, { receiver: { id: userId } }],

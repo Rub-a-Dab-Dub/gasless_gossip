@@ -1,24 +1,42 @@
-import { Controller, Post, Get, Param, Body, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Param,
+  Body,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { ChatsService } from './chats.service';
 import { CreateChatDto } from './dtos/create-chat.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('chats')
-@UseGuards(JwtAuthGuard)
 export class ChatsController {
   constructor(private chatService: ChatsService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   createChat(@Body() dto: CreateChatDto) {
     return this.chatService.createChat(dto);
   }
 
-  @Get('user/:userId')
-  getUserChats(@Param('userId') userId: number) {
+  @Post()
+  @UseGuards(JwtAuthGuard)
+  startNewChat(@Body() username: string, @Request() req) {
+    const userId = req.user.id;
+    return this.chatService.createNewChat(userId, username);
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  getUserChats(@Request() req) {
+    const userId = req.user.id;
     return this.chatService.getUserChats(userId);
   }
 
   @Get(':chatId')
+  @UseGuards(JwtAuthGuard)
   getChatById(@Param('chatId') chatId: number) {
     return this.chatService.getChatById(chatId);
   }

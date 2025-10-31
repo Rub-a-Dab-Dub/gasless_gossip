@@ -9,31 +9,35 @@ import {
   ParseIntPipe,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UsersService } from './users.service';
 import { ChangePasswordDto, UpdateProfileDto } from './dtos/user.dto';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('profile')
+  @UseGuards(JwtAuthGuard)
   getProfile(@Request() req) {
     return this.usersService.findById(req.user.userId);
   }
   @Get('profile/stats')
+  @UseGuards(JwtAuthGuard)
   getProfileStats(@Request() req) {
     return this.usersService.profileStats(req.user.userId);
   }
 
   @Put('profile')
+  @UseGuards(JwtAuthGuard)
   updateProfile(@Request() req, @Body() updateData: UpdateProfileDto) {
     return this.usersService.updateProfile(req.user.userId, updateData);
   }
 
   @Post('change-password')
+  @UseGuards(JwtAuthGuard)
   changePassword(@Request() req, @Body() passwords: ChangePasswordDto) {
     return this.usersService.changePassword(
       req.user.userId,
@@ -43,6 +47,7 @@ export class UsersController {
   }
 
   @Post(':id/follow')
+  @UseGuards(JwtAuthGuard)
   async followUser(
     @Param('id', ParseIntPipe) followedId: number,
     @Request() req,
@@ -52,12 +57,22 @@ export class UsersController {
   }
 
   @Delete(':id/unfollow')
+  @UseGuards(JwtAuthGuard)
   async unfollowUser(
     @Param('id', ParseIntPipe) followedId: number,
     @Request() req,
   ) {
     const followerId = req.user.userId;
     return this.usersService.unfollowUser(followerId, followedId);
+  }
+
+  @Get('count')
+  async totalUserCount() {
+    return this.usersService.totalUserCount();
+  }
+  @Get('search')
+  async search(@Query('username') username: string) {
+    return this.usersService.searchByUsername(username);
   }
 
   @Get(':id/stats')
@@ -86,6 +101,7 @@ export class UsersController {
   }
 
   @Post('logout')
+  @UseGuards(JwtAuthGuard)
   logout() {
     return {
       message: 'Logout successful on client side. Please delete your token.',
