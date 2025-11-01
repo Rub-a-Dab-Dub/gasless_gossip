@@ -27,7 +27,7 @@ import DeletePostDialog from "@/components/post/DeletePostDialog";
 import { setToLocalStorage } from "@/lib/local-storage";
 import EditPostDialog from "@/components/post/EditPostDialog";
 import MyRooms from "@/components/room/MyRooms";
-import {ArrowRight} from "@/components/icons";
+import { ArrowRight } from "@/components/icons";
 
 export default function Me() {
   const { profile, profileStats, myPosts, postsLoading } = useProfileData();
@@ -94,76 +94,78 @@ export default function Me() {
     <>
       <Header />
 
-      <div className="max-w-7xl mx-auto px-4 py-32 text-white">
-        <ProfileHeader
-          profile={profile}
-          stats={profileStats}
-          onEditClick={() => setShowEdit(true)}
-        />
+      {user ? <>
+        <div className="max-w-7xl mx-auto px-4 py-32 text-white">
+          <ProfileHeader
+            profile={profile}
+            stats={profileStats}
+            onEditClick={() => setShowEdit(true)}
+          />
 
-        <QuestsSection />
+          <QuestsSection />
 
-        <TabGroup>
-          <TabList className="flex justify-center text-center gap-8 mb-6 border-b border-dark-teal">
-            {["Posts", "Rooms", "NFTs"].map((label) => (
-              <Tab
-                key={label}
-                className="pb-2 w-full outline-none flex justify-center data-selected:text-dark-white text-light-grey data-selected:border-b-4 data-selected:border-teal-300"
-              >
-                {label}
-              </Tab>
-            ))}
-          </TabList>
+          <TabGroup>
+            <TabList className="flex justify-center text-center gap-8 mb-6 border-b border-dark-teal">
+              {["Posts", "Rooms", "NFTs"].map((label) => (
+                <Tab
+                  key={label}
+                  className="pb-2 w-full outline-none flex justify-center data-selected:text-dark-white text-light-grey data-selected:border-b-4 data-selected:border-teal-300"
+                >
+                  {label}
+                </Tab>
+              ))}
+            </TabList>
 
-          <TabPanels>
-            <TabPanel>
-              {postsLoading ? (
-                <p className="py-16 text-center text-sm text-white">Loading posts...</p>
-              ) : myPosts.length === 0 ? (
-                <EmptyPostsState />
-              ) : (
-                <div className="flex flex-col space-y-6">
-                  {myPosts.map((post: IPostList) => (
-                    <PostCard
-                      key={post.id}
-                      post={post}
-                      onEdit={handlePostEdit}
-                      onDelete={handlePostDelete}
-                    />
-                  ))}
-                </div>
-              )}
-            </TabPanel>
+            <TabPanels>
+              <TabPanel>
+                {postsLoading ? (
+                  <p className="py-16 text-center text-sm text-white">Loading posts...</p>
+                ) : myPosts.length === 0 ? (
+                  <EmptyPostsState />
+                ) : (
+                  <div className="flex flex-col space-y-6">
+                    {myPosts.map((post: IPostList) => (
+                      <PostCard
+                        key={post.id}
+                        post={post}
+                        onEdit={handlePostEdit}
+                        onDelete={handlePostDelete}
+                      />
+                    ))}
+                  </div>
+                )}
+              </TabPanel>
 
-            <TabPanel>
-              <MyRooms />
-            </TabPanel>
+              <TabPanel>
+                <MyRooms />
+              </TabPanel>
 
-            <TabPanel>
-              <NftsTab />
-            </TabPanel>
-          </TabPanels>
-        </TabGroup>
-      </div>
+              <TabPanel>
+                <NftsTab />
+              </TabPanel>
+            </TabPanels>
+          </TabGroup>
+        </div>
 
-      {postId && (
-        <DeletePostDialog id={postId} show={showPostDelete} onClose={() => setShowPostDelete(false)} />
-      )}
-      {post && (
-        <EditPostDialog post={post} show={showPostEdit} onClose={() => setShowPostEdit(false)} />
-      )}
+        {postId && (
+          <DeletePostDialog id={postId} show={showPostDelete} onClose={() => setShowPostDelete(false)} />
+        )}
+        {post && (
+          <EditPostDialog post={post} show={showPostEdit} onClose={() => setShowPostEdit(false)} />
+        )}
 
-      <FloatingCreatePostButton />
+        <FloatingCreatePostButton />
 
-      {showEdit && (
-        <EditProfileModal
-          form={form}
-          onChange={handleChange}
-          onClose={() => setShowEdit(false)}
-          onSave={handleSave}
-          saving={saving}
-        />
-      )}
+        {showEdit && (
+          <EditProfileModal
+            form={form}
+            onChange={handleChange}
+            onClose={() => setShowEdit(false)}
+            onSave={handleSave}
+            saving={saving}
+          />
+        )}
+      </> : <></>}
     </>
   );
 }
@@ -199,13 +201,22 @@ function ProfileHeader({
 
         <div>
           <div className="flex gap-6 mb-3">
-            {["posts", "followers", "following"].map((key) => (
-              <div key={key}>
-                <div className="text-sm text-tertiary uppercase mb-1">
-                  {key.charAt(0).toUpperCase() + key.slice(1)}
+            {[{ id: "posts", name: "Posts", "link": "" }, { id: "followers", name: "Followers", "link": `/user/followers?u=${profile?.username}` }, { id: "following", name: "Following", "link": `/user/following?u=${profile?.username}` }].map((row) => (
+              (!row.link ?
+                <div key={row.id}>
+                  <div className="text-sm text-tertiary uppercase mb-1">
+                    {row.name}
+                  </div>
+                  <div className="text-2xl font-fredoka font-semibold">{stats?.[row.id] ?? 0}</div>
                 </div>
-                <div className="text-2xl font-fredoka font-semibold">{stats?.[key] ?? 0}</div>
-              </div>
+                :
+                <Link key={row.id} href={row.link}>
+                  <div className="text-sm text-tertiary uppercase mb-1">
+                    {row.name}
+                  </div>
+                  <div className="text-2xl font-fredoka font-semibold">{stats?.[row.id] ?? 0}</div>
+                </Link>
+              )
             ))}
           </div>
           <div className="text-grey-100 text-sm space-y-0.5">
@@ -222,7 +233,6 @@ function ProfileHeader({
           className="text-white flex justify-center space-x-2 shadow-[inset_0_0_12px_1px_#2F2F2F]  items-center space-x-2 px-6 py-3 rounded-full hover:opacity-80 cursor-pointer transition-colors"
         >
           <span>View Wallet</span>
-          <ArrowRight className="w-6 h-6"/>
         </Link>
         <button
           onClick={onEditClick}

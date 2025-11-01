@@ -74,6 +74,26 @@ export class ChatsService {
     return qb.orderBy('chat.createdAt', 'DESC').getOne();
   }
 
+  async hasChatReturnChatId(
+    senderId: number,
+    receiverId: number,
+  ): Promise<number | null> {
+    let chat = await this.chatsRepository
+      .createQueryBuilder('chat')
+      .leftJoinAndSelect('chat.sender', 'sender')
+      .leftJoinAndSelect('chat.receiver', 'receiver')
+      .where(
+        `(chat.senderId = :senderId AND chat.receiverId = :receiverId) OR ` +
+          `(chat.senderId = :receiverId AND chat.receiverId = :senderId)`,
+        { senderId, receiverId },
+      )
+      .andWhere('chat.isGroup = false')
+      .select(['chat.id', 'chat.createdAt'])
+      .orderBy('chat.createdAt', 'DESC')
+      .getOne();
+    return chat ? chat.id : null;
+  }
+
   // === GET ALL USER CHATS ===
   async getUserChats(userId: number): Promise<ChatPreviewDto[]> {
     const qb = this.chatsRepository
@@ -116,7 +136,6 @@ export class ChatsService {
           .orderBy('"lastMsg"."createdAt"', 'DESC')
           .limit(1);
       }, 'last_message_json')
-      // Unread count
       .addSelect('COUNT(DISTINCT unread_messages.id)', 'unread_count')
       .groupBy(
         'chat.id, chat.createdAt, sender.id, sender.username, sender.photo, sender.title, receiver.id, receiver.username, receiver.photo, receiver.title',

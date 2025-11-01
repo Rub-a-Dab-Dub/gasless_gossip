@@ -31,7 +31,7 @@ import { deleteFromCookie } from '@/lib/cookies';
 import { deleteFromLocalStorage } from '@/lib/local-storage';
 
 const navigation = [
-  { name: 'home', icon: HomeIcon, href: '/' },
+  { name: 'home', icon: HomeIcon, href: '/feed' },
   { name: 'quests', icon: QuestIcon, href: '/quests' },
   { name: 'chats', icon: ChatsIcon, href: '/chat' },
   { name: 'rooms', icon: RoomIcon, href: '/rooms' },
