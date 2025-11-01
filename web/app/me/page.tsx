@@ -54,7 +54,8 @@ export default function Me() {
   );
 
   const handleSave = useCallback(async () => {
-    if (!form.username) return toast.error("Username must not be empty"); setShowPostDelete
+    if (!form.username) return toast.error("Username must not be empty");
+    setShowPostDelete;
 
     try {
       setSaving(true);
@@ -75,7 +76,7 @@ export default function Me() {
       console.error(err);
       toast.error("Error occurred while updating profile");
     } finally {
-      setShowPostDelete
+      setShowPostDelete;
       setSaving(false);
     }
   }, [form]);
@@ -94,78 +95,92 @@ export default function Me() {
     <>
       <Header />
 
-      {user ? <>
-        <div className="max-w-7xl mx-auto px-4 py-32 text-white">
-          <ProfileHeader
-            profile={profile}
-            stats={profileStats}
-            onEditClick={() => setShowEdit(true)}
-          />
+      {user ? (
+        <>
+          <div className="max-w-7xl mx-auto px-4 py-32 text-white">
+            <ProfileHeader
+              profile={profile}
+              stats={profileStats}
+              onEditClick={() => setShowEdit(true)}
+            />
 
-          <QuestsSection />
+            <QuestsSection />
 
-          <TabGroup>
-            <TabList className="flex justify-center text-center gap-8 mb-6 border-b border-dark-teal">
-              {["Posts", "Rooms", "NFTs"].map((label) => (
-                <Tab
-                  key={label}
-                  className="pb-2 w-full outline-none flex justify-center data-selected:text-dark-white text-light-grey data-selected:border-b-4 data-selected:border-teal-300"
-                >
-                  {label}
-                </Tab>
-              ))}
-            </TabList>
+            <TabGroup>
+              <TabList className="flex justify-center text-center gap-8 mb-6 border-b border-dark-teal">
+                {["Posts", "Rooms", "NFTs"].map((label) => (
+                  <Tab
+                    key={label}
+                    className="pb-2 w-full outline-none flex justify-center data-selected:text-dark-white text-light-grey data-selected:border-b-4 data-selected:border-teal-300"
+                  >
+                    {label}
+                  </Tab>
+                ))}
+              </TabList>
 
-            <TabPanels>
-              <TabPanel>
-                {postsLoading ? (
-                  <p className="py-16 text-center text-sm text-white">Loading posts...</p>
-                ) : myPosts.length === 0 ? (
-                  <EmptyPostsState />
-                ) : (
-                  <div className="flex flex-col space-y-6">
-                    {myPosts.map((post: IPostList) => (
-                      <PostCard
-                        key={post.id}
-                        post={post}
-                        onEdit={handlePostEdit}
-                        onDelete={handlePostDelete}
-                      />
-                    ))}
-                  </div>
-                )}
-              </TabPanel>
+              <TabPanels>
+                <TabPanel>
+                  {postsLoading ? (
+                    <p className="py-16 text-center text-sm text-white">
+                      Loading posts...
+                    </p>
+                  ) : myPosts.length === 0 ? (
+                    <EmptyPostsState />
+                  ) : (
+                    <div className="flex flex-col space-y-6">
+                      {myPosts.map((post: IPostList) => (
+                        <PostCard
+                          key={post.id}
+                          post={post}
+                          onEdit={handlePostEdit}
+                          onDelete={handlePostDelete}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </TabPanel>
 
-              <TabPanel>
-                <MyRooms />
-              </TabPanel>
+                <TabPanel>
+                  <MyRooms />
+                </TabPanel>
 
-              <TabPanel>
-                <NftsTab />
-              </TabPanel>
-            </TabPanels>
-          </TabGroup>
-        </div>
+                <TabPanel>
+                  <NftsTab />
+                </TabPanel>
+              </TabPanels>
+            </TabGroup>
+          </div>
 
-        {postId && (
-          <DeletePostDialog id={postId} show={showPostDelete} onClose={() => setShowPostDelete(false)} />
-        )}
-        {post && (
-          <EditPostDialog post={post} show={showPostEdit} onClose={() => setShowPostEdit(false)} />
-        )}
+          {postId && (
+            <DeletePostDialog
+              id={postId}
+              show={showPostDelete}
+              onClose={() => setShowPostDelete(false)}
+            />
+          )}
+          {post && (
+            <EditPostDialog
+              post={post}
+              show={showPostEdit}
+              onClose={() => setShowPostEdit(false)}
+            />
+          )}
 
-        <FloatingCreatePostButton />
+          <FloatingCreatePostButton />
 
-        {showEdit && (
-          <EditProfileModal
-            form={form}
-            onChange={handleChange}
-            onClose={() => setShowEdit(false)}
-            onSave={handleSave}
-            saving={saving}
-          />
-        )}
-      </> : <></>}
+          {showEdit && (
+            <EditProfileModal
+              form={form}
+              onChange={handleChange}
+              onClose={() => setShowEdit(false)}
+              onSave={handleSave}
+              saving={saving}
+            />
+          )}
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 }
@@ -182,9 +197,12 @@ function ProfileHeader({
   onEditClick: () => void;
 }) {
   return (
-    <div style={{
-      boxShadow: '0px 12px 13px -6px #14E3CD14'
-    }} className="p-3 rounded-bl-3xl rounded-br-3xl flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 gap-8">
+    <div
+      style={{
+        boxShadow: "0px 12px 13px -6px #14E3CD14",
+      }}
+      className="p-3 rounded-bl-3xl rounded-br-3xl flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 gap-8"
+    >
       <div className="flex items-center gap-6">
         <div>
           <Image
@@ -201,23 +219,39 @@ function ProfileHeader({
 
         <div>
           <div className="flex gap-6 mb-3">
-            {[{ id: "posts", name: "Posts", "link": "" }, { id: "followers", name: "Followers", "link": `/user/followers?u=${profile?.username}` }, { id: "following", name: "Following", "link": `/user/following?u=${profile?.username}` }].map((row) => (
-              (!row.link ?
+            {[
+              { id: "posts", name: "Posts", link: "" },
+              {
+                id: "followers",
+                name: "Followers",
+                link: `/user/followers?u=${profile?.username}`,
+              },
+              {
+                id: "following",
+                name: "Following",
+                link: `/user/following?u=${profile?.username}`,
+              },
+            ].map((row) =>
+              !row.link ? (
                 <div key={row.id}>
                   <div className="text-sm text-tertiary uppercase mb-1">
                     {row.name}
                   </div>
-                  <div className="text-2xl font-fredoka font-semibold">{stats?.[row.id] ?? 0}</div>
+                  <div className="text-2xl font-fredoka font-semibold">
+                    {stats?.[row.id] ?? 0}
+                  </div>
                 </div>
-                :
+              ) : (
                 <Link key={row.id} href={row.link}>
                   <div className="text-sm text-tertiary uppercase mb-1">
                     {row.name}
                   </div>
-                  <div className="text-2xl font-fredoka font-semibold">{stats?.[row.id] ?? 0}</div>
+                  <div className="text-2xl font-fredoka font-semibold">
+                    {stats?.[row.id] ?? 0}
+                  </div>
                 </Link>
               )
-            ))}
+            )}
           </div>
           <div className="text-grey-100 text-sm space-y-0.5">
             <div>{profile?.title ?? "--"}</div>
@@ -249,8 +283,12 @@ function QuestsSection() {
   return (
     <div className="rounded-2xl px-10 py-8 glass-effect__light mb-12">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold text-grey-500 font-fredoka">Quests</h2>
-        <button className="text-sm text-teal-300 hover:underline">View All</button>
+        <h2 className="text-lg font-semibold text-grey-500 font-fredoka">
+          Quests
+        </h2>
+        <button className="text-sm text-teal-300 hover:underline">
+          View All
+        </button>
       </div>
       <ul className="grid grid-cols-2 gap-4">
         <Quest />
@@ -262,8 +300,12 @@ function QuestsSection() {
 function EmptyPostsState() {
   return (
     <div className="flex flex-col items-center justify-center py-20 border border-teal-border rounded-xl">
-      <h3 className="text-base font-semibold mb-2 text-dark-white">No post has been made yet</h3>
-      <p className="text-light-grey mb-8">Create your first post to get started</p>
+      <h3 className="text-base font-semibold mb-2 text-dark-white">
+        No post has been made yet
+      </h3>
+      <p className="text-light-grey mb-8">
+        Create your first post to get started
+      </p>
       <CreatePostButtons />
     </div>
   );
@@ -279,7 +321,9 @@ function EditProfileModal({
   saving,
 }: {
   form: Partial<IUser>;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
   onClose: () => void;
   onSave: () => void;
   saving: boolean;
@@ -294,7 +338,9 @@ function EditProfileModal({
           <X size={32} />
         </button>
 
-        <h2 className="text-2xl font-normal pt-4 pb-2 text-left text-zinc-300/80">Edit Profile</h2>
+        <h2 className="text-2xl font-normal pt-4 pb-2 text-left text-zinc-300/80">
+          Edit Profile
+        </h2>
         <div className="text-sm font-normal text-emerald-200 mb-4">
           Update your account info
         </div>

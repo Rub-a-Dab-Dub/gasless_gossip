@@ -3,20 +3,23 @@
 import { Dialog, DialogPanel } from "@headlessui/react";
 import { Gift, ArrowRight } from "lucide-react";
 import React, { useState } from "react";
-import Avatar from "@/components/ui/Avatar"
+import Avatar from "@/components/ui/Avatar";
 import { usePathname } from "next/navigation";
 import CreateSuccessDialog from "@/components/CreateSuccessDialog";
 import toast from "react-hot-toast";
 import api from "@/lib/axios";
 import { ApiResponse } from "@/types/api";
-import {GiftIcon, UploadImageIcon} from "@/components/icons";
+import { GiftIcon, UploadImageIcon } from "@/components/icons";
 
 interface CreatePostDialogProps {
   show: boolean;
   onClose: () => void;
 }
 
-export default function CreatePostDialog({ show, onClose }: CreatePostDialogProps) {
+export default function CreatePostDialog({
+  show,
+  onClose,
+}: CreatePostDialogProps) {
   const [content, setContent] = useState("");
   const [isPosting, setIsPosting] = useState(false);
   const [isPosted, setIsPosted] = useState(false);
@@ -27,15 +30,15 @@ export default function CreatePostDialog({ show, onClose }: CreatePostDialogProp
       setIsPosting(true);
       const res = await api.post<ApiResponse>(`posts`, { content });
       if (res.data.error) {
-        toast.error(res.data.message ?? "Failed")
+        toast.error(res.data.message ?? "Failed");
         return;
       }
-      toast.success(res.data.data.message)
+      toast.success(res.data.data.message);
       setIsPosted(true);
       setContent("");
       onClose();
     } catch (error) {
-      toast.error("Unable to create post, an error occurred..")
+      toast.error("Unable to create post, an error occurred..");
       console.error("Error posting:", error);
     } finally {
       setIsPosting(false);
@@ -51,11 +54,17 @@ export default function CreatePostDialog({ show, onClose }: CreatePostDialogProp
   return (
     <>
       <Dialog open={show} onClose={onClose} className="relative z-50">
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" aria-hidden="true" />
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm"
+          aria-hidden="true"
+        />
         <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel style={{
-            boxShadow: '0px 14px 13px 0px #14E3CD14'
-          }} className="w-full max-w-5xl -mt-[12rem] bg-dark-900 border border-[#14F1D9]/30 rounded-3xl">
+          <DialogPanel
+            style={{
+              boxShadow: "0px 14px 13px 0px #14E3CD14",
+            }}
+            className="w-full max-w-5xl -mt-[12rem] bg-dark-900 border border-[#14F1D9]/30 rounded-3xl"
+          >
             <div className="p-6">
               <div className="flex gap-4">
                 <Avatar />
@@ -75,7 +84,7 @@ export default function CreatePostDialog({ show, onClose }: CreatePostDialogProp
                     <UploadImageIcon />
                   </button>
                   <button className="p-2 text-[#14F1D9] hover:bg-[#14F1D9]/10 rounded-lg">
-                    <GiftIcon/>
+                    <GiftIcon />
                   </button>
                 </div>
 
@@ -86,22 +95,24 @@ export default function CreatePostDialog({ show, onClose }: CreatePostDialogProp
                 >
                   <span className="w-12 h-12 bg-light-teal text-black rounded-full flex items-center justify-center">
                     <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="24"
-                          height="24"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="lucide lucide-plus-icon lucide-plus"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="lucide lucide-plus-icon lucide-plus"
                     >
-                      <path d="M5 12h14"/>
-                      <path d="M12 5v14"/>
+                      <path d="M5 12h14" />
+                      <path d="M12 5v14" />
                     </svg>
                   </span>
-                  <span className="text-sm font-bold text-light-teal">Post</span>
+                  <span className="text-sm font-bold text-light-teal">
+                    Post
+                  </span>
                 </button>
               </div>
             </div>
@@ -109,7 +120,12 @@ export default function CreatePostDialog({ show, onClose }: CreatePostDialogProp
         </div>
       </Dialog>
 
-      <CreateSuccessDialog action="post" isOpen={isPosted} onClose={() => setIsPosted(false)} xpEarned={30}/>
+      <CreateSuccessDialog
+        action="post"
+        isOpen={isPosted}
+        onClose={() => setIsPosted(false)}
+        xpEarned={30}
+      />
     </>
   );
 }
