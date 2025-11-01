@@ -46,7 +46,7 @@ export class UsersController {
     );
   }
 
-  @Post(':id/follow')
+  @Get(':id/follow')
   @UseGuards(JwtAuthGuard)
   async followUser(
     @Param('id', ParseIntPipe) followedId: number,
@@ -56,7 +56,7 @@ export class UsersController {
     return this.usersService.followUser(followerId, followedId);
   }
 
-  @Delete(':id/unfollow')
+  @Get(':id/unfollow')
   @UseGuards(JwtAuthGuard)
   async unfollowUser(
     @Param('id', ParseIntPipe) followedId: number,
@@ -70,6 +70,21 @@ export class UsersController {
   async totalUserCount() {
     return this.usersService.totalUserCount();
   }
+
+  @Get('all')
+  @UseGuards(JwtAuthGuard)
+  async allUsers(@Query('search') search: string, @Request() req) {
+    const { userId } = req.user;
+    return this.usersService.allUsers(userId, search);
+  }
+
+  @Get('profile/:username')
+  @UseGuards(JwtAuthGuard)
+  async viewProfile(@Param('username') username: string, @Request() req) {
+    const { userId } = req.user;
+    return this.usersService.viewUser(username, userId);
+  }
+
   @Get('search')
   @UseGuards(JwtAuthGuard)
   async search(@Query('username') username: string, @Request() req) {
@@ -87,19 +102,25 @@ export class UsersController {
     return this.usersService.findById(id);
   }
 
-  @Get('/profile/:username')
-  async viewUserByUsername(@Param('username') username: string) {
-    return this.usersService.findByUsername(username);
+  // @Get('/profile/:username')
+  // async viewUserByUsername(@Param('username') username: string) {
+  //   return this.usersService.findByUsername(username);
+  // }
+
+  @Get(':username/followers')
+  async listFollowers(
+    @Param('username') username: string,
+    @Query('search') search: string,
+  ) {
+    return this.usersService.getFollowers(username, search);
   }
 
-  @Get(':id/followers')
-  async listFollowers(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.getFollowers(id);
-  }
-
-  @Get(':id/following')
-  async listFollowing(@Param('id', ParseIntPipe) id: number) {
-    return this.usersService.getFollowing(id);
+  @Get(':username/following')
+  async listFollowing(
+    @Param('username') username: string,
+    @Query('search') search: string,
+  ) {
+    return this.usersService.getFollowing(username, search);
   }
 
   @Post('logout')

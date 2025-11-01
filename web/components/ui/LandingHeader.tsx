@@ -42,7 +42,7 @@ export default function Header() {
   const handleGetStarted = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (isAuthenticated) {
-      router.push("/dashboard");
+      router.push("/feed");
     } else {
       router.push("/auth");
     }

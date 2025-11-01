@@ -117,7 +117,7 @@ export default function Auth() {
       setToCookie("token", res.data.data.token);
       setToLocalStorage("user", JSON.stringify(res.data.data.user));
       if (page === "login") {
-        router.push("/dashboard");
+        router.push("/feed");
       } else {
         setSignupSuccess(true);
       }

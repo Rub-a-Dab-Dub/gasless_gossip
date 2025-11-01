@@ -61,7 +61,7 @@ export default function WelcomeScreen({ username }: WelcomeScreenProps) {
 
           {/* Continue Button */}
           <button
-            onClick={() => router.push("/dashboard")}
+            onClick={() => router.push("/feed")}
             className="w-73 justify-center bg-[linear-gradient(135deg,_#15FDE4_100%,_#13E5CE_0%)]
   shadow-[inset_-6px_-6px_12px_#1E9E90,_inset_6px_6px_10px_#24FFE7] cursor-pointer hover:bg-cyan-500 text-black font-semibold px-12 py-3 rounded-full inline-flex items-center gap-2 transition-all"
           >

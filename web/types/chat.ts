@@ -1,7 +1,7 @@
 import { ILastMessage, IMessages } from "./message";
 export interface UserSearchResult {
   id: number;
-  username: string | null;
+  username: string;
   photo: string | null;
   title: string | null;
   chat_id: number | null;

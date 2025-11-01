@@ -180,7 +180,7 @@ export default function Landing() {
                 through the blockchain’s most rewarding social playground.
               </p>
               <Link
-                href={isAuthenticated ? "/dashboard" : "/auth"}
+                href={isAuthenticated ? "/feed" : "/auth"}
                 className="inline-flex items-center gap-3 text-[#121418] px-8 py-4 font-medium transition-all duration-200 font-fredoka"
                 style={{
                   borderRadius: "32px",
@@ -324,7 +324,7 @@ export default function Landing() {
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
-                  href={isAuthenticated ? "/dashboard" : "/auth"}
+                  href={isAuthenticated ? "/feed" : "/auth"}
                   className="inline-flex items-center gap-3 text-[#121418] px-8 py-4 font-medium transition-all duration-200 font-fredoka"
                   style={{
                     borderRadius: "32px",
@@ -613,7 +613,7 @@ export default function Landing() {
           {/* Launch App Button */}
           <div className="flex justify-end mt-12">
             <Link
-              href={isAuthenticated ? "/dashboard" : "/auth"}
+              href={isAuthenticated ? "/feed" : "/auth"}
               className="inline-flex items-center gap-3 text-[#121418] px-8 py-4 font-medium transition-all duration-200 font-fredoka"
               style={{
                 borderRadius: "32px",
@@ -889,7 +889,7 @@ export default function Landing() {
           {/* Launch App Button - Bottom Left */}
           <div className="flex justify-start">
             <Link
-              href={isAuthenticated ? "/dashboard" : "/auth"}
+              href={isAuthenticated ? "/feed" : "/auth"}
               className="inline-flex items-center gap-3 text-[#121418] px-8 py-4 font-medium transition-all duration-200 font-fredoka"
               style={{
                 borderRadius: "32px",

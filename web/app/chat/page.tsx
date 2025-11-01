@@ -21,15 +21,19 @@ import toast from "react-hot-toast";
 import { IChat, UserSearchResult } from "@/types/chat";
 import { useAuth } from "@/hooks/useAuth";
 import { timeAgo } from "@/utils/date";
+import { useSearchParams } from "next/navigation";
 
 export default function ChatInterface() {
+  const searchParams = useSearchParams();
+  const cid = searchParams.get("cid") ?? null;
+  const username = searchParams.get("u") ?? null;
   const { user } = useAuth();
   const [message, setMessage] = useState("")
   const [selectedUser, setSelectedUser] = useState<UserSearchResult | null>(null)
-  const [chatId, setChatId] = useState<number | null>(null)
+  const [chatId, setChatId] = useState<number | null>(cid ? Number(cid) : null)
   const [chat, setChat] = useState<IChat | null>(null);
   const [chats, setChats] = useState<IChat[]>([]);
-  const [userSearch, setUserSearch] = useState<string>("")
+  const [userSearch, setUserSearch] = useState<string>(username ? String(username) : "")
   const [userSearchResults, setUserSearchResults] = useState<UserSearchResult[]>([]);
   const [isSendTokenOpen, setIsSendTokenOpen] = useState(false)
 
@@ -47,10 +51,17 @@ export default function ChatInterface() {
   useEffect(() => {
     getAllChats()
   }, [])
+
+
   const getChat = async () => {
     try {
       const res = await api.get<ApiResponse>(`/chats/${chatId}`)
-      if (!res.data.error) setChat(res.data.data)
+      if (!res.data.error) {
+        const chat = res.data.data;
+        const me = chat.sender.username === user?.username ? chat.receiver : chat.sender;
+        setChat(chat)
+        setSelectedUser(me)
+      }
     } catch {
       toast.error("Failed to fetch chat")
     }
@@ -65,6 +76,22 @@ export default function ChatInterface() {
     getChat();
   }, [chatId])
 
+  const searchUser = async (u: string) => {
+    try {
+      const res = await api.get<ApiResponse>(`/users/search?username=${u}`)
+      const data = res.data.error ? [] : res.data.data
+      if (data.length > 0) {
+        data.map((user: UserSearchResult) => {
+          if (user && (user?.username).toLowerCase().trim() === u.toLowerCase().trim()) {
+            setSelectedUser(user)
+          }
+        })
+      }
+      return data;
+    } catch {
+      return []
+    }
+  }
   // User search
   useEffect(() => {
     if (userSearch.length < 3) {
@@ -73,26 +100,25 @@ export default function ChatInterface() {
     }
 
     let isMounted = true
-    const searchUser = async () => {
+    const getSearchUser = async () => {
       setIsLoading(true)
       try {
-        const res = await api.get<ApiResponse>(`/users/search?username=${userSearch}`)
+        const data = await searchUser(userSearch);
         if (isMounted) {
-          setUserSearchResults(res.data.error ? [] : res.data.data)
+          setUserSearchResults(data)
         }
       } catch {
-        if (isMounted) setUserSearchResults([])
-      } finally {
         setIsLoading(false)
       }
     }
 
-    const delay = setTimeout(searchUser, 500)
+    const delay = setTimeout(getSearchUser, 500)
     return () => {
       isMounted = false
       clearTimeout(delay)
     }
   }, [userSearch])
+
 
   // Create new chat
   const handleCreateNewChat = async (username: string | null) => {
@@ -260,10 +286,10 @@ export default function ChatInterface() {
               {/* Chat Header */}
               <header className="w-full h-[296px] z-0 -mt-[112px] fixed flex items-end justify-between text-white p-4 border-b border-teal-500 bg-black">
                 <div className="flex items-center gap-3">
-                  <button className="md:hidden" onClick={() => { 
+                  <button className="md:hidden" onClick={() => {
                     setChatId(null);
                     getAllChats();
-                    }}>
+                  }}>
                     <ArrowLeft className="text-gray-400 w-6 h-6" />
                   </button>
                   <span
@@ -290,7 +316,7 @@ export default function ChatInterface() {
 
               <div className="w-full h-full">
                 {!chatId ?
-                  <div className="flex flex-col flex-1 items-center justify-center text-center space-y-4 p-6">
+                  <div className="flex flex-col flex-1 h-full items-center justify-center text-center space-y-4 p-6">
                     <MessageCircleWarningIcon className="w-16 h-16 text-teal-400/80" />
                     <h3 className="text-xl font-semibold text-white font-fredoka">
                       Start a Conversation
