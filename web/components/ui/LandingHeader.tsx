@@ -50,7 +50,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="fixed hidden md:block top-0 left-0 right-0 z-100 overflow-hidden md:bg-black">
+      <header className="fixed hidden md:block top-0 left-0 right-0 z-100 overflow-hidden bg-[#121418]">
         <div className=" mx-auto md:px-0 px-6 py-4 flex items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-48 gap-2 hidden md:flex px-14">
