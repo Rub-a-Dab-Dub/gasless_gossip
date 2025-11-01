@@ -31,7 +31,6 @@ export class Post {
   @OneToMany(() => Like, (like) => like.post, { cascade: true })
   likes: Like[];
 
-
   @RelationCount((post: Post) => post.comments)
   commentCount: number;
 

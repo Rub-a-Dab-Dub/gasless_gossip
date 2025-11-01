@@ -76,8 +76,8 @@ export class StarknetService implements OnModuleInit {
   // ============================================================
 
   async onModuleInit() {
-    await this.healthCheck();
-    await this.validateAccountDeployment();
+    // await this.healthCheck();
+    // await this.validateAccountDeployment();
     // await this.ensureAccountHasFunds();
   }
 

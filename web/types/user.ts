@@ -1,13 +1,12 @@
 import { IChat } from "./chat";
 import { IMessage } from "./message";
-import { IComment, ILike, IPost } from "./post";
+import { IComment, ILike, IPost, IPostList } from "./post";
 import { IRoomMember } from "./room";
 import { IWallet } from "./wallet";
 
 export interface IUser {
   id: number;
   username: string;
-  password: string;
   photo?: string | null;
   email?: string | null;
   address?: string | null;
@@ -27,6 +26,13 @@ export interface IUser {
   wallet: IWallet[];
 }
 
+export interface IAllUser {
+  id: number;
+  username: string;
+  photo?: string | null;
+  title?: string | null;
+  about?: string | null;
+}
 export interface IUpdateProfile {
   photo?: string;
   email?: string;
@@ -45,4 +51,18 @@ export interface IProfileStats {
   posts?: number;
   followers?: number;
   following?: number;
+}
+
+export interface IUserStats {
+  posts: number;
+  followers: number;
+  following: number;
+}
+export interface ViewUser {
+  user: IAllUser;
+  stats: IUserStats;
+  isFollowing: boolean;
+  isFollowedBy: boolean;
+  posts: IPostList[];
+  chat: null | number;
 }

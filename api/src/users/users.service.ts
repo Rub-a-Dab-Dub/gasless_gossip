@@ -10,13 +10,14 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { Post } from '../posts/entities/post.entity';
-import { ILike } from 'typeorm';
+import { ChatsService } from 'src/chats/chats.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
     @InjectRepository(Post) private postsRepository: Repository<Post>,
+    private readonly chatService: ChatsService,
   ) {}
 
   async totalUserCount(): Promise<number> {
@@ -35,16 +36,71 @@ export class UsersService {
     return user;
   }
 
-  async searchByUsername(username: string): Promise<User[]> {
-    const users = await this.usersRepository.find({
-      where: { username: ILike(`%${username}%`) },
-      select: ['id', 'username', 'photo', 'title'],
-    });
-
-    if (!users.length) {
-      throw new NotFoundException('User not found');
+  async searchByUsername(
+    username: string,
+    userId: number,
+  ): Promise<
+    {
+      id: number;
+      username: string;
+      photo: string | null;
+      title: string | null;
+      chat_id: number | null;
+    }[]
+  > {
+    const searchTerm = `%${username}%`.trim();
+    if (!searchTerm || searchTerm === '%%') {
+      throw new NotFoundException('Invalid search term');
     }
-    return users;
+
+    const qb = this.usersRepository
+      .createQueryBuilder('user')
+      .leftJoin(
+        'chats',
+        'chat',
+        `
+        chat.isGroup = false AND
+        (
+          (chat.senderId = :userId AND chat.receiverId = user.id) OR
+          (chat.senderId = user.id AND chat.receiverId = :userId)
+        )
+      `,
+        { userId },
+      )
+      .where('user.username ILIKE :searchTerm', { searchTerm })
+      .andWhere('user.id != :userId', { userId })
+      .select([
+        'user.id AS user_id',
+        'user.username AS user_username',
+        'user.photo AS user_photo',
+        'user.title AS user_title',
+        'chat.id AS chat_id',
+        'chat.createdAt AS chat_createdAt',
+      ])
+      .orderBy('chat_createdAt', 'DESC')
+      .addOrderBy('user_username', 'ASC');
+
+    const rawResults = await qb.getRawMany();
+
+    // if (rawResults.length === 0) {
+    //   throw new NotFoundException('User not found');
+    // }
+    const seen = new Set<number>();
+    const results = rawResults
+      .filter((row) => {
+        if (seen.has(row.user_id)) return false;
+        seen.add(row.user_id);
+        return true;
+      })
+      .map((row) => ({
+        id: row.user_id,
+        username: row.user_username,
+        photo: row.user_photo,
+        title: row.user_title,
+        chat_id: row.chat_id,
+      }));
+
+    return results;
   }
 
   async updateProfile(id: number, updateData: Partial<User>): Promise<User> {
@@ -150,37 +206,111 @@ export class UsersService {
     return { message: 'Unfollowed successfully' };
   }
 
-  async getFollowers(userId: number) {
+  async getFollowers(username: string, search?: string) {
     const user = await this.usersRepository.findOne({
-      where: { id: userId },
+      where: { username },
       relations: ['followers'],
     });
 
     if (!user) throw new NotFoundException('User not found');
+    let followers = user.followers.map((f) => ({
+      id: f.id,
+      username: f.username,
+      photo: f.photo,
+    }));
 
-    return {
-      users: user.followers.map((f) => ({
-        id: f.id,
-        username: f.username,
-        photo: f.photo,
-      })),
-    };
+    if (search) {
+      const searchLower = search.toLowerCase();
+      followers = followers.filter((f) =>
+        f.username.toLowerCase().includes(searchLower),
+      );
+    }
+
+    return followers;
   }
 
-  async getFollowing(userId: number) {
+  async getFollowing(username: string, search?: string) {
     const user = await this.usersRepository.findOne({
-      where: { id: userId },
+      where: { username },
       relations: ['following'],
     });
 
     if (!user) throw new NotFoundException('User not found');
 
+    let following = user.following.map((f) => ({
+      id: f.id,
+      username: f.username,
+      photo: f.photo,
+    }));
+
+    if (search) {
+      const searchLower = search.toLowerCase();
+      following = following.filter((f) =>
+        f.username.toLowerCase().includes(searchLower),
+      );
+    }
+
+    return following;
+  }
+
+  async allUsers(userId: number, search?: string) {
+    const query = this.usersRepository
+      .createQueryBuilder('user')
+      .select(['user.id', 'user.username', 'user.photo', 'user.title'])
+      .where('user.id != :userId', { userId });
+
+    if (search && search.trim() !== '') {
+      query.andWhere('user.username ILIKE :search', { search: `%${search}%` });
+    }
+
+    const users = await query.orderBy('RANDOM()').getMany();
+
+    return { users };
+  }
+
+  async viewUser(username: string, userId: number) {
+    const user = await this.usersRepository.findOne({
+      where: { username },
+      relations: ['followers', 'following', 'posts'],
+    });
+
+    if (!user) throw new NotFoundException('User not found');
+
+    const profileStats = {
+      posts: user.posts?.length || 0,
+      followers: user.followers?.length || 0,
+      following: user.following?.length || 0,
+    };
+
+    const isFollowing = user.followers.some((f) => f.id === userId);
+    const isFollowedBy = user.following.some((f) => f.id === userId);
+
+    const _posts = await this.postsRepository.find({
+      where: { author: { id: user.id } },
+      relations: ['likes', 'likes.user'],
+      order: { id: 'DESC' },
+    });
+
+    const posts = _posts.map((post) => ({
+      ...post,
+      hasLiked: post.likes?.some((like) => like.user?.id === userId) || false,
+    }));
+
+    const chat = await this.chatService.hasChatReturnChatId(userId, user.id);
+
     return {
-      users: user.following.map((f) => ({
-        id: f.id,
-        username: f.username,
-        photo: f.photo,
-      })),
+      user: {
+        id: user.id,
+        username: user.username,
+        photo: user.photo,
+        title: user.title,
+        about: user.about,
+      },
+      chat,
+      stats: profileStats,
+      isFollowing,
+      isFollowedBy,
+      posts,
     };
   }
 }

@@ -61,5 +61,5 @@ export interface IPostList {
   likeCount: number;
   commentCount: number;
   hasLiked: boolean;
-  author: IPostListAuthor;
+  author?: IPostListAuthor;
 }

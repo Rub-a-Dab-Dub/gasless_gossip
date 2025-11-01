@@ -31,7 +31,7 @@ import { deleteFromCookie } from '@/lib/cookies';
 import { deleteFromLocalStorage } from '@/lib/local-storage';
 
 const navigation = [
-  { name: 'home', icon: HomeIcon, href: '/' },
+  { name: 'home', icon: HomeIcon, href: '/feed' },
   { name: 'quests', icon: QuestIcon, href: '/quests' },
   { name: 'chats', icon: ChatsIcon, href: '/chat' },
   { name: 'rooms', icon: RoomIcon, href: '/rooms' },
@@ -51,7 +51,7 @@ export default function Header() {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 sm:border-b border-[#181E1D] bg-[#121418] z-[98] overflow-hidden">
+    <header className="fixed top-0 left-0 right-0 sm:border-b border-[#181E1D] bg-[#121418] z-[98] overflow-hidden h-[110px]">
       <div className="max-w-7xl mx-auto md:px-0 px-6 py-4 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-2 hidden md:flex">

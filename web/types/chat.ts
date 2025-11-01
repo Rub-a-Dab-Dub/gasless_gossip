@@ -1,11 +1,32 @@
-import { IMessage } from "./message";
-import { IUser } from "./user";
+import { ILastMessage, IMessages } from "./message";
+export interface UserSearchResult {
+  id: number;
+  username: string;
+  photo: string | null;
+  title: string | null;
+  chat_id: number | null;
+}
 
+export interface ISender {
+  id: number;
+  username: string;
+  photo: string | null;
+  title: string | null;
+}
+
+export interface IReceiver {
+  id: number;
+  username: string;
+  photo: string | null;
+  title: string | null;
+}
 export interface IChat {
   id: number;
-  sender: IUser; 
-  receiver: IUser; 
+  sender: ISender;
+  receiver: IReceiver;
+  messages: IMessages[];
   isGroup: boolean;
-  createdAt: string; 
-  messages: IMessage[];
+  createdAt: string;
+  unreadCount?: number;
+  lastMessage?: ILastMessage;
 }
