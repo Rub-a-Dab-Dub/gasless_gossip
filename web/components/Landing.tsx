@@ -19,7 +19,7 @@ import Partner1 from "@/images/partners/partner-1.png";
 import Partner2 from "@/images/partners/partner-2.png";
 import Partner3 from "@/images/partners/partner-3.png";
 
-import HeroImage from "@/images/photos/hero-image.svg";
+import HeroImage from "@/public/hero-image.svg";
 import HeroImageMobile from "@/images/photos/hero-image-mobile.svg";
 import api from "@/lib/axios";
 import { ApiResponse } from "@/types/api";
@@ -67,11 +67,11 @@ export default function Landing() {
     <div className="overflow-hidden">
       <div
         className="
-        bg-black hero relative pb-16 min-h-screen bg-cover bg-center bg-no-repeat bg-[url('/wave-hero-pattern-mobile.png')] md:bg-[url('/wave-hero-pattern.png')]"
+        bg-[] hero relative pb-16 min-h-screen bg-cover bg-center bg-no-repeat bg-[url('/wave-hero-pattern-mobile.png')] md:bg-[url('/wave-hero-pattern.png')]"
         style={{
           backgroundSize: "cover",
           backgroundBlendMode: "difference",
-          backgroundColor: "#121418",
+          backgroundColor: "",
           clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
         }}
       >
@@ -272,7 +272,7 @@ export default function Landing() {
           {/* 19.4k USERS */}
           <div className="">
             <div className="text-2xl mx-auto bg-[#1C1E22] rounded-full w-20 h-20 flex items-center justify-center font-medium text-white mb-2">
-              20.0k
+              {isLoading ? <Spinner /> : userCount}
             </div>
             <div className="text-sm text-[#A3A9A6] uppercase text-center tracking-wide">
               Users
@@ -282,7 +282,7 @@ export default function Landing() {
           {/* 8k ROOMS */}
           <div className="">
             <div className="text-2xl mx-auto bg-[#1C1E22] rounded-full w-20 h-20 flex items-center justify-center font-medium text-white mb-2">
-              0
+              {isLoading ? <Spinner /> : roomCount}
             </div>
             <div className="text-sm text-[#A3A9A6] uppercase text-center tracking-wide">
               Rooms
@@ -417,7 +417,7 @@ export default function Landing() {
       </section>
 
       {/* FAQ/Features Section */}
-      <section className="py-20 px-6 lg:px-12 bg-black">
+      <section className="py-20 px-6 lg:px-1">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="mb-12">
@@ -630,7 +630,7 @@ export default function Landing() {
       </section>
 
       {/* Frequently Asked Questions Section */}
-      <section className="py-20 px-6 lg:px-12 bg-black">
+      <section className="py-20 px-6 lg:px-12">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="mb-12">
@@ -933,12 +933,12 @@ export default function Landing() {
       <footer
         style={{
           backgroundSize: "cover",
-          backgroundBlendMode: "difference",
+          // backgroundBlendMode: "difference",
           backgroundColor: "#121418",
           clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
         }}
         className="
-          relative pb-10 pt-34 px-6 lg:px-12 bg-dark
+          relative pb-10 pt-34 px-6 lg:px-12 bg-[#121418]
           bg-[url('/wave-footer-pattern-mobile.png')]
           md:bg-[url('/wave-footer-pattern.png')]
         "
