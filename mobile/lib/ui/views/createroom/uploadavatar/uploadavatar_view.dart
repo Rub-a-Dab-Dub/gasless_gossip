@@ -372,26 +372,26 @@ class UploadavatarView extends StackedView<UploadavatarViewModel> {
   Widget _buildBottomToolbar(UploadavatarViewModel viewModel) {
     return Row(
       children: [
-          // Photo/Gallery Icon
-          GestureDetector(
-            onTap: viewModel.pickImages,
-            child: SvgPicture.asset(
-              AppAssets.gallery,
-              fit: BoxFit.none,
-            ),
+        // Photo/Gallery Icon
+        GestureDetector(
+          onTap: viewModel.pickImages,
+          child: SvgPicture.asset(
+            AppAssets.gallery,
+            fit: BoxFit.none,
           ),
-          const SizedBox(width: 30),
-          // GIF Icon (placeholder for now)
-          GestureDetector(
-            onTap: () {
-              // TODO: Implement GIF picker
-              // GIF picker tapped
-            },
-            child: SvgPicture.asset(
-              AppAssets.gift,
-              fit: BoxFit.none,
-            ),
+        ),
+        const SizedBox(width: 30),
+        // GIF Icon (placeholder for now)
+        GestureDetector(
+          onTap: () {
+            // TODO: Implement GIF picker
+            // GIF picker tapped
+          },
+          child: SvgPicture.asset(
+            AppAssets.gift,
+            fit: BoxFit.none,
           ),
+        ),
         const Spacer(),
         // Character count or additional options can go here
       ],

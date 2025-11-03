@@ -225,7 +225,6 @@ class ChatroomViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-
   void onEmojiTap() {
     // Open emoji picker
   }
@@ -310,7 +309,6 @@ class ChatroomViewModel extends BaseViewModel {
     clearNftSelection();
     hideBottomSheet();
   }
-
 
   @override
   void dispose() {

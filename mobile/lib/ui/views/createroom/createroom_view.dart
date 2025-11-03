@@ -290,7 +290,9 @@ class CreateroomView extends StackedView<CreateroomViewModel> {
             borderRadius: BorderRadius.circular(32),
             boxShadow: [
               BoxShadow(
-                color: isActive ? const Color(0xFF121418) : const Color(0xFF2F2F2F),
+                color: isActive
+                    ? const Color(0xFF121418)
+                    : const Color(0xFF2F2F2F),
                 offset: const Offset(0, 1),
                 blurRadius: 12,
                 inset: true,

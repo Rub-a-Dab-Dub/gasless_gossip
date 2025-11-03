@@ -260,7 +260,8 @@ class SignupView extends StackedView<SignupViewModel> {
                 AppAssets.vector1,
                 width: 90,
                 height: 115,
-                colorFilter: const ColorFilter.mode(Color(0xFF0E9186), BlendMode.srcIn),
+                colorFilter:
+                    const ColorFilter.mode(Color(0xFF0E9186), BlendMode.srcIn),
               ),
             ),
           ),
@@ -275,7 +276,8 @@ class SignupView extends StackedView<SignupViewModel> {
                 AppAssets.vector2,
                 width: 125,
                 height: 115,
-                colorFilter: const ColorFilter.mode(Color(0xFF0E9186), BlendMode.srcIn),
+                colorFilter:
+                    const ColorFilter.mode(Color(0xFF0E9186), BlendMode.srcIn),
               ),
             ),
           ),

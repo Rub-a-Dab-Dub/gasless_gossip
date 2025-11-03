@@ -625,7 +625,8 @@ class HomeView extends StackedView<HomeViewModel> {
                 ),
                 child: SvgPicture.asset(
                   AppAssets.room,
-                  colorFilter: const ColorFilter.mode(Color(0xFF14F1D9), BlendMode.srcIn),
+                  colorFilter: const ColorFilter.mode(
+                      Color(0xFF14F1D9), BlendMode.srcIn),
                   fit: BoxFit.none,
                 )),
             const SizedBox(width: 12),

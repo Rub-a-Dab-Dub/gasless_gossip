@@ -177,8 +177,7 @@ class CreatepostViewModel extends BaseViewModel {
       }
 
       // Navigate back to home and show success modal
-      _navigationService
-          .back(result: {'showSuccess': true, 'xp': earnedXP});
+      _navigationService.back(result: {'showSuccess': true, 'xp': earnedXP});
     } catch (e) {
       // Error creating post: $e
       // TODO: Show error dialog/snackbar

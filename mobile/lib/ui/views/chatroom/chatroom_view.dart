@@ -1088,7 +1088,8 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
           children: [
             TextField(
               controller: amountController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               textAlign: TextAlign.center,
               style: GoogleFonts.fredoka(
                 fontSize: 48,
