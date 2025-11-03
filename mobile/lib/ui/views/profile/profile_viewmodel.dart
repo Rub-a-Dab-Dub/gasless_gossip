@@ -137,12 +137,12 @@ class ProfileViewModel extends BaseViewModel {
 
   // Quest actions
   void onQuestTap(String questTitle) {
-    print("Quest tapped: $questTitle");
+    // Quest tapped: $questTitle
   }
 
   // Get started action for empty state
   void createNewPost() {
-    print("Get started tapped - navigate to create post");
+    // Get started tapped - navigate to create post
     // In real app, this would navigate to create post
   }
 

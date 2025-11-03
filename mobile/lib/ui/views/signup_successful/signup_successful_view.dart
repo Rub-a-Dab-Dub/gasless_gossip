@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_shadow/flutter_inset_shadow.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:stacked/stacked.dart';
 import 'package:mobile/ui/common/app_assets.dart';
@@ -23,7 +22,7 @@ class SignupSuccessfulView extends StackedView<SignupSuccessfulViewModel> {
       body: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
         child: Container(
-          color: const Color(0xFF121A19).withOpacity(0.88),
+          color: const Color(0xFF121A19).withValues(alpha: 0.88),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -48,7 +47,7 @@ class SignupSuccessfulView extends StackedView<SignupSuccessfulViewModel> {
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF14F1D9).withOpacity(0.12),
+            color: const Color(0xFF14F1D9).withValues(alpha: 0.12),
             blurRadius: 14,
             offset: const Offset(0, 4),
           ),

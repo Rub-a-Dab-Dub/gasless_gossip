@@ -40,7 +40,7 @@ class HomeViewModel extends BaseViewModel {
   }
 
   void onQuestTap() {
-    print("Quest tapped");
+    // Quest tapped
   }
 
   void onViewAllQuests() {

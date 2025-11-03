@@ -3,7 +3,6 @@ import 'package:flutter_inset_shadow/flutter_inset_shadow.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/ui/common/app_assets.dart';
-import 'package:mobile/ui/views/mypage/mypage_view.dart';
 import 'package:stacked/stacked.dart';
 
 import 'home_viewmodel.dart';
@@ -626,7 +625,7 @@ class HomeView extends StackedView<HomeViewModel> {
                 ),
                 child: SvgPicture.asset(
                   AppAssets.room,
-                  color: const Color(0xFF14F1D9),
+                  colorFilter: const ColorFilter.mode(Color(0xFF14F1D9), BlendMode.srcIn),
                   fit: BoxFit.none,
                 )),
             const SizedBox(width: 12),
@@ -656,7 +655,7 @@ class HomeView extends StackedView<HomeViewModel> {
           color: const Color(0xFF191E1D),
           borderRadius: BorderRadius.circular(32),
           border: Border.all(
-            color: Color(0xFF0F443E),
+            color: const Color(0xFF0F443E),
           ),
         ),
         child: Row(
@@ -746,7 +745,7 @@ class HomeView extends StackedView<HomeViewModel> {
     return GestureDetector(
       onTap: () {
         // Navigate to create post or show create options
-        print("Create post from My Page");
+        // Create post from My Page
       },
       child: Container(
         width: 48,
@@ -856,7 +855,7 @@ class SegmentedRingPainter extends CustomPainter {
 Widget _buildSuccessModal(BuildContext context, HomeViewModel viewModel) {
   return Positioned.fill(
     child: Container(
-      color: const Color(0xFF121A19).withOpacity(0.96),
+      color: const Color(0xFF121A19).withValues(alpha: 0.96),
       child: Column(
         children: [
           // Success Message at top
@@ -871,7 +870,7 @@ Widget _buildSuccessModal(BuildContext context, HomeViewModel viewModel) {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF14F1D9).withOpacity(0.12),
+                  color: const Color(0xFF14F1D9).withValues(alpha: 0.12),
                   blurRadius: 14,
                   offset: const Offset(0, 4),
                 ),

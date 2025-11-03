@@ -43,6 +43,6 @@ class SwapViewModel extends BaseViewModel {
 
     // Process the swap transaction
     // TODO: Implement actual swap logic
-    print('Swapping $_fromAmount to $_toAmount');
+    // Swapping $_fromAmount to $_toAmount
   }
 }

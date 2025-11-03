@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:mobile/app/app.router.dart';
 import 'package:mobile/ui/views/bottomnav/bottomnav_view.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:stacked/stacked.dart';
@@ -24,7 +23,7 @@ class UploadavatarViewModel extends BaseViewModel {
   File? get avatarImage => _avatarImage;
 
   // Additional images
-  List<File> _selectedImages = [];
+  final List<File> _selectedImages = [];
   List<File> get selectedImages => _selectedImages;
 
   // Room data from previous screen
@@ -58,7 +57,7 @@ class UploadavatarViewModel extends BaseViewModel {
         notifyListeners();
       }
     } catch (e) {
-      print('Error picking avatar: $e');
+      // Error picking avatar: $e
     }
   }
 
@@ -81,7 +80,7 @@ class UploadavatarViewModel extends BaseViewModel {
         notifyListeners();
       }
     } catch (e) {
-      print('Error picking images: $e');
+      // Error picking images: $e
     }
   }
 
@@ -102,7 +101,7 @@ class UploadavatarViewModel extends BaseViewModel {
         notifyListeners();
       }
     } catch (e) {
-      print('Error selecting from recent media: $e');
+      // Error selecting from recent media: $e
     }
   }
 
@@ -136,16 +135,16 @@ class UploadavatarViewModel extends BaseViewModel {
       } else if (permission == PermissionState.denied) {
         _permissionError =
             'Photo access denied. You can enable it in Settings.';
-        print('Photo permission denied');
+        // Photo permission denied
       } else if (permission == PermissionState.restricted) {
         _permissionError = 'Photo access is restricted on this device.';
-        print('Photo permission restricted');
+        // Photo permission restricted
       } else {
         _permissionError = 'Unable to access photos. Please check permissions.';
-        print('Photo permission state: $permission');
+        // Photo permission state: $permission
       }
     } catch (e) {
-      print('Error loading recent media: $e');
+      // Error loading recent media: $e
       _permissionError =
           'Failed to load recent photos. Using camera roll instead.';
       // Fallback: Don't show recent photos section if plugin fails

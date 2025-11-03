@@ -1,8 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_shadow/flutter_inset_shadow.dart';
-import 'package:flutter_svg/flutter_svg.dart'; // use this import
-import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/ui/common/app_assets.dart';
 import 'package:stacked/stacked.dart';
@@ -184,11 +183,11 @@ class SignupView extends StackedView<SignupViewModel> {
       width: w,
       height: h,
       decoration: BoxDecoration(
-        color: const Color(0xFF0F5951).withOpacity(0.16),
+        color: const Color(0xFF0F5951).withValues(alpha: 0.16),
         border: Border.all(color: const Color(0xFF0E9186), width: 2),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0F5951).withOpacity(0.24),
+            color: const Color(0xFF0F5951).withValues(alpha: 0.24),
             offset: const Offset(4, 8),
             blurRadius: 5.5,
           ),
@@ -197,77 +196,35 @@ class SignupView extends StackedView<SignupViewModel> {
     );
   }
 
-  // --- helper: try SVG, fallback to PNG (or a simple box) ---
-  Widget _svgOrFallback(String svgAssetPath,
-      {double? width, double? height, Color? color}) {
-    // We load the svg text, then attempt SvgPicture.string; if parsing fails
-    // we fall back to a same-named PNG (svg→png) or a decorated box.
-    return FutureBuilder<String>(
-      future: rootBundle.loadString(svgAssetPath),
-      builder: (ctx, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
-          // keep the original size while loading
-          return SizedBox(width: width, height: height);
-        }
-
-        if (snapshot.hasError || snapshot.data == null) {
-          // fallback attempt: try a .png with same name
-          final png = svgAssetPath.replaceAll('.svg', '.png');
-          return _pngOrFallback(png,
-              width: width, height: height, color: color);
-        }
-
-        // try to render the SVG string; catch if flutter_svg can't handle <filter/>
-        try {
-          return SvgPicture.string(
-            snapshot.data!,
-            width: width,
-            height: height,
-            color: color,
-            fit: BoxFit.contain,
-          );
-        } catch (e) {
-          // parsing failed (likely due to <filter/>); try PNG fallback
-          final png = svgAssetPath.replaceAll('.svg', '.png');
-          return _pngOrFallback(png,
-              width: width, height: height, color: color);
-        }
-      },
-    );
-  }
-
-  Widget _pngOrFallback(String pngAssetPath,
-      {double? width, double? height, Color? color}) {
-    // If you exported PNGs from Figma with the same base name, this will display them.
-    // If not present, show a decorative blurred box that matches the visual placement.
-    try {
-      return Image.asset(
-        pngAssetPath,
-        width: width,
-        height: height,
-        fit: BoxFit.contain,
-        color: color?.withOpacity(0.5),
-        colorBlendMode: color != null ? BlendMode.srcATop : null,
-      );
-    } catch (_) {
-      // final fallback: a decorated container (keeps placement)
-      return Container(
-        width: width,
-        height: height,
-        decoration: BoxDecoration(
-          color: const Color.fromRGBO(15, 89, 81, 0.16),
-          border: Border.all(color: const Color(0xFF0E9186), width: 2),
-          boxShadow: const [
-            BoxShadow(
-              color: Color.fromRGBO(15, 89, 81, 0.24),
-              offset: Offset(4, 8),
-              blurRadius: 2,
-            ),
-          ],
-        ),
-      );
-    }
-  }
+  // Widget _pngOrFallback(String pngAssetPath,
+  //     {double? width, double? height, Color? color}) {
+  //   try {
+  //     return Image.asset(
+  //       pngAssetPath,
+  //       width: width,
+  //       height: height,
+  //       fit: BoxFit.contain,
+  //       color: color?.withValues(alpha: 0.5),
+  //     );
+  //   } catch (_) {
+  //     // final fallback: a decorated container (keeps placement)
+  //     return Container(
+  //       width: width,
+  //       height: height,
+  //       decoration: BoxDecoration(
+  //         color: const Color.fromRGBO(15, 89, 81, 0.16),
+  //         border: Border.all(color: const Color(0xFF0E9186), width: 2),
+  //         boxShadow: const [
+  //           BoxShadow(
+  //             color: Color.fromRGBO(15, 89, 81, 0.24),
+  //             offset: Offset(4, 8),
+  //             blurRadius: 2,
+  //           ),
+  //         ],
+  //       ),
+  //     );
+  //   }
+  // }
 
   // Top section with logo and branding (placement preserved)
   Widget _buildTopSection() {
@@ -303,7 +260,7 @@ class SignupView extends StackedView<SignupViewModel> {
                 AppAssets.vector1,
                 width: 90,
                 height: 115,
-                color: const Color(0xFF0E9186).withOpacity(0.4),
+                colorFilter: const ColorFilter.mode(Color(0xFF0E9186), BlendMode.srcIn),
               ),
             ),
           ),
@@ -318,7 +275,7 @@ class SignupView extends StackedView<SignupViewModel> {
                 AppAssets.vector2,
                 width: 125,
                 height: 115,
-                color: const Color(0xFF0E9186).withOpacity(0.5),
+                colorFilter: const ColorFilter.mode(Color(0xFF0E9186), BlendMode.srcIn),
               ),
             ),
           ),
