@@ -78,7 +78,7 @@ class WalletView extends StackedView<WalletViewModel> {
               style: GoogleFonts.fredoka(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: Color(0xFFD6D8D3),
+                color: const Color(0xFFD6D8D3),
                 height: 1.14,
               ),
             ),
@@ -128,7 +128,7 @@ class WalletView extends StackedView<WalletViewModel> {
                     style: GoogleFonts.baloo2(
                       fontSize: 10,
                       fontWeight: FontWeight.w400,
-                      color: Color(0xFF0E9186),
+                      color: const Color(0xFF0E9186),
                       height: 1.2,
                     ),
                   ),
@@ -138,7 +138,7 @@ class WalletView extends StackedView<WalletViewModel> {
                     style: GoogleFonts.fredoka(
                       fontSize: 32,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFFF1F7F6),
+                      color: const Color(0xFFF1F7F6),
                       height: 1.22,
                     ),
                   ),
@@ -146,10 +146,10 @@ class WalletView extends StackedView<WalletViewModel> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.drag_handle,
                         size: 12,
-                        color: const Color(0xFF6B7A77),
+                        color: Color(0xFF6B7A77),
                       ),
                       const SizedBox(width: 2),
                       Text(
@@ -157,7 +157,7 @@ class WalletView extends StackedView<WalletViewModel> {
                         style: GoogleFonts.baloo2(
                           fontSize: 10,
                           fontWeight: FontWeight.w400,
-                          color: Color(0xFF6B7A77),
+                          color: const Color(0xFF6B7A77),
                           height: 1.2,
                         ),
                       ),
@@ -192,7 +192,7 @@ class WalletView extends StackedView<WalletViewModel> {
                       style: GoogleFonts.baloo2(
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
-                        color: Color(0xFFF1F7F6),
+                        color: const Color(0xFFF1F7F6),
                         height: 1.33,
                       ),
                     ),
@@ -242,7 +242,7 @@ class WalletView extends StackedView<WalletViewModel> {
           ),
         ),
 
-        SizedBox(height: 5),
+        const SizedBox(height: 5),
 
         // Wallet Address Section
         Container(
@@ -271,7 +271,7 @@ class WalletView extends StackedView<WalletViewModel> {
                 style: GoogleFonts.baloo2(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
-                  color: Color(0xFFF1F7F6),
+                  color: const Color(0xFFF1F7F6),
                   height: 1.14,
                 ),
               ),
@@ -284,7 +284,7 @@ class WalletView extends StackedView<WalletViewModel> {
                     style: GoogleFonts.baloo2(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
-                      color: Color(0xFFA3A9A6),
+                      color: const Color(0xFFA3A9A6),
                       height: 1.33,
                     ),
                   ),
@@ -386,7 +386,7 @@ class WalletView extends StackedView<WalletViewModel> {
             style: GoogleFonts.baloo2(
               fontSize: 16,
               fontWeight: FontWeight.w400,
-              color: Color(0xFFA3A9A6),
+              color: const Color(0xFFA3A9A6),
               height: 1.75,
             ),
           ),
@@ -422,7 +422,7 @@ class WalletView extends StackedView<WalletViewModel> {
             style: GoogleFonts.fredoka(
               fontSize: 16,
               fontWeight: FontWeight.w400,
-              color: Color(0xFFF1F7F6),
+              color: const Color(0xFFF1F7F6),
               height: 1.19,
               letterSpacing: -0.32,
             ),
@@ -433,7 +433,7 @@ class WalletView extends StackedView<WalletViewModel> {
             style: GoogleFonts.baloo2(
               fontSize: 12,
               fontWeight: FontWeight.w400,
-              color: Color(0xFFA3A9A6),
+              color: const Color(0xFFA3A9A6),
               height: 1.5,
               letterSpacing: -0.24,
             ),
@@ -446,11 +446,11 @@ class WalletView extends StackedView<WalletViewModel> {
               decoration: BoxDecoration(
                 color: const Color(0xFF121418),
                 borderRadius: BorderRadius.circular(32),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
-                      color: const Color(0xFF0F5951),
+                      color: Color(0xFF0F5951),
                       blurRadius: 12,
-                      offset: const Offset(0, 1),
+                      offset: Offset(0, 1),
                       spreadRadius: 0,
                       blurStyle: BlurStyle.inner,
                       inset: true),
@@ -464,7 +464,7 @@ class WalletView extends StackedView<WalletViewModel> {
                     style: GoogleFonts.fredoka(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF14F1D9),
+                      color: const Color(0xFF14F1D9),
                       height: 1.21,
                     ),
                   ),
@@ -874,17 +874,17 @@ class WalletView extends StackedView<WalletViewModel> {
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(vertical: 15),
-          decoration: BoxDecoration(
-            color: const Color(0xFF121A19),
-            borderRadius: const BorderRadius.only(
+          decoration: const BoxDecoration(
+            color: Color(0xFF121A19),
+            borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(12),
               bottomRight: Radius.circular(12),
             ),
             boxShadow: [
               BoxShadow(
-                color: const Color(0x1F14F1D9),
+                color: Color(0x1F14F1D9),
                 blurRadius: 5,
-                offset: const Offset(0, 4),
+                offset: Offset(0, 4),
               ),
             ],
           ),

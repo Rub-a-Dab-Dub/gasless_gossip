@@ -231,48 +231,6 @@ class UploadavatarView extends StackedView<UploadavatarViewModel> {
     );
   }
 
-  Widget _buildIcons(UploadavatarViewModel viewModel) {
-    return Row(
-      children: [
-        // Image Icon
-        GestureDetector(
-          onTap: viewModel.pickImages,
-          child: Container(
-            width: 24,
-            height: 24,
-            decoration: const BoxDecoration(
-              color: Color(0xFF0E9186),
-            ),
-            child: const Icon(
-              Icons.image_outlined,
-              size: 18,
-              color: Color(0xFFF1F7F6),
-            ),
-          ),
-        ),
-        const SizedBox(width: 32),
-        // Gift Icon
-        GestureDetector(
-          onTap: () {
-            // TODO: Implement gift functionality
-          },
-          child: Container(
-            width: 24,
-            height: 24,
-            decoration: const BoxDecoration(
-              color: Color(0xFF0E9186),
-            ),
-            child: const Icon(
-              Icons.card_giftcard_outlined,
-              size: 18,
-              color: Color(0xFFF1F7F6),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildRecentPhotosSection(UploadavatarViewModel viewModel) {
     // Don't show if there's a permission error
     if (viewModel.permissionError != null) {
@@ -341,7 +299,7 @@ class UploadavatarView extends StackedView<UploadavatarViewModel> {
         ),
         const SizedBox(height: 8),
         // Recent Photos Horizontal List
-        Container(
+        SizedBox(
           height: 80,
           child: viewModel.isLoadingMedia
               ? const Center(
@@ -412,33 +370,31 @@ class UploadavatarView extends StackedView<UploadavatarViewModel> {
   }
 
   Widget _buildBottomToolbar(UploadavatarViewModel viewModel) {
-    return Container(
-      child: Row(
-        children: [
-          // Photo/Gallery Icon
-          GestureDetector(
-            onTap: viewModel.pickImages,
-            child: SvgPicture.asset(
-              AppAssets.gallery,
-              fit: BoxFit.none,
-            ),
+    return Row(
+      children: [
+        // Photo/Gallery Icon
+        GestureDetector(
+          onTap: viewModel.pickImages,
+          child: SvgPicture.asset(
+            AppAssets.gallery,
+            fit: BoxFit.none,
           ),
-          const SizedBox(width: 30),
-          // GIF Icon (placeholder for now)
-          GestureDetector(
-            onTap: () {
-              // TODO: Implement GIF picker
-              print('GIF picker tapped');
-            },
-            child: SvgPicture.asset(
-              AppAssets.gift,
-              fit: BoxFit.none,
-            ),
+        ),
+        const SizedBox(width: 30),
+        // GIF Icon (placeholder for now)
+        GestureDetector(
+          onTap: () {
+            // TODO: Implement GIF picker
+            // GIF picker tapped
+          },
+          child: SvgPicture.asset(
+            AppAssets.gift,
+            fit: BoxFit.none,
           ),
-          const Spacer(),
-          // Character count or additional options can go here
-        ],
-      ),
+        ),
+        const Spacer(),
+        // Character count or additional options can go here
+      ],
     );
   }
 

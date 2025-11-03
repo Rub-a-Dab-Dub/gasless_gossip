@@ -21,12 +21,12 @@ class ReceiveScanViewModel extends BaseViewModel {
   void copyDomainName() {
     Clipboard.setData(ClipboardData(text: domainName));
     // TODO: Show snackbar/toast
-    print('Domain name copied: $domainName');
+    // Domain name copied: $domainName
   }
 
   void copyAccountAddress() {
     Clipboard.setData(ClipboardData(text: accountAddress));
     // TODO: Show snackbar/toast
-    print('Account address copied: $accountAddress');
+    // Account address copied: $accountAddress
   }
 }

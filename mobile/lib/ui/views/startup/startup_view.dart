@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile/ui/common/app_assets.dart';
 import 'package:stacked/stacked.dart';
 
@@ -27,8 +26,8 @@ class StartupView extends StackedView<StartupViewModel> {
 
           // 🧾 Overlay for title (optional: add gradient overlay if needed)
           Container(
-            color:
-                Colors.black.withOpacity(0.2), // subtle overlay for readability
+            color: Colors.black
+                .withValues(alpha: 0.2), // subtle overlay for readability
           ),
 
           // 🧠 Foreground content

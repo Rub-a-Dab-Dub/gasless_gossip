@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:mobile/app/app.router.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:mobile/app/app.locator.dart';
@@ -12,7 +10,7 @@ class CreatepostViewModel extends BaseViewModel {
   final _imagePicker = ImagePicker();
 
   String _postText = '';
-  List<File> _selectedImages = [];
+  final List<File> _selectedImages = [];
   List<AssetEntity> _recentMedia = [];
   bool _isDraft = false;
   bool _isLoadingMedia = false;
@@ -65,16 +63,16 @@ class CreatepostViewModel extends BaseViewModel {
       } else if (permission == PermissionState.denied) {
         _permissionError =
             'Photo access denied. You can enable it in Settings.';
-        print('Photo permission denied');
+        // Photo permission denied
       } else if (permission == PermissionState.restricted) {
         _permissionError = 'Photo access is restricted on this device.';
-        print('Photo permission restricted');
+        // Photo permission restricted
       } else {
         _permissionError = 'Unable to access photos. Please check permissions.';
-        print('Photo permission state: $permission');
+        // Photo permission state: $permission
       }
     } catch (e) {
-      print('Error loading recent media: $e');
+      // Error loading recent media: $e
       _permissionError =
           'Failed to load recent photos. Using camera roll instead.';
       // Fallback: Don't show recent photos section if plugin fails
@@ -95,7 +93,7 @@ class CreatepostViewModel extends BaseViewModel {
         notifyListeners();
       }
     } catch (e) {
-      print('Error selecting from recent media: $e');
+      // Error selecting from recent media: $e
     }
   }
 
@@ -115,7 +113,7 @@ class CreatepostViewModel extends BaseViewModel {
         notifyListeners();
       }
     } catch (e) {
-      print('Error picking image: $e');
+      // Error picking image: $e
     }
   }
 
@@ -135,7 +133,7 @@ class CreatepostViewModel extends BaseViewModel {
         notifyListeners();
       }
     } catch (e) {
-      print('Error taking photo: $e');
+      // Error taking photo: $e
     }
   }
 
@@ -149,7 +147,7 @@ class CreatepostViewModel extends BaseViewModel {
   void saveDraft() {
     _isDraft = true;
     // TODO: Implement draft saving logic
-    print('Draft saved');
+    // Draft saved
     _navigationService.back();
   }
 
@@ -166,8 +164,8 @@ class CreatepostViewModel extends BaseViewModel {
       //   images: _selectedImages,
       // );
 
-      print('Creating post with text: $_postText');
-      print('Images: ${_selectedImages.length}');
+      // Creating post with text: $_postText
+      // Images: ${_selectedImages.length}
 
       // Calculate XP based on content (example logic)
       int earnedXP = 12; // Base XP for posting
@@ -179,10 +177,9 @@ class CreatepostViewModel extends BaseViewModel {
       }
 
       // Navigate back to home and show success modal
-      await _navigationService
-          .back(result: {'showSuccess': true, 'xp': earnedXP});
+      _navigationService.back(result: {'showSuccess': true, 'xp': earnedXP});
     } catch (e) {
-      print('Error creating post: $e');
+      // Error creating post: $e
       // TODO: Show error dialog/snackbar
     } finally {
       setBusy(false);

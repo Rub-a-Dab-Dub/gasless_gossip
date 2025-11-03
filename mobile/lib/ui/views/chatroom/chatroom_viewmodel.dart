@@ -88,7 +88,7 @@ class ChatroomViewModel extends BaseViewModel {
   List<Token> _tokens = [];
   Token? _selectedToken;
   List<ChatRoomMessage> _messages = [];
-  Set<int> _selectedNftIndices =
+  final Set<int> _selectedNftIndices =
       {}; // Track selected NFT indices from bottom sheet
 
   ChatroomViewModel({required this.chatUser}) {
@@ -225,21 +225,6 @@ class ChatroomViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  void _showFilesBottomSheet() {
-    // This will be called from the view
-    print("Show files bottom sheet");
-  }
-
-  void _showNFTsBottomSheet() {
-    // This will be called from the view
-    print("Show NFTs bottom sheet");
-  }
-
-  void _showWalletBottomSheet() {
-    // This will be called from the view
-    print("Show wallet bottom sheet");
-  }
-
   void onEmojiTap() {
     // Open emoji picker
   }
@@ -320,17 +305,9 @@ class ChatroomViewModel extends BaseViewModel {
 
   void sendSelectedNfts() {
     // TODO: Implement sending selected NFTs
-    print('Sending ${_selectedNftIndices.length} NFTs');
+    // Sending ${_selectedNftIndices.length} NFTs
     clearNftSelection();
     hideBottomSheet();
-  }
-
-  String _getCurrentTime() {
-    final now = DateTime.now();
-    final hour = now.hour > 12 ? now.hour - 12 : now.hour;
-    final minute = now.minute.toString().padLeft(2, '0');
-    final period = now.hour >= 12 ? 'PM' : 'AM';
-    return '$hour:$minute $period';
   }
 
   @override

@@ -27,8 +27,8 @@ class MyPageView extends StackedView<MyPageViewModel> {
                   // Back arrow
                   GestureDetector(
                     onTap: () => viewModel.onBackTap(),
-                    child: Icon(Icons.arrow_back,
-                        color: const Color(0xFFF1F7F6), size: 24),
+                    child: const Icon(Icons.arrow_back,
+                        color: Color(0xFFF1F7F6), size: 24),
                   ),
 
                   // Title
@@ -42,10 +42,10 @@ class MyPageView extends StackedView<MyPageViewModel> {
                   ),
 
                   // Invisible arrow for spacing balance
-                  Opacity(
+                  const Opacity(
                     opacity: 0,
                     child: Icon(Icons.arrow_forward_ios,
-                        color: const Color(0xFFF1F7F6), size: 24),
+                        color: Color(0xFFF1F7F6), size: 24),
                   ),
                 ],
               ),
@@ -81,7 +81,7 @@ class MyPageView extends StackedView<MyPageViewModel> {
                             width: 204,
                             height: 204,
                             decoration: BoxDecoration(
-                              image: DecorationImage(
+                              image: const DecorationImage(
                                 image: AssetImage(AppAssets.bigprofile),
                                 fit: BoxFit.cover,
                                 alignment: Alignment.center,
@@ -91,7 +91,7 @@ class MyPageView extends StackedView<MyPageViewModel> {
                                 BoxShadow(
                                   color:
                                       const Color(0xFF222A2A).withOpacity(0.2),
-                                  offset: Offset(2, 2),
+                                  offset: const Offset(2, 2),
                                   blurRadius: 1,
                                   spreadRadius: 0,
                                 ),
@@ -203,7 +203,7 @@ class MyPageView extends StackedView<MyPageViewModel> {
   /// Editable input field
   Widget _buildInputField(
       {required String label, required TextEditingController controller}) {
-    return Container(
+    return SizedBox(
       width: 390,
       //padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(

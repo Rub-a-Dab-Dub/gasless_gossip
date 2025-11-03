@@ -822,7 +822,7 @@ packages:
     source: hosted
     version: "1.6.0"
   stacked_shared:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: stacked_shared
       sha256: "3d69b34d87422b78a7e5123681d3f4bcdd79757170454933f68795c54812d003"

@@ -40,6 +40,6 @@ class SendViewModel extends BaseViewModel {
 
     // Process the send transaction
     // TODO: Implement actual send logic
-    print('Sending ${amountController.text} to ${nicknameController.text}');
+    // Sending ${amountController.text} to ${nicknameController.text}
   }
 }

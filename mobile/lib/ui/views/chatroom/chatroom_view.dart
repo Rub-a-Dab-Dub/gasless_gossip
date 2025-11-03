@@ -43,7 +43,7 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
                   GestureDetector(
                     onTap: () => viewModel.hideBottomSheet(),
                     behavior: HitTestBehavior.translucent,
-                    child: Container(
+                    child: SizedBox(
                       width: double.infinity,
                       height: double.infinity,
                       child: GestureDetector(
@@ -246,7 +246,7 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
                 style: GoogleFonts.baloo2(
                   fontSize: 10,
                   color: message.isSentByMe
-                      ? const Color(0xFF121418).withOpacity(0.7)
+                      ? const Color(0xFF121418).withValues(alpha: 0.7)
                       : const Color(0xFFA3A9A6),
                 ),
               ),
@@ -257,7 +257,7 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
                   size: 12,
                   color: message.isRead
                       ? const Color(0xFF121418)
-                      : const Color(0xFF121418).withOpacity(0.5),
+                      : const Color(0xFF121418).withValues(alpha: 0.5),
                 ),
               ],
             ],
@@ -501,7 +501,7 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
             Center(
                 child: SvgPicture.asset(
               svgIcon,
-              color: displayColor,
+              colorFilter: ColorFilter.mode(displayColor, BlendMode.srcIn),
               width: 12,
               height: 12,
             )),
@@ -711,11 +711,11 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
       if (image != null) {
         viewModel.hideBottomSheet();
         // Handle the selected image
-        print('Camera image selected: ${image.path}');
+        // Camera image selected: ${image.path}
         // You can add logic here to send the image or add it to the chat
       }
     } catch (e) {
-      print('Error picking image from camera: $e');
+      // Error picking image from camera: $e
     }
   }
 
@@ -733,11 +733,11 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
       if (image != null) {
         viewModel.hideBottomSheet();
         // Handle the selected image
-        print('Gallery image selected: ${image.path}');
+        // Gallery image selected: ${image.path}
         // You can add logic here to send the image or add it to the chat
       }
     } catch (e) {
-      print('Error picking image from gallery: $e');
+      // Error picking image from gallery: $e
     }
   }
 
@@ -863,7 +863,7 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
                                       boxShadow: [
                                         BoxShadow(
                                           color: const Color(0xFF14F1D9)
-                                              .withOpacity(0.4),
+                                              .withValues(alpha: 0.4),
                                           blurRadius: 8,
                                           spreadRadius: 2,
                                         ),
@@ -1088,7 +1088,8 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
           children: [
             TextField(
               controller: amountController,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               textAlign: TextAlign.center,
               style: GoogleFonts.fredoka(
                 fontSize: 48,
@@ -1250,7 +1251,7 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
                 letterSpacing: -0.02,
               ),
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             const Icon(
               Icons.arrow_forward,
               size: 24,
@@ -1467,7 +1468,7 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
   Widget _buildSuccessModal(BuildContext context, ChatroomViewModel viewModel) {
     return Positioned.fill(
       child: Container(
-        color: const Color(0xFF121A19).withOpacity(0.96),
+        color: const Color(0xFF121A19).withValues(alpha: 0.96),
         child: Column(
           children: [
             // Success Message at top
@@ -1482,7 +1483,7 @@ class ChatroomView extends StackedView<ChatroomViewModel> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF14F1D9).withOpacity(0.12),
+                    color: const Color(0xFF14F1D9).withValues(alpha: 0.12),
                     blurRadius: 14,
                     offset: const Offset(0, 4),
                   ),

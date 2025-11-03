@@ -146,7 +146,7 @@ class SendView extends StackedView<SendViewModel> {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF14F1D9).withOpacity(0.04),
+            color: const Color(0xFF14F1D9).withValues(alpha: 0.04),
             blurRadius: 24,
             offset: const Offset(0, 0),
             inset: true,
@@ -233,9 +233,9 @@ class SendView extends StackedView<SendViewModel> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        height: 24,
+                      SizedBox(
                         width: 24,
+                        height: 24,
                         child: Image.asset(AppAssets.base),
                       ),
                       const SizedBox(width: 4),
@@ -483,11 +483,11 @@ class SendView extends StackedView<SendViewModel> {
         decoration: BoxDecoration(
           color: const Color(0xFF121418),
           borderRadius: BorderRadius.circular(32),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
-              color: const Color(0xFF2F2F2F),
+              color: Color(0xFF2F2F2F),
               blurRadius: 12,
-              offset: const Offset(0, 1),
+              offset: Offset(0, 1),
               inset: true,
             ),
           ],

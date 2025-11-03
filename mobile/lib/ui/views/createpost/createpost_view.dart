@@ -46,7 +46,7 @@ class CreatepostView extends StackedView<CreatepostViewModel> {
                         (viewModel.recentMedia.isNotEmpty ||
                             viewModel.isLoadingMedia))
                       _buildRecentPhotosSection(viewModel),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     _buildBottomToolbar(viewModel),
@@ -70,9 +70,9 @@ class CreatepostView extends StackedView<CreatepostViewModel> {
           GestureDetector(
             onTap: viewModel.goBack,
             child: const Icon(
-              Icons.close,
-              size: 24,
+              Icons.arrow_back,
               color: Color(0xFFF1F7F6),
+              size: 24,
             ),
           ),
           const Spacer(),
@@ -83,7 +83,7 @@ class CreatepostView extends StackedView<CreatepostViewModel> {
               width: 104,
               height: 35,
               decoration: BoxDecoration(
-                color: Color(0xFF191E1D),
+                color: const Color(0xFF191E1D),
                 borderRadius: BorderRadius.circular(32),
               ),
               child: Center(
@@ -107,7 +107,7 @@ class CreatepostView extends StackedView<CreatepostViewModel> {
               decoration: BoxDecoration(
                 color: viewModel.canPost
                     ? const Color(0xFF14F1D9)
-                    : const Color(0xFF14F1D9).withOpacity(0.4),
+                    : const Color(0xFF14F1D9).withValues(alpha: 0.4),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
@@ -117,7 +117,7 @@ class CreatepostView extends StackedView<CreatepostViewModel> {
                   fontWeight: FontWeight.w500,
                   color: viewModel.canPost
                       ? const Color(0xFF121418)
-                      : const Color(0xFF121418).withOpacity(0.6),
+                      : const Color(0xFF121418).withValues(alpha: 0.6),
                 ),
               ),
             ),
@@ -343,7 +343,7 @@ class CreatepostView extends StackedView<CreatepostViewModel> {
         ),
         const SizedBox(height: 8),
         // Recent Photos Horizontal List
-        Container(
+        SizedBox(
           height: 80,
           child: viewModel.isLoadingMedia
               ? const Center(
@@ -414,33 +414,31 @@ class CreatepostView extends StackedView<CreatepostViewModel> {
   }
 
   Widget _buildBottomToolbar(CreatepostViewModel viewModel) {
-    return Container(
-      child: Row(
-        children: [
-          // Photo/Gallery Icon
-          GestureDetector(
-            onTap: viewModel.pickImage,
-            child: SvgPicture.asset(
-              AppAssets.gallery,
-              fit: BoxFit.none,
-            ),
+    return Row(
+      children: [
+        // Photo/Gallery Icon
+        GestureDetector(
+          onTap: viewModel.pickImage,
+          child: SvgPicture.asset(
+            AppAssets.gallery,
+            fit: BoxFit.none,
           ),
-          const SizedBox(width: 30),
-          // GIF Icon (placeholder for now)
-          GestureDetector(
-            onTap: () {
-              // TODO: Implement GIF picker
-              print('GIF picker tapped');
-            },
-            child: SvgPicture.asset(
-              AppAssets.gift,
-              fit: BoxFit.none,
-            ),
+        ),
+        const SizedBox(width: 30),
+        // GIF Icon (placeholder for now)
+        GestureDetector(
+          onTap: () {
+            // TODO: Implement GIF picker
+            // GIF picker tapped
+          },
+          child: SvgPicture.asset(
+            AppAssets.gift,
+            fit: BoxFit.none,
           ),
-          const Spacer(),
-          // Character count or additional options can go here
-        ],
-      ),
+        ),
+        const Spacer(),
+        // Character count or additional options can go here
+      ],
     );
   }
 

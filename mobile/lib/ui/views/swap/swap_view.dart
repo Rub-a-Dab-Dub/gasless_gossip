@@ -145,7 +145,7 @@ class SwapView extends StackedView<SwapViewModel> {
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF14F1D9).withOpacity(0.04),
+            color: const Color(0xFF14F1D9).withValues(alpha: 0.04),
             blurRadius: 24,
             offset: const Offset(0, 0),
             inset: true,
@@ -220,7 +220,7 @@ class SwapView extends StackedView<SwapViewModel> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
+                    SizedBox(
                       height: 24,
                       width: 24,
                       child: Image.asset(AppAssets.base),
@@ -306,7 +306,7 @@ class SwapView extends StackedView<SwapViewModel> {
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF14F1D9).withOpacity(0.04),
+            color: const Color(0xFF14F1D9).withValues(alpha: 0.04),
             blurRadius: 24,
             offset: const Offset(0, 0),
             inset: true,
@@ -345,7 +345,7 @@ class SwapView extends StackedView<SwapViewModel> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
+                    SizedBox(
                       height: 24,
                       width: 24,
                       child: Image.asset(AppAssets.usdt),
@@ -427,11 +427,11 @@ class SwapView extends StackedView<SwapViewModel> {
         decoration: BoxDecoration(
           color: const Color(0xFF121418),
           borderRadius: BorderRadius.circular(32),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
-              color: const Color(0xFF2F2F2F),
+              color: Color(0xFF2F2F2F),
               blurRadius: 12,
-              offset: const Offset(0, 1),
+              offset: Offset(0, 1),
               inset: true,
             ),
           ],

@@ -15,6 +15,6 @@ class SignupSuccessfulViewModel extends BaseViewModel {
 
   void onShare() {
     // TODO: Implement share functionality
-    print('Share tapped');
+    // Share tapped
   }
 }

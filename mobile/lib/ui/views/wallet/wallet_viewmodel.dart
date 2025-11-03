@@ -28,11 +28,11 @@ class Transaction {
 class WalletViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
 
-  String _balance = '\$3,784.545';
-  String _approximateBalance = '\$3,784.54';
-  String _selectedToken = 'USDT';
-  String _username = 'username.gaslessgossip.baseeth';
-  String _walletAddress = '0xWI32....W893';
+  final String _balance = '\$3,784.545';
+  final String _approximateBalance = '\$3,784.54';
+  final String _selectedToken = 'USDT';
+  final String _username = 'username.gaslessgossip.baseeth';
+  final String _walletAddress = '0xWI32....W893';
 
   bool _showCopySuccess = false;
   bool get showCopySuccess => _showCopySuccess;
@@ -128,7 +128,7 @@ class WalletViewModel extends BaseViewModel {
   }
 
   void onCopyAddress() {
-    print('Copy address tapped');
+    // Copy address tapped
   }
 
   void onGetStartedFromHistory() {
@@ -137,12 +137,12 @@ class WalletViewModel extends BaseViewModel {
   }
 
   void onTokenSelectorTapped() {
-    print('Token selector tapped');
+    // Token selector tapped
   }
 
   void onCopyAddressFromBottomSheet() {
     // Copy logic here
-    print('Copy address tapped');
+    // Copy address tapped
 
     // Show success message
     _showCopySuccess = true;

@@ -5,17 +5,18 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i21;
+import 'package:flutter/material.dart' as _i22;
 import 'package:flutter/material.dart';
 import 'package:mobile/ui/views/bottomnav/bottomnav_view.dart' as _i6;
 import 'package:mobile/ui/views/chatroom/chatroom_view.dart' as _i11;
-import 'package:mobile/ui/views/chatroom/chatroom_viewmodel.dart' as _i22;
+import 'package:mobile/ui/views/chatroom/chatroom_viewmodel.dart' as _i23;
 import 'package:mobile/ui/views/chats/chats_view.dart' as _i8;
 import 'package:mobile/ui/views/createpost/createpost_view.dart' as _i13;
 import 'package:mobile/ui/views/createroom/createroom_view.dart' as _i12;
 import 'package:mobile/ui/views/createroom/uploadavatar/uploadavatar_view.dart'
     as _i16;
 import 'package:mobile/ui/views/home/home_view.dart' as _i2;
+import 'package:mobile/ui/views/joinroom/joinroom_view.dart' as _i21;
 import 'package:mobile/ui/views/mypage/mypage_view.dart' as _i14;
 import 'package:mobile/ui/views/profile/profile_view.dart' as _i10;
 import 'package:mobile/ui/views/quests/quests_view.dart' as _i7;
@@ -30,7 +31,7 @@ import 'package:mobile/ui/views/startup/startup_view.dart' as _i3;
 import 'package:mobile/ui/views/swap/swap_view.dart' as _i18;
 import 'package:mobile/ui/views/wallet/wallet_view.dart' as _i15;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i23;
+import 'package:stacked_services/stacked_services.dart' as _i24;
 
 class Routes {
   static const homeView = '/home-view';
@@ -71,6 +72,8 @@ class Routes {
 
   static const receiveScanView = '/receive-scan-view';
 
+  static const joinroomView = '/joinroom-view';
+
   static const all = <String>{
     homeView,
     startupView,
@@ -91,6 +94,7 @@ class Routes {
     swapView,
     signupSuccessfulView,
     receiveScanView,
+    joinroomView,
   };
 }
 
@@ -176,29 +180,33 @@ class StackedRouter extends _i1.RouterBase {
       Routes.receiveScanView,
       page: _i20.ReceiveScanView,
     ),
+    _i1.RouteDef(
+      Routes.joinroomView,
+      page: _i21.JoinroomView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.HomeView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.HomeView(),
         settings: data,
       );
     },
     _i3.StartupView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.StartupView(),
         settings: data,
       );
     },
     _i4.SignupView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.SignupView(),
         settings: data,
       );
     },
     _i5.SigninView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.SigninView(),
         settings: data,
       );
@@ -207,32 +215,32 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<BottomnavViewArguments>(
         orElse: () => const BottomnavViewArguments(),
       );
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i6.BottomnavView(key: args.key, initialIndex: args.initialIndex),
         settings: data,
       );
     },
     _i7.QuestsView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i7.QuestsView(),
         settings: data,
       );
     },
     _i8.ChatsView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i8.ChatsView(),
         settings: data,
       );
     },
     _i9.RoomsView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i9.RoomsView(),
         settings: data,
       );
     },
     _i10.ProfileView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i10.ProfileView(),
         settings: data,
       );
@@ -241,63 +249,69 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<ChatroomViewArguments>(
         orElse: () => const ChatroomViewArguments(),
       );
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i11.ChatroomView(chatUser: args.chatUser, key: args.key),
         settings: data,
       );
     },
     _i12.CreateroomView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i12.CreateroomView(),
         settings: data,
       );
     },
     _i13.CreatepostView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i13.CreatepostView(),
         settings: data,
       );
     },
     _i14.MyPageView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i14.MyPageView(),
         settings: data,
       );
     },
     _i15.WalletView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i15.WalletView(),
         settings: data,
       );
     },
     _i16.UploadavatarView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i16.UploadavatarView(),
         settings: data,
       );
     },
     _i17.SendView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i17.SendView(),
         settings: data,
       );
     },
     _i18.SwapView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i18.SwapView(),
         settings: data,
       );
     },
     _i19.SignupSuccessfulView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i19.SignupSuccessfulView(),
         settings: data,
       );
     },
     _i20.ReceiveScanView: (data) {
-      return _i21.MaterialPageRoute<dynamic>(
+      return _i22.MaterialPageRoute<dynamic>(
         builder: (context) => const _i20.ReceiveScanView(),
+        settings: data,
+      );
+    },
+    _i21.JoinroomView: (data) {
+      return _i22.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i21.JoinroomView(),
         settings: data,
       );
     },
@@ -316,7 +330,7 @@ class BottomnavViewArguments {
     this.initialIndex = 0,
   });
 
-  final _i21.Key? key;
+  final _i22.Key? key;
 
   final int initialIndex;
 
@@ -343,9 +357,9 @@ class ChatroomViewArguments {
     this.key,
   });
 
-  final _i22.ChatUser? chatUser;
+  final _i23.ChatUser? chatUser;
 
-  final _i21.Key? key;
+  final _i22.Key? key;
 
   @override
   String toString() {
@@ -364,7 +378,7 @@ class ChatroomViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i23.NavigationService {
+extension NavigatorStateExtension on _i24.NavigationService {
   Future<dynamic> navigateToHomeView([
     int? routerId,
     bool preventDuplicates = true,
@@ -422,7 +436,7 @@ extension NavigatorStateExtension on _i23.NavigationService {
   }
 
   Future<dynamic> navigateToBottomnavView({
-    _i21.Key? key,
+    _i22.Key? key,
     int initialIndex = 0,
     int? routerId,
     bool preventDuplicates = true,
@@ -495,8 +509,8 @@ extension NavigatorStateExtension on _i23.NavigationService {
   }
 
   Future<dynamic> navigateToChatroomView({
-    _i22.ChatUser? chatUser,
-    _i21.Key? key,
+    _i23.ChatUser? chatUser,
+    _i22.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -637,6 +651,20 @@ extension NavigatorStateExtension on _i23.NavigationService {
         transition: transition);
   }
 
+  Future<dynamic> navigateToJoinroomView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.joinroomView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
   Future<dynamic> replaceWithHomeView([
     int? routerId,
     bool preventDuplicates = true,
@@ -694,7 +722,7 @@ extension NavigatorStateExtension on _i23.NavigationService {
   }
 
   Future<dynamic> replaceWithBottomnavView({
-    _i21.Key? key,
+    _i22.Key? key,
     int initialIndex = 0,
     int? routerId,
     bool preventDuplicates = true,
@@ -767,8 +795,8 @@ extension NavigatorStateExtension on _i23.NavigationService {
   }
 
   Future<dynamic> replaceWithChatroomView({
-    _i22.ChatUser? chatUser,
-    _i21.Key? key,
+    _i23.ChatUser? chatUser,
+    _i22.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -903,6 +931,20 @@ extension NavigatorStateExtension on _i23.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.receiveScanView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithJoinroomView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.joinroomView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
