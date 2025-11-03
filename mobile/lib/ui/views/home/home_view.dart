@@ -408,9 +408,9 @@ class HomeView extends StackedView<HomeViewModel> {
       decoration: BoxDecoration(
         color: const Color(0xFF121418),
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: const Color(0xFF222222),
+            color: Color(0xFF222222),
             blurRadius: 32,
             inset: true,
           ),
@@ -602,7 +602,7 @@ class HomeView extends StackedView<HomeViewModel> {
           color: const Color(0xFF191E1D),
           borderRadius: BorderRadius.circular(32),
           border: Border.all(
-            color: Color(0xFF0F443E),
+            color: const Color(0xFF0F443E),
           ),
         ),
         child: Row(

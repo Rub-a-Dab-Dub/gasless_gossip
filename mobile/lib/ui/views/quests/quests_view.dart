@@ -433,7 +433,7 @@ class QuestsView extends StackedView<QuestsViewModel> {
                 style: GoogleFonts.fredoka(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF3C4A47),
+                  color: const Color(0xFF3C4A47),
                 ),
               ),
             ),
@@ -783,7 +783,7 @@ class QuestsView extends StackedView<QuestsViewModel> {
             ),
           ),
 
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           // Referral Section
           _buildReferralSection(viewModel),
         ],
@@ -1098,7 +1098,7 @@ class QuestsView extends StackedView<QuestsViewModel> {
         // Avatar and Name
         Column(
           children: [
-            Container(
+            SizedBox(
               width: 48,
               height: 48,
               child: Image.asset(imagePath),

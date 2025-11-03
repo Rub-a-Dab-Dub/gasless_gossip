@@ -483,11 +483,11 @@ class SendView extends StackedView<SendViewModel> {
         decoration: BoxDecoration(
           color: const Color(0xFF121418),
           borderRadius: BorderRadius.circular(32),
-          boxShadow: [
+          boxShadow: const [
             BoxShadow(
-              color: const Color(0xFF2F2F2F),
+              color: Color(0xFF2F2F2F),
               blurRadius: 12,
-              offset: const Offset(0, 1),
+              offset: Offset(0, 1),
               inset: true,
             ),
           ],

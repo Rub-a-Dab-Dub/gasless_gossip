@@ -83,7 +83,7 @@ class CreatepostView extends StackedView<CreatepostViewModel> {
               width: 104,
               height: 35,
               decoration: BoxDecoration(
-                color: Color(0xFF191E1D),
+                color: const Color(0xFF191E1D),
                 borderRadius: BorderRadius.circular(32),
               ),
               child: Center(
