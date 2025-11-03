@@ -368,6 +368,8 @@ class HomeView extends StackedView<HomeViewModel> {
                     _buildInteractionButton(Icons.chat_bubble_outline, '24'),
                     const SizedBox(width: 24),
                     _buildInteractionButton(Icons.share, '24'),
+                    const SizedBox(width: 24),
+                    _buildInteractionButton(Icons.local_fire_department, '9'),
                   ],
                 ),
               ],
@@ -389,7 +391,7 @@ class HomeView extends StackedView<HomeViewModel> {
         const SizedBox(width: 4),
         Text(
           count,
-          style: GoogleFonts.baloo2(
+          style: GoogleFonts.fredoka(
             fontSize: 12,
             fontWeight: FontWeight.w400,
             color: const Color(0xFF6B7A77),

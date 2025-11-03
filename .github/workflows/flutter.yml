@@ -1,10 +1,10 @@
-name: Build CI
+name: Flutter CI
 
 on:
   push:
-    branches: [ main, dev ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main, dev ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -12,33 +12,23 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up Flutter
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.35.4'
+          flutter-version: '3.35.6'
+          channel: 'stable'
+
       - name: Install dependencies
-        working-directory: ./mobile
+        working-directory: mobile
         run: flutter pub get
 
       - name: Verify formatting
-        working-directory: ./mobile
-        run: dart format --output=none --set-exit-if-changed .
-
-      - name: Generate files
-        working-directory: ./mobile
-        run: flutter pub run build_runner build --delete-conflicting-outputs
+        working-directory: mobile
+        run: flutter format --set-exit-if-changed .
 
       - name: Analyze project source
-        working-directory: ./mobile
-        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+        working-directory: mobile
+        run: flutter analyze
 
-
-      #- name: Run tests
-      #  working-directory: ./mobile
-      #  run: flutter test
-
-      #- name: Run tests
-      #  working-directory: ./app
-      #  run: flutter test

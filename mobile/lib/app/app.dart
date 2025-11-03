@@ -21,6 +21,7 @@ import 'package:mobile/ui/views/send/send_view.dart';
 import 'package:mobile/ui/views/swap/swap_view.dart';
 import 'package:mobile/ui/views/signup_successful/signup_successful_view.dart';
 import 'package:mobile/ui/views/receive_scan/receive_scan_view.dart';
+import 'package:mobile/ui/views/joinroom/joinroom_view.dart';
 // @stacked-import
 
 @StackedApp(
@@ -45,6 +46,7 @@ import 'package:mobile/ui/views/receive_scan/receive_scan_view.dart';
     MaterialRoute(page: SendView),
     MaterialRoute(page: SignupSuccessfulView),
     MaterialRoute(page: ReceiveScanView),
+    MaterialRoute(page: JoinroomView),
 // @stacked-route
   ],
   dependencies: [
