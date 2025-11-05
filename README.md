@@ -26,11 +26,55 @@ Chat, tip friends, join exclusive rooms, and level up—all with near-zero gas f
 ### Prerequisites
 
 - Node.js 18+
-- PostgreSQL 14+
-- Flutter 3.x (for mobile)
+- Docker Desktop ([Download](https://www.docker.com/products/docker-desktop/)) **OR** PostgreSQL 14+
+- Flutter 3.x (for mobile, optional)
 - Starknet wallet (Argent/Braavos)
 
-### 1️⃣ Clone & Install
+### Option A: Docker Setup (Recommended) 🐳
+
+**Fastest way to get started!** Docker handles PostgreSQL and Redis automatically.
+
+```bash
+# 1. Clone & navigate
+git clone https://github.com/Rub-a-Dab-Dub/gasless_gossip.git
+cd gasless_gossip
+
+# 2. Install dependencies and setup environment files
+npm run setup
+
+# 3. Update environment variables
+# Edit api/.env with your Starknet credentials
+# - STARKNET_ACCOUNT_ADDRESS
+# - STARKNET_PRIVATE_KEY
+# - STARKNET_CONTRACT_ADDRESS
+# - JWT_SECRET (generate a secure random string)
+
+# 4. Start Docker services (PostgreSQL + Redis)
+npm run docker:start
+
+# 5. Start development servers (API + Web)
+npm run dev
+```
+
+**Done!** 🎉
+- API runs on `http://localhost:3001`
+- Web runs on `http://localhost:3000`
+- PostgreSQL on `localhost:5432`
+- Redis on `localhost:6379`
+
+**See [DOCKER_SETUP.md](./DOCKER_SETUP.md) for detailed Docker documentation.**
+
+---
+
+### Option B: Manual Setup
+
+If you prefer installing PostgreSQL manually:
+
+### Option B: Manual Setup
+
+If you prefer installing PostgreSQL manually:
+
+#### 1️⃣ Clone & Install
 
 ```bash
 git clone https://github.com/Rub-a-Dab-Dub/gasless_gossip.git
@@ -123,7 +167,69 @@ flutter run
 
 ---
 
-## 🏗️ Architecture
+## � NPM Scripts Reference
+
+### One-Command Development
+
+```bash
+npm run dev              # Start both API and Web (concurrent)
+npm run docker:start     # Start PostgreSQL & Redis containers
+```
+
+### Docker Management
+
+```bash
+npm run docker:start     # Start Docker services
+npm run docker:stop      # Stop Docker services (keeps data)
+npm run docker:restart   # Restart Docker services
+npm run docker:logs      # View live container logs
+npm run docker:clean     # Stop and remove all data (fresh start)
+```
+
+### Development (Individual)
+
+```bash
+npm run dev:api          # Start only API server
+npm run dev:web          # Start only Web server
+```
+
+### Building
+
+```bash
+npm run build            # Build both API and Web
+npm run build:api        # Build only API
+npm run build:web        # Build only Web
+```
+
+### Testing
+
+```bash
+npm run test             # Run all tests
+npm run test:api         # Run API tests
+npm run test:web         # Run Web tests
+npm run test:e2e         # Run E2E tests
+```
+
+### Linting
+
+```bash
+npm run lint             # Lint all code
+npm run lint:api         # Lint API only
+npm run lint:web         # Lint Web only
+```
+
+### Utilities
+
+```bash
+npm run setup            # Setup environment files
+npm run db:clear         # Clear database (destructive!)
+npm run clean            # Remove node_modules and builds
+npm run fresh            # Clean + reinstall everything
+```
+
+---
+
+## �🏗️ Architecture
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -360,13 +466,39 @@ NEXT_PUBLIC_STARKNET_NETWORK=sepolia
 
 ## 🚨 Troubleshooting
 
+### Docker Issues
+
+**Port 5432 already in use:**
+```bash
+# Stop local PostgreSQL
+brew services stop postgresql@14  # macOS
+sudo systemctl stop postgresql    # Linux
+```
+
+**Containers won't start:**
+```bash
+npm run docker:logs      # Check logs
+npm run docker:clean     # Reset everything
+npm run docker:start     # Start fresh
+```
+
+**Database connection refused:**
+```bash
+# Wait for PostgreSQL to be ready
+npm run docker:logs      # Look for "database system is ready"
+```
+
+### Backend Issues
+
 ### Backend won't start
 - Check PostgreSQL is running: `brew services list`
 - Verify database exists: `psql -U postgres -l`
 - Check `.env` file has all required variables
 
 ### Starknet transactions fail
-- Ensure account has STRK on Sepolia: [Starknet Faucet](https://faucet.goerli.starknet.io/)
+- ### Starknet Issues
+
+- **Transactions fail:**
 - Check contract address is correct
 - Verify RPC URL is responsive
 

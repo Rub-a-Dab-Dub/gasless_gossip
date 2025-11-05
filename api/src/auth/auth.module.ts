@@ -11,13 +11,15 @@ import { EvmService } from '../contracts/evm.service';
 import { WalletService } from '../wallets/wallet.service';
 import { BullModule } from '@nestjs/bullmq';
 import { Wallet } from '../wallets/entities/wallet.entity';
-
+import { StringValue } from 'ms';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Wallet]),
     JwtModule.register({
       secret: process.env.JWT_SECRET ?? 'G4ZL3ZZ_G0ZZ1P',
-      signOptions: { expiresIn: process.env.JWT_EXPIRES_IN ?? '1d' },
+      signOptions: {
+        expiresIn: (process.env.JWT_EXPIRES_IN ?? '1d') as StringValue,
+      },
     }),
     BullModule.registerQueue({
       name: 'wallet-queue',
