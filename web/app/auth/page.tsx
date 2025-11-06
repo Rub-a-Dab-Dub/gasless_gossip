@@ -13,7 +13,7 @@ import { ApiResponse } from "@/types/api";
 import { IUser } from "@/types/user";
 import { setToCookie } from "@/lib/cookies";
 import { setToLocalStorage } from "@/lib/local-storage";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const fredoka = Fredoka({
   subsets: ["latin"],
@@ -61,6 +61,9 @@ function Header() {
 
 export default function Auth() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams?.get('redirect') || '/feed';
+  
   const [page, setPage] = useState<string>("login");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -117,7 +120,8 @@ export default function Auth() {
       setToCookie("token", res.data.data.token);
       setToLocalStorage("user", JSON.stringify(res.data.data.user));
       if (page === "login") {
-        router.push("/feed");
+        // Redirect to intended destination or default to /feed
+        router.push(redirectPath);
       } else {
         setSignupSuccess(true);
       }
