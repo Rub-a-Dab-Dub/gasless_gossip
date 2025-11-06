@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RoomCategory } from '../room-categories/entities/room-category.entity';
+import { RoomCategory } from './entities/room-category.entity';
 import { CreateRoomCategoryDto } from './dtos/create-room-category.dto';
 import { UpdateRoomCategoryDto } from './dtos/update-room-category.dto';
 

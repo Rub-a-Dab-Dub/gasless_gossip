@@ -4,7 +4,6 @@ import * as dotenv from 'dotenv';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { ResponseService } from './common/services/response.service';
-import { RoomCategoriesSeeder } from './room-categories/room-categories.seeder';
 import { CommandFactory } from 'nest-commander';
 
 dotenv.config();
@@ -28,8 +27,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseInterceptor());
   const responseService = app.get(ResponseService);
   app.useGlobalFilters(new AllExceptionsFilter(responseService));
-  const seeder = app.get(RoomCategoriesSeeder);
-  await seeder.seed();
+
   await app.listen(Number(process.env.PORT));
   await CommandFactory.run(AppModule);
 }

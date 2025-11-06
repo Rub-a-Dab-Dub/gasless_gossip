@@ -12,7 +12,7 @@ import {
 import { RoomCategoriesService } from './room-categories.service';
 import { CreateRoomCategoryDto } from './dtos/create-room-category.dto';
 import { UpdateRoomCategoryDto } from './dtos/update-room-category.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/application/auth/jwt-auth.guard';
 
 @Controller('room-categories')
 @UseGuards(JwtAuthGuard)

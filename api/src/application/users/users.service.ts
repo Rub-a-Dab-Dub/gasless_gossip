@@ -10,7 +10,7 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { Post } from '../posts/entities/post.entity';
-import { ChatsService } from 'src/chats/chats.service';
+import { ChatsService } from 'src/application/chats/chats.service';
 
 @Injectable()
 export class UsersService {

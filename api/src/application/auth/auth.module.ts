@@ -5,13 +5,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.strategy';
-import { ContractsService } from '../contracts/contracts.service';
-import { StarknetService } from '../contracts/starknet.service';
-import { EvmService } from '../contracts/evm.service';
+import { ContractsService } from 'src/contracts/contracts.service';
+import { StarknetService } from 'src/contracts/starknet.service';
+import { EvmService } from 'src/contracts/evm.service';
 import { WalletService } from '../wallets/wallet.service';
-import { BullModule } from '@nestjs/bullmq';
 import { Wallet } from '../wallets/entities/wallet.entity';
 import { StringValue } from 'ms';
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, Wallet]),
@@ -20,9 +20,6 @@ import { StringValue } from 'ms';
       signOptions: {
         expiresIn: (process.env.JWT_EXPIRES_IN ?? '1d') as StringValue,
       },
-    }),
-    BullModule.registerQueue({
-      name: 'wallet-queue',
     }),
   ],
   providers: [

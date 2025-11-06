@@ -5,7 +5,7 @@ import { Chat } from './entities/chat.entity';
 import { User } from '../users/entities/user.entity';
 import { ChatPreviewDto } from './dtos/chat-preview.dto';
 import { ChatDetailDto } from './dtos/chat-details.dto';
-import { MessageDto } from 'src/messages/dtos/message.dto';
+import { MessageDto } from '../messages/dtos/message.dto';
 
 @Injectable()
 export class ChatsService {

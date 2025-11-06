@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Param, Get, UseGuards } from '@nestjs/common';
 import { RoomMessagesService } from './room-messages.service';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/application/auth/jwt-auth.guard';
 
 @Controller('room-messages')
 @UseGuards(JwtAuthGuard)

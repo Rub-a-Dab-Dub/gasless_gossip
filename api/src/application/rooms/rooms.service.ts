@@ -12,7 +12,7 @@ import { RoomMember } from './entities/room-member.entity';
 import { User } from '../users/entities/user.entity';
 import { RoomCategory } from '../room-categories/entities/room-category.entity';
 import { CreateRoomDto } from './dtos/create-room.dto';
-import { generateRoomCode } from '../common/helpers/string';
+import { generateRoomCode } from '../../common/helpers/string';
 
 @Injectable()
 export class RoomService {

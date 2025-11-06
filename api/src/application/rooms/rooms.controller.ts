@@ -15,7 +15,7 @@ import { RoomService } from './rooms.service';
 import { CreateRoomDto } from './dtos/create-room.dto';
 import { AddRoomMemberDto } from './dtos/add-room-member.dto';
 import { UpdateRoomDto } from './dtos/update-room.dto';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/application/auth/jwt-auth.guard';
 
 @Controller('rooms')
 export class RoomController {

@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import { User } from '../users/entities/user.entity';
 import { LoginDto, SignupDto } from './dtos/auth.dto';
 import { shortString } from 'starknet';
-import { ContractsService } from '../contracts/contracts.service';
+import { ContractsService } from '../../contracts/contracts.service';
 import { WalletService } from '../wallets/wallet.service';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';

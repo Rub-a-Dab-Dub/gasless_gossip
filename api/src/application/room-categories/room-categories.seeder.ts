@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RoomCategory } from '../room-categories/entities/room-category.entity';
+import { RoomCategory } from './entities/room-category.entity';
 import slugify from 'slugify';
 
 @Injectable()
