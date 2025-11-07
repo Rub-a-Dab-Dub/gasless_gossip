@@ -62,8 +62,7 @@ function Header() {
 export default function Auth() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirectPath = searchParams?.get('redirect') || '/feed';
-  
+  const redirectPath = searchParams?.get("redirect") || "/feed";
   const [page, setPage] = useState<string>("login");
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -79,6 +78,14 @@ export default function Auth() {
   useEffect(() => {
     setPage("login");
   }, []);
+
+  const resetForm = () => {
+    setUsername("");
+    setPassword("");
+    setEmail("");
+    setAddress("");
+    setConfirmPassword("");
+  };
 
   const isFormValid = () => {
     if (page === "login") {
@@ -178,7 +185,10 @@ export default function Auth() {
                     <div className="w-full flex items-center font-normal text-zinc-300">
                       Don&apos;t have an account?
                       <span
-                        onClick={() => setPage("register")}
+                        onClick={() => {
+                          setPage("register");
+                          resetForm();
+                        }}
                         className="pl-2 cursor-pointer font-bold text-[#7AF8EB]"
                       >
                         Sign up
@@ -190,7 +200,10 @@ export default function Auth() {
                     <div className="w-full flex items-center font-normal text-zinc-300">
                       Already have an account?
                       <span
-                        onClick={() => setPage("login")}
+                        onClick={() => {
+                          setPage("login");
+                          resetForm();
+                        }}
                         className="pl-2 cursor-pointer font-bold text-[#7AF8EB]"
                       >
                         Log in
