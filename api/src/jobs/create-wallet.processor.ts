@@ -1,8 +1,8 @@
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
-import { WalletService } from '../wallets/wallet.service';
+import { WalletService } from '../application/wallets/wallet.service';
 import { ContractsService } from '../contracts/contracts.service';
-import { User } from '../users/entities/user.entity';
+import { User } from '../application/users/entities/user.entity';
 
 interface CreateWalletJobData {
   user: User;

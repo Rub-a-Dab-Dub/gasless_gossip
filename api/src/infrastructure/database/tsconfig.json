@@ -1,0 +1,16 @@
+// This tsconfig is used by typeorm cli. Otherwise it would take the nearest tsconfig.json - that is actually used by nestjs.
+{
+   "compilerOptions": {
+      "lib": [
+         "es5",
+         "es6"
+      ],
+      "target": "es5",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "outDir": "./build",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "sourceMap": true
+   }
+}
