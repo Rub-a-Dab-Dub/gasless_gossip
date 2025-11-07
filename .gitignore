@@ -16,7 +16,9 @@ dist/
 
 # Logs
 *.log
+*.log.*
 **/*.log
+**/*.log.*
 logs/
 **/logs/
 
