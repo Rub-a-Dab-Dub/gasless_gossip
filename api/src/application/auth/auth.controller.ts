@@ -26,11 +26,22 @@ export class AuthController {
   })
   @ApiResponse({
     status: 401,
-    description: 'Username or email already exists.',
+    description: 'Username already exists.',
     schema: {
       example: {
         statusCode: 401,
         message: 'Username already taken',
+        error: 'Unauthorized',
+      },
+    },
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'email already taken.',
+    schema: {
+      example: {
+        statusCode: 401,
+        message: 'Email already taken',
         error: 'Unauthorized',
       },
     },
