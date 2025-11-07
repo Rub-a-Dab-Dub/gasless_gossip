@@ -16,6 +16,7 @@ import { RoomMember } from '../../rooms/entities/room-member.entity';
 import { Chat } from '../../chats/entities/chat.entity';
 import { Room } from '../../rooms/entities/room.entity';
 import { Wallet } from '../../wallets/entities/wallet.entity';
+import { UserVerification } from './user-verification.entity';
 
 @Entity()
 export class User {
@@ -34,6 +35,9 @@ export class User {
   @Column({ nullable: true })
   email: string;
 
+  @Column({ default: false })
+  is_verified: boolean;
+
   @Column({ nullable: true })
   address: string;
 
@@ -45,6 +49,12 @@ export class User {
 
   @Column({ type: 'text', nullable: true })
   about: string;
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  created_at: Date;
+
+  @Column({ default: () => 'CURRENT_TIMESTAMP' })
+  updated_at: Date;
 
   @OneToMany(() => Post, (post) => post.author)
   posts: Post[];
@@ -87,6 +97,9 @@ export class User {
   @OneToMany(() => Room, (room) => room.owner)
   createdRooms: Room[];
 
-  @OneToOne(() => Wallet, (wallet) => wallet.user)
+  @OneToMany(() => Wallet, (wallet) => wallet.user)
   wallet: Wallet;
+
+  @OneToMany(() => UserVerification, (verification) => verification.user)
+  verifications: UserVerification[];
 }

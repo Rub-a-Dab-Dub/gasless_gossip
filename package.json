@@ -41,6 +41,7 @@
     "concurrently": "^9.2.1"
   },
   "dependencies": {
+    "@nestjs/event-emitter": "^3.0.1",
     "starknet": "^7.6.4"
   },
   "engines": {

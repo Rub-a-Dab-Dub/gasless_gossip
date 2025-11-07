@@ -11,6 +11,7 @@ import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { Post } from '../posts/entities/post.entity';
 import { ChatsService } from 'src/application/chats/chats.service';
+import { UserVerificationService } from './user-verification.service';
 
 @Injectable()
 export class UsersService {
@@ -18,6 +19,7 @@ export class UsersService {
     @InjectRepository(User) private usersRepository: Repository<User>,
     @InjectRepository(Post) private postsRepository: Repository<Post>,
     private readonly chatService: ChatsService,
+    private readonly userVerificationService: UserVerificationService,
   ) {}
 
   async totalUserCount(): Promise<number> {
@@ -105,7 +107,7 @@ export class UsersService {
 
   async updateProfile(id: number, updateData: Partial<User>): Promise<User> {
     const user = await this.findById(id);
-    if (updateData.id || updateData.xp) {
+    if (updateData.id || updateData.xp || updateData.is_verified) {
       throw new UnprocessableEntityException('Unacceptable payload');
     }
     if (updateData.username && updateData.username !== user.username) {
@@ -312,5 +314,10 @@ export class UsersService {
       isFollowedBy,
       posts,
     };
+  }
+
+  async removeExpiredTokens(): Promise<void> {
+    const deletedCount = await this.userVerificationService.cleanupExpiredTokens();
+    console.log(`Cleaned up ${deletedCount} expired verification tokens`);
   }
 }

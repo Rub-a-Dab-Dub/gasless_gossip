@@ -5,11 +5,19 @@ import { ResponseInterceptor } from './common/interceptors/response.interceptor'
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { ResponseService } from './common/services/response.service';
 import { CommandFactory } from 'nest-commander';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
+import { Logger } from 'nestjs-pino';
+import { setupDocumentationServer } from './infrastructure/documentation';
 
 dotenv.config();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+  forceCloseConnections: true,
+  rawBody: true,
+});
+  app.enableShutdownHooks();
   app.enableCors({
     origin: [
       'http://localhost:3000',
@@ -27,6 +35,14 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseInterceptor());
   const responseService = app.get(ResponseService);
   app.useGlobalFilters(new AllExceptionsFilter(responseService));
+
+  app.useStaticAssets(join(__dirname, '..', 'src', 'assets', 'public'));
+  app.setBaseViewsDir(join(__dirname, '..', 'src', 'assets', 'views'));
+  app.setViewEngine('hbs');
+  setupDocumentationServer(app);
+
+  // app.use('/static', express.static(join(__dirname, '..', 'public')));
+  app.useLogger(app.get(Logger));
 
   await app.listen(Number(process.env.PORT));
   await CommandFactory.run(AppModule);
