@@ -9,14 +9,16 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { Logger } from 'nestjs-pino';
 import { setupDocumentationServer } from './infrastructure/documentation';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 
 dotenv.config();
 
 async function bootstrap() {
-const app = await NestFactory.create<NestExpressApplication>(AppModule, {
-  forceCloseConnections: true,
-  rawBody: true,
-});
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    forceCloseConnections: true,
+    rawBody: true,
+  });
   app.enableShutdownHooks();
   app.enableCors({
     origin: [
@@ -43,6 +45,15 @@ const app = await NestFactory.create<NestExpressApplication>(AppModule, {
 
   // app.use('/static', express.static(join(__dirname, '..', 'public')));
   app.useLogger(app.get(Logger));
+
+  // Enable validation
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
 
   await app.listen(Number(process.env.PORT));
   await CommandFactory.run(AppModule);
