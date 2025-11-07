@@ -11,10 +11,11 @@ const config: DataSourceOptions = {
   username: process.env.DATABASE_USER || 'gasless_user',
   password: process.env.DATABASE_PASS || 'gasless_password',
   database: process.env.DATABASE_NAME || 'gasless',
-  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-  migrations: ['./migrations/*{.ts,.js}'],
-  synchronize: process.env.NODE_ENV !== 'production', // Auto-sync in dev, manual migrations in prod
+  entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
+  migrations: [__dirname + '/migrations/*{.ts,.js}'],
+  synchronize: false, // Never use true in production
   logging: process.env.NODE_ENV === 'development',
+  migrationsRun: false, // Set to true to auto-run migrations on app start
 };
 
 console.log('Database config:', {

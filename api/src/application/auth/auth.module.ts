@@ -11,10 +11,16 @@ import { EvmService } from 'src/contracts/evm.service';
 import { WalletService } from '../wallets/wallet.service';
 import { Wallet } from '../wallets/entities/wallet.entity';
 import { StringValue } from 'ms';
+import { UserEventListeners } from '@/events/user-listeners';
+import { HttpModule } from '@nestjs/axios';
+import { UserVerificationService } from '../users/user-verification.service';
+import { UserVerification } from '../users/entities/user-verification.entity';
+import { EmailTemplateService } from '@/notification/core/email';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Wallet]),
+    HttpModule,
+    TypeOrmModule.forFeature([User, Wallet,UserVerification]),
     JwtModule.register({
       secret: process.env.JWT_SECRET ?? 'G4ZL3ZZ_G0ZZ1P',
       signOptions: {
@@ -29,6 +35,9 @@ import { StringValue } from 'ms';
     StarknetService,
     EvmService,
     WalletService,
+    UserEventListeners,
+    UserVerificationService,
+    EmailTemplateService
   ],
   controllers: [AuthController],
   exports: [JwtModule],

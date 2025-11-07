@@ -6,7 +6,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
  */
 export function setupDocumentationServer(app: INestApplication) {
   const config = new DocumentBuilder()
-    .setTitle('Shopnest Messaging API Documentation')
+    .setTitle('Gasless Gossip API Documentation')
     .setDescription('Messaging service API endpoints docs.')
     .setVersion('1.0')
     .build();

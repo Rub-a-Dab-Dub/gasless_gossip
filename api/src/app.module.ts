@@ -15,6 +15,11 @@ import queueConfig from './infrastructure/queue/queue.config';
 import { WalletModule } from './application/wallets/wallet.module';
 import { DatabaseModule } from './infrastructure/database/database.module';
 import { QueueModule } from './infrastructure/queue/queue.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { LoggerModule } from './infrastructure/logger';
+import { EmailModule } from './notification/features/email/email.module';
+// import { ScheduleModule } from '@nestjs/schedule';
+import { Schedule as MySchedules } from './schedule/schedule.module';
 // import { ContractsModule } from './contracts/contracts.module';
 
 @Module({
@@ -24,7 +29,11 @@ import { QueueModule } from './infrastructure/queue/queue.module';
       load: [starknetConfig, typeormConfig, queueConfig],
       envFilePath: '.env',
     }),
+    LoggerModule,
     DatabaseModule,
+    EventEmitterModule.forRoot(),
+    MySchedules,
+    EmailModule,
     QueueModule,
     UsersModule,
     AuthModule,
