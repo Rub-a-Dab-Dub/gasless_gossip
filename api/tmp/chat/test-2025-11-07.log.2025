@@ -3320,3 +3320,363 @@
 {"level":30,"time":1762553989350,"pid":1703,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/username/:username, GET} route"}
 {"level":30,"time":1762553989350,"pid":1703,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/sync-missing, POST} route"}
 {"level":30,"time":1762553989366,"pid":1703,"hostname":"Praises-MacBook-Pro.local","context":"NestApplication","msg":"Nest application successfully started"}
+{"level":30,"time":1762555879310,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"EmailController {/email}:"}
+{"level":30,"time":1762555879311,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/email, POST} route"}
+{"level":30,"time":1762555879311,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"UsersController {/users}:"}
+{"level":30,"time":1762555879312,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile, GET} route"}
+{"level":30,"time":1762555879312,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile/stats, GET} route"}
+{"level":30,"time":1762555879312,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile, PUT} route"}
+{"level":30,"time":1762555879312,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/change-password, POST} route"}
+{"level":30,"time":1762555879313,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id/follow, GET} route"}
+{"level":30,"time":1762555879313,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id/unfollow, GET} route"}
+{"level":30,"time":1762555879313,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/count, GET} route"}
+{"level":30,"time":1762555879313,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/all, GET} route"}
+{"level":30,"time":1762555879314,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile/:username, GET} route"}
+{"level":30,"time":1762555879314,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/search, GET} route"}
+{"level":30,"time":1762555879314,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id/stats, GET} route"}
+{"level":30,"time":1762555879314,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id, GET} route"}
+{"level":30,"time":1762555879314,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:username/followers, GET} route"}
+{"level":30,"time":1762555879314,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:username/following, GET} route"}
+{"level":30,"time":1762555879314,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/logout, POST} route"}
+{"level":30,"time":1762555879314,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"AuthController {/auth}:"}
+{"level":30,"time":1762555879314,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/signup, POST} route"}
+{"level":30,"time":1762555879314,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/login, POST} route"}
+{"level":30,"time":1762555879314,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/verify-email/:userId, POST} route"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/resend-verification/:userId, POST} route"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/forgot-password, POST} route"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/reset-password/:userId, POST} route"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"PostsController {/posts}:"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts, POST} route"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts, GET} route"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id, GET} route"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id, PUT} route"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id, DELETE} route"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id/like, POST} route"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id/comment, POST} route"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/comment/:commentId, PUT} route"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/comment/:commentId, DELETE} route"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/user/me, GET} route"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/user/:username, GET} route"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"ChatsController {/chats}:"}
+{"level":30,"time":1762555879315,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/chats, POST} route"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/chats/me, GET} route"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/chats/:chatId, GET} route"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"MessagesController {/messages}:"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/messages, POST} route"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/messages/chat/:chatId, GET} route"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/messages/:messageId/read, PATCH} route"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"RoomCategoriesController {/room-categories}:"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories, POST} route"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories, GET} route"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories/:id, GET} route"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories/:id, PUT} route"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories/:id, DELETE} route"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"RoomMessagesController {/room-messages}:"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-messages/:roomId/:senderId, POST} route"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-messages/:roomId, GET} route"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"RoomController {/rooms}:"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms, POST} route"}
+{"level":30,"time":1762555879316,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId, PUT} route"}
+{"level":30,"time":1762555879317,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId, DELETE} route"}
+{"level":30,"time":1762555879317,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms, GET} route"}
+{"level":30,"time":1762555879317,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/created, GET} route"}
+{"level":30,"time":1762555879317,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/me, GET} route"}
+{"level":30,"time":1762555879317,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/count, GET} route"}
+{"level":30,"time":1762555879317,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId, GET} route"}
+{"level":30,"time":1762555879317,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomCode, GET} route"}
+{"level":30,"time":1762555879317,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/add-member, POST} route"}
+{"level":30,"time":1762555879317,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId/remove/:userId, DELETE} route"}
+{"level":30,"time":1762555879317,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId/members, GET} route"}
+{"level":30,"time":1762555879317,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"WalletController {/wallet}:"}
+{"level":30,"time":1762555879317,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/me, GET} route"}
+{"level":30,"time":1762555879317,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/username/:username, GET} route"}
+{"level":30,"time":1762555879317,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/sync-missing, POST} route"}
+{"level":30,"time":1762555879333,"pid":8092,"hostname":"Praises-MacBook-Pro.local","context":"NestApplication","msg":"Nest application successfully started"}
+{"level":30,"time":1762555905714,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"EmailController {/email}:"}
+{"level":30,"time":1762555905715,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/email, POST} route"}
+{"level":30,"time":1762555905716,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"UsersController {/users}:"}
+{"level":30,"time":1762555905716,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile, GET} route"}
+{"level":30,"time":1762555905716,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile/stats, GET} route"}
+{"level":30,"time":1762555905716,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile, PUT} route"}
+{"level":30,"time":1762555905716,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/change-password, POST} route"}
+{"level":30,"time":1762555905717,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id/follow, GET} route"}
+{"level":30,"time":1762555905717,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id/unfollow, GET} route"}
+{"level":30,"time":1762555905717,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/count, GET} route"}
+{"level":30,"time":1762555905717,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/all, GET} route"}
+{"level":30,"time":1762555905717,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile/:username, GET} route"}
+{"level":30,"time":1762555905718,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/search, GET} route"}
+{"level":30,"time":1762555905718,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id/stats, GET} route"}
+{"level":30,"time":1762555905718,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id, GET} route"}
+{"level":30,"time":1762555905718,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:username/followers, GET} route"}
+{"level":30,"time":1762555905718,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:username/following, GET} route"}
+{"level":30,"time":1762555905718,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/logout, POST} route"}
+{"level":30,"time":1762555905718,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"AuthController {/auth}:"}
+{"level":30,"time":1762555905718,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/signup, POST} route"}
+{"level":30,"time":1762555905718,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/login, POST} route"}
+{"level":30,"time":1762555905718,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/verify-email/:userId, POST} route"}
+{"level":30,"time":1762555905718,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/resend-verification/:userId, POST} route"}
+{"level":30,"time":1762555905718,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/forgot-password, POST} route"}
+{"level":30,"time":1762555905718,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/reset-password/:userId, POST} route"}
+{"level":30,"time":1762555905718,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"PostsController {/posts}:"}
+{"level":30,"time":1762555905718,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts, POST} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts, GET} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id, GET} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id, PUT} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id, DELETE} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id/like, POST} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id/comment, POST} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/comment/:commentId, PUT} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/comment/:commentId, DELETE} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/user/me, GET} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/user/:username, GET} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"ChatsController {/chats}:"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/chats, POST} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/chats/me, GET} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/chats/:chatId, GET} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"MessagesController {/messages}:"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/messages, POST} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/messages/chat/:chatId, GET} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/messages/:messageId/read, PATCH} route"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"RoomCategoriesController {/room-categories}:"}
+{"level":30,"time":1762555905719,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories, POST} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories, GET} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories/:id, GET} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories/:id, PUT} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories/:id, DELETE} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"RoomMessagesController {/room-messages}:"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-messages/:roomId/:senderId, POST} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-messages/:roomId, GET} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"RoomController {/rooms}:"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms, POST} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId, PUT} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId, DELETE} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms, GET} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/created, GET} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/me, GET} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/count, GET} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId, GET} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomCode, GET} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/add-member, POST} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId/remove/:userId, DELETE} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId/members, GET} route"}
+{"level":30,"time":1762555905720,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"WalletController {/wallet}:"}
+{"level":30,"time":1762555905721,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/me, GET} route"}
+{"level":30,"time":1762555905721,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/username/:username, GET} route"}
+{"level":30,"time":1762555905721,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/sync-missing, POST} route"}
+{"level":30,"time":1762555905736,"pid":8261,"hostname":"Praises-MacBook-Pro.local","context":"NestApplication","msg":"Nest application successfully started"}
+{"level":30,"time":1762555908416,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"EmailController {/email}:"}
+{"level":30,"time":1762555908418,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/email, POST} route"}
+{"level":30,"time":1762555908418,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"UsersController {/users}:"}
+{"level":30,"time":1762555908419,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile, GET} route"}
+{"level":30,"time":1762555908419,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile/stats, GET} route"}
+{"level":30,"time":1762555908419,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile, PUT} route"}
+{"level":30,"time":1762555908419,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/change-password, POST} route"}
+{"level":30,"time":1762555908419,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id/follow, GET} route"}
+{"level":30,"time":1762555908420,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id/unfollow, GET} route"}
+{"level":30,"time":1762555908420,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/count, GET} route"}
+{"level":30,"time":1762555908420,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/all, GET} route"}
+{"level":30,"time":1762555908420,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile/:username, GET} route"}
+{"level":30,"time":1762555908421,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/search, GET} route"}
+{"level":30,"time":1762555908421,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id/stats, GET} route"}
+{"level":30,"time":1762555908421,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id, GET} route"}
+{"level":30,"time":1762555908421,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:username/followers, GET} route"}
+{"level":30,"time":1762555908421,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:username/following, GET} route"}
+{"level":30,"time":1762555908421,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/logout, POST} route"}
+{"level":30,"time":1762555908421,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"AuthController {/auth}:"}
+{"level":30,"time":1762555908421,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/signup, POST} route"}
+{"level":30,"time":1762555908421,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/login, POST} route"}
+{"level":30,"time":1762555908421,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/verify-email/:userId, POST} route"}
+{"level":30,"time":1762555908421,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/resend-verification/:userId, POST} route"}
+{"level":30,"time":1762555908421,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/forgot-password, POST} route"}
+{"level":30,"time":1762555908421,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/reset-password/:userId, POST} route"}
+{"level":30,"time":1762555908421,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"PostsController {/posts}:"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts, POST} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts, GET} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id, GET} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id, PUT} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id, DELETE} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id/like, POST} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id/comment, POST} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/comment/:commentId, PUT} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/comment/:commentId, DELETE} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/user/me, GET} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/user/:username, GET} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"ChatsController {/chats}:"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/chats, POST} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/chats/me, GET} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/chats/:chatId, GET} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"MessagesController {/messages}:"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/messages, POST} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/messages/chat/:chatId, GET} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/messages/:messageId/read, PATCH} route"}
+{"level":30,"time":1762555908422,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"RoomCategoriesController {/room-categories}:"}
+{"level":30,"time":1762555908423,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories, POST} route"}
+{"level":30,"time":1762555908423,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories, GET} route"}
+{"level":30,"time":1762555908423,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories/:id, GET} route"}
+{"level":30,"time":1762555908423,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories/:id, PUT} route"}
+{"level":30,"time":1762555908423,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories/:id, DELETE} route"}
+{"level":30,"time":1762555908423,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"RoomMessagesController {/room-messages}:"}
+{"level":30,"time":1762555908423,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-messages/:roomId/:senderId, POST} route"}
+{"level":30,"time":1762555908423,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-messages/:roomId, GET} route"}
+{"level":30,"time":1762555908423,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"RoomController {/rooms}:"}
+{"level":30,"time":1762555908423,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms, POST} route"}
+{"level":30,"time":1762555908424,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId, PUT} route"}
+{"level":30,"time":1762555908424,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId, DELETE} route"}
+{"level":30,"time":1762555908424,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms, GET} route"}
+{"level":30,"time":1762555908424,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/created, GET} route"}
+{"level":30,"time":1762555908424,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/me, GET} route"}
+{"level":30,"time":1762555908424,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/count, GET} route"}
+{"level":30,"time":1762555908424,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId, GET} route"}
+{"level":30,"time":1762555908424,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomCode, GET} route"}
+{"level":30,"time":1762555908424,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/add-member, POST} route"}
+{"level":30,"time":1762555908424,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId/remove/:userId, DELETE} route"}
+{"level":30,"time":1762555908424,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId/members, GET} route"}
+{"level":30,"time":1762555908424,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"WalletController {/wallet}:"}
+{"level":30,"time":1762555908424,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/me, GET} route"}
+{"level":30,"time":1762555908424,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/username/:username, GET} route"}
+{"level":30,"time":1762555908424,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/sync-missing, POST} route"}
+{"level":30,"time":1762555908440,"pid":8300,"hostname":"Praises-MacBook-Pro.local","context":"NestApplication","msg":"Nest application successfully started"}
+{"level":30,"time":1762555958637,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"EmailController {/email}:"}
+{"level":30,"time":1762555958638,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/email, POST} route"}
+{"level":30,"time":1762555958638,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"UsersController {/users}:"}
+{"level":30,"time":1762555958638,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile, GET} route"}
+{"level":30,"time":1762555958639,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile/stats, GET} route"}
+{"level":30,"time":1762555958639,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile, PUT} route"}
+{"level":30,"time":1762555958639,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/change-password, POST} route"}
+{"level":30,"time":1762555958639,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id/follow, GET} route"}
+{"level":30,"time":1762555958639,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id/unfollow, GET} route"}
+{"level":30,"time":1762555958640,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/count, GET} route"}
+{"level":30,"time":1762555958640,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/all, GET} route"}
+{"level":30,"time":1762555958640,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile/:username, GET} route"}
+{"level":30,"time":1762555958640,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/search, GET} route"}
+{"level":30,"time":1762555958640,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id/stats, GET} route"}
+{"level":30,"time":1762555958640,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id, GET} route"}
+{"level":30,"time":1762555958640,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:username/followers, GET} route"}
+{"level":30,"time":1762555958640,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:username/following, GET} route"}
+{"level":30,"time":1762555958640,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/logout, POST} route"}
+{"level":30,"time":1762555958640,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"AuthController {/auth}:"}
+{"level":30,"time":1762555958641,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/signup, POST} route"}
+{"level":30,"time":1762555958641,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/login, POST} route"}
+{"level":30,"time":1762555958641,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/verify-email/:userId, POST} route"}
+{"level":30,"time":1762555958641,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/resend-verification/:userId, POST} route"}
+{"level":30,"time":1762555958641,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/forgot-password, POST} route"}
+{"level":30,"time":1762555958641,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/reset-password/:userId, POST} route"}
+{"level":30,"time":1762555958641,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"PostsController {/posts}:"}
+{"level":30,"time":1762555958641,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts, POST} route"}
+{"level":30,"time":1762555958641,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts, GET} route"}
+{"level":30,"time":1762555958641,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id, GET} route"}
+{"level":30,"time":1762555958641,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id, PUT} route"}
+{"level":30,"time":1762555958641,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id, DELETE} route"}
+{"level":30,"time":1762555958641,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id/like, POST} route"}
+{"level":30,"time":1762555958641,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id/comment, POST} route"}
+{"level":30,"time":1762555958641,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/comment/:commentId, PUT} route"}
+{"level":30,"time":1762555958641,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/comment/:commentId, DELETE} route"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/user/me, GET} route"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/user/:username, GET} route"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"ChatsController {/chats}:"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/chats, POST} route"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/chats/me, GET} route"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/chats/:chatId, GET} route"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"MessagesController {/messages}:"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/messages, POST} route"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/messages/chat/:chatId, GET} route"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/messages/:messageId/read, PATCH} route"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"RoomCategoriesController {/room-categories}:"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories, POST} route"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories, GET} route"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories/:id, GET} route"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories/:id, PUT} route"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories/:id, DELETE} route"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"RoomMessagesController {/room-messages}:"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-messages/:roomId/:senderId, POST} route"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-messages/:roomId, GET} route"}
+{"level":30,"time":1762555958642,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"RoomController {/rooms}:"}
+{"level":30,"time":1762555958643,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms, POST} route"}
+{"level":30,"time":1762555958643,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId, PUT} route"}
+{"level":30,"time":1762555958643,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId, DELETE} route"}
+{"level":30,"time":1762555958643,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms, GET} route"}
+{"level":30,"time":1762555958643,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/created, GET} route"}
+{"level":30,"time":1762555958643,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/me, GET} route"}
+{"level":30,"time":1762555958643,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/count, GET} route"}
+{"level":30,"time":1762555958643,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId, GET} route"}
+{"level":30,"time":1762555958643,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomCode, GET} route"}
+{"level":30,"time":1762555958643,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/add-member, POST} route"}
+{"level":30,"time":1762555958643,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId/remove/:userId, DELETE} route"}
+{"level":30,"time":1762555958643,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId/members, GET} route"}
+{"level":30,"time":1762555958643,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"WalletController {/wallet}:"}
+{"level":30,"time":1762555958644,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/me, GET} route"}
+{"level":30,"time":1762555958644,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/username/:username, GET} route"}
+{"level":30,"time":1762555958644,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/sync-missing, POST} route"}
+{"level":30,"time":1762555958659,"pid":8595,"hostname":"Praises-MacBook-Pro.local","context":"NestApplication","msg":"Nest application successfully started"}
+{"level":30,"time":1762556181608,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"EmailController {/email}:"}
+{"level":30,"time":1762556181610,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/email, POST} route"}
+{"level":30,"time":1762556181610,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"UsersController {/users}:"}
+{"level":30,"time":1762556181610,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile, GET} route"}
+{"level":30,"time":1762556181610,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile/stats, GET} route"}
+{"level":30,"time":1762556181610,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile, PUT} route"}
+{"level":30,"time":1762556181610,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/change-password, POST} route"}
+{"level":30,"time":1762556181611,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id/follow, GET} route"}
+{"level":30,"time":1762556181611,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id/unfollow, GET} route"}
+{"level":30,"time":1762556181611,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/count, GET} route"}
+{"level":30,"time":1762556181611,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/all, GET} route"}
+{"level":30,"time":1762556181612,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/profile/:username, GET} route"}
+{"level":30,"time":1762556181612,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/search, GET} route"}
+{"level":30,"time":1762556181612,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id/stats, GET} route"}
+{"level":30,"time":1762556181612,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:id, GET} route"}
+{"level":30,"time":1762556181612,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:username/followers, GET} route"}
+{"level":30,"time":1762556181612,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/:username/following, GET} route"}
+{"level":30,"time":1762556181612,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/users/logout, POST} route"}
+{"level":30,"time":1762556181612,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"AuthController {/auth}:"}
+{"level":30,"time":1762556181612,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/signup, POST} route"}
+{"level":30,"time":1762556181612,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/login, POST} route"}
+{"level":30,"time":1762556181612,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/verify-email/:userId, POST} route"}
+{"level":30,"time":1762556181612,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/resend-verification/:userId, POST} route"}
+{"level":30,"time":1762556181612,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/forgot-password, POST} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/auth/reset-password/:userId, POST} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"PostsController {/posts}:"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts, POST} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts, GET} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id, GET} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id, PUT} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id, DELETE} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id/like, POST} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/:id/comment, POST} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/comment/:commentId, PUT} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/comment/:commentId, DELETE} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/user/me, GET} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/posts/user/:username, GET} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"ChatsController {/chats}:"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/chats, POST} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/chats/me, GET} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/chats/:chatId, GET} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"MessagesController {/messages}:"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/messages, POST} route"}
+{"level":30,"time":1762556181613,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/messages/chat/:chatId, GET} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/messages/:messageId/read, PATCH} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"RoomCategoriesController {/room-categories}:"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories, POST} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories, GET} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories/:id, GET} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories/:id, PUT} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-categories/:id, DELETE} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"RoomMessagesController {/room-messages}:"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-messages/:roomId/:senderId, POST} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/room-messages/:roomId, GET} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"RoomController {/rooms}:"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms, POST} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId, PUT} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId, DELETE} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms, GET} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/created, GET} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/me, GET} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/count, GET} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId, GET} route"}
+{"level":30,"time":1762556181614,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomCode, GET} route"}
+{"level":30,"time":1762556181615,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/add-member, POST} route"}
+{"level":30,"time":1762556181615,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId/remove/:userId, DELETE} route"}
+{"level":30,"time":1762556181615,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/rooms/:roomId/members, GET} route"}
+{"level":30,"time":1762556181615,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RoutesResolver","msg":"WalletController {/wallet}:"}
+{"level":30,"time":1762556181615,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/me, GET} route"}
+{"level":30,"time":1762556181615,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/username/:username, GET} route"}
+{"level":30,"time":1762556181615,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"RouterExplorer","msg":"Mapped {/wallet/sync-missing, POST} route"}
+{"level":30,"time":1762556181630,"pid":9765,"hostname":"Praises-MacBook-Pro.local","context":"NestApplication","msg":"Nest application successfully started"}
