@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  BadRequestException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -53,10 +57,11 @@ export class AuthService {
     const res = await this.usersRepository.save(user);
 
     // Create verification token
-    const verification = await this.userVerificationService.createVerificationToken(
-      res.id,
-      'verify-email',
-    );
+    const verification =
+      await this.userVerificationService.createVerificationToken(
+        res.id,
+        'verify-email',
+      );
 
     // Trigger background wallet creation
     await this.walletQueue.add(
@@ -74,7 +79,8 @@ export class AuthService {
     });
 
     return {
-      message: 'User created successfully. Please check your email to verify your account.',
+      message:
+        'User created successfully. Please check your email to verify your account.',
       userId: res.id,
     };
   }
@@ -82,10 +88,7 @@ export class AuthService {
   async login(body: LoginDto) {
     // Try to find user by username or email
     const user = await this.usersRepository.findOne({
-      where: [
-        { username: body.identifier },
-        { email: body.identifier }
-      ],
+      where: [{ username: body.identifier }, { email: body.identifier }],
     });
 
     if (!user || !(await bcrypt.compare(body.password, user.password))) {
@@ -95,10 +98,11 @@ export class AuthService {
     if (!user.is_verified) {
       try {
         // Try to create or resend verification token
-        const verification = await this.userVerificationService.createVerificationToken(
-          user.id,
-          'verify-email',
-        );
+        const verification =
+          await this.userVerificationService.createVerificationToken(
+            user.id,
+            'verify-email',
+          );
 
         this.eventEmitter.emit(eventListeners.USER_VERIFICATION_SENT, {
           user,
@@ -113,9 +117,9 @@ export class AuthService {
         return {
           code: 412,
           message: 'verify your account',
-          details: "Your account is not verified. A verification email has been sent to ${user.email}. Please check your email and verify your account.",
-        }
-
+          details:
+            'Your account is not verified. A verification email has been sent to ${user.email}. Please check your email and verify your account.',
+        };
       } catch (error) {
         if (error instanceof BadRequestException) {
           // Max retries exceeded
@@ -156,9 +160,8 @@ export class AuthService {
   }
 
   async resendVerification(userId: number) {
-    const verification = await this.userVerificationService.resendVerification(
-      userId,
-    );
+    const verification =
+      await this.userVerificationService.resendVerification(userId);
 
     this.eventEmitter.emit(eventListeners.USER_VERIFICATION_SENT, {
       user: await this.usersRepository.findOne({ where: { id: userId } }),
@@ -176,14 +179,16 @@ export class AuthService {
     if (!user) {
       // Don't reveal if user exists or not for security
       return {
-        message: 'If an account with that email exists, a password reset code has been sent.',
+        message:
+          'If an account with that email exists, a password reset code has been sent.',
       };
     }
 
-    const verification = await this.userVerificationService.createVerificationToken(
-      user.id,
-      'forgot-password',
-    );
+    const verification =
+      await this.userVerificationService.createVerificationToken(
+        user.id,
+        'forgot-password',
+      );
 
     this.eventEmitter.emit(eventListeners.USER_PASSWORD_RESET_SENT, {
       user,
@@ -191,7 +196,8 @@ export class AuthService {
     });
 
     return {
-      message: 'If an account with that email exists, a password reset code has been sent.',
+      message:
+        'If an account with that email exists, a password reset code has been sent.',
       userId: user.id, // Return userId so frontend can use it for reset
     };
   }
@@ -208,7 +214,8 @@ export class AuthService {
     await this.usersRepository.save(user);
 
     return {
-      message: 'Password reset successfully. You can now login with your new password.',
+      message:
+        'Password reset successfully. You can now login with your new password.',
     };
   }
 }
