@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
+import type React from "react";
 import Image from "next/image";
-import { ArrowRight, Eye, EyeClosed } from "lucide-react";
+import { ArrowRight, Eye, EyeOff } from "lucide-react";
 import Lottie from "lottie-react";
 import animationData from "@/public/logo flsah screen4.json";
 import { Fredoka, Baloo_2 } from "next/font/google";
@@ -64,77 +65,162 @@ export default function Auth() {
   const searchParams = useSearchParams();
   const redirectPath = searchParams?.get("redirect") || "/feed";
   const [page, setPage] = useState<string>("login");
-  const [username, setUsername] = useState<string>("");
+  const [identifier, setIdentifier] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [email, setEmail] = useState<string>("");
-  const [address, setAddress] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
   const [signupSuccess, setSignupSuccess] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
+  const [userId, setUserId] = useState<number | null>(null);
+  const [showVerification, setShowVerification] = useState<boolean>(false);
+  const [verificationCode, setVerificationCode] = useState<string>("");
 
   useEffect(() => {
     setPage("login");
   }, []);
 
   const resetForm = () => {
-    setUsername("");
+    setIdentifier("");
     setPassword("");
     setEmail("");
-    setAddress("");
+    setUsername("");
     setConfirmPassword("");
+    setVerificationCode("");
   };
 
-  const isFormValid = () => {
-    if (page === "login") {
-      return username !== "" && password !== "";
-    } else {
-      return (
-        username !== "" &&
-        email !== "" &&
-        password !== "" &&
-        confirmPassword !== "" &&
-        password === confirmPassword
-      );
-    }
+  const isLoginFormValid = () => {
+    return identifier !== "" && password !== "";
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const isSignupFormValid = () => {
+    return (
+      username !== "" &&
+      email !== "" &&
+      password !== "" &&
+      confirmPassword !== "" &&
+      password === confirmPassword
+    );
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setSubmitting(true);
-      if (username === "" || password === "") {
+
+      if (!isLoginFormValid()) {
         toast.error("All fields are required");
         return;
       }
-      if (page !== "login" && password !== confirmPassword) {
-        toast.error("Password confirmation failed");
+
+      const res = await api.post("/auth/login", {
+        identifier,
+        password,
+      });
+
+      if (res.status === 412 || res.data?.code === 412) {
+        setUserId(res.data?.userId);
+        setShowVerification(true);
+        toast.error(
+          "Your account is not verified. Please check your email for verification code."
+        );
         return;
       }
-      const url = page === "login" ? "auth/login" : "auth/signup";
-      let body: ISignup | ILogin = { username, password };
-      if (page !== "login") body = { ...body, email, address };
-      const res = await api.post<ApiResponse<{ token: string; user: IUser }>>(
-        url,
-        body
-      );
+
       if (res.data.error) {
-        toast.error(res.data.message);
+        toast.error(res.data.message || "Login failed");
         return;
       }
-      setToCookie("token", res.data.data.token);
-      setToLocalStorage("user", JSON.stringify(res.data.data.user));
-      if (page === "login") {
-        // Redirect to intended destination or default to /feed
+
+      if (res.data.data?.token && res.data.data?.user) {
+        setToCookie("token", res.data.data.token);
+        setToLocalStorage("user", JSON.stringify(res.data.data.user));
+        toast.success("Login successful!");
         router.push(redirectPath);
-      } else {
-        setSignupSuccess(true);
       }
-    } catch (err) {
-      console.log(err);
-      toast.error("Error while creating account, please try again...");
+    } catch (err: any) {
+      console.log("[v0] Login error:", err);
+      const errorMessage =
+        err.response?.data?.message || err.message || "Login failed";
+      toast.error(errorMessage);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setSubmitting(true);
+
+      if (!isSignupFormValid()) {
+        toast.error("All fields are required and passwords must match");
+        return;
+      }
+
+      const res = await api.post("/auth/signup", {
+        username,
+        email,
+        password,
+      });
+
+      if (res.data.error) {
+        toast.error(res.data.message || "Signup failed");
+        return;
+      }
+
+      setUserId(res.data.data?.userId);
+      setSignupSuccess(true);
+      toast.success("Account created! Please verify your email.");
+    } catch (err: any) {
+      console.log("[v0] Signup error:", err);
+      const errorMessage =
+        err.response?.data?.message || err.message || "Signup failed";
+      toast.error(errorMessage);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleVerifyEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setSubmitting(true);
+
+      if (!verificationCode || verificationCode.length < 6) {
+        toast.error("Please enter a valid verification code");
+        return;
+      }
+
+      if (!userId) {
+        toast.error("User ID not found. Please try again.");
+        return;
+      }
+
+      const res = await api.post(`/auth/verify-email/${userId}`, {
+        token: verificationCode,
+      });
+
+      if (res.data.error) {
+        toast.error(res.data.message || "Verification failed");
+        return;
+      }
+
+      toast.success("Email verified successfully!");
+
+      // Auto-login after verification
+      setShowVerification(false);
+      setPage("login");
+      setIdentifier(username || email);
+      resetForm();
+    } catch (err: any) {
+      console.log("[v0] Verification error:", err);
+      const errorMessage =
+        err.response?.data?.message || err.message || "Verification failed";
+      toast.error(errorMessage);
     } finally {
       setSubmitting(false);
     }
@@ -148,6 +234,71 @@ export default function Auth() {
           <WelcomeScreen username={username} />
         </div>
       </div>
+    );
+  }
+
+  if (showVerification && userId) {
+    return (
+      <>
+        <div className="flex flex-col items-center justify-center min-h-screen">
+          <div className="max-w-xl w-full space-y-6 rounded-b-4xl pb-30 shadow-[inset_0_0_32px_1px_#0F59513D] flex flex-col items-center px-6">
+            <div className="pt-10">
+              <h2
+                className={`${fredoka.className} text-[#7AF8EB] text-center font-medium text-3xl mb-4`}>
+                Verify Your Email
+              </h2>
+              <p className="text-zinc-300 text-center text-sm mb-6">
+                We sent a verification code to your email. Please enter it
+                below.
+              </p>
+            </div>
+
+            <form onSubmit={handleVerifyEmail} className="w-full space-y-6">
+              <div>
+                <label
+                  htmlFor="verificationCode"
+                  className="block text-[#7AF8EB] text-sm font-medium mb-2">
+                  Verification Code
+                </label>
+                <input
+                  id="verificationCode"
+                  type="text"
+                  value={verificationCode}
+                  onChange={(e) =>
+                    setVerificationCode(e.target.value.slice(0, 6))
+                  }
+                  placeholder="000000"
+                  maxLength={6}
+                  className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors text-center text-2xl tracking-widest"
+                />
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowVerification(false);
+                    resetForm();
+                  }}
+                  className="flex-1 text-white flex shadow-[inset_0_0_12px_1px_#2F2F2F] items-center justify-center space-x-2 px-6 py-4 rounded-full hover:opacity-80 cursor-pointer transition-colors">
+                  <span>Back</span>
+                </button>
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className={`flex-1 ${
+                    verificationCode.length === 6 && !submitting
+                      ? "text-black flex shadow-[inset_-6px_-6px_12px_#1E9E90,_inset_6px_6px_10px_#24FFE7] bg-[linear-gradient(135deg,_#15FDE4_100%,_#13E5CE_0%)] items-center justify-center space-x-2 px-6 py-4 rounded-full hover:opacity-80 cursor-pointer transition-colors"
+                      : "flex shadow-[inset_0_0_12px_1px_#2F2F2F] items-center justify-center space-x-2 px-6 py-4 rounded-full hover:opacity-80 cursor-pointer transition-colors text-white"
+                  }`}>
+                  <span>{submitting ? "Verifying..." : "Verify"}</span>
+                  {!submitting && <ArrowRight className="w-5 h-5" />}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </>
     );
   }
 
@@ -169,14 +320,12 @@ export default function Auth() {
               className="relative -top-30 left-18 w-24 object-cover"
             />
             <p
-              className={`relative -top-28 text-center text-[#F1F7F6] ${baloo_2.className} max-w-md`}
-            >
+              className={`relative -top-28 text-center text-[#F1F7F6] ${baloo_2.className} max-w-md`}>
               Ready to spill the tea?
             </p>
             <div className="w-full flex flex-col space-y-2">
               <h2
-                className={`${fredoka.className} text-[#7AF8EB] text-center relative -top-20 font-medium text-4xl`}
-              >
+                className={`${fredoka.className} text-[#7AF8EB] text-center relative -top-20 font-medium text-4xl`}>
                 {page === "login" ? "Log In" : "Sign Up"}
               </h2>
               <div className="w-full relative -top-16">
@@ -189,8 +338,7 @@ export default function Auth() {
                           setPage("register");
                           resetForm();
                         }}
-                        className="pl-2 cursor-pointer font-bold text-[#7AF8EB]"
-                      >
+                        className="pl-2 cursor-pointer font-bold text-[#7AF8EB]">
                         Sign up
                       </span>
                     </div>
@@ -204,8 +352,7 @@ export default function Auth() {
                           setPage("login");
                           resetForm();
                         }}
-                        className="pl-2 cursor-pointer font-bold text-[#7AF8EB]"
-                      >
+                        className="pl-2 cursor-pointer font-bold text-[#7AF8EB]">
                         Log in
                       </span>
                     </div>
@@ -217,49 +364,70 @@ export default function Auth() {
         </div>
       </div>
 
-      <div className="mt-10 flex items-center justify-center">
-        <div className="w-full max-w-xl">
-          <form method="POST" onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label
-                htmlFor="username"
-                className="block text-[#7AF8EB] text-sm font-medium mb-2"
-              >
-                username
-              </label>
-              <input
-                id="username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="e.g. MaskedParrot85"
-                className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors"
-              />
-            </div>
+      <div className="mt-10 flex items-center justify-center pb-20">
+        <div className="w-full max-w-xl px-6">
+          <form
+            method="POST"
+            onSubmit={page === "login" ? handleLogin : handleSignup}
+            className="space-y-6">
+            {page === "login" ? (
+              <>
+                <div>
+                  <label
+                    htmlFor="identifier"
+                    className="block text-[#7AF8EB] text-sm font-medium mb-2">
+                    username or email
+                  </label>
+                  <input
+                    id="identifier"
+                    type="text"
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value)}
+                    placeholder="e.g. MaskedParrot85 or email@example.com"
+                    className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors"
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <label
+                    htmlFor="username"
+                    className="block text-[#7AF8EB] text-sm font-medium mb-2">
+                    username
+                  </label>
+                  <input
+                    id="username"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="e.g. MaskedParrot85"
+                    className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors"
+                  />
+                </div>
 
-            {page !== "login" && (
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-[#7AF8EB] text-sm font-medium mb-2"
-                >
-                  email address
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="e.g. maskedparrot@gmail.com"
-                  className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors"
-                />
-              </div>
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block text-[#7AF8EB] text-sm font-medium mb-2">
+                    email address
+                  </label>
+                  <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="e.g. maskedparrot@gmail.com"
+                    className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors"
+                  />
+                </div>
+              </>
             )}
+
             <div>
               <label
                 htmlFor="password"
-                className="block text-[#7AF8EB] text-sm font-medium mb-2"
-              >
+                className="block text-[#7AF8EB] text-sm font-medium mb-2">
                 password
               </label>
               <div className="relative">
@@ -268,16 +436,15 @@ export default function Auth() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="********"
+                  placeholder="••••••••"
                   className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors pr-12"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
-                >
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors">
                   {showPassword ? (
-                    <EyeClosed className="w-5 h-5" />
+                    <EyeOff className="w-5 h-5" />
                   ) : (
                     <Eye className="w-5 h-5" />
                   )}
@@ -289,8 +456,7 @@ export default function Auth() {
               <div>
                 <label
                   htmlFor="confirmPassword"
-                  className="block text-[#7AF8EB] text-sm font-medium mb-2"
-                >
+                  className="block text-[#7AF8EB] text-sm font-medium mb-2">
                   confirm password
                 </label>
                 <div className="relative">
@@ -299,16 +465,15 @@ export default function Auth() {
                     type={showConfirmPassword ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="********"
+                    placeholder="••••••••"
                     className="w-full bg-transparent border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#7AF8EB] transition-colors pr-12"
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
-                  >
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors">
                     {showConfirmPassword ? (
-                      <EyeClosed className="w-5 h-5" />
+                      <EyeOff className="w-5 h-5" />
                     ) : (
                       <Eye className="w-5 h-5" />
                     )}
@@ -322,13 +487,14 @@ export default function Auth() {
                 type="submit"
                 disabled={submitting}
                 className={`${
-                  isFormValid()
+                  (page === "login"
+                    ? isLoginFormValid()
+                    : isSignupFormValid()) && !submitting
                     ? "text-black flex shadow-[inset_-6px_-6px_12px_#1E9E90,_inset_6px_6px_10px_#24FFE7] bg-[linear-gradient(135deg,_#15FDE4_100%,_#13E5CE_0%)] items-center space-x-2 px-6 py-4 rounded-full hover:opacity-80 cursor-pointer transition-colors"
                     : "flex shadow-[inset_0_0_12px_1px_#2F2F2F] items-center space-x-2 px-6 py-4 rounded-full hover:opacity-80 cursor-pointer transition-colors text-white"
-                }`}
-              >
+                }`}>
                 {submitting ? (
-                  <span>Please wait..</span>
+                  <span>Please wait...</span>
                 ) : (
                   <>
                     <span>Continue</span>
