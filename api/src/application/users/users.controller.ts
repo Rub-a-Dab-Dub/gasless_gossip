@@ -4,16 +4,18 @@ import {
   Put,
   Body,
   UseGuards,
-  Request,
   Post,
   ParseIntPipe,
   Param,
-  Delete,
   Query,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UsersService } from './users.service';
 import { ChangePasswordDto, UpdateProfileDto } from './dtos/user.dto';
+import {
+  CurrentUser,
+  CurrentUserData,
+} from '@/common/decorators/current-user.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -21,26 +23,32 @@ export class UsersController {
 
   @Get('profile')
   @UseGuards(JwtAuthGuard)
-  getProfile(@Request() req) {
-    return this.usersService.findById(req.user.userId);
+  getProfile(@CurrentUser() user: CurrentUserData) {
+    return this.usersService.findById(user.userId);
   }
   @Get('profile/stats')
   @UseGuards(JwtAuthGuard)
-  getProfileStats(@Request() req) {
-    return this.usersService.profileStats(req.user.userId);
+  getProfileStats(@CurrentUser() user: CurrentUserData) {
+    return this.usersService.profileStats(user.userId);
   }
 
   @Put('profile')
   @UseGuards(JwtAuthGuard)
-  updateProfile(@Request() req, @Body() updateData: UpdateProfileDto) {
-    return this.usersService.updateProfile(req.user.userId, updateData);
+  updateProfile(
+    @CurrentUser() user: CurrentUserData,
+    @Body() updateData: UpdateProfileDto,
+  ) {
+    return this.usersService.updateProfile(user.userId, updateData);
   }
 
   @Post('change-password')
   @UseGuards(JwtAuthGuard)
-  changePassword(@Request() req, @Body() passwords: ChangePasswordDto) {
+  changePassword(
+    @CurrentUser() user: CurrentUserData,
+    @Body() passwords: ChangePasswordDto,
+  ) {
     return this.usersService.changePassword(
-      req.user.userId,
+      user.userId,
       passwords.old_password,
       passwords.new_password,
     );
@@ -50,9 +58,9 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   async followUser(
     @Param('id', ParseIntPipe) followedId: number,
-    @Request() req,
+    @CurrentUser() user: CurrentUserData,
   ) {
-    const followerId = req.user.userId;
+    const followerId = user.userId;
     return this.usersService.followUser(followerId, followedId);
   }
 
@@ -60,9 +68,9 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   async unfollowUser(
     @Param('id', ParseIntPipe) followedId: number,
-    @Request() req,
+    @CurrentUser() user: CurrentUserData,
   ) {
-    const followerId = req.user.userId;
+    const followerId = user.userId;
     return this.usersService.unfollowUser(followerId, followedId);
   }
 
@@ -73,22 +81,31 @@ export class UsersController {
 
   @Get('all')
   @UseGuards(JwtAuthGuard)
-  async allUsers(@Query('search') search: string, @Request() req) {
-    const { userId } = req.user;
+  async allUsers(
+    @Query('search') search: string,
+    @CurrentUser() user: CurrentUserData,
+  ) {
+    const { userId } = user;
     return this.usersService.allUsers(userId, search);
   }
 
   @Get('profile/:username')
   @UseGuards(JwtAuthGuard)
-  async viewProfile(@Param('username') username: string, @Request() req) {
-    const { userId } = req.user;
+  async viewProfile(
+    @Param('username') username: string,
+    @CurrentUser() user: CurrentUserData,
+  ) {
+    const { userId } = user;
     return this.usersService.viewUser(username, userId);
   }
 
   @Get('search')
   @UseGuards(JwtAuthGuard)
-  async search(@Query('username') username: string, @Request() req) {
-    const { userId } = req.user;
+  async search(
+    @Query('username') username: string,
+    @CurrentUser() user: CurrentUserData,
+  ) {
+    const { userId } = user;
     return this.usersService.searchByUsername(username, userId);
   }
 
