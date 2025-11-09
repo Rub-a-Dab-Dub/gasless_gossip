@@ -27,17 +27,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { loading, user, authenticated } = useAuth();
-  const router = useRouter();
-  const pathname = usePathname();
-  if (!pathname.includes("auth")) {
-  }
+  const { loading } = useAuth();
+  
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable}  ${fredoka.variable} antialiased bg-[#121418]`}
       >
-        <Providers>{loading ? <></> : <>{children}</>}</Providers>
+        <Providers>
+          {loading ? (
+            <div className="min-h-screen flex items-center justify-center bg-[#121418]">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#7AF8EB]"></div>
+            </div>
+          ) : (
+            <>{children}</>
+          )}
+        </Providers>
       </body>
     </html>
   );
