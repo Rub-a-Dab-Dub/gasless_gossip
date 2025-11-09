@@ -73,6 +73,7 @@ export class AuthService {
       },
     );
 
+    // Send verification email (non-blocking)
     this.eventEmitter.emit(eventListeners.USER_VERIFICATION_SENT, {
       user: res,
       token: verification.token,
