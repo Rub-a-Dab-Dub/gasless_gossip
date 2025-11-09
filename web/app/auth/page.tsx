@@ -6,12 +6,10 @@ import { ArrowRight, Eye, EyeOff } from "lucide-react";
 import Lottie from "lottie-react";
 import animationData from "@/public/logo flsah screen4.json";
 import { Fredoka, Baloo_2 } from "next/font/google";
-import WelcomeScreen from "@/components/WelcomeScreen";
-import { ILogin, ISignup } from "@/types/auth";
 import toast from "react-hot-toast";
+import { isAxiosError } from "axios";
 import api from "@/lib/axios";
 import { ApiResponse } from "@/types/api";
-import { IUser } from "@/types/user";
 import { setToCookie } from "@/lib/cookies";
 import { setToLocalStorage } from "@/lib/local-storage";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -73,7 +71,6 @@ export default function Auth() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
-  const [signupSuccess, setSignupSuccess] = useState<boolean>(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [userId, setUserId] = useState<number | null>(null);
   const [showVerification, setShowVerification] = useState<boolean>(false);
@@ -106,6 +103,18 @@ export default function Auth() {
     );
   };
 
+  const getErrorMessage = (error: unknown, fallback: string) => {
+    if (isAxiosError<ApiResponse>(error)) {
+      return error.response?.data?.message ?? error.message ?? fallback;
+    }
+
+    if (error instanceof Error) {
+      return error.message || fallback;
+    }
+
+    return fallback;
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -120,7 +129,7 @@ export default function Auth() {
         identifier,
         password,
       });
-
+      console.log("res is => ", res);
       if (res.status === 412 || res.data?.code === 412) {
         setUserId(res.data?.userId);
         setShowVerification(true);
@@ -141,10 +150,9 @@ export default function Auth() {
         toast.success("Login successful!");
         router.push(redirectPath);
       }
-    } catch (err: any) {
-      console.log("[v0] Login error:", err);
-      const errorMessage =
-        err.response?.data?.message || err.message || "Login failed";
+    } catch (error: unknown) {
+      console.log("[v0] Login error:", error);
+      const errorMessage = getErrorMessage(error, "Login failed");
       toast.error(errorMessage);
     } finally {
       setSubmitting(false);
@@ -165,6 +173,7 @@ export default function Auth() {
         username,
         email,
         password,
+        address: "",
       });
 
       if (res.data.error) {
@@ -172,13 +181,19 @@ export default function Auth() {
         return;
       }
 
-      setUserId(res.data.data?.userId);
-      setSignupSuccess(true);
-      toast.success("Account created! Please verify your email.");
-    } catch (err: any) {
-      console.log("[v0] Signup error:", err);
-      const errorMessage =
-        err.response?.data?.message || err.message || "Signup failed";
+      const createdUserId = res.data.data?.userId ?? null;
+      if (createdUserId) {
+        setUserId(createdUserId);
+      }
+      setShowVerification(true);
+      const successMessage =
+        res.data.data?.message ||
+        res.data.message ||
+        "Account created! Please verify your email.";
+      toast.success(successMessage);
+    } catch (error: unknown) {
+      console.log("[v0] Signup error:", error);
+      const errorMessage = getErrorMessage(error, "Signup failed");
       toast.error(errorMessage);
     } finally {
       setSubmitting(false);
@@ -216,30 +231,19 @@ export default function Auth() {
       setPage("login");
       setIdentifier(username || email);
       resetForm();
-    } catch (err: any) {
-      console.log("[v0] Verification error:", err);
-      const errorMessage =
-        err.response?.data?.message || err.message || "Verification failed";
+    } catch (error: unknown) {
+      console.log("[v0] Verification error:", error);
+      const errorMessage = getErrorMessage(error, "Verification failed");
       toast.error(errorMessage);
     } finally {
       setSubmitting(false);
     }
   };
 
-  if (signupSuccess) {
-    return (
-      <div className="">
-        <Header />
-        <div className="flex flex-col items-center justify-center flex-grow">
-          <WelcomeScreen username={username} />
-        </div>
-      </div>
-    );
-  }
-
   if (showVerification && userId) {
     return (
       <>
+        <Header />
         <div className="flex flex-col items-center justify-center min-h-screen">
           <div className="max-w-xl w-full space-y-6 rounded-b-4xl pb-30 shadow-[inset_0_0_32px_1px_#0F59513D] flex flex-col items-center px-6">
             <div className="pt-10">
@@ -304,6 +308,7 @@ export default function Auth() {
 
   return (
     <>
+      <Header />
       <div className="flex flex-col items-center justify-center flex-grow">
         <div className="max-w-xl w-full space-y-6 rounded-b-4xl pb-30 shadow-[inset_0_0_32px_1px_#0F59513D] flex flex-col items-center">
           <div className="w-64 h-80 relative -top-30">
