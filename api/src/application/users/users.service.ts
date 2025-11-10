@@ -12,12 +12,15 @@ import * as bcrypt from 'bcrypt';
 import { Post } from '../posts/entities/post.entity';
 import { ChatsService } from 'src/application/chats/chats.service';
 import { UserVerificationService } from './user-verification.service';
+import { Wallet } from '../wallets/entities/wallet.entity';
+import { UserProfileDto, PublicUserDto } from './dtos/user-response.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private usersRepository: Repository<User>,
     @InjectRepository(Post) private postsRepository: Repository<Post>,
+    @InjectRepository(Wallet) private walletRepository: Repository<Wallet>,
     private readonly chatService: ChatsService,
     private readonly userVerificationService: UserVerificationService,
   ) {}
@@ -26,10 +29,64 @@ export class UsersService {
     return await this.usersRepository.count();
   }
 
-  async findById(id: number): Promise<User> {
-    const user = await this.usersRepository.findOne({ where: { id } });
+  // Helper method to remove sensitive fields
+  private sanitizeUser(user: User): Partial<User> {
+    const { password, is_verified, email, ...safeUser } = user;
+    return safeUser;
+  }
+
+  // Helper method to get public user info
+  private getPublicUserInfo(user: User): PublicUserDto {
+    return {
+      id: user.id,
+      username: user.username,
+      photo: user.photo,
+      title: user.title,
+      about: user.about,
+      xp: user.xp,
+    };
+  }
+
+  async findById(id: number): Promise<UserProfileDto> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: ['followers', 'following', 'posts'],
+    });
     if (!user) throw new NotFoundException('User not found');
-    return user;
+
+    const wallet = await this.walletRepository.findOne({
+      where: { user: { id } },
+    });
+
+    const stats = {
+      posts: user.posts?.length || 0,
+      followers: user.followers?.length || 0,
+      following: user.following?.length || 0,
+    };
+
+    return {
+      id: user.id,
+      username: user.username,
+      photo: user.photo,
+      email: user.email,
+      is_verified: user.is_verified,
+      address: user.address,
+      xp: user.xp,
+      title: user.title,
+      about: user.about,
+      created_at: user.created_at,
+      stats,
+      wallet: wallet
+        ? {
+            celo_address: wallet.celo_address,
+            celo_balance: wallet.celo_balance?.toString() || '0',
+            base_address: wallet.base_address,
+            base_balance: wallet.base_balance?.toString() || '0',
+            starknet_address: wallet.starknet_address,
+            starknet_balance: wallet.starknet_balance?.toString() || '0',
+          }
+        : undefined,
+    };
   }
 
   async findByUsername(username: string): Promise<User> {
@@ -105,12 +162,22 @@ export class UsersService {
     return results;
   }
 
-  async updateProfile(id: number, updateData: Partial<User>): Promise<User> {
-    const user = await this.findById(id);
-    if (updateData.id || updateData.xp || updateData.is_verified) {
+  async updateProfile(
+    id: number,
+    updateData: Partial<User>,
+  ): Promise<UserProfileDto> {
+    const userEntity = await this.usersRepository.findOne({ where: { id } });
+    if (!userEntity) throw new NotFoundException('User not found');
+
+    if (
+      updateData.id ||
+      updateData.xp ||
+      updateData.is_verified ||
+      updateData.password
+    ) {
       throw new UnprocessableEntityException('Unacceptable payload');
     }
-    if (updateData.username && updateData.username !== user.username) {
+    if (updateData.username && updateData.username !== userEntity.username) {
       const existing_username = await this.usersRepository.findOne({
         where: { username: updateData.username },
       });
@@ -118,7 +185,7 @@ export class UsersService {
         throw new UnprocessableEntityException('Username not available');
       }
     }
-    if (updateData.email && updateData.email !== user.email) {
+    if (updateData.email && updateData.email !== userEntity.email) {
       const existing_email = await this.usersRepository.findOne({
         where: { email: updateData.email },
       });
@@ -126,18 +193,33 @@ export class UsersService {
         throw new UnprocessableEntityException('Email address in use');
       }
     }
-    if (updateData.password) {
-      updateData.password = await bcrypt.hash(updateData.password, 10);
-    }
-    Object.assign(user, updateData);
-    return this.usersRepository.save(user);
+
+    Object.assign(userEntity, updateData);
+    await this.usersRepository.save(userEntity);
+
+    // Return sanitized profile
+    return this.findById(id);
   }
 
   async changePassword(id: number, old_password: string, new_password: string) {
-    const user = await this.findById(id);
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (!user) throw new NotFoundException('User not found');
+
     const passwordValid = await bcrypt.compare(old_password, user.password);
     if (!passwordValid) {
       throw new UnauthorizedException('Old password is incorrect');
+    }
+
+    if (old_password === new_password) {
+      throw new BadRequestException(
+        'New password must be different from old password',
+      );
+    }
+
+    if (new_password.length < 8) {
+      throw new BadRequestException(
+        'Password must be at least 8 characters long',
+      );
     }
 
     user.password = await bcrypt.hash(new_password, 10);
@@ -219,6 +301,8 @@ export class UsersService {
       id: f.id,
       username: f.username,
       photo: f.photo,
+      title: f.title,
+      xp: f.xp,
     }));
 
     if (search) {
@@ -243,6 +327,8 @@ export class UsersService {
       id: f.id,
       username: f.username,
       photo: f.photo,
+      title: f.title,
+      xp: f.xp,
     }));
 
     if (search) {
@@ -258,7 +344,13 @@ export class UsersService {
   async allUsers(userId: number, search?: string) {
     const query = this.usersRepository
       .createQueryBuilder('user')
-      .select(['user.id', 'user.username', 'user.photo', 'user.title'])
+      .select([
+        'user.id',
+        'user.username',
+        'user.photo',
+        'user.title',
+        'user.xp',
+      ])
       .where('user.id != :userId', { userId });
 
     if (search && search.trim() !== '') {
@@ -277,6 +369,10 @@ export class UsersService {
     });
 
     if (!user) throw new NotFoundException('User not found');
+
+    const wallet = await this.walletRepository.findOne({
+      where: { user: { id: user.id } },
+    });
 
     const profileStats = {
       posts: user.posts?.length || 0,
@@ -307,17 +403,27 @@ export class UsersService {
         photo: user.photo,
         title: user.title,
         about: user.about,
+        xp: user.xp,
+        created_at: user.created_at,
       },
       chat,
       stats: profileStats,
       isFollowing,
       isFollowedBy,
+      wallet: wallet
+        ? {
+            celo_address: wallet.celo_address,
+            base_address: wallet.base_address,
+            starknet_address: wallet.starknet_address,
+          }
+        : undefined,
       posts,
     };
   }
 
   async removeExpiredTokens(): Promise<void> {
-    const deletedCount = await this.userVerificationService.cleanupExpiredTokens();
+    const deletedCount =
+      await this.userVerificationService.cleanupExpiredTokens();
     console.log(`Cleaned up ${deletedCount} expired verification tokens`);
   }
 }

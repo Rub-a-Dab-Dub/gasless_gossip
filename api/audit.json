@@ -36,6 +36,16 @@
             "date": 1762720323100,
             "name": "./tmp/chat/test-2025-11-09.log.2025",
             "hash": "396183042dd6701fb41f1c040973f0b7"
+        },
+        {
+            "date": 1762764276696,
+            "name": "./tmp/chat/test-2025-11-10.log.0",
+            "hash": "9c845966fc38d58284b1b59ca0ff4248"
+        },
+        {
+            "date": 1762772758774,
+            "name": "./tmp/chat/test-2025-11-10.log.2025",
+            "hash": "747ff8e6bd619cc6c53e0cecd72ab0b5"
         }
     ]
 }

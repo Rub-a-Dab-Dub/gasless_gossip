@@ -13,6 +13,7 @@ import { UserVerificationService } from '@/application/users/user-verification.s
 import { Comment } from '@/application/posts/entities/comment.entity';
 import { Like } from '@/application/posts/entities/like.entity';
 import { UserVerification } from '@/application/users/entities/user-verification.entity';
+import { Wallet } from '@/application/wallets/entities/wallet.entity';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UserVerification } from '@/application/users/entities/user-verification
       Comment,
       Like,
       UserVerification,
+      Wallet,
     ]),
   ],
   providers: [
