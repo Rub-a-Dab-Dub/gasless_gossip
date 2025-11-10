@@ -9,9 +9,12 @@ import { ChatsService } from '../chats/chats.service';
 import { UserVerificationService } from './user-verification.service';
 import { UserVerification } from './entities/user-verification.entity';
 import { EmailTemplateService } from '@/notification/core/email';
+import { Wallet } from '../wallets/entities/wallet.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Post, Chat, UserVerification])],
+  imports: [
+    TypeOrmModule.forFeature([User, Post, Chat, UserVerification, Wallet]),
+  ],
   providers: [
     UsersService,
     ChatsService,
