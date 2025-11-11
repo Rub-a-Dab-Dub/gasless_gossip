@@ -124,4 +124,14 @@ export class EmailService {
       }),
     });
   }
+
+  async sendTestEmail(to: string) {
+    await this.email.sendEmailTemplate({
+      to,
+      subject: 'Test Email',
+      html: this.renderHtmlTemplates('welcome-user', {
+        first_name: 'Test User',
+      }),
+    });
+  }
 }
