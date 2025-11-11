@@ -10,4 +10,12 @@ export class EmailController {
   create(@Body() createEmailDto: SendVerifyUserEmailDto) {
     return this.emailService.create(createEmailDto);
   }
+
+  @Post('send-test')
+  sendTestEmail(@Body('to') to: string) {
+    if (!to || to.trim() === '' || !to.includes('@')) {
+      throw new Error('Recipient email address is required');
+    }
+    return this.emailService.sendTestEmail(to);
+  }
 }
