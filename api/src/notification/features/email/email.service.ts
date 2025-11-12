@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { SendVerifyUserEmailDto } from './dto/create-email.dto';
 import * as fs from 'fs';
 import Handlebars from 'handlebars';
@@ -9,6 +9,7 @@ import { IUser } from '@/common/interfaces';
 @Injectable()
 export class EmailService {
   private partialsRegistered = false;
+  private logger = new Logger(EmailService.name);
 
   constructor(private email: EmailTemplateService) {
     // Register partials when the service is instantiated
@@ -126,12 +127,18 @@ export class EmailService {
   }
 
   async sendTestEmail(to: string) {
-    await this.email.sendEmailTemplate({
-      to,
-      subject: 'Test Email',
-      html: this.renderHtmlTemplates('welcome-user', {
-        first_name: 'Test User',
-      }),
-    });
+    try {
+      await this.email.sendEmailTemplate({
+        to,
+        subject: 'Test Email',
+        html: this.renderHtmlTemplates('welcome-user', {
+          first_name: 'Test User',
+        }),
+      });
+    } catch (error) {
+      console.error('❌ Error sending test email:', error);
+      this.logger.log('❌ Error sending test email:', error);
+      throw error;
+    }
   }
 }
