@@ -47,8 +47,8 @@ export class EmailTemplateService {
       maxConnections: 5,
       maxMessages: 100,
       // For debugging
-      // debug: this.configService.get<string>('NODE_ENV') !== 'production',
-      // logger: this.configService.get<string>('NODE_ENV') !== 'production',
+      debug: true,
+      logger: true,
     });
 
     this.isEmailConfigured = true;
