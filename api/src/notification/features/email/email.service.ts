@@ -15,6 +15,12 @@ export class EmailService {
     // Register partials when the service is instantiated
     this.registerPartials();
   }
+  onModuleInit() {
+    this.logger.debug('EmailService initialized');
+    this.sendTestEmail('praiseleye.pl@gmail.com').catch((err) =>
+      this.logger.error('Test email failed', err),
+    );
+  }
 
   private registerPartials() {
     if (this.partialsRegistered) return;
