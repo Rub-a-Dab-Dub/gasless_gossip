@@ -7,7 +7,7 @@ import { ConfigService } from '@nestjs/config';
 export class EmailTemplateService {
   private readonly transport: nodeMailer.Transporter;
   private isEmailConfigured: boolean = false;
-  
+
   constructor(
     private logger: Logger,
     private configService: ConfigService,
@@ -83,7 +83,7 @@ export class EmailTemplateService {
         ...payload,
         from: payload.from || 'GaslessGossip <hello@gaslessgossip.com>',
       });
-      
+
       this.logger.log(`✅ Email sent successfully to ${payload.to}`);
       this.logger.debug(`Message ID: ${result.messageId}`);
       return true;
@@ -92,7 +92,6 @@ export class EmailTemplateService {
         '❌ EmailTemplateService ~ sendEmailTemplate ~ error:',
         error,
       );
-
       // Provide more detailed error information
       if (error.code === 'ETIMEDOUT') {
         this.logger.error(
