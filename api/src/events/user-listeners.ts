@@ -69,7 +69,9 @@ export class UserEventListeners {
     });
 
     if (emailSent) {
-      this.logger.log(`Password reset email sent successfully to ${user.email}`);
+      this.logger.log(
+        `Password reset email sent successfully to ${user.email}`,
+      );
     } else {
       this.logger.error(`Failed to send password reset email to ${user.email}`);
     }

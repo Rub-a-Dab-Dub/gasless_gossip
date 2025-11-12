@@ -14,7 +14,6 @@ import { PostsService } from './posts.service';
 import { CreatePostDto, EditPostDto } from './dtos/post.dto';
 import { CommentDto, EditCommentDto } from './dtos/comment.dto';
 
-
 @Controller('posts')
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}

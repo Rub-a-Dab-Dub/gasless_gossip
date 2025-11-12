@@ -67,7 +67,8 @@ export class ChangePasswordDto {
   old_password: string;
 
   @ApiProperty({
-    description: 'New password - must be at least 8 characters and different from old password',
+    description:
+      'New password - must be at least 8 characters and different from old password',
     example: 'NewSecurePassword456',
     minLength: 8,
   })
@@ -75,4 +76,3 @@ export class ChangePasswordDto {
   @MinLength(8)
   new_password: string;
 }
-
