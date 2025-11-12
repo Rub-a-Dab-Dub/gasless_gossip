@@ -19,7 +19,7 @@ async function bootstrap() {
     forceCloseConnections: true,
     rawBody: true,
   });
-  app.enableShutdownHooks();
+  // app.enableShutdownHooks();
   app.enableCors({
     origin: [
       'http://localhost:3000',
