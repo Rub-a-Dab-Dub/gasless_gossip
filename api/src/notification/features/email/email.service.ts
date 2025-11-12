@@ -131,7 +131,7 @@ export class EmailService {
       await this.email.sendEmailTemplate({
         to,
         subject: 'Test Email',
-        html: this.renderHtmlTemplates('welcome-user', {
+        html: this.renderHtmlTemplates('index', {
           first_name: 'Test User',
         }),
       });
