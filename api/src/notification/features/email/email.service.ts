@@ -113,6 +113,12 @@ export class EmailService {
       '🚀 ~ EmailService ~ sendVerifyUserEmailDto:',
       sendVerifyUserEmailDto,
     );
+
+    if (!sendVerifyUserEmailDto.email) {
+      console.error('Cannot send verification email: email address is missing');
+      return;
+    }
+
     await this.email.sendEmailTemplate({
       to: sendVerifyUserEmailDto.email,
       subject: 'Verify your email',
@@ -123,6 +129,11 @@ export class EmailService {
   }
 
   async sendWelcomeEmail(user: IUser) {
+    if (!user.email) {
+      console.error('Cannot send welcome email: email address is missing');
+      return;
+    }
+
     await this.email.sendEmailTemplate({
       to: user.email,
       subject: 'Welcome user',

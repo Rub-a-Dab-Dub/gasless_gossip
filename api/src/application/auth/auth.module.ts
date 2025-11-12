@@ -20,7 +20,7 @@ import { EmailTemplateService } from '@/notification/core/email';
 @Module({
   imports: [
     HttpModule,
-    TypeOrmModule.forFeature([User, Wallet,UserVerification]),
+    TypeOrmModule.forFeature([User, Wallet, UserVerification]),
     JwtModule.register({
       secret: process.env.JWT_SECRET ?? 'G4ZL3ZZ_G0ZZ1P',
       signOptions: {
@@ -37,7 +37,7 @@ import { EmailTemplateService } from '@/notification/core/email';
     WalletService,
     UserEventListeners,
     UserVerificationService,
-    EmailTemplateService
+    EmailTemplateService,
   ],
   controllers: [AuthController],
   exports: [JwtModule],

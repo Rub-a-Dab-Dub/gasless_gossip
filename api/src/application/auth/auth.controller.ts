@@ -1,7 +1,26 @@
-import { Body, Controller, Post, Param, HttpStatus, HttpCode } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Post,
+  Param,
+  HttpStatus,
+  HttpCode,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBody,
+} from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { LoginDto, SignupDto, ForgotPasswordDto, ResetPasswordDto, VerifyEmailDto } from './dtos/auth.dto';
+import {
+  LoginDto,
+  SignupDto,
+  ForgotPasswordDto,
+  ResetPasswordDto,
+  VerifyEmailDto,
+} from './dtos/auth.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -12,14 +31,16 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: 'Register a new user account',
-    description: 'Creates a new user account and sends a verification email with a 6-digit code. The code expires in 5 minutes.',
+    description:
+      'Creates a new user account and sends a verification email with a 6-digit code. The code expires in 5 minutes.',
   })
   @ApiResponse({
     status: 201,
     description: 'User successfully created. Verification email sent.',
     schema: {
       example: {
-        message: 'User created successfully. Please check your email to verify your account.',
+        message:
+          'User created successfully. Please check your email to verify your account.',
         userId: 1,
       },
     },
@@ -52,7 +73,10 @@ export class AuthController {
     schema: {
       example: {
         statusCode: 400,
-        message: ['email must be an email', 'password must be at least 8 characters'],
+        message: [
+          'email must be an email',
+          'password must be at least 8 characters',
+        ],
         error: 'Bad Request',
       },
     },
@@ -65,7 +89,8 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Login to user account',
-    description: 'Authenticate user with username/email and password. Returns JWT token if account is verified. If unverified, sends a new verification code.',
+    description:
+      'Authenticate user with username/email and password. Returns JWT token if account is verified. If unverified, sends a new verification code.',
   })
   @ApiResponse({
     status: 200,
@@ -89,13 +114,15 @@ export class AuthController {
       example: {
         code: 412,
         message: 'verify your account',
-        details: 'Your account is not verified. A verification email has been sent to your email. Please check your email and verify your account.',
+        details:
+          'Your account is not verified. A verification email has been sent to your email. Please check your email and verify your account.',
       },
     },
   })
   @ApiResponse({
     status: 401,
-    description: 'Invalid credentials or maximum verification attempts exceeded.',
+    description:
+      'Invalid credentials or maximum verification attempts exceeded.',
     schema: {
       example: {
         statusCode: 401,
@@ -112,7 +139,8 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Verify user email address',
-    description: 'Verify email using the 6-digit code sent to the user. The code must be used within 5 minutes.',
+    description:
+      'Verify email using the 6-digit code sent to the user. The code must be used within 5 minutes.',
   })
   @ApiParam({
     name: 'userId',
@@ -157,10 +185,7 @@ export class AuthController {
       },
     },
   })
-  verifyEmail(
-    @Param('userId') userId: string,
-    @Body('token') token: string,
-  ) {
+  verifyEmail(@Param('userId') userId: string, @Body('token') token: string) {
     return this.authService.verifyEmail(+userId, token);
   }
 
@@ -168,7 +193,8 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Resend verification email',
-    description: 'Resend verification code to user email. Limited to 3 attempts per hour.',
+    description:
+      'Resend verification code to user email. Limited to 3 attempts per hour.',
   })
   @ApiParam({
     name: 'userId',
@@ -191,7 +217,8 @@ export class AuthController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'Maximum retry limit reached. Please try again after 1 hour or contact support.',
+        message:
+          'Maximum retry limit reached. Please try again after 1 hour or contact support.',
         error: 'Bad Request',
       },
     },
@@ -215,14 +242,16 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Request password reset',
-    description: 'Send a 6-digit password reset code to user email. The code expires in 5 minutes.',
+    description:
+      'Send a 6-digit password reset code to user email. The code expires in 5 minutes.',
   })
   @ApiResponse({
     status: 200,
     description: 'Password reset email sent if account exists.',
     schema: {
       example: {
-        message: 'If an account with that email exists, a password reset code has been sent.',
+        message:
+          'If an account with that email exists, a password reset code has been sent.',
         userId: 1,
       },
     },
@@ -233,7 +262,8 @@ export class AuthController {
     schema: {
       example: {
         statusCode: 400,
-        message: 'Maximum retry limit reached. Please try again after 1 hour or contact support.',
+        message:
+          'Maximum retry limit reached. Please try again after 1 hour or contact support.',
         error: 'Bad Request',
       },
     },
@@ -246,7 +276,8 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Reset user password',
-    description: 'Reset password using the 6-digit code sent to email. Requires userId to ensure security.',
+    description:
+      'Reset password using the 6-digit code sent to email. Requires userId to ensure security.',
   })
   @ApiParam({
     name: 'userId',
@@ -260,7 +291,8 @@ export class AuthController {
     description: 'Password reset successfully.',
     schema: {
       example: {
-        message: 'Password reset successfully. You can now login with your new password.',
+        message:
+          'Password reset successfully. You can now login with your new password.',
       },
     },
   })
@@ -290,6 +322,10 @@ export class AuthController {
     @Param('userId') userId: string,
     @Body() body: ResetPasswordDto,
   ) {
-    return this.authService.resetPassword(+userId, body.token, body.newPassword);
+    return this.authService.resetPassword(
+      +userId,
+      body.token,
+      body.newPassword,
+    );
   }
 }

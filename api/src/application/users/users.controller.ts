@@ -87,7 +87,8 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Get current user statistics',
-    description: 'Retrieves posts, followers, and following counts for the authenticated user.',
+    description:
+      'Retrieves posts, followers, and following counts for the authenticated user.',
   })
   @ApiResponse({
     status: 200,
@@ -172,7 +173,8 @@ export class UsersController {
   })
   @ApiResponse({
     status: 422,
-    description: 'Unprocessable Entity - Username/Email already taken or invalid payload',
+    description:
+      'Unprocessable Entity - Username/Email already taken or invalid payload',
     schema: {
       example: {
         statusCode: 422,

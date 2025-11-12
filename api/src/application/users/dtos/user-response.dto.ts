@@ -140,7 +140,8 @@ export class UserProfileDto extends SafeUserDto {
   };
 
   @ApiPropertyOptional({
-    description: 'Wallet information with balances (only visible to profile owner)',
+    description:
+      'Wallet information with balances (only visible to profile owner)',
     type: WalletInfoDto,
   })
   wallet?: {

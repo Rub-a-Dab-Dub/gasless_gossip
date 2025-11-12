@@ -1,4 +1,12 @@
-import { Controller, Post, Get, Param, Body, Patch, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Param,
+  Body,
+  Patch,
+  UseGuards,
+} from '@nestjs/common';
 import { MessagesService } from './messages.service';
 import { CreateMessageDto } from './dtos/create-message.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
