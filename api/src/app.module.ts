@@ -23,6 +23,7 @@ import { Schedule as MySchedules } from './schedule/schedule.module';
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 // import { ContractsModule } from './contracts/contracts.module';
+import { FilesModule } from './application/files/files.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { AppController } from './app.controller';
     RoomMessagesModule,
     RoomsModule,
     WalletModule,
+    FilesModule,
     // ContractsModule,
   ],
   controllers: [AppController],
