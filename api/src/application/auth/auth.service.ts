@@ -63,16 +63,6 @@ export class AuthService {
         'verify-email',
       );
 
-    // Trigger background wallet creation
-    await this.walletQueue.add(
-      'create-wallet',
-      { user },
-      {
-        attempts: 3,
-        backoff: 5000,
-      },
-    );
-
     // Send verification email (non-blocking)
     this.eventEmitter.emit(eventListeners.USER_VERIFICATION_SENT, {
       user: res,
@@ -149,6 +139,21 @@ export class AuthService {
       token,
       'verify-email',
     );
+
+    // Trigger wallet creation after successful email verification
+    await this.walletQueue.add(
+      'create-wallet',
+      { user },
+      {
+        attempts: 3,
+        backoff: 5000,
+      },
+    );
+
+    // Emit event for any other post-verification actions
+    this.eventEmitter.emit(eventListeners.USER_EMAIL_VERIFIED, {
+      user,
+    });
 
     return {
       message: 'Email verified successfully',

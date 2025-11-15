@@ -74,4 +74,47 @@ export class WalletService {
       .limit(limit)
       .getMany();
   }
+
+  async findVerifiedUsersWithoutWallet(): Promise<User[]> {
+    return this.userRepo
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.wallet', 'wallet')
+      .where('user.is_verified = :verified', { verified: true })
+      .andWhere('wallet.id IS NULL')
+      .getMany();
+  }
+
+  async createWalletsForVerifiedUsers(): Promise<{
+    processed: number;
+    created: number;
+    failed: number;
+    errors: Array<{ userId: number; username: string; error: string }>;
+  }> {
+    const users = await this.findVerifiedUsersWithoutWallet();
+    let created = 0;
+    let failed = 0;
+    const errors: Array<{ userId: number; username: string; error: string }> =
+      [];
+
+    for (const user of users) {
+      try {
+        await this.createWallet(user);
+        created++;
+      } catch (error) {
+        failed++;
+        errors.push({
+          userId: user.id,
+          username: user.username,
+          error: error.message || 'Unknown error',
+        });
+      }
+    }
+
+    return {
+      processed: users.length,
+      created,
+      failed,
+      errors,
+    };
+  }
 }

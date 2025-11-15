@@ -76,4 +76,12 @@ export class UserEventListeners {
       this.logger.error(`Failed to send password reset email to ${user.email}`);
     }
   }
+
+  @OnEvent(eventListeners.USER_EMAIL_VERIFIED)
+  handleUserEmailVerified(payload: { user: any }) {
+    const { user } = payload;
+    this.logger.log(
+      `User ${user.username} (ID: ${user.id}) email verified successfully. Wallet creation initiated.`,
+    );
+  }
 }
