@@ -81,4 +81,30 @@ export class WalletController {
     );
     return { jobId: job.id, message: 'Wallet sync started' };
   }
+
+  @Post('sync-verified-users')
+  @UseGuards(JwtAuthGuard)
+  async syncVerifiedUsersWallets() {
+    const result = await this.walletService.createWalletsForVerifiedUsers();
+    return {
+      message: 'Verified users wallet sync completed',
+      ...result,
+    };
+  }
+
+  @Get('verified-without-wallet')
+  @UseGuards(JwtAuthGuard)
+  async getVerifiedUsersWithoutWallet() {
+    const users = await this.walletService.findVerifiedUsersWithoutWallet();
+    return {
+      count: users.length,
+      users: users.map((user) => ({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        is_verified: user.is_verified,
+        created_at: user.created_at,
+      })),
+    };
+  }
 }

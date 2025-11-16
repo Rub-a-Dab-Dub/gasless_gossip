@@ -12,11 +12,16 @@ export const setToCookie = (
 ) => {
   if (typeof document === "undefined") return;
 
+  const cookieOptions = {
+    path: "/",
+    ...options,
+  };
+
   let cookieStr = `${encodeURIComponent(name)}=${encodeURIComponent(value)}`;
 
-  if (options.expires)
-    cookieStr += `; expires=${options.expires.toUTCString()}`;
-  if (options.path) cookieStr += `; path=${options.path}`;
+  if (cookieOptions.expires)
+    cookieStr += `; expires=${cookieOptions.expires.toUTCString()}`;
+  if (cookieOptions.path) cookieStr += `; path=${cookieOptions.path}`;
 
   document.cookie = cookieStr;
 };

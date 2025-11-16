@@ -5,7 +5,6 @@ import {
   OneToMany,
   ManyToMany,
   JoinTable,
-  OneToOne,
 } from 'typeorm';
 
 import { Post } from '../../posts/entities/post.entity';

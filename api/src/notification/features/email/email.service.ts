@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { SendVerifyUserEmailDto } from './dto/create-email.dto';
 import * as fs from 'fs';
 import Handlebars from 'handlebars';
@@ -9,10 +9,17 @@ import { IUser } from '@/common/interfaces';
 @Injectable()
 export class EmailService {
   private partialsRegistered = false;
+  private logger = new Logger(EmailService.name);
 
   constructor(private email: EmailTemplateService) {
     // Register partials when the service is instantiated
     this.registerPartials();
+  }
+  onModuleInit() {
+    this.logger.debug('EmailService initialized');
+    this.sendTestEmail('praiseleye.pl@gmail.com').catch((err) =>
+      this.logger.error('Test email failed', err),
+    );
   }
 
   private registerPartials() {
@@ -106,6 +113,12 @@ export class EmailService {
       '🚀 ~ EmailService ~ sendVerifyUserEmailDto:',
       sendVerifyUserEmailDto,
     );
+
+    if (!sendVerifyUserEmailDto.email) {
+      console.error('Cannot send verification email: email address is missing');
+      return;
+    }
+
     await this.email.sendEmailTemplate({
       to: sendVerifyUserEmailDto.email,
       subject: 'Verify your email',
@@ -116,6 +129,11 @@ export class EmailService {
   }
 
   async sendWelcomeEmail(user: IUser) {
+    if (!user.email) {
+      console.error('Cannot send welcome email: email address is missing');
+      return;
+    }
+
     await this.email.sendEmailTemplate({
       to: user.email,
       subject: 'Welcome user',
@@ -123,5 +141,21 @@ export class EmailService {
         first_name: user.username,
       }),
     });
+  }
+
+  async sendTestEmail(to: string) {
+    try {
+      await this.email.sendEmailTemplate({
+        to,
+        subject: 'Test Email',
+        html: this.renderHtmlTemplates('index', {
+          first_name: 'Test User',
+        }),
+      });
+    } catch (error) {
+      console.error('❌ Error sending test email:', error);
+      this.logger.log('❌ Error sending test email:', error);
+      throw error;
+    }
   }
 }

@@ -8,16 +8,6 @@
     "extension": "",
     "files": [
         {
-            "date": 1762543767474,
-            "name": "./tmp/chat/test-2025-11-07.log.0",
-            "hash": "db17ed0e15e4673ab79bf88e9189e099"
-        },
-        {
-            "date": 1762544499863,
-            "name": "./tmp/chat/test-2025-11-07.log.2025",
-            "hash": "33d0598f88d97d859f4dc5cbdcc66b8c"
-        },
-        {
             "date": 1762557526893,
             "name": "./tmp/chat/test-2025-11-08.log.0",
             "hash": "f00b2503910157dfac50e6af0be92717"
@@ -26,6 +16,46 @@
             "date": 1762557549544,
             "name": "./tmp/chat/test-2025-11-08.log.2025",
             "hash": "85388e1f21d60859b83a35e2e845c0fc"
+        },
+        {
+            "date": 1762720310761,
+            "name": "./tmp/chat/test-2025-11-09.log.0",
+            "hash": "960cf7fe68dcb7e8204f4489e2320b41"
+        },
+        {
+            "date": 1762720323100,
+            "name": "./tmp/chat/test-2025-11-09.log.2025",
+            "hash": "396183042dd6701fb41f1c040973f0b7"
+        },
+        {
+            "date": 1762764276696,
+            "name": "./tmp/chat/test-2025-11-10.log.0",
+            "hash": "9c845966fc38d58284b1b59ca0ff4248"
+        },
+        {
+            "date": 1762772758774,
+            "name": "./tmp/chat/test-2025-11-10.log.2025",
+            "hash": "747ff8e6bd619cc6c53e0cecd72ab0b5"
+        },
+        {
+            "date": 1762859423220,
+            "name": "./tmp/chat/test-2025-11-11.log.0",
+            "hash": "2291d699a9f962225f8dfdcc9b69c9b8"
+        },
+        {
+            "date": 1762859425117,
+            "name": "./tmp/chat/test-2025-11-11.log.2025",
+            "hash": "26bf10874a13f4c1534408b1e828fe6a"
+        },
+        {
+            "date": 1762944185639,
+            "name": "./tmp/chat/test-2025-11-12.log.0",
+            "hash": "dfb6c78b6cc201062a3b453c74c8a84f"
+        },
+        {
+            "date": 1762944912627,
+            "name": "./tmp/chat/test-2025-11-12.log.2025",
+            "hash": "de03eed53c34135f1985cac675c8f6f4"
         }
     ]
 }

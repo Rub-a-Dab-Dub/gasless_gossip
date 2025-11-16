@@ -78,7 +78,7 @@ export class ChatsService {
     senderId: number,
     receiverId: number,
   ): Promise<number | null> {
-    let chat = await this.chatsRepository
+    const chat = await this.chatsRepository
       .createQueryBuilder('chat')
       .leftJoinAndSelect('chat.sender', 'sender')
       .leftJoinAndSelect('chat.receiver', 'receiver')

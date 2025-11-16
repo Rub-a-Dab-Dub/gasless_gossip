@@ -19,7 +19,7 @@ async function bootstrap() {
     forceCloseConnections: true,
     rawBody: true,
   });
-  app.enableShutdownHooks();
+  // app.enableShutdownHooks();
   app.enableCors({
     origin: [
       'http://localhost:3000',
@@ -30,6 +30,10 @@ async function bootstrap() {
       'http://gaslessgossip.xyz',
       'https://www.gaslessgossip.xyz',
       'http://www.gaslessgossip.xyz',
+      'https://gaslessgossip.com',
+      'http://gaslessgossip.com',
+      'https://www.gaslessgossip.com',
+      'http://www.gaslessgossip.com',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,

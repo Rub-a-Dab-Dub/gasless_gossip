@@ -20,7 +20,10 @@ import { LoggerModule } from './infrastructure/logger';
 import { EmailModule } from './notification/features/email/email.module';
 // import { ScheduleModule } from '@nestjs/schedule';
 import { Schedule as MySchedules } from './schedule/schedule.module';
+import { AppService } from './app.service';
+import { AppController } from './app.controller';
 // import { ContractsModule } from './contracts/contracts.module';
+import { FilesModule } from './application/files/files.module';
 
 @Module({
   imports: [
@@ -45,7 +48,10 @@ import { Schedule as MySchedules } from './schedule/schedule.module';
     RoomMessagesModule,
     RoomsModule,
     WalletModule,
+    FilesModule,
     // ContractsModule,
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
