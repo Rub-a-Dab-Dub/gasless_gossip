@@ -24,6 +24,8 @@ import { AppService } from './app.service';
 import { AppController } from './app.controller';
 // import { ContractsModule } from './contracts/contracts.module';
 import { FilesModule } from './application/files/files.module';
+import { ContractsModule } from './contracts/contracts.module';
+import { JobsModule } from './jobs/jobs.module';
 
 @Module({
   imports: [
@@ -48,6 +50,8 @@ import { FilesModule } from './application/files/files.module';
     RoomMessagesModule,
     RoomsModule,
     WalletModule,
+    ContractsModule,
+    JobsModule,
     FilesModule,
     // ContractsModule,
   ],
