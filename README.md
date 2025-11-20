@@ -13,7 +13,7 @@ Chat, tip friends, join exclusive rooms, and level up—all with near-zero gas f
 ## ✨ What Can You Do?
 
 - 💬 **Chat & Earn**: Send messages and earn XP
-- 💰 **Tip in Chats**: Reward users with STRK tokens (2% platform fee)
+- 💰 **Tip in Chats**: Reward users with tokens (2% platform fee)
 - 🔐 **Token-Gated Rooms**: Create paid or invite-only rooms
 - 🎁 **P2P Transfers**: Send tokens to friends (no fees!)
 - 🏆 **Level Up**: Complete quests, earn badges, climb leaderboards
@@ -65,10 +65,6 @@ npm run dev
 **See [DOCKER_SETUP.md](./DOCKER_SETUP.md) for detailed Docker documentation.**
 
 ---
-
-### Option B: Manual Setup
-
-If you prefer installing PostgreSQL manually:
 
 ### Option B: Manual Setup
 
@@ -287,7 +283,6 @@ gasless_gossip/
     ├── starknet/          # Cairo contracts
     │   ├── src/gg_pay.sol
     │   └── tests/
-    └── solidity/          # Base/Celo (EVM)
 ```
 
 ---
@@ -345,7 +340,7 @@ git checkout -b feature/your-feature-name
 
 ### 3. Make Changes
 
-- Follow existing code style (ESLint/Prettier for TS, Cairo formatting for contracts)
+- Follow existing code style (ESLint/Prettier for TS, Solidity formatting for contracts)
 - Write tests for new features
 - Update documentation if needed
 
@@ -401,7 +396,7 @@ Look for issues tagged `good-first-issue` or `help-wanted`:
 Users never pay gas fees. The backend's paymaster account sponsors all transactions using session keys.
 
 ### Token Tipping
-Send STRK tokens in chats with a 2% platform fee. Tips are instant and on-chain.
+Send tokens in chats with a 2% platform fee. Tips are instant and on-chain.
 
 ### Room Entry Fees
 Creators can set token-gated rooms. Platform takes 2%, creator gets 98%.
